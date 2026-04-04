@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Skill(primer)",
+      "mcp__playwright__browser_navigate",
+      "Bash(npx tsc:*)",
+      "Bash(kill 7073 7074)",
+      "Bash(kill 2849)",
+      "Read(//tmp/**)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(echo \"PID: $!\")",
+      "Bash(pkill -f \"next-server\")",
+      "Bash(mkdir -p \"/mnt/d/Saas Factory/mi-primer-saas/public/Fotobio\")",
+      "Bash(mv \"/mnt/d/Saas Factory/mi-primer-saas/IMG-20251214-WA0009.jpg\" \"/mnt/d/Saas Factory/mi-primer-saas/public/Fotobio/\")",
+      "Bash(chmod 644 \"/mnt/d/Saas Factory/mi-primer-saas/public/Fotobio/IMG-20251214-WA0009.jpg\")",
+      "WebFetch(domain:postimg.cc)",
+      "Bash(curl -L \"https://i.postimg.cc/HW1GPvps/IMG-20251214-WA0009.jpg\" -o \"/mnt/d/Saas Factory/mi-primer-saas/public/Fotobio/IMG-20251214-WA0009.jpg\")",
+      "Bash(kill 2884:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "next-devtools",
+    "playwright",
+    "supabase"
+  ]
+}

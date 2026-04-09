@@ -1,9 +1,11 @@
+import VideoPlayer from '@/features/video/VideoPlayer';
+
 export default function Home() {
   return (
     <>
       {/* ─── BARRA SUPERIOR FIJA ─────────────────────────────────────── */}
-      <div className="fixed top-0 left-0 w-full z-50 text-center py-4 font-bold uppercase tracking-widest text-base border-b border-white/10" style={{ background: '#aed8f7', color: '#0a0f3d' }}>
-        ⚠️ EXCLUSIVO PARA AGENTES COMERCIALES Y EMPRESARIOS DE ALTO RENDIMIENTO
+      <div className="fixed top-0 left-0 w-full z-50 text-center py-5 font-bold uppercase tracking-widest text-lg border-b border-white/10" style={{ background: '#aed8f7', color: '#0a0f3d' }}>
+        ⚠️ PARA GENTE QUE VIVE DEL ARTE DE NEGOCIAR Y VENDER
       </div>
 
       <main
@@ -17,10 +19,7 @@ export default function Home() {
         <section className="pt-32 pb-14 px-6 max-w-3xl mx-auto text-center">
           {/* Headline */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase leading-tight tracking-tight mb-6 text-white">
-            OPTIMIZA TU BIOLOGÍA{' '}
-            <span style={{ color: '#aed8f7' }}>CON HERRAMIENTAS NATURALES</span>
-            {' '}PARA MEJORAR TU CLARIDAD, TU ENERGÍA{' '}
-            <span style={{ color: '#aed8f7' }}>Y TUS RESULTADOS</span>
+            optimiza tu biología para obtener el control de tu rendimiento para evitar perdidas en el Profit por dejarlo al azar.
           </h1>
 
           {/* Subtítulo — más visible y con autoridad */}
@@ -34,15 +33,7 @@ export default function Home() {
 
         {/* ─── VIDEO ───────────────────────────────────────────────────── */}
         <section className="px-6 max-w-3xl mx-auto pb-12">
-          <div className="aspect-video rounded-2xl overflow-hidden shadow-[0_8px_60px_rgba(174,216,247,0.2)] ring-1 ring-white/10 bg-black">
-            <iframe
-              className="w-full h-full"
-              src="https://play.gumlet.io/embed/69d0ae6347eee1605a471273?autoplay=true&muted=true&loop=false"
-              title="Video de presentación"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-              allowFullScreen
-            />
-          </div>
+          <VideoPlayer />
         </section>
 
         {/* ─── CTA 1 ───────────────────────────────────────────────────── */}

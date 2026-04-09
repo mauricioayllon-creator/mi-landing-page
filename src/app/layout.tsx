@@ -3,8 +3,13 @@ import Script from 'next/script'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'SaaS Factory App',
-  description: 'Built with SaaS Factory',
+  title: 'Mauricio Ayllón',
+  description: 'Optimiza tu biología para obtener el control de tu rendimiento.',
+  openGraph: {
+    title: 'Mauricio Ayllón',
+    description: 'Optimiza tu biología para obtener el control de tu rendimiento.',
+    siteName: 'Mauricio Ayllón',
+  },
 }
 
 export default function RootLayout({

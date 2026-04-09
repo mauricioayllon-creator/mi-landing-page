@@ -1,8 +1,10 @@
 import VideoPlayer from '@/features/video/VideoPlayer';
+import CalendlyTracker from '@/features/tracking/CalendlyTracker';
 
 export default function Home() {
   return (
     <>
+      <CalendlyTracker />
       {/* ─── BARRA SUPERIOR FIJA ─────────────────────────────────────── */}
       <div className="fixed top-0 left-0 w-full z-50 text-center py-5 font-bold uppercase tracking-widest text-lg border-b border-white/10 bg-gradient-to-r from-blue-400 to-indigo-500 text-white drop-shadow-[0_2px_8px_rgba(99,102,241,0.5)]">
         ⚠️ PARA GENTE QUE VIVE DEL ARTE DE NEGOCIAR Y VENDER

@@ -16,7 +16,9 @@
       "Bash(chmod 644 \"/mnt/d/Saas Factory/mi-primer-saas/public/Fotobio/IMG-20251214-WA0009.jpg\")",
       "WebFetch(domain:postimg.cc)",
       "Bash(curl -L \"https://i.postimg.cc/HW1GPvps/IMG-20251214-WA0009.jpg\" -o \"/mnt/d/Saas Factory/mi-primer-saas/public/Fotobio/IMG-20251214-WA0009.jpg\")",
-      "Bash(kill 2884:*)"
+      "Bash(kill 2884:*)",
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\('next:', p.dependencies.next\\)\")",
+      "Bash(jobs)"
     ]
   },
   "enabledMcpjsonServers": [

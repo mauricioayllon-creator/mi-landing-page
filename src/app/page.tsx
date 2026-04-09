@@ -4,27 +4,24 @@ export default function Home() {
   return (
     <>
       {/* ─── BARRA SUPERIOR FIJA ─────────────────────────────────────── */}
-      <div className="fixed top-0 left-0 w-full z-50 text-center py-5 font-bold uppercase tracking-widest text-lg border-b border-white/10" style={{ background: '#aed8f7', color: '#0a0f3d' }}>
+      <div className="fixed top-0 left-0 w-full z-50 text-center py-5 font-bold uppercase tracking-widest text-lg border-b border-white/10 bg-gradient-to-r from-blue-400 to-indigo-500 text-white drop-shadow-[0_2px_8px_rgba(99,102,241,0.5)]">
         ⚠️ PARA GENTE QUE VIVE DEL ARTE DE NEGOCIAR Y VENDER
       </div>
 
-      <main
-        className="min-h-screen text-white antialiased"
-        style={{
-          background:
-            'linear-gradient(170deg, #06082a 0%, #03041a 45%, #000000 100%)',
-        }}
-      >
+      <main className="min-h-screen text-white antialiased bg-gradient-to-b from-slate-950 to-blue-950">
         {/* ─── PROMISE / HERO ──────────────────────────────────────────── */}
-        <section className="pt-32 pb-14 px-6 max-w-3xl mx-auto text-center">
+        <section className="pt-32 pb-14 px-6 max-w-5xl mx-auto text-center">
           {/* Headline */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase leading-tight tracking-tight mb-6 text-white">
-            optimiza tu biología para obtener el control de tu rendimiento para evitar perdidas en el Profit por dejarlo al azar.
+            optimiza tu biología para obtener el control de tu rendimiento{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+              para evitar perdidas en el Profit por dejarlo al azar.
+            </span>
           </h1>
 
           {/* Subtítulo — más visible y con autoridad */}
-          <p className="text-gray-200 text-xl sm:text-2xl font-semibold leading-relaxed max-w-xl mx-auto uppercase">
-            Sin medicamentos raros. Sin entrenar como un atleta.
+          <p className="text-gray-200 text-lg sm:text-xl font-semibold leading-relaxed max-w-3xl mx-auto uppercase">
+            SIN GASTAR UN SOLO CENTAVO EN MEDICAMENTOS Y SIN INVERTIR 1 HORA DE TU TIEMPO.
           </p>
 
           {/* Separador sutil */}

@@ -1,14 +1,23 @@
 import type { Metadata } from 'next'
+import { Geist } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 
+const geist = Geist({
+  subsets: ['latin'],
+  variable: '--font-geist',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
-  title: 'Mauricio Ayllón',
-  description: 'Optimiza tu biología para obtener el control de tu rendimiento.',
+  title: 'Unreal Marketing — Clientes constantes para tu negocio local',
+  description:
+    'Instalamos un sistema de contenido que atrae clientes de forma constante, para que tu negocio deje de depender de la suerte.',
   openGraph: {
-    title: 'Mauricio Ayllón',
-    description: 'Optimiza tu biología para obtener el control de tu rendimiento.',
-    siteName: 'Mauricio Ayllón',
+    title: 'Unreal Marketing — Clientes constantes para tu negocio local',
+    description:
+      'Instalamos un sistema de contenido que atrae clientes de forma constante, para que tu negocio deje de depender de la suerte.',
+    siteName: 'Unreal Marketing',
   },
 }
 
@@ -18,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="es" className={geist.variable}>
       <head>
         {/* Meta Pixel Code */}
         <Script id="meta-pixel" strategy="afterInteractive">

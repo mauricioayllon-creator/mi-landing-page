@@ -2,7 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
- * Personaliza tu tema aquí
- * Documentación: https://tailwindcss.com/docs/theme
- */
+/* ─────────────────────────────────────────────────────────────
+ * UNREAL MARKETING — Design tokens (variables CSS)
+ * ───────────────────────────────────────────────────────────── */
+:root {
+  --emerald: #005f51;
+  --lime: #31d96d;
+  --ink: #0d0d0d;
+  --ink-soft: #121212;
+  --cream: #f7f6f2;
+  --titulo: #fcfcfc;
+  --rojo: #e5342b;
+  --naranja: #f59e0b;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 110px; /* deja aire bajo el navbar flotante al saltar a anclas */
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-geist), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Patrón sutil de cuadrícula para el hero ─────────────────── */
+.grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* ── Degradado de tarjeta de testimonio ──────────────────────── */
+.testimonial-gradient {
+  background: linear-gradient(135deg, #0a8c77 0%, #006b5b 45%, #004439 100%);
+}
+
+/* ── Acordeón FAQ (native <details>) ─────────────────────────── */
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details[open] .faq-arrow {
+  transform: rotate(180deg);
+}
+.faq-arrow {
+  transition: transform 0.25s ease;
+}
+details[open] .faq-answer {
+  animation: faq-reveal 0.25s ease;
+}
+@keyframes faq-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

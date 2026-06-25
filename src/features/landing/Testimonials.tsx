@@ -8,9 +8,13 @@
  *   - result:  cifra/frase del badge (ej. "+13.398 Bs/mes")
  *   - niche:   título del nicho (H3)
  *   - name:    nombre del negocio
- *   - logoSrc: ruta del logo en /public
- *   - reelSrc: (opcional) URL del embed del reel 9:16; tiene prioridad sobre el logo
- *   - story:   situación → acción → resultado. Envolvé las cifras en {cifra('...')}
+ *   - logoSrc:  ruta del logo en /public
+ *   - reelSrc:  (opcional) URL del embed del reel 9:16; tiene prioridad sobre el logo
+ *   - videoSrc:  (opcional) ruta de un video vertical 9:16 self-hosteado en /public;
+ *               máxima prioridad. Se muestra con controles, sin autoplay.
+ *   - posterSrc: (opcional) imagen de portada del video (frame 9:16). Evita el
+ *               rectángulo negro antes del play.
+ *   - story:    situación → acción → resultado. Envolvé las cifras en {cifra('...')}
  */
 
 import Image from 'next/image'
@@ -27,6 +31,8 @@ type Caso = {
   name: string
   logoSrc: string
   reelSrc?: string
+  videoSrc?: string
+  posterSrc?: string
   story: ReactNode
 }
 
@@ -36,6 +42,8 @@ const CASOS: Caso[] = [
     niche: 'Heladería',
     name: 'Milky Way',
     logoSrc: '/testimonio-milkyway.jpeg',
+    videoSrc: '/testimonio-milkyway.mp4',
+    posterSrc: '/testimonio-milkyway-poster.jpg',
     story: (
       <>
         Estaba perdiendo dinero y a punto de cerrar completamente. Implementamos
@@ -57,12 +65,36 @@ const CASOS: Caso[] = [
       </>
     ),
   },
+  {
+    result: '+500 leads en 1 mes',
+    niche: 'Instituto',
+    name: 'Grupo Alfa',
+    logoSrc: '/testimonio-grupoalfa.jpeg',
+    story: (
+      <>
+        Necesitaban dar a conocer su método de estudio único. Creamos el sistema
+        de contenido y lograron {cifra('más de 10 videos, todos virales')}, que
+        les trajeron {cifra('+500 leads nuevos en 1 mes')}.
+      </>
+    ),
+  },
 ]
 
 function Media({ caso }: { caso: Caso }) {
   return (
     <div className="mx-auto w-full max-w-[260px] shrink-0">
-      {caso.reelSrc ? (
+      {caso.videoSrc ? (
+        <div className="relative aspect-[9/16] overflow-hidden rounded-3xl bg-ink shadow-card ring-1 ring-black/10">
+          <video
+            className="h-full w-full object-cover"
+            src={caso.videoSrc}
+            poster={caso.posterSrc}
+            controls
+            playsInline
+            preload="metadata"
+          />
+        </div>
+      ) : caso.reelSrc ? (
         <div className="relative aspect-[9/16] overflow-hidden rounded-3xl bg-ink shadow-card ring-1 ring-black/10">
           <iframe
             className="h-full w-full"

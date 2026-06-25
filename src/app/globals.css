@@ -43,6 +43,33 @@ body {
   background: linear-gradient(135deg, #0a8c77 0%, #006b5b 45%, #004439 100%);
 }
 
+/* ── Carrusel infinito de comentarios (marquee) ──────────────── */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 45s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
 /* ── Acordeón FAQ (native <details>) ─────────────────────────── */
 details > summary {
   list-style: none;

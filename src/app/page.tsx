@@ -1,8 +1,9 @@
 import Image from 'next/image'
 import CalendlyTracker from '@/features/tracking/CalendlyTracker'
-import VideoPlayer from '@/features/video/VideoPlayer'
 import FAQ from '@/features/landing/FAQ'
 import Testimonials from '@/features/landing/Testimonials'
+import BestVideos from '@/features/landing/BestVideos'
+import Platform from '@/features/landing/Platform'
 
 const CALENDLY_URL = 'https://calendly.com/mauricio-ayllon-7/mauricio1-1'
 
@@ -81,7 +82,7 @@ export default function Home() {
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white p-1">
               <Image src="/unreal-logo.png" alt="Unreal Marketing" width={32} height={32} className="h-full w-auto object-contain" />
             </span>
-            <span className="text-sm font-semibold text-titulo md:text-base">
+            <span className="whitespace-nowrap text-sm font-semibold text-titulo md:text-base">
               Unreal Marketing
             </span>
           </a>
@@ -91,13 +92,14 @@ export default function Home() {
             </a>
             <a
               href="#agendar"
-              className="inline-flex items-center gap-2 rounded-pill bg-lime px-4 py-2.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.03] active:scale-95"
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-pill bg-lime px-3.5 py-2.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.03] active:scale-95 md:px-4"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <rect x="2" y="6" width="14" height="12" rx="3" />
                 <path d="m16 10 6-3v10l-6-3" />
               </svg>
-              Agendar una llamada
+              <span className="sm:hidden">Agendar</span>
+              <span className="hidden sm:inline">Agendar una llamada</span>
             </a>
           </div>
         </nav>
@@ -123,16 +125,16 @@ export default function Home() {
               className="mx-auto mt-7 max-w-3xl font-semibold text-titulo"
               style={{ fontSize: 'clamp(2.25rem, 6vw, 3.75rem)', lineHeight: 1.08, letterSpacing: '-1.5px' }}
             >
-              Conseguí clientes para tu negocio de forma{' '}
-              <span className="text-lime">constante</span>, sin depender de la{' '}
-              <span className="text-lime">suerte</span>.
+              Un flujo <span className="text-lime">constante</span> de clientes
+              para tu negocio — y un sistema que{' '}
+              <span className="text-lime">no deja escapar ni uno</span>.
             </h1>
 
             {/* Subtítulo / objeciones */}
             <p className="mx-auto mt-6 max-w-2xl text-lg font-normal leading-relaxed text-white/75">
-              Sin depender de hacerte viral, sin gastar en publicidad que no
-              funciona y sin que tengas que volverte experto en redes.
-              Instalamos un sistema de contenido que te trae clientes mes a mes.
+              Sin responder a curiosos, sin depender de hacerte viral, sin
+              depender de ads. Instalamos un sistema ya validado que ha
+              cuadruplicado las ventas a nuestros clientes.
             </p>
 
             {/* Prueba social compacta */}
@@ -150,24 +152,67 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Indicador de paso */}
-            <p className="mt-12 text-sm font-semibold uppercase tracking-widest text-lime">
-              Paso 1 · Mirá el video
-            </p>
-
-            {/* VSL */}
-            <div className="mx-auto mt-4 max-w-3xl">
-              <VideoPlayer />
-            </div>
-
-            <div className="mt-9">
+            <div className="mt-12">
               <CtaButton>Agendar una llamada</CtaButton>
             </div>
           </div>
         </section>
 
-        {/* ─── 3. BLOQUE DE AGENDAMIENTO ────────────────────── */}
-        <section id="agendar" className="bg-cream px-6 py-20">
+        {/* ─── 3. PASO 1 · RESULTADOS: TESTIMONIOS ──────────── */}
+        <section id="testimonios" className="bg-cream px-6 pb-12 pt-20">
+          <div className="mx-auto mb-10 max-w-3xl text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-emerald">
+              Paso 1 · Conocé nuestros resultados
+            </p>
+            <h2
+              className="font-bold text-ink"
+              style={{ fontSize: 'clamp(1.875rem, 4.5vw, 3rem)', lineHeight: 1.1, letterSpacing: '-1.2px' }}
+            >
+              Negocios que implementaron{' '}
+              <span className="text-emerald">este sistema</span>
+            </h2>
+            <p className="mt-4 text-lg text-ink/60">
+              Resultados reales de dueños como vos.
+            </p>
+          </div>
+          <Testimonials />
+        </section>
+
+        {/* ─── 4. VIDEOS QUE MÁS VENDIERON ──────────────────── */}
+        <section className="bg-cream px-6 pb-20 pt-4">
+          <div className="mx-auto mb-10 max-w-3xl text-center">
+            <h2
+              className="font-bold text-ink"
+              style={{ fontSize: 'clamp(1.875rem, 4.5vw, 3rem)', lineHeight: 1.1, letterSpacing: '-1.2px' }}
+            >
+              Videos que <span className="text-emerald">MÁS</span> vendieron
+            </h2>
+            <p className="mt-4 text-lg text-ink/60">
+              Contenido que se volvió viral y llenó de clientes potenciales.
+            </p>
+          </div>
+          <BestVideos />
+        </section>
+
+        {/* ─── 6. TECNOLOGÍA PROPIA: PLATAFORMA + AGENTE IA ──── */}
+        <section className="bg-cream px-6 pb-20 pt-4">
+          <div className="mx-auto mb-10 max-w-3xl text-center">
+            <h2
+              className="font-bold text-ink"
+              style={{ fontSize: 'clamp(1.875rem, 4.5vw, 3rem)', lineHeight: 1.1, letterSpacing: '-1.2px' }}
+            >
+              Tecnología propia: <span className="text-emerald">Agente de IA</span> + Plataforma
+            </h2>
+            <p className="mt-4 text-lg text-ink/60">
+              Somos los únicos en el mercado que desarrollamos nuestra propia
+              tecnología para garantizar y medir los resultados de cada cliente.
+            </p>
+          </div>
+          <Platform />
+        </section>
+
+        {/* ─── 7. PASO 2 · AGENDAMIENTO (CALENDLY) ──────────── */}
+        <section id="agendar" className="bg-cream px-6 pb-20 pt-4">
           <div className="mx-auto mb-8 max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-widest text-emerald">
               Paso 2 · Agendá tu llamada
@@ -183,24 +228,7 @@ export default function Home() {
           <CalendarBlock />
         </section>
 
-        {/* ─── 4. CASOS DE ÉXITO / TESTIMONIOS ──────────────── */}
-        <section id="testimonios" className="bg-cream px-6 pb-20">
-          <div className="mx-auto mb-10 max-w-3xl text-center">
-            <h2
-              className="font-bold text-ink"
-              style={{ fontSize: 'clamp(1.875rem, 4.5vw, 3rem)', lineHeight: 1.1, letterSpacing: '-1.2px' }}
-            >
-              Negocios que dejaron de depender de la{' '}
-              <span className="text-emerald">suerte</span>
-            </h2>
-            <p className="mt-4 text-lg text-ink/60">
-              Resultados reales de dueños como vos.
-            </p>
-          </div>
-          <Testimonials />
-        </section>
-
-        {/* ─── 5. FAQ ───────────────────────────────────────── */}
+        {/* ─── 8. FAQ ───────────────────────────────────────── */}
         <section className="bg-cream px-6 pb-20">
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <h2

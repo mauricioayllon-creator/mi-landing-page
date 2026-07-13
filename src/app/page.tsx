@@ -2,8 +2,9 @@ import Image from 'next/image'
 import CalendlyTracker from '@/features/tracking/CalendlyTracker'
 import FAQ from '@/features/landing/FAQ'
 import Testimonials from '@/features/landing/Testimonials'
-import BestVideos from '@/features/landing/BestVideos'
+// import BestVideos from '@/features/landing/BestVideos' // Sección "Videos que más vendieron" ocultada a pedido (2026-07-13). El componente se conserva intacto.
 import Platform from '@/features/landing/Platform'
+import AgentDemo from '@/features/landing/AgentDemo'
 
 const CALENDLY_URL = 'https://calendly.com/mauricio-ayllon-7/mauricio1-1'
 
@@ -178,21 +179,26 @@ export default function Home() {
           <Testimonials />
         </section>
 
-        {/* ─── 4. VIDEOS QUE MÁS VENDIERON ──────────────────── */}
+        {/* ─── 4. VIDEOS QUE MÁS VENDIERON — OCULTA (a pedido, 2026-07-13) ──
+             El componente <BestVideos/> se conserva intacto en
+             src/features/landing/BestVideos.tsx. Para reactivar la sección:
+             descomentá la línea de import arriba y este bloque de JSX.
+
         <section className="bg-cream px-6 pb-20 pt-4">
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <h2
               className="font-bold text-ink"
               style={{ fontSize: 'clamp(1.875rem, 4.5vw, 3rem)', lineHeight: 1.1, letterSpacing: '-1.2px' }}
             >
-              Videos que <span className="text-emerald">MÁS</span> vendieron
+              Videos que <span className="text-emerald">MAS</span> vendieron
             </h2>
             <p className="mt-4 text-lg text-ink/60">
-              Contenido que se volvió viral y llenó de clientes potenciales.
+              Contenido que se volvio viral y lleno de clientes potenciales.
             </p>
           </div>
           <BestVideos />
         </section>
+        ─────────────────────────────────────────────────────────────── */}
 
         {/* ─── 6. TECNOLOGÍA PROPIA: PLATAFORMA + AGENTE IA ──── */}
         <section className="bg-cream px-6 pb-20 pt-4">
@@ -209,6 +215,26 @@ export default function Home() {
             </p>
           </div>
           <Platform />
+        </section>
+
+        {/* ─── 6b. DEMO INTERACTIVA · AGENTE EN ACCIÓN ──────── */}
+        <section id="demo" className="bg-cream px-6 pb-20 pt-4">
+          <div className="mx-auto mb-10 max-w-3xl text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-emerald">
+              Demo interactiva
+            </p>
+            <h2
+              className="font-bold text-ink"
+              style={{ fontSize: 'clamp(1.875rem, 4.5vw, 3rem)', lineHeight: 1.1, letterSpacing: '-1.2px' }}
+            >
+              Mirá al agente <span className="text-emerald">en acción</span>
+            </h2>
+            <p className="mt-4 text-lg text-ink/60">
+              Conversaciones de ejemplo reproducidas en tiempo real: todo lo
+              verde lo respondió la IA, sin intervención humana.
+            </p>
+          </div>
+          <AgentDemo />
         </section>
 
         {/* ─── 7. PASO 2 · AGENDAMIENTO (CALENDLY) ──────────── */}

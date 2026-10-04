@@ -22,7 +22,7 @@ import type { ReactNode } from 'react'
 
 /** Pinta una cifra/dato en verde lima dentro de un párrafo. */
 function cifra(text: string): ReactNode {
-  return <span className="font-semibold text-lime">{text}</span>
+  return <span className="font-semibold text-acento">{text}</span>
 }
 
 type Caso = {
@@ -135,7 +135,7 @@ export default function Testimonials() {
 
             <div className={`flex-1 ${mediaFirst ? 'md:order-2' : 'md:order-1'}`}>
               {/* Badge resultado */}
-              <span className="inline-flex items-center gap-2 rounded-pill bg-lime px-4 py-1.5 text-sm font-semibold text-ink">
+              <span className="inline-flex items-center gap-2 rounded-pill bg-acento px-4 py-1.5 text-sm font-semibold text-ink">
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 2c3 1 6 5 6 10l-2 4-2-1-2 2-2-2-2 1-2-4c0-5 3-9 6-10Zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
                 </svg>

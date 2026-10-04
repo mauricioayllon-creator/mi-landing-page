@@ -22,7 +22,7 @@ html {
 }
 
 body {
-  background-color: var(--cream);
+  background-color: #f3f6fb; /* hielo: fondo frío que pega con el azul de la marca */
   color: var(--ink);
   font-family: var(--font-geist), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -40,7 +40,25 @@ body {
 
 /* ── Degradado de tarjeta de testimonio ──────────────────────── */
 .testimonial-gradient {
-  background: linear-gradient(135deg, #0a8c77 0%, #006b5b 45%, #004439 100%);
+  background: linear-gradient(135deg, #1a6fe0 0%, #0b4bb0 45%, #082e6e 100%);
+}
+
+/* ── Degradados de la marca (del caballo del logo: celeste → azul → azul profundo) ── */
+.degradado-marca {
+  background: linear-gradient(135deg, #1a6fe0 0%, #0b3b8c 55%, #072866 100%);
+}
+.degradado-acento {
+  background: linear-gradient(135deg, #7ae3ff 0%, #1ec8ff 50%, #0ea2e0 100%);
+}
+
+/* ── Marco de celular para la demo del cupón ─────────────────── */
+.marco-celular {
+  border-radius: 2.75rem;
+  padding: 0.65rem;
+  background: #0d0d0d;
+  box-shadow:
+    0 0 0 2px #2a2a2a,
+    0 30px 80px -20px rgba(11, 59, 140, 0.6);
 }
 
 /* ── Carrusel infinito de comentarios (marquee) ──────────────── */

@@ -9,15 +9,17 @@ const geist = Geist({
   display: 'swap',
 })
 
+const TITULO = 'Grow Business · Mauricio Ayllón — Lanzamientos con cupón para tiendas de La Paz'
+const DESCRIPCION =
+  'Armo el lanzamiento de tu tienda con una fecha real. Tu cliente reserva su cupón y su hora sin salir de TikTok, y la venta se cierra en tu mostrador.'
+
 export const metadata: Metadata = {
-  title: 'Unreal Marketing — Clientes constantes para tu negocio local',
-  description:
-    'Instalamos un sistema de contenido que atrae clientes de forma constante, para que tu negocio deje de depender de la suerte.',
+  title: TITULO,
+  description: DESCRIPCION,
   openGraph: {
-    title: 'Unreal Marketing — Clientes constantes para tu negocio local',
-    description:
-      'Instalamos un sistema de contenido que atrae clientes de forma constante, para que tu negocio deje de depender de la suerte.',
-    siteName: 'Unreal Marketing',
+    title: TITULO,
+    description: DESCRIPCION,
+    siteName: 'Grow Business',
   },
 }
 

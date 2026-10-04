@@ -1,35 +1,27 @@
 /**
- * Acordeón de preguntas frecuentes.
+ * Las dudas que más salen en las visitas, respondidas cortito.
  * Usa <details>/<summary> nativo → accesible y sin JS.
- *
- * ⚠️ Las RESPUESTAS están redactadas en base a tu posicionamiento.
- *    Revisalas y ajustá precios/tiempos a tu oferta real.
+ * ⚠️ Solo promesas que dependen de nosotros. Si algo cambia en la oferta, cámbialo aquí.
  */
+
+import { PAUTA_MAX, PAUTA_MIN, PRECIO_SERVICIO } from './config'
 
 const FAQS: { q: string; a: string }[] = [
   {
-    q: '¿Esto funciona para mi tipo de negocio?',
-    a: 'Sí. El sistema está pensado para negocios locales que dependen de que la gente de su zona los conozca y confíe en ellos: gimnasios, clínicas, estéticas, restaurantes, talleres, inmobiliarias y más. Adaptamos el contenido a tu rubro y a tu público. En la llamada lo confirmamos para tu caso puntual.',
+    q: '¿Funciona en mi rubro?',
+    a: 'Funciona en tiendas que venden algo que cualquiera compra y que deja buena ganancia por venta: tenis, celulares, colchones, relojes, ropa, cosas para bebé. De un rubro a otro cambia la oferta, no el sistema. Más arriba puedes ver cómo se vería en el tuyo.',
   },
   {
-    q: '¿Tengo que salir yo en cámara?',
-    a: 'No es obligatorio. Hay formatos que funcionan sin que aparezcas (producto, lugar, proceso, clientes, equipo). Dicho esto, cuando el dueño aparece suele generar más confianza, así que te damos guiones y dirección para que sea simple y rápido si decidís hacerlo.',
+    q: 'Ya pagué publicidad y no vendí nada',
+    a: 'Pasa casi siempre. La publicidad sí trae gente, pero en el camino se pierden: uno se olvida, otro no te cree, otro pregunta precio y no vuelve. Mi trabajo es que lleguen hasta tu puerta con su cupón. Lo de adentro (tu precio, tu atención, tu producto) depende de ti, y te lo digo antes de empezar.',
   },
   {
-    q: '¿En cuánto tiempo voy a ver resultados?',
-    a: 'No vendemos magia de la noche a la mañana. Es un sistema constante: las primeras semanas montamos todo y empezás a ganar visibilidad, y el efecto compuesto de clientes que llegan mes a mes se siente con la constancia. En la llamada te damos expectativas realistas para tu negocio.',
+    q: '¿Y si reservan y no vienen?',
+    a: 'Cada uno elige su día y su hora, y le llega un recordatorio el día antes y el mismo día. El cupón solo vale esa fecha. Y si a mitad del lanzamiento un video no trae reservas, lo cambiamos ese día, no al final.',
   },
   {
-    q: '¿Qué pasa si ningún video se hace viral?',
-    a: 'No dependemos de hacernos virales. Ese es justamente el punto: la viralidad es suerte, y tu negocio no puede depender de la suerte. El sistema está diseñado para atraer clientes de forma constante con contenido que conecta con tu público local, se haga viral o no.',
-  },
-  {
-    q: 'Ya intenté redes / publicidad antes y no funcionó. ¿Por qué esto sería distinto?',
-    a: 'Porque la mayoría publica sin un sistema: postean cuando se acuerdan, sin estrategia y sin medir. Nosotros instalamos un sistema de contenido con un método claro, sin que tengas que volverte experto en redes ni quemar plata en publicidad que no convierte. Es estructura, no improvisación.',
-  },
-  {
-    q: '¿Qué incluye exactamente y cuánto cuesta?',
-    a: 'Incluye la instalación completa del sistema de contenido para tu negocio: estrategia, formatos, guiones y acompañamiento para que entren clientes mes a mes. La inversión depende de tu situación y objetivos, por eso lo vemos en la llamada: primero confirmamos que sea para vos y recién ahí hablamos de números.',
+    q: '¿Cuánto cuesta?',
+    a: `Mi servicio parte en ${PRECIO_SERVICIO.toLocaleString('es-BO')} Bs. La publicidad la pagas tú desde tu cuenta (${PAUTA_MIN} a ${PAUTA_MAX} Bs) y esa plata nunca pasa por mí. En la visita hacemos la cuenta con tus números para que sepas en cuántas ventas lo recuperas.`,
   },
 ]
 
@@ -39,12 +31,12 @@ export default function FAQ() {
       {FAQS.map(({ q, a }) => (
         <details
           key={q}
-          className="group rounded-2xl bg-emerald px-6 py-5 text-titulo shadow-float transition-shadow open:shadow-card"
+          className="group rounded-2xl degradado-marca px-6 py-5 text-titulo shadow-float transition-shadow open:shadow-card"
         >
           <summary className="flex items-center justify-between gap-4">
             <span className="text-lg font-semibold leading-snug">{q}</span>
             <svg
-              className="faq-arrow h-5 w-5 shrink-0 text-lime"
+              className="faq-arrow h-5 w-5 shrink-0 text-acento"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"

@@ -2,16 +2,15 @@ import Image from 'next/image'
 
 /**
  * Prueba social: negocios de rubros distintos, con números que el usuario confirmó.
- * Sneaker Fashion (dato del usuario, 2026-10-04): 5 videos, más de 236 mil vistas, más de 1.004 personas
- * escribieron, 21 pares vendidos (la mayoría a 850 Bs, algunos a 750) con 1.000 Bs de servicio + 512 Bs
- * de publicidad. Ventas: mínimo 21 × 750 = 15.750 Bs → "más de 15.000 Bs" y "más de 10 Bs por cada 1".
+ * Sneaker Fashion: 1.000 Bs de servicio + 512 Bs de publicidad, 5 videos, más de 236 mil vistas
+ * (dato del usuario, 2026-10-04). Ventas de la promo: 21.100 Bs (dato del usuario, 2026-10-13)
+ * → 21.100 / 1.512 = 13,95: "casi 14 Bs por cada 1". Por pedido del usuario (2026-10-13) no se
+ * muestran los pares vendidos ni cuántas personas escribieron.
  */
 
 const SNEAKER = [
-  { cifra: '21 pares', texto: 'vendidos en su promo' },
-  { cifra: '+15.000 Bs', texto: 'en ventas' },
+  { cifra: 'Casi 14 Bs', texto: 'en ventas por cada 1 Bs invertido' },
   { cifra: '+236 mil', texto: 'vistas en 5 videos' },
-  { cifra: '+1.004', texto: 'personas le escribieron' },
 ]
 
 const OTROS = [
@@ -38,9 +37,9 @@ export default function PruebaSocial() {
             </div>
           </div>
           <p className="mt-5 text-2xl font-bold leading-snug tracking-tight text-ink">
-            Invirtió 1.512 Bs y vendió más de <span className="text-azul">15.000 Bs</span>.
+            Invirtió 1.512 Bs y vendió <span className="text-azul">21.100 Bs</span>.
           </p>
-          <p className="mt-1 text-ink/60">Más de 10 Bs en ventas por cada boliviano invertido (servicio + publicidad).</p>
+          <p className="mt-1 text-ink/60">Esos 1.512 Bs son todo: mi servicio y la publicidad.</p>
           <dl className="mt-5 grid grid-cols-2 gap-3">
             {SNEAKER.map(({ cifra, texto }) => (
               <div key={texto} className="rounded-2xl bg-hielo p-3">

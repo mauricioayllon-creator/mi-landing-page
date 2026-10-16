@@ -2,9 +2,8 @@
  * Las dudas que más salen en las visitas, respondidas cortito.
  * Usa <details>/<summary> nativo → accesible y sin JS.
  * ⚠️ Solo promesas que dependen de nosotros. Si algo cambia en la oferta, cámbialo aquí.
+ * Sin "¿Cuánto cuesta?": el precio se habla en la reunión, no en la página (pedido del usuario, 2026-10-13).
  */
-
-import { PAUTA_MAX, PAUTA_MIN, PRECIO_SERVICIO } from './config'
 
 const FAQS: { q: string; a: string }[] = [
   {
@@ -18,10 +17,6 @@ const FAQS: { q: string; a: string }[] = [
   {
     q: '¿Y si reservan y no vienen?',
     a: 'Cada uno elige su día y su hora, y le llega un recordatorio el día antes y el mismo día. El cupón solo vale esa fecha. Y si a mitad del lanzamiento un video no trae reservas, lo cambiamos ese día, no al final.',
-  },
-  {
-    q: '¿Cuánto cuesta?',
-    a: `Mi servicio parte en ${PRECIO_SERVICIO.toLocaleString('es-BO')} Bs. La publicidad la pagas tú desde tu cuenta (${PAUTA_MIN} a ${PAUTA_MAX} Bs) y esa plata nunca pasa por mí. En la visita hacemos la cuenta con tus números para que sepas en cuántas ventas lo recuperas.`,
   },
 ]
 

@@ -23,14 +23,16 @@ export const NOMBRE_OFERTA = 'Lanzamiento Tienda Llena'
 /**
  * Garantía (decidida por el usuario el 2026-10-04): si no se venden con cupón las unidades
  * necesarias para recuperar esta parte de la inversión (servicio + publicidad), el siguiente
- * lanzamiento va sin cobrar el servicio. La calculadora saca el número de cupones.
- * En la página no se dice el porcentaje: se muestra el número de cupones.
+ * lanzamiento va sin cobrar el servicio. En /propuesta la calculadora saca el número de cupones;
+ * la página principal solo nombra la garantía (desde el 2026-10-13 ya no tiene calculadora).
+ * No se dice el porcentaje: se muestra el número de cupones.
  * Por qué no el 100%: lo que pasa dentro de la tienda (precio, vendedores, producto) no lo controlamos.
  * Con null, la garantía no aparece.
  */
 export const GARANTIA_PARTE: number | null = 0.5
 
-/** Precio del servicio por lanzamiento, en Bs. En /propuesta se puede cambiar con ?p=1800 */
+/** Precio del servicio por lanzamiento, en Bs. Solo se usa en /propuesta (se cambia con ?p=1800).
+ *  No va en la página principal: el precio se habla en la reunión (pedido del usuario, 2026-10-13). */
 export const PRECIO_SERVICIO = 1500
 /** La pauta la pone la tienda desde su propia cuenta. */
 export const PAUTA_MIN = 500
@@ -50,7 +52,12 @@ export type Video = (
 ) & { formato?: 'vertical' | 'horizontal' }
 
 /** VSL 1 (antes de la reunión): qué es, para quién, el caso de la tienda de tenis y las dudas. */
-export const VSL_PRINCIPAL: Video | null = null
+export const VSL_PRINCIPAL: Video | null = {
+  tipo: 'mp4',
+  src: '/videos/vsl-grow-business.mp4',
+  poster: '/videos/vsl-grow-business.jpg',
+  formato: 'horizontal',
+}
 /** Caso de estudio grabado en pantalla: el anuncio, los números y lo que se aprendió. */
 export const VIDEO_CASO: Video | null = null
 /** VSL 2 (después de la reunión, para el socio o la pareja): plan, inversión y riesgos. */
@@ -60,9 +67,6 @@ export const VSL_PROPUESTA: Video | null = null
  *  Comprímelo a ~4 MB (540 px de ancho) para que cargue con datos móviles. Con null, se muestra solo la demo.
  *  Ej.: { src: '/videos/nuestro.mp4', poster: '/videos/nuestro.jpg', pie: 'Un video de nuestras promos' } */
 export const VIDEO_EJEMPLO: { src: string; poster: string; pie: string } | null = null
-
-/** Inversión total de referencia del dueño: el servicio + la publicidad máxima. */
-export const INVERSION_REFERENCIA = PRECIO_SERVICIO + PAUTA_MAX
 
 /** Cupones (ventas con cupón) que el dueño necesita para recuperar una parte de lo que invierte. */
 export function cuponesPara(parte: number, inversion: number, gananciaPorVenta: number) {

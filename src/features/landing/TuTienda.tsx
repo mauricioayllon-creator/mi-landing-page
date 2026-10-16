@@ -1,26 +1,27 @@
 'use client'
 
 import { useState } from 'react'
-import Simulador, { type Numeros } from './Simulador'
+import WhatsAppButton from './WhatsAppButton'
 
 /**
- * "¿Qué vendes?": el dueño elige su rubro y ve una promo de ejemplo con su cuenta.
+ * "¿Qué vendes?": el dueño elige su rubro y ve una promo de ejemplo.
  * Responde "no es mi rubro": el sistema es el mismo, cambia la oferta.
- * Los números son ejemplos; en la visita se hacen con los del dueño.
+ * La calculadora se sacó de aquí el 2026-10-13 (pedido del usuario: la gente no la iba a entender);
+ * sigue en /propuesta. El botón pide la promo de su tienda, con el rubro ya escrito en el mensaje.
  */
 
-type Rubro = Numeros & { nombre: string; porque: string; regalo: string }
+type Rubro = { nombre: string; porque: string; regalo: string; cupon: number; unidades: number }
 
 const RUBROS: Rubro[] = [
-  { nombre: 'Tenis', porque: 'Llegó la colección nueva', regalo: 'unas medias', precio: 800, costo: 500, cupon: 100, unidades: 40 },
-  { nombre: 'Celulares', porque: 'Aniversario de la tienda', regalo: 'funda y vidrio templado', precio: 2500, costo: 2100, cupon: 150, unidades: 30 },
-  { nombre: 'Colchones', porque: 'Fin de año', regalo: '2 almohadas', precio: 2200, costo: 1400, cupon: 300, unidades: 20 },
-  { nombre: 'Relojes', porque: 'Regalos de Navidad', regalo: 'caja de regalo', precio: 600, costo: 300, cupon: 80, unidades: 40 },
-  { nombre: 'Mochilas y maletas', porque: 'Vacaciones de fin de año', regalo: 'un candado', precio: 450, costo: 250, cupon: 70, unidades: 50 },
-  { nombre: 'Cosas para bebé', porque: 'Feria del bebé', regalo: 'un kit de regalo', precio: 1800, costo: 1200, cupon: 200, unidades: 20 },
+  { nombre: 'Tenis', porque: 'Llegó la colección nueva', regalo: 'unas medias', cupon: 100, unidades: 40 },
+  { nombre: 'Celulares', porque: 'Aniversario de la tienda', regalo: 'funda y vidrio templado', cupon: 150, unidades: 30 },
+  { nombre: 'Colchones', porque: 'Fin de año', regalo: '2 almohadas', cupon: 300, unidades: 20 },
+  { nombre: 'Relojes', porque: 'Regalos de Navidad', regalo: 'caja de regalo', cupon: 80, unidades: 40 },
+  { nombre: 'Mochilas y maletas', porque: 'Vacaciones de fin de año', regalo: 'un candado', cupon: 70, unidades: 50 },
+  { nombre: 'Cosas para bebé', porque: 'Feria del bebé', regalo: 'un kit de regalo', cupon: 200, unidades: 20 },
 ]
 
-export default function TuTienda({ inversion }: { inversion: number }) {
+export default function TuTienda() {
   const [i, setI] = useState(0)
   const r = RUBROS[i]
 
@@ -51,10 +52,14 @@ export default function TuTienda({ inversion }: { inversion: number }) {
         </p>
       </div>
 
-      <p className="mt-8 mb-4 text-center text-ink/65">
-        ¿Y la ganancia? Cambia estos números por los tuyos:
-      </p>
-      <Simulador key={r.nombre} inicial={r} inversion={inversion} desde />
+      <div className="mt-8 flex flex-col items-center gap-3 text-center">
+        <WhatsAppButton
+          mensaje={`Hola Mauricio, vi tu página. Tengo una tienda de ${r.nombre.toLowerCase()} y quiero que me armes la promo para mi próxima fecha.`}
+        >
+          Quiero la de mi tienda
+        </WhatsAppButton>
+        <p className="text-sm text-ink/60">Es gratis, y es tuya aunque no trabajemos juntos.</p>
+      </div>
     </div>
   )
 }

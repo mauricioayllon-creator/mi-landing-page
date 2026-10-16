@@ -4,6 +4,8 @@ import { GARANTIA_PARTE, LANZAMIENTOS_POR_MES, NOMBRE_OFERTA, PAUTA_MAX, PAUTA_M
  * La oferta en una hoja: responde las 4 preguntas que le hizo a Hormozi su papá
  * (¿qué logro?, ¿cómo sé que va a pasar?, ¿cuánto tarda?, ¿qué tengo que hacer?) más el riesgo.
  * El número de cupones de la garantía lo saca la calculadora con los números de cada tienda.
+ * Desde el 2026-10-13 la hoja ya no está en la página principal (pedido del usuario: mucho texto, y el
+ * precio se habla en la reunión). TextoGarantia y CondicionesGarantia los sigue usando /propuesta.
  */
 
 export function TextoGarantia() {

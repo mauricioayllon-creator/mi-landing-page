@@ -2,8 +2,16 @@ import Image from 'next/image'
 import WhatsAppButton from './WhatsAppButton'
 import { LOGO, MARCA, PERSONA } from './config'
 
-/** Navbar flotante, igual en todas las páginas. */
-export function Nav({ mensaje }: { mensaje: string }) {
+/** Navbar flotante, igual en todas las páginas. `botonCorto` es el texto del botón en el celular. */
+export function Nav({
+  mensaje,
+  boton = 'Escríbeme por WhatsApp',
+  botonCorto = 'WhatsApp',
+}: {
+  mensaje: string
+  boton?: string
+  botonCorto?: string
+}) {
   return (
     <header className="fixed inset-x-0 top-4 z-50 px-4">
       <nav className="mx-auto flex max-w-5xl items-center justify-between rounded-pill bg-ink/95 px-4 py-3 shadow-float backdrop-blur md:px-5">
@@ -17,8 +25,8 @@ export function Nav({ mensaje }: { mensaje: string }) {
           </span>
         </a>
         <WhatsAppButton mensaje={mensaje} className="px-3.5 py-2.5 text-sm md:px-4">
-          <span className="sm:hidden">WhatsApp</span>
-          <span className="hidden sm:inline">Escríbeme por WhatsApp</span>
+          <span className="sm:hidden">{botonCorto}</span>
+          <span className="hidden sm:inline">{boton}</span>
         </WhatsAppButton>
       </nav>
     </header>
@@ -78,13 +86,21 @@ export function Footer() {
 }
 
 /** Barra fija abajo con el botón de WhatsApp (pensada para el celular). */
-export function BarraWhatsApp({ texto, mensaje }: { texto: React.ReactNode; mensaje: string }) {
+export function BarraWhatsApp({
+  texto,
+  mensaje,
+  boton = 'Escríbeme',
+}: {
+  texto: React.ReactNode
+  mensaje: string
+  boton?: string
+}) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-pill bg-ink px-5 py-3 shadow-float md:px-6">
         <p className="text-sm font-medium text-titulo sm:text-base">{texto}</p>
         <WhatsAppButton mensaje={mensaje} className="shrink-0 px-4 py-2.5 text-sm">
-          Escríbeme
+          {boton}
         </WhatsAppButton>
       </div>
     </div>

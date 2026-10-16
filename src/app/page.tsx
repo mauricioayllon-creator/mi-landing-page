@@ -8,6 +8,11 @@
  * Lo que cambia seguido (WhatsApp, videos, precio, garantía) está en src/features/landing/config.ts.
  * Los componentes viejos (AgentDemo, Platform, BestVideos, Testimonials, CalendlyTracker) se
  * conservan intactos, pero ya no están en la página.
+ *
+ * 2026-10-13 (pedido del usuario): fuera la calculadora, la oferta "en una hoja" (mucho texto) y el
+ * precio. El precio se habla en la reunión. La calculadora y la garantía en cupones siguen en /propuesta.
+ * El botón regala algo en vez de pedir una reunión: la promo de su próxima fecha, armada gratis
+ * (el regalo de la visita 1, ficha 14 §3.2; regalar servicio triplicó la respuesta en [L1.7]).
  */
 
 import Image from 'next/image'
@@ -15,19 +20,13 @@ import FAQ from '@/features/landing/FAQ'
 import VideoSlot from '@/features/landing/VideoSlot'
 import ComoFunciona from '@/features/landing/ComoFunciona'
 import TuTienda from '@/features/landing/TuTienda'
-import Oferta from '@/features/landing/Oferta'
 import PruebaSocial from '@/features/landing/PruebaSocial'
 import WhatsAppButton from '@/features/landing/WhatsAppButton'
 import { BarraWhatsApp, Footer, Nav, TituloSeccion } from '@/features/landing/Marco'
-import {
-  GARANTIA_PARTE,
-  INVERSION_REFERENCIA,
-  LANZAMIENTOS_POR_MES,
-  PERSONA,
-  VSL_PRINCIPAL,
-} from '@/features/landing/config'
+import { GARANTIA_PARTE, LANZAMIENTOS_POR_MES, PERSONA, VSL_PRINCIPAL } from '@/features/landing/config'
 
-const MENSAJE = 'Hola Mauricio, vi tu página. Mi tienda es ____ y mi próxima fecha fuerte es ____.'
+const MENSAJE = 'Hola Mauricio, vi tu página. Quiero que me armes la promo para mi próxima fecha.'
+const BOTON = 'Quiero mi promo armada gratis'
 
 function Hero() {
   return (
@@ -63,14 +62,16 @@ function Hero() {
         )}
 
         <div className="mt-10 flex flex-col items-center gap-4">
-          <WhatsAppButton mensaje={MENSAJE}>Escríbeme tu próxima fecha fuerte</WhatsAppButton>
+          <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
+            {BOTON}
+          </WhatsAppButton>
+          <p className="max-w-md leading-relaxed text-white/80">
+            Te la llevo armada a tu tienda. Si te sirve, la lanzamos juntos; si no, te la quedas igual.
+          </p>
           {GARANTIA_PARTE && (
-            <p className="max-w-md text-sm leading-relaxed text-white/65">
+            <p className="max-w-md text-sm leading-relaxed text-white/55">
               Con garantía: si tu promo no llega al mínimo de ventas que sacamos con tus números, el
-              siguiente lanzamiento te lo hago sin cobrar.{' '}
-              <a href="#cuenta" className="font-semibold text-acento underline underline-offset-4">
-                Calcula la tuya
-              </a>
+              siguiente lanzamiento te lo hago sin cobrar.
             </p>
           )}
         </div>
@@ -98,10 +99,13 @@ function Cierre() {
         </h2>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/75">
           Es la temporada más fuerte para una tienda. Una promo se arma con unas 2 semanas de
-          anticipación, y tomo {LANZAMIENTOS_POR_MES} tiendas por mes. Escríbeme tu fecha y la armamos.
+          anticipación, y tomo {LANZAMIENTOS_POR_MES} tiendas por mes. Pídeme la tuya y te la llevo
+          armada, gratis.
         </p>
         <div className="mt-8">
-          <WhatsAppButton mensaje={MENSAJE}>Escríbeme por WhatsApp</WhatsAppButton>
+          <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
+            {BOTON}
+          </WhatsAppButton>
         </div>
         <p className="mt-10 max-w-xl text-sm leading-relaxed text-white/50">
           P.D. Si cada venta te deja muy poca ganancia, un cupón no te conviene y te lo voy a decir
@@ -115,7 +119,7 @@ function Cierre() {
 export default function Home() {
   return (
     <>
-      <Nav mensaje={MENSAJE} />
+      <Nav mensaje={MENSAJE} boton="Quiero mi promo gratis" botonCorto="Promo gratis" />
 
       <main id="top">
         <Hero />
@@ -127,21 +131,14 @@ export default function Home() {
           <ComoFunciona />
         </section>
 
-        <section id="cuenta" className="bg-white px-6 py-20">
-          <TituloSeccion etiqueta="En tu tienda" bajada="Elige qué vendes. Los números son de ejemplo; en la visita los hacemos con los tuyos.">
+        <section className="bg-white px-6 py-20">
+          <TituloSeccion etiqueta="En tu tienda" bajada="Elige qué vendes. Es un ejemplo: la tuya la armamos con lo que vendes de verdad.">
             ¿Qué vendes? <span className="text-marca">Así se vería tu promo</span>
           </TituloSeccion>
-          <TuTienda inversion={INVERSION_REFERENCIA} />
+          <TuTienda />
         </section>
 
         <section className="bg-hielo px-6 py-20">
-          <TituloSeccion etiqueta="En una hoja">
-            Lo que te ofrezco, <span className="text-marca">sin letra chica</span>
-          </TituloSeccion>
-          <Oferta />
-        </section>
-
-        <section className="bg-hielo px-6 pb-20">
           <TituloSeccion>
             Negocios con los que <span className="text-marca">ya trabajé</span>
           </TituloSeccion>
@@ -161,9 +158,10 @@ export default function Home() {
 
       <BarraWhatsApp
         mensaje={MENSAJE}
+        boton="La quiero"
         texto={
           <>
-            Que tu promo llene <span className="font-semibold text-acento">tu tienda</span>
+            Te armo tu próxima promo, <span className="font-semibold text-acento">gratis</span>
           </>
         }
       />

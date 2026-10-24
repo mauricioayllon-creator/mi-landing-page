@@ -37,7 +37,7 @@ function texto(valor: string | string[] | undefined, max: number) {
 }
 
 const PASOS = [
-  { titulo: 'Armamos tu oferta juntos', texto: 'El porqué, la fecha, el valor del cupón y cuántas unidades separas.' },
+  { titulo: 'Armamos tu oferta juntos', texto: 'El porqué, la fecha, el regalo y cuántas unidades separas. Sin bajar tu precio.' },
   { titulo: 'La ponemos en tu cupón', texto: 'Con tu nombre. Tu cliente elige su día y su hora.' },
   { titulo: 'Videos y publicidad', texto: 'Grabo en tu tienda (unas 3 horas), edito y lanzamos la publicidad con fecha.' },
   { titulo: 'El día de la promo', texto: 'Llegan con su cupón. Al final ves cuántos reservaron, cuántos vinieron y cuánto vendiste.' },
@@ -125,7 +125,7 @@ export default async function Propuesta({ searchParams }: { searchParams: Params
 
         <section className="bg-hielo px-6 pb-20">
           <TituloSeccion
-            bajada={`El servicio es ${precio.toLocaleString('es-BO')} Bs. La publicidad (${PAUTA_MIN} a ${PAUTA_MAX} Bs) la pagas tú desde tu cuenta y nunca pasa por mí.`}
+            bajada={`El servicio es ${precio.toLocaleString('es-BO')} Bs: la mitad para empezar y la otra mitad cuando te lleguen tus clientes. La publicidad (${PAUTA_MIN} a ${PAUTA_MAX} Bs) la pagas tú desde tu cuenta y nunca pasa por mí.`}
           >
             ¿En cuántas ventas lo <span className="text-marca">recuperas</span>?
           </TituloSeccion>

@@ -12,19 +12,20 @@ export function TextoGarantia() {
   if (!GARANTIA_PARTE) return null
   return (
     <>
-      Si no se venden con cupón las unidades mínimas que te marca la calculadora, el siguiente lanzamiento
-      te lo hago sin cobrar mi servicio.
+      Me pagas la mitad para empezar. La otra mitad, recién cuando te lleguen los clientes que necesitas para
+      recuperar lo que pusiste (los que te marca la calculadora). Si no llegan, no me la pagas.
     </>
   )
 }
 
-/** Las condiciones y el porqué del mínimo (admisión: lo de adentro de la tienda no depende de mí). */
+/** Las condiciones y por qué se cuentan llegadas (admisión: lo de adentro de la tienda no depende de mí). */
 export function CondicionesGarantia() {
   return (
     <>
-      Solo te pido al menos {PAUTA_MIN} Bs de publicidad, aprobar los videos en 24 horas, separar el stock y
-      canjear cada cupón en tu panel. ¿Por qué no te garantizo recuperar todo? Porque lo que pasa dentro de tu
-      tienda (tu precio, tus vendedores, tu producto) depende de ti. Lo que depende de mí, lo garantizo.
+      Solo te pido tu parte: tus accesos, aprobar los videos en 24 horas, al menos {PAUTA_MIN} Bs de publicidad,
+      tu stock separado y validar cada cupón en tu panel. Si no la cumples, la otra mitad se paga igual en la fecha
+      del acuerdo. ¿Por qué cuento llegadas y no ventas? Porque lo que pasa dentro de tu tienda (tu precio, tus
+      vendedores, tu producto) depende de ti. Lo que depende de mí, lo garantizo.
     </>
   )
 }

@@ -4,14 +4,15 @@ import { useState } from 'react'
 import { GARANTIA_PARTE, cuponesPara } from './config'
 
 /**
- * La cuenta del dueño: cuánto le queda por venta con el cupón, cuánto gana si se acaba el stock,
- * con cuántas ventas recupera lo que invierte y cuál es SU garantía (en cupones).
- * Responde "el cupón me baja la ganancia" y "¿y si no funciona?" con sus propios números.
+ * La cuenta del dueño: cuánto le queda por venta con su regalo, cuánto gana si se acaba el stock,
+ * con cuántas ventas recupera lo que invierte y cuál es SU garantía (los clientes que tienen que llegar).
+ * Responde "la promo me baja la ganancia" y "¿y si no funciona?" con sus propios números.
+ * `cupon` es lo que a la tienda le cuesta el regalo (desde el 2026-10-24: una oferta mejor que una rebaja).
  */
 
 export type Numeros = { precio: number; costo: number; cupon: number; unidades: number }
 
-const EJEMPLO: Numeros = { precio: 800, costo: 500, cupon: 100, unidades: 40 }
+const EJEMPLO: Numeros = { precio: 800, costo: 500, cupon: 45, unidades: 40 }
 
 const bs = (n: number) => `${Math.round(n).toLocaleString('es-BO')} Bs`
 const pct = (parte: number, total: number) => `${Math.min(100, (parte / total) * 100)}%`
@@ -107,7 +108,7 @@ export default function Simulador({
             <CampoBs id="precio" label="Lo vendes a" valor={precio} onChange={setPrecio} />
             <CampoBs id="costo" label="Te cuesta" valor={costo} onChange={setCosto} />
           </div>
-          <Deslizador id="cupon" label="Cupón de" valor={cupon} unidad="Bs" min={0} max={maxCupon} paso={10} onChange={setCupon} />
+          <Deslizador id="cupon" label="Lo que te cuesta el regalo" valor={cupon} unidad="Bs" min={0} max={maxCupon} paso={5} onChange={setCupon} />
           <Deslizador id="unidades" label="Unidades que separas" valor={unidades} unidad="u." min={5} max={200} paso={5} onChange={setUnidades} />
           <p className="rounded-2xl bg-hielo px-4 py-3 text-sm text-ink/70">
             Lo que inviertes: <span className="font-bold text-ink">{desde ? 'desde ' : ''}{bs(inversion)}</span> (mi servicio + la
@@ -122,20 +123,20 @@ export default function Simulador({
           {!listo ? (
             <p className="text-lg leading-relaxed">
               {p > 0 && c > 0
-                ? 'Con ese cupón pierdes en cada venta. Bájalo, o regala algo que a ti te cueste poco en vez de descontar.'
+                ? 'Con ese regalo pierdes en cada venta. Elige uno que para tu cliente valga harto y a ti te cueste poco.'
                 : 'Pon a cuánto lo vendes y cuánto te cuesta.'}
             </p>
           ) : (
             <>
               <div>
-                <p className="text-sm text-white/70">Con el cupón te quedan</p>
+                <p className="text-sm text-white/70">Con el regalo te quedan</p>
                 <p className="text-4xl font-bold tracking-tight text-acento">{bs(porVenta)}</p>
                 <p className="text-sm text-white/70">por cada venta</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-xl bg-white/10 p-3">
                   <p className="text-xs text-white/65">Si se acaban, vendes</p>
-                  <p className="text-xl font-bold">{bs(unidades * (p - cupon))}</p>
+                  <p className="text-xl font-bold">{bs(unidades * p)}</p>
                 </div>
                 <div className="rounded-xl bg-white/10 p-3">
                   <p className="text-xs text-white/65">y ganas</p>
@@ -153,15 +154,9 @@ export default function Simulador({
 
           <div className="relative mt-10 mb-12">
             <div className="flex h-4 overflow-hidden rounded-full bg-black/5">
-              {garantia > 0 && <div className="degradado-marca" style={{ width: pct(Math.min(garantia, tope), tope) }} />}
-              <div className="bg-azul" style={{ width: pct(Math.max(0, Math.min(recupera, tope) - garantia), tope) }} />
+              <div className="bg-azul" style={{ width: pct(Math.min(recupera, tope), tope) }} />
               <div className="degradado-acento" style={{ width: pct(Math.max(0, unidades - recupera), tope) }} />
             </div>
-            {garantia > 0 && (
-              <span className="absolute -top-8 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-marca" style={{ left: pct(garantia, tope) }}>
-                Garantía: {garantia}
-              </span>
-            )}
             <span className="absolute top-6 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-azul" style={{ left: pct(recupera, tope) }}>
               Recuperas: {recupera}
             </span>
@@ -186,9 +181,9 @@ export default function Simulador({
                 <path d="m9 12 2 2 4-4" />
               </svg>
               <p className="leading-relaxed text-ink/80">
-                <span className="font-bold text-ink">Tu garantía:</span> si no se venden al menos{' '}
-                <span className="font-bold text-marca">{garantia} cupones</span>, el siguiente lanzamiento te lo
-                hago sin cobrar mi servicio.
+                <span className="font-bold text-ink">Tu garantía:</span> me pagas la mitad para empezar, y la otra
+                mitad recién cuando te lleguen <span className="font-bold text-marca">{garantia} clientes</span> con su
+                cupón, los que necesitas para recuperar lo que pusiste. Si no llegan, no me la pagas.
               </p>
             </div>
           )}

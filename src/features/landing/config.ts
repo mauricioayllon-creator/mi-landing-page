@@ -21,19 +21,19 @@ export const LANZAMIENTOS_POR_MES = 3
 export const NOMBRE_OFERTA = 'Lanzamiento Tienda Llena'
 
 /**
- * Garantía (decidida por el usuario el 2026-10-04): si no se venden con cupón las unidades
- * necesarias para recuperar esta parte de la inversión (servicio + publicidad), el siguiente
- * lanzamiento va sin cobrar el servicio. En /propuesta la calculadora saca el número de cupones;
- * la página principal solo nombra la garantía (desde el 2026-10-13 ya no tiene calculadora).
- * No se dice el porcentaje: se muestra el número de cupones.
- * Por qué no el 100%: lo que pasa dentro de la tienda (precio, vendedores, producto) no lo controlamos.
- * Con null, la garantía no aparece.
+ * Garantía (decidida por el usuario el 2026-10-24): el dueño paga la mitad para empezar y la otra
+ * mitad cuando le llegan los clientes que necesita para recuperar lo que puso (servicio + publicidad).
+ * Si no llegan, no la paga. Se mide en llegadas (cupones validados en su tienda), porque lo que pasa
+ * dentro de la tienda (precio, vendedores, producto) no lo controlamos.
+ * En /propuesta la calculadora saca ese número; la página principal la nombra sin número.
+ * Es la parte de la inversión que esos clientes recuperan (1 = toda). Con null, la garantía no aparece.
  */
-export const GARANTIA_PARTE: number | null = 0.5
+export const GARANTIA_PARTE: number | null = 1
 
-/** Precio del servicio por lanzamiento, en Bs. Solo se usa en /propuesta (se cambia con ?p=1800).
+/** Precio del servicio por lanzamiento, en Bs, que se paga en dos mitades (decidido el 2026-10-24).
+ *  Solo se usa en /propuesta (se cambia con ?p=1800).
  *  No va en la página principal: el precio se habla en la reunión (pedido del usuario, 2026-10-13). */
-export const PRECIO_SERVICIO = 1500
+export const PRECIO_SERVICIO = 2500
 /** La pauta la pone la tienda desde su propia cuenta. */
 export const PAUTA_MIN = 500
 export const PAUTA_MAX = 700

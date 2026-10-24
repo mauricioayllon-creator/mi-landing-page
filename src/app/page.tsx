@@ -46,13 +46,13 @@ function Hero() {
           className="mx-auto mt-7 max-w-3xl font-semibold text-titulo"
           style={{ fontSize: 'clamp(2.2rem, 6.2vw, 3.75rem)', lineHeight: 1.06, letterSpacing: '-1.5px' }}
         >
-          Que tu próxima promo llene tu tienda,{' '}
-          <span className="text-acento">no tu WhatsApp</span>.
+          Vende más que tu competencia,{' '}
+          <span className="text-acento">sin bajar tu precio</span>.
         </h1>
 
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/75">
-          Armamos tu promo con fecha, grabo los videos y lanzamos la publicidad. Tu cliente guarda un
-          cupón de tu tienda, elige su día y su hora, y llega a comprar.
+          El camino de un extraño: que te vea, te elija, llegue y compre. Te hago videos que no pasa de
+          largo, armamos una oferta mejor que una rebaja y llega a tu tienda con su día y su hora.
         </p>
 
         {VSL_PRINCIPAL && (
@@ -70,8 +70,8 @@ function Hero() {
           </p>
           {GARANTIA_PARTE && (
             <p className="max-w-md text-sm leading-relaxed text-white/55">
-              Con garantía: si tu promo no llega al mínimo de ventas que sacamos con tus números, el
-              siguiente lanzamiento te lo hago sin cobrar.
+              Con garantía: me pagas la mitad para empezar, y la otra mitad cuando ya te estén llegando
+              clientes.
             </p>
           )}
         </div>

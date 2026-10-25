@@ -13,20 +13,67 @@
  * precio. El precio se habla en la reunión. La calculadora y la garantía en cupones siguen en /propuesta.
  * El botón regala algo en vez de pedir una reunión: la promo de su próxima fecha, armada gratis
  * (el regalo de la visita 1, ficha 14 §3.2; regalar servicio triplicó la respuesta en [L1.7]).
+ *
+ * 2026-10-25 (pedido del usuario): el botón pide agendar una llamada. "Cómo funciona" y "¿Qué vendes?"
+ * quedan ocultas, no borradas: se vuelven a mostrar con SECCIONES en config.ts.
+ * La promo gratis sigue en la oferta pero no se nombra (PROMO_GRATIS en config.ts). Cada sección
+ * termina con el mismo botón y una guía de qué pasa al tocarlo; en el celular, si no entra, "Escríbeme".
  */
 
 import Image from 'next/image'
 import FAQ from '@/features/landing/FAQ'
 import VideoSlot from '@/features/landing/VideoSlot'
+import ReproductorVSL from '@/features/landing/ReproductorVSL'
 import ComoFunciona from '@/features/landing/ComoFunciona'
 import TuTienda from '@/features/landing/TuTienda'
 import PruebaSocial from '@/features/landing/PruebaSocial'
 import WhatsAppButton from '@/features/landing/WhatsAppButton'
 import { BarraWhatsApp, Footer, Nav, TituloSeccion } from '@/features/landing/Marco'
-import { GARANTIA_PARTE, LANZAMIENTOS_POR_MES, PERSONA, VSL_PRINCIPAL } from '@/features/landing/config'
+import {
+  GARANTIA_PARTE,
+  LANZAMIENTOS_POR_MES,
+  PERSONA,
+  PROMO_GRATIS,
+  SECCIONES,
+  VSL_PRINCIPAL,
+} from '@/features/landing/config'
 
-const MENSAJE = 'Hola Mauricio, vi tu página. Quiero que me armes la promo para mi próxima fecha.'
-const BOTON = 'Quiero mi promo armada gratis'
+const MENSAJE = 'Hola, vi el video y quiero agendar una llamada.'
+const BOTON = 'Quiero agendar una llamada'
+const BOTON_CORTO = 'Escríbeme'
+
+/**
+ * El botón principal con una guía antes ("Dale clic aquí") y después (qué pasa al tocarlo),
+ * para que nadie se quede sin saber qué hacer. `claro` = texto claro, para fondos oscuros.
+ */
+function LlamadaALaAccion({ claro = false, antes }: { claro?: boolean; antes?: React.ReactNode }) {
+  return (
+    <div className="flex flex-col items-center gap-3 text-center">
+      {antes && <p className={`mb-3 text-xl font-bold ${claro ? 'text-titulo' : 'text-ink'}`}>{antes}</p>}
+      <p className={`flex items-center gap-1.5 text-sm font-semibold uppercase tracking-widest ${claro ? 'text-acento' : 'text-marca'}`}>
+        Dale clic aquí
+        <svg
+          className="h-4 w-4 motion-safe:animate-bounce"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14M5 12l7 7 7-7" />
+        </svg>
+      </p>
+      <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
+        {BOTON}
+      </WhatsAppButton>
+      <p className={`max-w-sm text-sm leading-relaxed ${claro ? 'text-white/70' : 'text-ink/60'}`}>
+        Se abre tu WhatsApp con el mensaje listo. Solo tocas enviar y elegimos juntos el día y la hora.
+      </p>
+    </div>
+  )
+}
 
 function Hero() {
   return (
@@ -50,24 +97,38 @@ function Hero() {
           <span className="text-acento">sin bajar tu precio</span>.
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/75">
-          El camino de un extraño: que te vea, te elija, llegue y compre. Te hago videos que no pasa de
-          largo, armamos una oferta mejor que una rebaja y llega a tu tienda con su día y su hora.
+        {/* 2026-10-25 (pedido del usuario): una instrucción simple en vez del párrafo abstracto. */}
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/80 md:text-xl">
+          <span className="font-semibold text-titulo">Mira este video (18 min).</span> Si te hace sentido,{' '}
+          <span className="font-semibold text-acento">agenda una llamada conmigo.</span>
         </p>
 
         {VSL_PRINCIPAL && (
           <div className="mt-10">
-            <VideoSlot video={VSL_PRINCIPAL} titulo="Cómo funciona el Lanzamiento Tienda Llena" />
+            {VSL_PRINCIPAL.tipo === 'mp4' ? (
+              <ReproductorVSL
+                video={VSL_PRINCIPAL}
+                titulo="Cómo funciona el Lanzamiento Tienda Llena"
+                boton={
+                  <WhatsAppButton mensaje={MENSAJE} className="px-4 py-2.5 text-sm sm:px-6 sm:py-3.5 sm:text-base">
+                    {BOTON}
+                  </WhatsAppButton>
+                }
+              />
+            ) : (
+              <VideoSlot video={VSL_PRINCIPAL} titulo="Cómo funciona el Lanzamiento Tienda Llena" />
+            )}
           </div>
         )}
 
         <div className="mt-10 flex flex-col items-center gap-4">
-          <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
-            {BOTON}
-          </WhatsAppButton>
-          <p className="max-w-md leading-relaxed text-white/80">
-            Te la llevo armada a tu tienda. Si te sirve, la lanzamos juntos; si no, te la quedas igual.
-          </p>
+          <LlamadaALaAccion claro />
+          {PROMO_GRATIS && (
+            <p className="max-w-md leading-relaxed text-white/80">
+              En la llamada vemos tu próxima fecha y te llevo la promo armada a tu tienda, gratis. Si te
+              sirve, la lanzamos juntos; si no, te la quedas igual.
+            </p>
+          )}
           {GARANTIA_PARTE && (
             <p className="max-w-md text-sm leading-relaxed text-white/55">
               Con garantía: me pagas la mitad para empezar, y la otra mitad cuando ya te estén llegando
@@ -99,13 +160,13 @@ function Cierre() {
         </h2>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/75">
           Es la temporada más fuerte para una tienda. Una promo se arma con unas 2 semanas de
-          anticipación, y tomo {LANZAMIENTOS_POR_MES} tiendas por mes. Pídeme la tuya y te la llevo
-          armada, gratis.
+          anticipación, y tomo {LANZAMIENTOS_POR_MES} tiendas por mes.{' '}
+          {PROMO_GRATIS
+            ? 'Agenda una llamada y te llevo la tuya armada, gratis.'
+            : 'Agenda una llamada y vemos la fecha de tu tienda.'}
         </p>
         <div className="mt-8">
-          <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
-            {BOTON}
-          </WhatsAppButton>
+          <LlamadaALaAccion claro />
         </div>
         <p className="mt-10 max-w-xl text-sm leading-relaxed text-white/50">
           P.D. Si cada venta te deja muy poca ganancia, un cupón no te conviene y te lo voy a decir
@@ -119,30 +180,37 @@ function Cierre() {
 export default function Home() {
   return (
     <>
-      <Nav mensaje={MENSAJE} boton="Quiero mi promo gratis" botonCorto="Promo gratis" />
+      <Nav mensaje={MENSAJE} boton={BOTON} botonCorto={BOTON_CORTO} />
 
       <main id="top">
         <Hero />
 
-        <section className="bg-hielo px-6 py-20">
-          <TituloSeccion etiqueta="El sistema">
-            Cómo funciona, y <span className="text-marca">por qué funciona</span>
-          </TituloSeccion>
-          <ComoFunciona />
-        </section>
+        {SECCIONES.comoFunciona && (
+          <section className="bg-hielo px-6 py-20">
+            <TituloSeccion etiqueta="El sistema">
+              Cómo funciona, y <span className="text-marca">por qué funciona</span>
+            </TituloSeccion>
+            <ComoFunciona />
+          </section>
+        )}
 
-        <section className="bg-white px-6 py-20">
-          <TituloSeccion etiqueta="En tu tienda" bajada="Elige qué vendes. Es un ejemplo: la tuya la armamos con lo que vendes de verdad.">
-            ¿Qué vendes? <span className="text-marca">Así se vería tu promo</span>
-          </TituloSeccion>
-          <TuTienda />
-        </section>
+        {SECCIONES.tuTienda && (
+          <section className="bg-white px-6 py-20">
+            <TituloSeccion etiqueta="En tu tienda" bajada="Elige qué vendes. Es un ejemplo: la tuya la armamos con lo que vendes de verdad.">
+              ¿Qué vendes? <span className="text-marca">Así se vería tu promo</span>
+            </TituloSeccion>
+            <TuTienda />
+          </section>
+        )}
 
         <section className="bg-hielo px-6 py-20">
           <TituloSeccion>
             Negocios con los que <span className="text-marca">ya trabajé</span>
           </TituloSeccion>
           <PruebaSocial />
+          <div className="mt-14">
+            <LlamadaALaAccion antes="¿Quieres algo así para tu tienda?" />
+          </div>
         </section>
 
         <section className="bg-hielo px-6 pb-20">
@@ -150,6 +218,9 @@ export default function Home() {
             Lo que más me <span className="text-marca">preguntan</span>
           </TituloSeccion>
           <FAQ />
+          <div className="mt-14">
+            <LlamadaALaAccion antes="¿Te quedó otra duda? Te la respondo en la llamada." />
+          </div>
         </section>
 
         <Cierre />
@@ -158,10 +229,11 @@ export default function Home() {
 
       <BarraWhatsApp
         mensaje={MENSAJE}
-        boton="La quiero"
+        boton={BOTON}
+        botonCorto={BOTON_CORTO}
         texto={
           <>
-            Te armo tu próxima promo, <span className="font-semibold text-acento">gratis</span>
+            Agenda tu llamada <span className="font-semibold text-acento">aquí →</span>
           </>
         }
       />

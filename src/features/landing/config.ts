@@ -11,6 +11,17 @@ export const LOGO = '/grow-business-logo.png'
  *  Si queda vacío, el botón abre WhatsApp para que la persona elija el chat. */
 export const WHATSAPP = '59172030850'
 
+/** Secciones de la página principal que se pueden ocultar sin borrarlas (true = se ve).
+ *  2026-10-25 (pedido del usuario): se ocultan "Cómo funciona" y "¿Qué vendes?", guardadas por si vuelven. */
+export const SECCIONES = {
+  comoFunciona: false,
+  tuTienda: false,
+}
+
+/** La promo armada gratis (el regalo de la visita 1) sigue en la oferta, pero no se nombra en la página:
+ *  la gente no la entendía (pedido del usuario, 2026-10-25). Con true vuelven sus frases. */
+export const PROMO_GRATIS = false
+
 /** Demo pública del cupón (no guarda datos). */
 export const DEMO_CUPON = 'https://descuentos-com.netlify.app/?demo=1'
 

@@ -13,6 +13,9 @@
  * precio. El precio se habla en la reunión. La calculadora y la garantía en cupones siguen en /propuesta.
  * El botón regala algo en vez de pedir una reunión: la promo de su próxima fecha, armada gratis
  * (el regalo de la visita 1, ficha 14 §3.2; regalar servicio triplicó la respuesta en [L1.7]).
+ *
+ * 2026-10-25 (pedido del usuario): el botón pide agendar una llamada. "Cómo funciona" y "¿Qué vendes?"
+ * quedan ocultas, no borradas: se vuelven a mostrar con SECCIONES en config.ts.
  */
 
 import Image from 'next/image'
@@ -23,10 +26,10 @@ import TuTienda from '@/features/landing/TuTienda'
 import PruebaSocial from '@/features/landing/PruebaSocial'
 import WhatsAppButton from '@/features/landing/WhatsAppButton'
 import { BarraWhatsApp, Footer, Nav, TituloSeccion } from '@/features/landing/Marco'
-import { GARANTIA_PARTE, LANZAMIENTOS_POR_MES, PERSONA, VSL_PRINCIPAL } from '@/features/landing/config'
+import { GARANTIA_PARTE, LANZAMIENTOS_POR_MES, PERSONA, SECCIONES, VSL_PRINCIPAL } from '@/features/landing/config'
 
-const MENSAJE = 'Hola Mauricio, vi tu página. Quiero que me armes la promo para mi próxima fecha.'
-const BOTON = 'Quiero mi promo armada gratis'
+const MENSAJE = 'Hola, vi el video y quiero agendar una llamada.'
+const BOTON = 'Quiero agendar una llamada'
 
 function Hero() {
   return (
@@ -119,24 +122,28 @@ function Cierre() {
 export default function Home() {
   return (
     <>
-      <Nav mensaje={MENSAJE} boton="Quiero mi promo gratis" botonCorto="Promo gratis" />
+      <Nav mensaje={MENSAJE} boton={BOTON} botonCorto="Agendar" />
 
       <main id="top">
         <Hero />
 
-        <section className="bg-hielo px-6 py-20">
-          <TituloSeccion etiqueta="El sistema">
-            Cómo funciona, y <span className="text-marca">por qué funciona</span>
-          </TituloSeccion>
-          <ComoFunciona />
-        </section>
+        {SECCIONES.comoFunciona && (
+          <section className="bg-hielo px-6 py-20">
+            <TituloSeccion etiqueta="El sistema">
+              Cómo funciona, y <span className="text-marca">por qué funciona</span>
+            </TituloSeccion>
+            <ComoFunciona />
+          </section>
+        )}
 
-        <section className="bg-white px-6 py-20">
-          <TituloSeccion etiqueta="En tu tienda" bajada="Elige qué vendes. Es un ejemplo: la tuya la armamos con lo que vendes de verdad.">
-            ¿Qué vendes? <span className="text-marca">Así se vería tu promo</span>
-          </TituloSeccion>
-          <TuTienda />
-        </section>
+        {SECCIONES.tuTienda && (
+          <section className="bg-white px-6 py-20">
+            <TituloSeccion etiqueta="En tu tienda" bajada="Elige qué vendes. Es un ejemplo: la tuya la armamos con lo que vendes de verdad.">
+              ¿Qué vendes? <span className="text-marca">Así se vería tu promo</span>
+            </TituloSeccion>
+            <TuTienda />
+          </section>
+        )}
 
         <section className="bg-hielo px-6 py-20">
           <TituloSeccion>
@@ -158,10 +165,10 @@ export default function Home() {
 
       <BarraWhatsApp
         mensaje={MENSAJE}
-        boton="La quiero"
+        boton="Agendar"
         texto={
           <>
-            Te armo tu próxima promo, <span className="font-semibold text-acento">gratis</span>
+            ¿Hablamos? <span className="font-semibold text-acento">Agenda una llamada</span>
           </>
         }
       />

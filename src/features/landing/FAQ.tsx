@@ -5,10 +5,13 @@
  * Sin "¿Cuánto cuesta?": el precio se habla en la reunión, no en la página (pedido del usuario, 2026-10-13).
  */
 
+import { SECCIONES } from './config'
+
 const FAQS: { q: string; a: string }[] = [
   {
     q: '¿Funciona en mi rubro?',
-    a: 'Funciona en tiendas que venden algo que cualquiera compra y que deja buena ganancia por venta: tenis, celulares, colchones, relojes, ropa, cosas para bebé. De un rubro a otro cambia la oferta, no el sistema. Más arriba puedes ver cómo se vería en el tuyo.',
+    // La última frase remite a la sección "¿Qué vendes?": solo va si esa sección se ve.
+    a: `Funciona en tiendas que venden algo que cualquiera compra y que deja buena ganancia por venta: tenis, celulares, colchones, relojes, ropa, cosas para bebé. De un rubro a otro cambia la oferta, no el sistema.${SECCIONES.tuTienda ? ' Más arriba puedes ver cómo se vería en el tuyo.' : ''}`,
   },
   {
     q: 'Ya pagué publicidad y no vendí nada',

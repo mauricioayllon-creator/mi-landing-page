@@ -16,6 +16,8 @@
  *
  * 2026-10-25 (pedido del usuario): el botón pide agendar una llamada. "Cómo funciona" y "¿Qué vendes?"
  * quedan ocultas, no borradas: se vuelven a mostrar con SECCIONES en config.ts.
+ * La promo gratis sigue en la oferta pero no se nombra (PROMO_GRATIS en config.ts). Cada sección
+ * termina con el mismo botón y una guía de qué pasa al tocarlo; en el celular, si no entra, "Escríbeme".
  */
 
 import Image from 'next/image'
@@ -26,10 +28,51 @@ import TuTienda from '@/features/landing/TuTienda'
 import PruebaSocial from '@/features/landing/PruebaSocial'
 import WhatsAppButton from '@/features/landing/WhatsAppButton'
 import { BarraWhatsApp, Footer, Nav, TituloSeccion } from '@/features/landing/Marco'
-import { GARANTIA_PARTE, LANZAMIENTOS_POR_MES, PERSONA, SECCIONES, VSL_PRINCIPAL } from '@/features/landing/config'
+import {
+  GARANTIA_PARTE,
+  LANZAMIENTOS_POR_MES,
+  PERSONA,
+  PROMO_GRATIS,
+  SECCIONES,
+  VSL_PRINCIPAL,
+} from '@/features/landing/config'
 
 const MENSAJE = 'Hola, vi el video y quiero agendar una llamada.'
 const BOTON = 'Quiero agendar una llamada'
+const BOTON_CORTO = 'Escríbeme'
+
+/**
+ * El botón principal con una guía antes ("Dale clic aquí") y después (qué pasa al tocarlo),
+ * para que nadie se quede sin saber qué hacer. `claro` = texto claro, para fondos oscuros.
+ */
+function LlamadaALaAccion({ claro = false, antes }: { claro?: boolean; antes?: React.ReactNode }) {
+  return (
+    <div className="flex flex-col items-center gap-3 text-center">
+      {antes && <p className={`mb-3 text-xl font-bold ${claro ? 'text-titulo' : 'text-ink'}`}>{antes}</p>}
+      <p className={`flex items-center gap-1.5 text-sm font-semibold uppercase tracking-widest ${claro ? 'text-acento' : 'text-marca'}`}>
+        Dale clic aquí
+        <svg
+          className="h-4 w-4 motion-safe:animate-bounce"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14M5 12l7 7 7-7" />
+        </svg>
+      </p>
+      <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
+        {BOTON}
+      </WhatsAppButton>
+      <p className={`max-w-sm text-sm leading-relaxed ${claro ? 'text-white/70' : 'text-ink/60'}`}>
+        Se abre tu WhatsApp con el mensaje listo. Solo tocas enviar y elegimos juntos el día y la hora.
+      </p>
+    </div>
+  )
+}
 
 function Hero() {
   return (
@@ -65,12 +108,13 @@ function Hero() {
         )}
 
         <div className="mt-10 flex flex-col items-center gap-4">
-          <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
-            {BOTON}
-          </WhatsAppButton>
-          <p className="max-w-md leading-relaxed text-white/80">
-            Te la llevo armada a tu tienda. Si te sirve, la lanzamos juntos; si no, te la quedas igual.
-          </p>
+          <LlamadaALaAccion claro />
+          {PROMO_GRATIS && (
+            <p className="max-w-md leading-relaxed text-white/80">
+              En la llamada vemos tu próxima fecha y te llevo la promo armada a tu tienda, gratis. Si te
+              sirve, la lanzamos juntos; si no, te la quedas igual.
+            </p>
+          )}
           {GARANTIA_PARTE && (
             <p className="max-w-md text-sm leading-relaxed text-white/55">
               Con garantía: me pagas la mitad para empezar, y la otra mitad cuando ya te estén llegando
@@ -102,13 +146,13 @@ function Cierre() {
         </h2>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/75">
           Es la temporada más fuerte para una tienda. Una promo se arma con unas 2 semanas de
-          anticipación, y tomo {LANZAMIENTOS_POR_MES} tiendas por mes. Pídeme la tuya y te la llevo
-          armada, gratis.
+          anticipación, y tomo {LANZAMIENTOS_POR_MES} tiendas por mes.{' '}
+          {PROMO_GRATIS
+            ? 'Agenda una llamada y te llevo la tuya armada, gratis.'
+            : 'Agenda una llamada y vemos la fecha de tu tienda.'}
         </p>
         <div className="mt-8">
-          <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
-            {BOTON}
-          </WhatsAppButton>
+          <LlamadaALaAccion claro />
         </div>
         <p className="mt-10 max-w-xl text-sm leading-relaxed text-white/50">
           P.D. Si cada venta te deja muy poca ganancia, un cupón no te conviene y te lo voy a decir
@@ -122,7 +166,7 @@ function Cierre() {
 export default function Home() {
   return (
     <>
-      <Nav mensaje={MENSAJE} boton={BOTON} botonCorto="Agendar" />
+      <Nav mensaje={MENSAJE} boton={BOTON} botonCorto={BOTON_CORTO} />
 
       <main id="top">
         <Hero />
@@ -150,6 +194,9 @@ export default function Home() {
             Negocios con los que <span className="text-marca">ya trabajé</span>
           </TituloSeccion>
           <PruebaSocial />
+          <div className="mt-14">
+            <LlamadaALaAccion antes="¿Quieres algo así para tu tienda?" />
+          </div>
         </section>
 
         <section className="bg-hielo px-6 pb-20">
@@ -157,6 +204,9 @@ export default function Home() {
             Lo que más me <span className="text-marca">preguntan</span>
           </TituloSeccion>
           <FAQ />
+          <div className="mt-14">
+            <LlamadaALaAccion antes="¿Te quedó otra duda? Te la respondo en la llamada." />
+          </div>
         </section>
 
         <Cierre />
@@ -165,10 +215,11 @@ export default function Home() {
 
       <BarraWhatsApp
         mensaje={MENSAJE}
-        boton="Agendar"
+        boton={BOTON}
+        botonCorto={BOTON_CORTO}
         texto={
           <>
-            ¿Hablamos? <span className="font-semibold text-acento">Agenda una llamada</span>
+            Agenda tu llamada <span className="font-semibold text-acento">aquí →</span>
           </>
         }
       />

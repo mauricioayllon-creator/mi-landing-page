@@ -25,11 +25,20 @@ export function Nav({
           </span>
         </a>
         <WhatsAppButton mensaje={mensaje} className="px-3.5 py-2.5 text-sm md:px-4">
-          <span className="sm:hidden">{botonCorto}</span>
-          <span className="hidden sm:inline">{boton}</span>
+          <TextoBoton largo={boton} corto={botonCorto} />
         </WhatsAppButton>
       </nav>
     </header>
+  )
+}
+
+/** Texto de botón con una versión corta para el celular, donde la larga no entra. */
+function TextoBoton({ largo, corto = largo }: { largo: string; corto?: string }) {
+  return (
+    <>
+      <span className="sm:hidden">{corto}</span>
+      <span className="hidden sm:inline">{largo}</span>
+    </>
   )
 }
 
@@ -85,22 +94,24 @@ export function Footer() {
   )
 }
 
-/** Barra fija abajo con el botón de WhatsApp (pensada para el celular). */
+/** Barra fija abajo con el botón de WhatsApp (pensada para el celular). `botonCorto` es el texto en el celular. */
 export function BarraWhatsApp({
   texto,
   mensaje,
   boton = 'Escríbeme',
+  botonCorto,
 }: {
   texto: React.ReactNode
   mensaje: string
   boton?: string
+  botonCorto?: string
 }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-pill bg-ink px-5 py-3 shadow-float md:px-6">
         <p className="text-sm font-medium text-titulo sm:text-base">{texto}</p>
         <WhatsAppButton mensaje={mensaje} className="shrink-0 px-4 py-2.5 text-sm">
-          {boton}
+          <TextoBoton largo={boton} corto={botonCorto} />
         </WhatsAppButton>
       </div>
     </div>

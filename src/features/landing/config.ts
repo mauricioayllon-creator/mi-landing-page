@@ -18,6 +18,10 @@ export const SECCIONES = {
   tuTienda: false,
 }
 
+/** La promo armada gratis (el regalo de la visita 1) sigue en la oferta, pero no se nombra en la página:
+ *  la gente no la entendía (pedido del usuario, 2026-10-25). Con true vuelven sus frases. */
+export const PROMO_GRATIS = false
+
 /** Demo pública del cupón (no guarda datos). */
 export const DEMO_CUPON = 'https://descuentos-com.netlify.app/?demo=1'
 

@@ -23,6 +23,7 @@
 import Image from 'next/image'
 import FAQ from '@/features/landing/FAQ'
 import VideoSlot from '@/features/landing/VideoSlot'
+import ReproductorVSL from '@/features/landing/ReproductorVSL'
 import ComoFunciona from '@/features/landing/ComoFunciona'
 import TuTienda from '@/features/landing/TuTienda'
 import PruebaSocial from '@/features/landing/PruebaSocial'
@@ -103,7 +104,19 @@ function Hero() {
 
         {VSL_PRINCIPAL && (
           <div className="mt-10">
-            <VideoSlot video={VSL_PRINCIPAL} titulo="Cómo funciona el Lanzamiento Tienda Llena" />
+            {VSL_PRINCIPAL.tipo === 'mp4' ? (
+              <ReproductorVSL
+                video={VSL_PRINCIPAL}
+                titulo="Cómo funciona el Lanzamiento Tienda Llena"
+                boton={
+                  <WhatsAppButton mensaje={MENSAJE} className="px-4 py-2.5 text-sm sm:px-6 sm:py-3.5 sm:text-base">
+                    {BOTON}
+                  </WhatsAppButton>
+                }
+              />
+            ) : (
+              <VideoSlot video={VSL_PRINCIPAL} titulo="Cómo funciona el Lanzamiento Tienda Llena" />
+            )}
           </div>
         )}
 

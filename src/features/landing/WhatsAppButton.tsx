@@ -4,6 +4,24 @@ import { linkWhatsApp } from './config'
 
 type Fbq = (accion: string, evento: string) => void
 
+const FUENTES: Record<string, string> = { tiktok: 'TikTok', facebook: 'Facebook', fb: 'Facebook', instagram: 'Instagram', ig: 'Instagram', google: 'Google' }
+
+/**
+ * De dónde vino la visita, para que el mensaje de WhatsApp lo diga (pedido del usuario, 2026-10-25).
+ * Usa ?utm_source= si el link del anuncio lo trae; si no, la marca que agrega cada plataforma sola
+ * al link de sus anuncios (TikTok: ttclid · Meta: fbclid, no distingue Facebook de Instagram · Google: gclid).
+ * Si entró directo, no agrega nada.
+ */
+function origenVisita() {
+  const p = new URLSearchParams(window.location.search)
+  const utm = p.get('utm_source')?.trim().slice(0, 30)
+  if (utm) return FUENTES[utm.toLowerCase()] ?? utm
+  if (p.has('ttclid')) return 'TikTok'
+  if (p.has('fbclid')) return 'Facebook o Instagram'
+  if (p.has('gclid')) return 'Google'
+  return ''
+}
+
 /** Botón a WhatsApp con el mensaje ya escrito. Cuenta el clic en el Pixel de Meta como "Contact". */
 export default function WhatsAppButton({
   mensaje,
@@ -24,7 +42,12 @@ export default function WhatsAppButton({
       href={linkWhatsApp(mensaje)}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={() => (window as unknown as { fbq?: Fbq }).fbq?.('track', 'Contact')}
+      onClick={(e) => {
+        // El link se arma al tocar, porque el origen solo se conoce en el navegador.
+        const origen = origenVisita()
+        if (origen) e.currentTarget.href = linkWhatsApp(`${mensaje} (desde ${origen})`)
+        ;(window as unknown as { fbq?: Fbq }).fbq?.('track', 'Contact')
+      }}
       className={`inline-flex items-center justify-center gap-2 rounded-pill font-semibold shadow-float transition-transform hover:scale-[1.03] active:scale-95 ${colores} ${className}`}
     >
       <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

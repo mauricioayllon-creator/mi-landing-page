@@ -97,9 +97,10 @@ function Hero() {
           <span className="text-acento">sin bajar tu precio</span>.
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/75">
-          El camino de un extraño: que te vea, te elija, llegue y compre. Te hago videos que no pasa de
-          largo, armamos una oferta mejor que una rebaja y llega a tu tienda con su día y su hora.
+        {/* 2026-10-25 (pedido del usuario): una instrucción simple en vez del párrafo abstracto. */}
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/80 md:text-xl">
+          <span className="font-semibold text-titulo">Mira este video (18 min).</span> Si te hace sentido,{' '}
+          <span className="font-semibold text-acento">agenda una llamada conmigo.</span>
         </p>
 
         {VSL_PRINCIPAL && (

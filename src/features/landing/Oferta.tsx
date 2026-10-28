@@ -1,4 +1,4 @@
-import { GARANTIA_PARTE, LANZAMIENTOS_POR_MES, NOMBRE_OFERTA, PAUTA_MAX, PAUTA_MIN, PRECIO_SERVICIO } from './config'
+import { GARANTIA_DIAS_EXTRA, GARANTIA_PARTE, LANZAMIENTOS_POR_MES, NOMBRE_OFERTA, PAUTA_MAX, PAUTA_MIN, PRECIO_SERVICIO } from './config'
 
 /**
  * La oferta en una hoja: responde las 4 preguntas que le hizo a Hormozi su papá
@@ -13,7 +13,9 @@ export function TextoGarantia() {
   return (
     <>
       Me pagas la mitad para empezar. La otra mitad, recién cuando te lleguen los clientes que necesitas para
-      recuperar lo que pusiste (los que te marca la calculadora). Si no llegan, no me la pagas.
+      recuperar lo que pusiste (los que te marca la calculadora). Cuenta cada cliente que llega con su cupón y tú lo
+      validas, compre o no. Si en tu fecha no llegan, sigo {GARANTIA_DIAS_EXTRA} días más con tu video ganador, sin
+      costo; y si igual no llegan, no me la pagas.
     </>
   )
 }

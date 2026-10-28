@@ -40,6 +40,10 @@ export const NOMBRE_OFERTA = 'Lanzamiento Tienda Llena'
  * Es la parte de la inversión que esos clientes recuperan (1 = toda). Con null, la garantía no aparece.
  */
 export const GARANTIA_PARTE: number | null = 1
+/** Si en su fecha no llegan, sigo estos días más con su video ganador, sin costo (decidido el 2026-10-28). */
+export const GARANTIA_DIAS_EXTRA = 7
+/** Si el número de clientes sale más que esto, el producto de la promo deja poco: se elige otro (decidido el 2026-10-28). */
+export const GARANTIA_TOPE = 25
 
 /** Precio del servicio por lanzamiento, en Bs, que se paga en dos mitades (decidido el 2026-10-24).
  *  Solo se usa en /propuesta (se cambia con ?p=1800).

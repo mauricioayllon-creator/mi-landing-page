@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { GARANTIA_PARTE, cuponesPara } from './config'
+import { GARANTIA_DIAS_EXTRA, GARANTIA_PARTE, GARANTIA_TOPE, cuponesPara } from './config'
 
 /**
  * La cuenta del dueño: cuánto le queda por venta con su regalo, cuánto gana si se acaba el stock,
@@ -174,7 +174,22 @@ export default function Simulador({
             )}
           </p>
 
-          {garantia > 0 && garantia <= unidades && (
+          {garantia > GARANTIA_TOPE && (
+            <div className="mt-4 flex gap-3 rounded-2xl bg-white p-4 ring-1 ring-amber-300">
+              <svg className="mt-0.5 h-6 w-6 shrink-0 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 9v4" />
+                <path d="M12 17h.01" />
+                <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+              </svg>
+              <p className="leading-relaxed text-ink/80">
+                <span className="font-bold text-ink">Con este producto necesitas {garantia} clientes:</span> es mucho
+                para una promo, porque te deja poco por venta. Elijamos otro producto, uno que te deje más, y ahí sale
+                tu garantía.
+              </p>
+            </div>
+          )}
+
+          {garantia > 0 && garantia <= GARANTIA_TOPE && garantia <= unidades && (
             <div className="mt-4 flex gap-3 rounded-2xl bg-white p-4 ring-1 ring-marca/15">
               <svg className="mt-0.5 h-6 w-6 shrink-0 text-marca" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" />
@@ -183,7 +198,9 @@ export default function Simulador({
               <p className="leading-relaxed text-ink/80">
                 <span className="font-bold text-ink">Tu garantía:</span> me pagas la mitad para empezar, y la otra
                 mitad recién cuando te lleguen <span className="font-bold text-marca">{garantia} clientes</span> con su
-                cupón, los que necesitas para recuperar lo que pusiste. Si no llegan, no me la pagas.
+                cupón, los que necesitas para recuperar lo que pusiste. Cuenta cada cliente que llega con su cupón y
+                tú lo validas, compre o no. Si en tu fecha no llegan, sigo {GARANTIA_DIAS_EXTRA} días más con tu video
+                ganador, sin costo; y si igual no llegan, no me la pagas.
               </p>
             </div>
           )}

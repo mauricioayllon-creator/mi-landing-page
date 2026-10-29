@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Tu cola de edición · Grow Business</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b4bb0'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' text-anchor='middle' fill='white'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+<style>
+  body { background: var(--surface-2, #f4f6fb); }
+  .marca { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 13px; }
+  .marca i { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: #fff; color: #0b4bb0; font-style: normal; font-weight: 800; font-size: 14px; }
+  .ed-top { padding: 22px 16px 26px; color: #fff; background: linear-gradient(140deg, #0b4bb0, #082e6e 70%); }
+  .ed-top h1 { font-family: var(--display); font-size: 26px; letter-spacing: -.02em; margin: 6px 0 4px; }
+  .ed-top p { color: rgba(255, 255, 255, .82); font-weight: 600; font-size: 14px; max-width: 640px; }
+  .ed { max-width: 760px; margin: 0 auto; padding: 16px; display: grid; gap: 14px; }
+  .ed-v { background: #fff; border-radius: 18px; padding: 16px; border: 1px solid var(--line, #e3e8f2); }
+  .ed-v h2 { font-size: 17px; margin: 4px 0 2px; }
+  .ed-v .para { font-size: 12.5px; font-weight: 800; color: var(--blue-2, #0b4bb0); text-transform: uppercase; letter-spacing: .06em; }
+  .ed-v .est { font-size: 13px; font-weight: 700; color: var(--ink-3, #6b7488); margin-top: 2px; }
+  .ed-links { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .ed-links a { font-weight: 800; font-size: 13.5px; color: var(--blue-2, #0b4bb0); }
+  .ed-tabla { display: grid; gap: 6px; margin: 10px 0; }
+  .ed-f { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13.5px; padding: 8px 10px; border-radius: 12px; background: var(--surface-2, #f4f6fb); }
+  .ed-f b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3, #6b7488); }
+  .ed-pasada { margin-top: 12px; padding: 12px; border-radius: 14px; border: 1px dashed var(--line, #d7deea); }
+  .ed-pasada ul { margin: 6px 0 10px 18px; padding: 0; font-size: 13.5px; line-height: 1.55; }
+  .ed-pasada input { width: 100%; min-height: 40px; padding: 8px 10px; border-radius: 11px; border: 1px solid var(--line, #d7deea); font: inherit; margin-bottom: 8px; }
+  .ed-pasada button { min-height: 42px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--lima-2, #17a34a); color: #fff; font-weight: 800; font-size: 14px; cursor: pointer; }
+  .ed-pasada button:disabled { opacity: .5; cursor: default; }
+  .ed-nota { font-size: 13px; font-weight: 700; color: var(--amber-ink, #8a5a00); }
+  .ed-vacio { text-align: center; padding: 40px 16px; color: var(--ink-3, #6b7488); font-weight: 700; }
+  @media (max-width: 520px) { .ed-f { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="ed-top"><div class="ed" style="padding:0;gap:0"><span class="marca"><i>G</i>Grow Business</span><h1>Tu cola de edición</h1>
+<p>Los videos que esperan tus pasadas: la 1 (armar) y la 3 (textos y sonido). Cuando termines una, pega el link de lo que hiciste y márcala.</p></div></div>
+<main class="ed" id="ed"><div class="ed-vacio">Cargando…</div></main>
+<script src="config.js"></script>
+<script src="sistema.js"></script>
+<script>
+(function () {
+  "use strict";
+  var K = new URLSearchParams(location.search).get("k") || "", PASADAS = (window.SISTEMA && window.SISTEMA.fabrica && window.SISTEMA.fabrica.pasadas) || [];
+  var e = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  function api(datos) { return fetch(window.PANEL_ENDPOINT, { method: "POST", body: JSON.stringify(datos) }).then(function (r) { return r.json(); }); }
+  function pasada(n) { return PASADAS.find(function (p) { return p.n === n; }) || { nombre: "Pasada " + n, pasos: [] }; }
+  /** La pasada que te toca: la 1 si todavía no se armó; la 3 cuando Mauricio ya hizo el gancho (la 2). */
+  function teToca(x) { return x.pasada < 1 ? 1 : x.pasada >= 2 && x.pasada < 3 ? 3 : 0; }
+  function videoHTML(x, i) {
+    var n = teToca(x), p = n ? pasada(n) : null, g = x.guion;
+    var est = x.pasada < 1 ? "Para armar (pasada 1)" : x.pasada < 2 ? "Armado: Mauricio hace el gancho (pasada 2)" : x.pasada < 3 ? "Te toca la pasada 3: textos y sonido" : "En revisión de Mauricio";
+    return '<section class="ed-v"><div class="para">' + e(x.para) + "</div><h2>" + e(x.titulo) + '</h2><div class="est">' + e(est) + (x.fechaPub ? " · sale el " + e(x.fechaPub.split("-").reverse().join("/")) : "") + "</div>" +
+      '<div class="ed-links">' + (x.carpeta ? '<a href="' + e(x.carpeta) + '" target="_blank" rel="noopener">El material (carpeta)</a>' : '<span class="ed-nota">Todavía no hay carpeta con el material: pídesela a Mauricio.</span>') + (x.editado ? '<a href="' + e(x.editado) + '" target="_blank" rel="noopener">Tu última entrega</a>' : "") + "</div>" +
+      (g ? (g.gancho ? '<p style="font-size:13.5px"><b>El gancho:</b> ' + e(g.gancho) + "</p>" : "") + (g.filas.length ? '<div class="ed-tabla">' + g.filas.map(function (f) { return '<div class="ed-f"><div><b>Se dice</b>' + e(f.dice) + "</div><div><b>Se ve</b>" + e(f.ve) + "</div></div>"; }).join("") + "</div>" : "") +
+        (g.cta ? '<p style="font-size:13.5px"><b>El final:</b> ' + e(g.cta) + "</p>" : "") : '<p class="ed-nota">Este video no tiene guion escrito: arma según el material y lo que te dijo Mauricio.</p>') +
+      (p ? '<div class="ed-pasada"><b>Pasada ' + n + " · " + e(p.nombre) + "</b>" + (p.sale ? '<div style="font-size:13px;color:var(--ink-3,#6b7488);font-weight:600">' + e(p.sale) + "</div>" : "") + "<ul>" + (p.pasos || []).map(function (s) { return "<li>" + e(s) + "</li>"; }).join("") + "</ul>" +
+        '<input id="lk-' + i + '" placeholder="El link de lo que hiciste (Drive)" inputmode="url"><button type="button" data-i="' + i + '" data-n="' + n + '">Terminé la pasada ' + n + "</button></div>" : "") + "</section>";
+  }
+  var COLA = [];
+  function pintar(res) {
+    COLA = res.cola || [];
+    var main = document.getElementById("ed");
+    main.innerHTML = COLA.length ? COLA.map(videoHTML).join("") : '<div class="ed-vacio">No hay nada en tu cola. Cuando Mauricio grabe un video nuevo, aparece aquí.</div>';
+  }
+  function cargar() {
+    if (!K) { document.getElementById("ed").innerHTML = '<div class="ed-vacio">Este link no tiene su llave. Pídele el link a Mauricio.</div>'; return; }
+    api({ accion: "editor-ver", k: K }).then(function (res) {
+      if (!res.ok) { document.getElementById("ed").innerHTML = '<div class="ed-vacio">Este link ya no funciona. Pídele el nuevo a Mauricio.</div>'; return; }
+      pintar(res);
+    }).catch(function () { document.getElementById("ed").innerHTML = '<div class="ed-vacio">No se pudo conectar. Revisa tu internet y vuelve a abrir el link.</div>'; });
+  }
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-i]"); if (!b) return;
+    var x = COLA[+b.dataset.i], link = (document.getElementById("lk-" + b.dataset.i) || {}).value || "";
+    if (link && !/^https:\/\//.test(link.trim())) { alert("El link tiene que empezar con https://"); return; }
+    b.disabled = true; b.textContent = "Guardando…";
+    api({ accion: "editor-marcar", k: K, c: x.c, v: x.v, n: +b.dataset.n, link: link.trim() }).then(function (res) {
+      if (!res.ok) { alert(res.error === "antes" ? "Todavía no te toca esta pasada." : "No se pudo guardar. Intenta otra vez."); b.disabled = false; b.textContent = "Terminé la pasada " + b.dataset.n; return; }
+      pintar(res);
+    }).catch(function () { alert("No se pudo conectar. Intenta otra vez."); b.disabled = false; b.textContent = "Terminé la pasada " + b.dataset.n; });
+  });
+  cargar();
+})();
+</script>
+</body>
+</html>

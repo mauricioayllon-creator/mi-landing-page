@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b4bb0">
+<title>Tu campaña · Grow Business</title>
+<meta name="description" content="En qué va tu campaña, lo que te toca, tus videos y tus resultados, en un solo lugar.">
+<meta property="og:title" content="Tu campaña con Grow Business">
+<meta property="og:description" content="Mira en qué vamos, aprueba tus videos y sigue tus resultados.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b4bb0'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' text-anchor='middle' fill='white'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+<style>
+  body { padding-bottom: env(safe-area-inset-bottom); }
+
+  /* ---------- portada ---------- */
+  .hero { position: relative; overflow: hidden; color: #fff; padding: 16px 18px 92px;
+    background:
+      radial-gradient(900px 420px at 110% -20%, rgba(92, 165, 255, .55), transparent 60%),
+      radial-gradient(520px 360px at -20% 115%, rgba(49, 217, 109, .22), transparent 62%),
+      linear-gradient(160deg, #1a6fe0 0%, #0b4bb0 42%, #082e6e 78%, #051d47 100%); }
+  .hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+    background-image: radial-gradient(rgba(255, 255, 255, .09) 1px, transparent 1px); background-size: 22px 22px;
+    mask-image: linear-gradient(180deg, #000, transparent 85%); -webkit-mask-image: linear-gradient(180deg, #000, transparent 85%); }
+  .hero-in { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+  .hero-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .marca { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 13px; letter-spacing: .01em; }
+  .marca i { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: #fff; color: var(--blue-2); font-style: normal; font-family: var(--display); font-weight: 800; font-size: 14px; }
+  .btn-ico.vidrio { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .2); color: #fff; }
+  .btn-ico.vidrio:hover { background: rgba(255, 255, 255, .2); }
+  .hero-cliente { display: flex; align-items: center; gap: 14px; margin-bottom: 26px; }
+  .hero-cliente .avatar { width: 58px; height: 58px; border-radius: 18px; font-size: 21px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .28); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .5); }
+  .hero-cliente small { display: block; font-size: 12.5px; font-weight: 700; color: rgba(255, 255, 255, .7); letter-spacing: .02em; }
+  .hero-cliente h1 { font-family: var(--display); font-size: 27px; line-height: 1.05; letter-spacing: -.025em; overflow-wrap: anywhere; }
+  .hero-motor { display: flex; align-items: center; gap: 12px; }
+  .hero-motor .trio { width: 168px; margin: -10px -6px -10px -14px; }
+  .hero-txt { min-width: 0; flex: 1; }
+  .hero-barra { margin-top: 16px; padding: 14px 14px 13px; border-radius: 22px; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .hb-top { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 11px; }
+  .hb-top > b { font-family: var(--display); font-size: 44px; line-height: .86; letter-spacing: -.045em; flex: none; }
+  .hb-top > b small { font-size: 21px; margin-left: 1px; color: rgba(255, 255, 255, .75); }
+  .hb-top > div { min-width: 0; }
+  .hb-top > div > span { display: block; font-size: 13px; font-weight: 800; color: rgba(255, 255, 255, .92); }
+  .hb-top em { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-style: normal; font-size: 12.5px; font-weight: 600; color: rgba(255, 255, 255, .68); margin-top: 1px; }
+  .hb-top em .i { color: var(--lima); margin: -2px 3px 0 0; }
+  .hero-freno { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 12px; padding: 10px 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .1); color: #fff; text-align: left; cursor: pointer; transition: transform .15s var(--ease); }
+  .hero-freno:active { transform: scale(.98); }
+  .hero-freno.tarde { border-color: transparent; background: linear-gradient(135deg, #f7b538, #d97706); box-shadow: 0 12px 26px -12px rgba(217, 119, 6, .95); }
+  .hero-freno > .i:first-child { width: 36px; height: 36px; padding: 8px; border-radius: 12px; background: rgba(255, 255, 255, .2); }
+  .hero-freno span { flex: 1; min-width: 0; }
+  .hero-freno small { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; opacity: .85; }
+  .hero-freno b { display: block; font-size: 15px; line-height: 1.25; }
+  .hero-freno em { display: block; font-style: normal; font-size: 12.5px; font-weight: 600; opacity: .88; }
+  .hero-txt small { display: block; font-size: 12px; font-weight: 800; color: var(--lima); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4px; }
+  .hero-txt .ahora { font-family: var(--display); font-size: 25px; line-height: 1.08; letter-spacing: -.025em; margin-bottom: 10px; }
+  .hero-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .hero-cuenta { margin-top: 22px; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .16); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 14px; font-weight: 600; }
+  .hero-cuenta b { font-family: var(--display); font-size: 30px; line-height: 1; color: var(--lima); letter-spacing: -.03em; }
+  .hero-cuenta span { color: rgba(255, 255, 255, .92); }
+  .hero-cuenta em { font-style: normal; display: block; font-size: 12.5px; color: rgba(255, 255, 255, .65); }
+
+  .cuerpo { position: relative; z-index: 2; max-width: 600px; margin: -64px auto 0; padding: 0 14px 110px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .cuerpo > * { min-width: 0; }
+  .previa { display: flex; gap: 10px; align-items: center; padding: 11px 14px; border-radius: 16px; background: var(--amber-soft); color: var(--amber-ink); font-size: 13.5px; font-weight: 700; }
+
+  /* ---------- barra pequeña al bajar ---------- */
+  .mini { position: fixed; top: 0; left: 0; right: 0; z-index: 60; transform: translateY(-110%); transition: transform .35s var(--ease); background: rgba(8, 46, 110, .92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #fff; }
+  .mini.ver { transform: none; }
+  .mini-in { max-width: 600px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
+  .mini .avatar { width: 32px; height: 32px; border-radius: 10px; font-size: 12px; background: rgba(255, 255, 255, .15); }
+  .mini-txt { flex: 1; min-width: 0; }
+  .mini-txt b { display: block; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mini-txt span { display: block; font-size: 12px; color: rgba(255, 255, 255, .7); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mini .pct { font-family: var(--display); font-weight: 800; font-size: 17px; color: var(--lima); }
+  .mini-prog { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 255, 255, .12); }
+  .mini-prog i { display: block; height: 100%; background: linear-gradient(90deg, var(--lima-2), var(--lima)); box-shadow: 0 0 8px rgba(49, 217, 109, .6); }
+  .mueve { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; margin-top: 7px; padding: 3px 9px 3px 6px; border-radius: 99px; background: var(--blue-soft); color: var(--blue-2); font-size: 12px; font-weight: 800; }
+  .mueve span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ---------- cómo se mueve tu campaña (el motor) ---------- */
+  .maq-intro { margin: -6px 0 16px; font-size: 13.5px; font-weight: 600; color: var(--ink-2); }
+  .cadena { list-style: none; margin: 0; padding: 0; }
+  .nodo { position: relative; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px; padding-bottom: 20px; }
+  .nodo > .rueda, .nodo > .meta-ico { justify-self: center; z-index: 1; }
+  .nodo:not(:last-child)::before { content: ""; position: absolute; left: 26.5px; top: 47px; bottom: 1px; width: 3px; border-radius: 3px; background: repeating-linear-gradient(180deg, #d5deea 0 6px, transparent 6px 12px); }
+  .nodo.actual:not(:last-child)::before { top: 59px; background: repeating-linear-gradient(180deg, var(--blue) 0 6px, transparent 6px 12px) 0 0 / 3px 24px; animation: flujo .9s linear infinite reverse; }
+  .nodo.e-listo:not(:last-child)::before, .nodo.e-falta:not(:last-child)::before { background: linear-gradient(180deg, var(--lima), #a7ebc1); }
+  .nodo-c { min-width: 0; padding-top: 8px; }
+  .nodo.actual .nodo-c { margin-top: -2px; padding: 14px; border-radius: 20px; background: linear-gradient(180deg, #edf4ff, #f8fbff); border: 1px solid #d3e3fb; }
+  .nodo.actual.e-trabado .nodo-c { background: linear-gradient(180deg, #fff4dc, #fffbf3); border-color: #f5d391; }
+  .nodo-cab { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .nodo-cab b { font-size: 15px; line-height: 1.3; }
+  .nodo.actual .nodo-cab b { font-family: var(--display); font-size: 18px; letter-spacing: -.015em; }
+  .nodo.e-espera .nodo-cab b { color: var(--ink-2); font-weight: 700; }
+  .nodo-fecha { display: block; margin-top: 2px; font-size: 12.5px; font-weight: 700; color: var(--ink-3); }
+  .nodo.e-listo .nodo-fecha { color: var(--lima-2); }
+  .nodo-para { margin-top: 8px; font-size: 14px; font-weight: 800; color: var(--navy); }
+  .nodo-det { margin-top: 3px; font-size: 13.5px; color: #34507e; }
+  .engs-tit { display: flex; align-items: center; gap: 6px; margin: 14px 0 8px; font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: var(--ink-3); }
+  .engs { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 7px; }
+  .engs-tit + .engs { margin-top: 0; }
+  .eng { display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 8px; border-radius: 15px; background: #fff; border: 1px solid var(--line); box-shadow: var(--sh-1); }
+  .eng.e-hecho, .eng.e-espera { box-shadow: none; background: rgba(255, 255, 255, .65); }
+  .eng.e-hecho .eng-txt b { color: var(--ink-2); font-weight: 700; }
+  .eng.e-atrasado { border-color: #f6c1c3; }
+  .eng.e-hoy { border-color: #f5d391; }
+  .eng.e-hoy.q-yo { border-color: #c4dafb; }
+  .eng-txt { flex: 1; min-width: 0; }
+  .eng-txt b { display: block; font-size: 14px; line-height: 1.3; }
+  .eng-txt small { display: block; margin-top: 1px; font-size: 12px; font-weight: 700; color: var(--ink-3); }
+  .eng.q-cliente:not(.e-hecho):not(.e-espera) .eng-txt small { color: var(--amber-ink); }
+  .eng.e-atrasado .eng-txt small { color: var(--coral-ink); }
+  .eng.e-espera .eng-txt small { color: var(--blue-2); }
+  .eng .btn { flex: none; }
+  .pildoras { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .pild { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; padding: 2px 9px 2px 3px; border-radius: 99px; background: var(--line-2); color: var(--ink-2); font-size: 12px; font-weight: 700; }
+  .pild span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pild.q-cliente { background: var(--amber-soft); color: var(--amber-ink); }
+  .pild.e-hecho, .pild.e-espera { background: var(--lima-soft); color: var(--lima-2); }
+  .pild.e-atrasado { background: var(--coral-soft); color: var(--coral-ink); }
+  .meta-ico { width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; background: linear-gradient(135deg, var(--blue-2), var(--navy-2)); color: var(--lima); box-shadow: var(--sh-azul); }
+  .nodo.meta.lograda .meta-ico { background: linear-gradient(135deg, var(--lima-2), #0a6b35); color: #fff; }
+  .nodo.meta .nodo-c small { display: block; font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); }
+  .nodo.meta .nodo-c b { display: block; font-family: var(--display); font-size: 18px; line-height: 1.25; letter-spacing: -.01em; color: var(--navy); }
+  /* cómo se lee */
+  .leer { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 16px; }
+  .leer li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px; align-items: center; }
+  .leer li > :first-child { justify-self: center; }
+  .leer b { display: block; font-size: 15px; line-height: 1.3; }
+  .leer span.t { display: block; font-size: 13.5px; color: var(--ink-2); font-weight: 500; }
+  .barrita { display: flex; gap: 2px; width: 54px; height: 12px; padding: 2px; border-radius: 99px; background: var(--line-2); }
+  .barrita i { flex: 1; border-radius: 99px; background: rgba(11, 21, 48, .08); }
+  .barrita i.l { background: var(--lima-2); } .barrita i.g { background: var(--blue); }
+  .caja-ico { width: 46px; height: 46px; border-radius: 15px; display: grid; place-items: center; background: linear-gradient(135deg, var(--blue-2), var(--navy-2)); color: var(--lima); }
+
+  /* ---------- te toca ---------- */
+  .toca { border: 0; background: linear-gradient(180deg, #fff8e8 0%, #fff 70%); box-shadow: 0 0 0 1.5px #f7d48c, var(--sh-2); }
+  .toca .burbuja { background: var(--amber); color: #fff; box-shadow: 0 8px 18px -8px rgba(245, 158, 11, .9); }
+  .toca.nada { background: linear-gradient(180deg, #ecfbf2 0%, #fff 80%); box-shadow: 0 0 0 1.5px #b6ebca, var(--sh-1); }
+  .toca.nada .burbuja { background: var(--lima-2); box-shadow: 0 8px 18px -8px rgba(18, 161, 80, .9); }
+  .tarea { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 12px; padding: 14px; border-radius: 18px; background: #fff; border: 1px solid #f3dfb4; margin-top: 10px; }
+  .tarea.vencida { border-color: #f6c1c3; background: #fffafa; }
+  .tarea .t-ico { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--amber-soft); color: var(--amber-ink); }
+  .tarea.vencida .t-ico { background: var(--coral-soft); color: var(--coral-ink); }
+  .tarea h3 { font-size: 15.5px; line-height: 1.3; }
+  .tarea .cuando { margin: 6px 0 0; }
+  .tarea .porque { margin-top: 8px; font-size: 13.5px; color: var(--ink-2); }
+  .tarea details { margin-top: 8px; font-size: 13.5px; }
+  .tarea details summary { cursor: pointer; font-weight: 800; color: var(--blue-2); list-style: none; display: inline-flex; align-items: center; gap: 4px; }
+  .tarea details summary::-webkit-details-marker { display: none; }
+  .tarea details[open] summary .i { transform: rotate(90deg); }
+  .tarea details p { margin-top: 6px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); }
+  .tarea .acc { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .luego { margin-top: 12px; border-radius: 16px; background: var(--surface-2); padding: 4px 14px; }
+  .luego summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 10px 0; font-weight: 800; font-size: 14px; color: var(--ink-2); }
+  .luego summary::-webkit-details-marker { display: none; }
+  .luego summary .i:last-child { margin-left: auto; transition: transform .2s; }
+  .luego[open] summary .i:last-child { transform: rotate(90deg); }
+  .luego div { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+  .luego div b { font-weight: 700; }
+  .luego div span { color: var(--ink-3); font-weight: 700; white-space: nowrap; }
+  .encuesta { border: 0; box-shadow: 0 0 0 1.5px #c9dcfb, var(--sh-2); background: linear-gradient(180deg, #f1f6ff, #fff 70%); }
+  .encuesta.hecha { box-shadow: 0 0 0 1.5px #b6ebca, var(--sh-1); background: linear-gradient(180deg, #ecfbf2, #fff 80%); }
+  .encuesta.hecha .burbuja { background: var(--lima-2); color: #fff; }
+  .encuesta .pregunta { font-weight: 700; font-size: 15px; margin-bottom: 12px; }
+  .notas { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 4px; }
+  .notas button { aspect-ratio: 1; min-height: 34px; border-radius: 10px; border: 1.5px solid var(--line); background: #fff; font-weight: 800; font-size: 14px; cursor: pointer; transition: all .15s; padding: 0; }
+  .notas button:hover { border-color: var(--blue); color: var(--blue); }
+  .notas button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; transform: scale(1.08); box-shadow: var(--sh-azul); }
+  .extremos { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11.5px; font-weight: 700; color: var(--ink-3); }
+  @media (max-width: 400px) { .notas { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  .num .antes-ahora { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--ink-3); }
+  .num .antes-ahora .chip { font-size: 11.5px; padding: 2px 8px; }
+  .esperando { display: flex; gap: 10px; align-items: center; padding: 11px 14px; border-radius: 14px; background: var(--surface-2); font-size: 13.5px; font-weight: 700; color: var(--ink-2); margin-top: 10px; }
+  .esperando .i { color: var(--lima-2); }
+  .esperando span { flex: 1; }
+  .todo-ok { font-size: 15px; font-weight: 700; color: var(--ink); }
+  .todo-ok small { display: block; font-size: 13px; color: var(--ink-2); font-weight: 600; margin-top: 2px; }
+
+  .ver-hechos { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; margin-bottom: 14px; border-radius: 14px; border: 1px dashed #bfe7ce; background: #f3fcf6; color: var(--lima-2); font-weight: 800; font-size: 13.5px; cursor: pointer; text-align: left; }
+  .ver-hechos .i:last-child { margin-left: auto; }
+
+  /* ---------- videos ---------- */
+  .carrusel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 18px 10px; margin: 0 -18px; scrollbar-width: none; }
+  .carrusel::-webkit-scrollbar { display: none; }
+  .vid { position: relative; flex: none; width: 146px; aspect-ratio: 9 / 16; border-radius: 22px; overflow: hidden; scroll-snap-align: start; border: 0; padding: 0; cursor: pointer; color: #fff; text-align: left; transition: transform .25s var(--ease), box-shadow .25s; box-shadow: 0 12px 26px -14px rgba(5, 29, 71, .7);
+    background: radial-gradient(140px 160px at 80% 0%, rgba(92, 165, 255, .35), transparent 70%), linear-gradient(170deg, #12305f, #071a3d); }
+  .vid:hover { transform: translateY(-3px); }
+  .vid:active { transform: scale(.97); }
+  .vid.aprobar { background: radial-gradient(160px 180px at 80% 0%, rgba(140, 200, 255, .6), transparent 70%), linear-gradient(170deg, #2a7cf6, #0b4bb0); box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--blue), 0 16px 30px -12px rgba(26, 111, 224, .9); }
+  .vid.cambios { background: linear-gradient(170deg, #f7b538, #c86d05); }
+  .vid.aprobado { background: radial-gradient(160px 180px at 80% 0%, rgba(150, 255, 190, .45), transparent 70%), linear-gradient(170deg, #1fbf63, #0a7a3a); }
+  .vid.publicado { background: radial-gradient(160px 180px at 80% 0%, rgba(49, 217, 109, .35), transparent 70%), linear-gradient(170deg, #0b1530, #050b1c); }
+  .vid::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, .45)); pointer-events: none; }
+  .vid-chip { position: absolute; top: 10px; left: 10px; right: 10px; z-index: 1; }
+  .vid-chip .chip { background: rgba(255, 255, 255, .92); color: var(--ink); font-size: 11px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .vid-ico { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -62%); width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .3); backdrop-filter: blur(4px); z-index: 1; }
+  .vid.aprobar .vid-ico { background: #fff; color: var(--blue); animation: latido 2s infinite; }
+  .vid-pie { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 1; }
+  .vid-pie b { display: block; font-size: 14px; line-height: 1.2; overflow-wrap: anywhere; }
+  .vid-pie small { display: block; font-size: 11.5px; font-weight: 700; color: rgba(255, 255, 255, .78); margin-top: 3px; }
+  .vid-dots { display: flex; gap: 3px; margin-top: 8px; }
+  .vid-dots i { flex: 1; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .25); }
+  .vid-dots i.si { background: #fff; }
+  .vid-resumen { display: flex; align-items: center; gap: 12px; margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+  .vid-resumen .barra-prog { flex: 1; }
+  .etapas { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+  .etapas li { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: var(--ink-3); }
+  .etapas li .i { width: 28px; height: 28px; padding: 6px; border-radius: 50%; background: var(--line-2); }
+  .etapas li.si { color: var(--ink); }
+  .etapas li.si .i { background: var(--lima-soft); color: var(--lima-2); }
+  .etapas li.ahora { color: var(--blue-2); }
+  .etapas li.ahora .i { background: var(--blue); color: #fff; }
+  .nota-cambio { margin-top: 14px; padding: 12px 14px; border-radius: 14px; background: var(--amber-soft); color: var(--amber-ink); font-size: 14px; font-weight: 600; }
+
+  /* ---------- novedades (como mensajes) ---------- */
+  .msj { display: flex; gap: 10px; margin-top: 14px; }
+  .msj:first-of-type { margin-top: 0; }
+  .msj .avatar { width: 38px; height: 38px; border-radius: 50%; font-size: 13px; }
+  .msj-burbuja { flex: 1; min-width: 0; padding: 12px 14px; border-radius: 6px 20px 20px 20px; background: var(--surface-2); border: 1px solid var(--line-2); }
+  .msj-cab { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; font-size: 12.5px; color: var(--ink-3); font-weight: 700; }
+  .msj-cab b { color: var(--ink); font-size: 13.5px; }
+  .msj-burbuja p { font-size: 14.5px; line-height: 1.5; }
+  .msj-burbuja .enlace { margin-top: 8px; }
+
+  /* ---------- resultados ---------- */
+  .nums { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .num { position: relative; padding: 14px; border-radius: 18px; background: linear-gradient(160deg, #f6f9ff, #eef3fc); border: 1px solid #e3ebf8; overflow: hidden; }
+  .num .i { color: var(--blue); }
+  .num b { display: block; font-family: var(--display); font-size: 30px; line-height: 1.05; letter-spacing: -.03em; color: var(--navy); margin-top: 10px; overflow-wrap: anywhere; }
+  .num span { display: block; font-size: 12.5px; font-weight: 800; color: var(--ink-2); margin-top: 4px; }
+  .num small { display: block; font-size: 12px; color: var(--ink-3); font-weight: 600; margin-top: 2px; }
+
+  /* ---------- plan ---------- */
+  .objetivo { display: flex; gap: 12px; align-items: flex-start; padding: 16px; border-radius: 18px; background: linear-gradient(135deg, var(--blue), var(--navy)); color: #fff; margin-bottom: 16px; box-shadow: var(--sh-azul); }
+  .objetivo .i { color: var(--lima); margin-top: 2px; }
+  .objetivo small { display: block; font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: rgba(255, 255, 255, .7); margin-bottom: 3px; }
+  .objetivo p { font-family: var(--display); font-size: 18px; line-height: 1.25; letter-spacing: -.01em; }
+  .incluye { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 10px; }
+  .incluye li { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; font-weight: 600; }
+  .incluye li .i { width: 24px; height: 24px; padding: 5px; border-radius: 50%; background: var(--lima-soft); color: var(--lima-2); }
+  .esperar { display: flex; gap: 12px; padding: 14px; border-radius: 16px; background: var(--amber-soft); }
+  .esperar .i { color: var(--amber-ink); margin-top: 2px; }
+  .esperar b { display: block; font-size: 14px; margin-bottom: 4px; color: var(--amber-ink); }
+  .esperar p { font-size: 14px; color: #5b3a0c; }
+
+  /* ---------- tu garantía ---------- */
+  .gar-c { color: #fff; border: 0; background: radial-gradient(420px 220px at 100% 0%, rgba(49, 217, 109, .28), transparent 60%), linear-gradient(140deg, #0b4bb0, #082e6e 70%); box-shadow: var(--sh-2); }
+  .gar-c .sec-cab h2 { color: #fff; }
+  .gar-c .sec-cab p { color: rgba(255, 255, 255, .72); }
+  .gar-c .sec-cab .burbuja { background: rgba(255, 255, 255, .14); color: #fff; }
+  .gar-c .g-num { display: flex; align-items: flex-end; gap: 10px; margin-top: 4px; }
+  .gar-c .g-num b { font-family: var(--display); font-size: 46px; line-height: .9; letter-spacing: -.04em; }
+  .gar-c .g-num span { font-size: 14.5px; font-weight: 700; color: rgba(255, 255, 255, .82); padding-bottom: 4px; }
+  .gar-c .barra-prog { background: rgba(255, 255, 255, .16); height: 10px; margin: 14px 0 10px; }
+  .gar-c .g-txt { font-size: 14.5px; line-height: 1.5; color: rgba(255, 255, 255, .9); font-weight: 600; }
+  .gar-c .g-txt.listo { color: #fff; font-weight: 800; }
+  .gar-c .g-tu { margin-top: 14px; padding: 12px 14px; border-radius: 16px; background: rgba(255, 255, 255, .09); }
+  .gar-c .g-tu small { display: block; font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: rgba(255, 255, 255, .65); margin-bottom: 6px; }
+  .gar-c .g-tu li { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; font-weight: 600; color: rgba(255, 255, 255, .9); margin-top: 4px; }
+  .gar-c .g-tu ul { list-style: none; margin: 0; padding: 0; }
+  .gar-c .g-tu .i { color: var(--lima); flex: none; margin-top: 2px; }
+  .gar-c .g-tu li.espera .i { color: rgba(255, 255, 255, .55); }
+  .gar-c .g-tu li.riesgo .i { color: #ffc24a; }
+  .gar-c .g-tu li.rota { color: #fff; }
+  .gar-c .g-tu li.rota .i { color: #ff8a8a; }
+  .gar-c .g-tu .g-det { display: block; font-style: normal; font-size: 12.5px; font-weight: 600; color: rgba(255, 255, 255, .72); }
+  .gar-c .g-linea { margin: 2px 0 8px; padding: 8px 10px; border-radius: 11px; background: rgba(49, 217, 109, .18); font-size: 13.5px; font-weight: 800; color: #fff; }
+  .gar-c .g-linea.mal { background: rgba(255, 110, 110, .24); }
+  .seg-sn { display: flex; gap: 8px; }
+  .seg-sn button { flex: 1; min-height: 44px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; font-weight: 800; font-size: 15px; cursor: pointer; transition: all .15s; }
+  .seg-sn button:hover { border-color: var(--blue); color: var(--blue); }
+  .seg-sn button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: var(--sh-azul); }
+
+  /* ---------- pagos ---------- */
+  .billetera { padding: 20px 18px; border-radius: var(--r-lg); color: #fff; box-shadow: var(--sh-2); overflow: hidden; position: relative;
+    background: radial-gradient(420px 220px at 110% -20%, rgba(92, 165, 255, .45), transparent 60%), linear-gradient(150deg, #0b4bb0, #082e6e 60%, #051d47); }
+  .billetera .sec-cab h2 { color: #fff; }
+  .billetera .sec-cab .burbuja { background: rgba(255, 255, 255, .14); color: #fff; }
+  .billetera .sec-cab p { color: rgba(255, 255, 255, .7); }
+  .saldo-grande small { display: block; font-size: 12.5px; font-weight: 800; color: rgba(255, 255, 255, .7); text-transform: uppercase; letter-spacing: .08em; }
+  .saldo-grande b { display: block; font-family: var(--display); font-size: 40px; line-height: 1.05; letter-spacing: -.03em; margin: 4px 0 2px; }
+  .saldo-grande span { font-size: 13.5px; color: rgba(255, 255, 255, .8); font-weight: 600; }
+  .billetera .barra-prog { background: rgba(255, 255, 255, .15); margin: 14px 0 6px; }
+  .billetera .acc { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .billetera .acc .btn { flex: 1; }
+  .btn.blanco { border: 0; background: #fff; color: var(--navy); }
+  .btn.vidrio { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .22); color: #fff; }
+  .pago { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid rgba(255, 255, 255, .12); font-size: 14px; }
+  .pago:first-of-type { margin-top: 16px; }
+  .pago .p-ico { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; background: rgba(255, 255, 255, .12); flex: none; }
+  .pago.pagado .p-ico { background: var(--lima); color: var(--navy); }
+  .pago div { flex: 1; min-width: 0; }
+  .pago b { display: block; }
+  .pago small { display: block; font-size: 12.5px; color: rgba(255, 255, 255, .7); font-weight: 600; }
+  .qr-hoja { display: block; width: 230px; max-width: 100%; margin: 4px auto 14px; border-radius: 18px; border: 1px solid var(--line); background: #fff; padding: 8px; }
+  .datos-pago { padding: 14px; border-radius: 16px; background: var(--surface-2); font-size: 14.5px; font-weight: 600; }
+
+  /* ---------- tu asesor ---------- */
+  .asesor { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+  .asesor .avatar { width: 54px; height: 54px; border-radius: 50%; font-size: 18px; }
+  .asesor b { display: block; font-size: 16px; }
+  .asesor span { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+  .lineas { display: grid; gap: 10px; margin-bottom: 16px; }
+  .lineas div { display: flex; gap: 10px; font-size: 14px; color: var(--ink-2); font-weight: 600; }
+  .lineas .i { color: var(--blue); margin-top: 1px; }
+
+  .fab { position: fixed; right: 18px; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 55; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; background: var(--wa); color: #fff; box-shadow: 0 14px 30px -8px rgba(34, 192, 99, .8); text-decoration: none; transition: transform .2s var(--ease); }
+  .fab:active { transform: scale(.92); }
+  .pie { text-align: center; font-size: 12.5px; color: var(--ink-3); font-weight: 700; padding: 6px 0 0; }
+
+  /* ---------- bienvenida (pantalla completa) ---------- */
+  .bienv { position: fixed; inset: 0; z-index: 100; overflow: auto; color: #fff; display: grid; place-items: center; padding: 28px 22px;
+    background: radial-gradient(700px 420px at 100% 0%, rgba(92, 165, 255, .5), transparent 60%), radial-gradient(500px 360px at 0% 100%, rgba(49, 217, 109, .25), transparent 60%), linear-gradient(160deg, #1a6fe0, #082e6e 70%, #051d47); }
+  .bienv-in { width: 100%; max-width: 440px; }
+  .bienv .logos { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; }
+  .bienv .logos .avatar { width: 52px; height: 52px; border-radius: 16px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .25); }
+  .bienv .logos .mas { color: rgba(255, 255, 255, .5); font-weight: 800; }
+  .bienv h1 { font-family: var(--display); font-size: 40px; line-height: 1; letter-spacing: -.035em; margin-bottom: 14px; }
+  .bienv .txt { font-size: 16px; line-height: 1.55; color: rgba(255, 255, 255, .9); }
+  .bienv .firma { margin: 14px 0 26px; font-weight: 800; color: var(--lima); }
+  .bienv ul { list-style: none; margin: 0 0 30px; padding: 0; display: grid; gap: 12px; }
+  .bienv li { display: flex; gap: 12px; align-items: center; font-size: 15px; font-weight: 700; }
+  .bienv li .i { width: 38px; height: 38px; padding: 9px; border-radius: 12px; background: rgba(255, 255, 255, .12); color: var(--lima); }
+  .bienv .btn { width: 100%; min-height: 54px; font-size: 16px; }
+  .error-pagina { max-width: 440px; margin: 70px auto; padding: 30px 24px; text-align: center; }
+  .error-pagina .i { color: var(--blue); margin-bottom: 12px; }
+  .error-pagina h1 { font-family: var(--display); font-size: 24px; margin-bottom: 8px; }
+  .error-pagina p { color: var(--ink-2); }
+  @media (max-width: 370px) {
+    .hero-motor .trio { width: 124px; }
+    .hb-top > b { font-size: 38px; }
+    .hero-txt .ahora { font-size: 21px; }
+    .nums { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="config.js"></script>
+<script src="logica.js"></script>
+<script src="iconos.js"></script>
+<script>
+(function () {
+  "use strict";
+  var ENDPOINT = String(window.PANEL_ENDPOINT || "").trim();
+  var P = new URLSearchParams(location.search);
+  var C = P.get("c") || "", K = P.get("k") || "", YO = P.get("yo") === "1";
+  var S = { d: null, cargado: 0, todasNov: false, verHechos: false };
+
+  // ---------- utilidades ----------
+  function $(id) { return document.getElementById(id); }
+  function e(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function leer(k) { try { return localStorage.getItem(k); } catch (x) { return null; } }
+  function guardar(k, v) { try { localStorage.setItem(k, v); } catch (x) { /* sin almacenamiento */ } }
+  var tToast;
+  function toast(msg, esError) {
+    var t = $("toast"); t.innerHTML = ICO(esError ? "alerta" : "check", 18) + "<span>" + e(msg) + "</span>"; t.classList.toggle("error", !!esError); t.classList.add("ver");
+    clearTimeout(tToast); tToast = setTimeout(function () { t.classList.remove("ver"); }, 3200);
+  }
+  function api(datos) {
+    if (!ENDPOINT) return Promise.reject(new Error("sin-endpoint"));
+    var ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, 30000);
+    return fetch(ENDPOINT, { method: "POST", body: JSON.stringify(datos), signal: ctrl ? ctrl.signal : undefined })
+      .then(function (r) { return r.json(); })
+      .then(function (r) { clearTimeout(t); return r; }, function (x) { clearTimeout(t); throw x; });
+  }
+  function copiar(texto, aviso) {
+    function ok() { toast(aviso || "Copiado"); }
+    function viejo() {
+      var a = document.createElement("textarea"); a.value = texto; a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      var r = false; try { r = document.execCommand("copy"); } catch (x) { r = false; }
+      document.body.removeChild(a);
+      if (r) ok(); else window.prompt("Copia esto:", texto);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(ok, viejo); else viejo();
+  }
+  function iniciales(s) { var p = String(s || "?").split(/\s+/).filter(function (w) { return w.length > 1; }); return p.slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join("") || "?"; }
+  function yo() { return S.d && S.d.ajustes.nombre ? GB.primerNombre(S.d.ajustes.nombre) : "tu asesor"; }
+  function linkWa(texto) { return GB.waLink(S.d.ajustes.whatsapp, texto); }
+  function logo(cli, p) { return cli.logo ? '<img src="' + e(cli.logo) + '" alt="">' : e(iniciales(p.negocio)); }
+  function retraso(i) { return ' style="animation-delay:' + (i * 70) + 'ms"'; }
+
+  // ---------- hoja que sube ----------
+  function hoja(html, alAbrir) {
+    cerrarHoja();
+    var v = document.createElement("div");
+    v.className = "velo"; v.id = "velo";
+    v.innerHTML = '<div class="hoja" role="dialog" aria-modal="true"><button class="btn-ico chico cerrar" type="button" data-cerrar aria-label="Cerrar">' + ICO("x", 16) + "</button>" + html + "</div>";
+    v.addEventListener("click", function (ev) { if (ev.target === v || ev.target.closest("[data-cerrar]")) cerrarHoja(); });
+    document.body.appendChild(v);
+    document.body.style.overflow = "hidden";
+    if (alAbrir) alAbrir(v);
+  }
+  function cerrarHoja() { var v = $("velo"); if (v) v.remove(); document.body.style.overflow = ""; }
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") cerrarHoja(); });
+
+  // ---------- cargar ----------
+  function errorPagina(tit, txt) {
+    $("app").innerHTML = '<div class="card error-pagina aparece">' + ICO("enlace", 34) + "<h1>" + e(tit) + '</h1><p>' + e(txt) + "</p></div>";
+  }
+  function cargar(silencioso) {
+    if (!C || !K) { errorPagina("Este link está incompleto", "Pide el link completo a quien maneja tu campaña."); return Promise.resolve(); }
+    if (!silencioso) $("app").innerHTML = '<div class="hero" style="min-height:330px"><div class="hero-in"><div class="hero-top"><span class="marca"><i>G</i>Grow Business</span></div></div></div>' +
+      '<div class="cuerpo"><div class="esq" style="height:180px"></div><div class="esq" style="height:300px"></div><div class="esq" style="height:240px"></div></div>';
+    return api({ accion: "ver", c: C, k: K }).then(function (res) {
+      if (!res.ok) {
+        if (res.error === "clave" || res.error === "no-existe") return errorPagina("Este link ya no funciona", "Pide el link nuevo a quien maneja tu campaña.");
+        throw new Error(res.error || "servidor");
+      }
+      var primera = !S.d;
+      S.d = res; S.cargado = Date.now();
+      pintar(primera);
+      if (primera && !YO) api({ accion: "visto", c: C, k: K }).catch(function () {});
+    }).catch(function (x) {
+      if (silencioso) return;
+      errorPagina("No se pudo cargar", x && x.message === "sin-endpoint" ? "Falta configurar la dirección del panel." : "Revisa tu internet y vuelve a abrir el link.");
+    });
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible" && S.d && Date.now() - S.cargado > 60000 && !$("velo")) cargar(true);
+  });
+
+  // ---------- pintar ----------
+  function pintar(primera) {
+    var d = S.d, cli = d.cliente, p = cli.proyecto;
+    document.title = p.etiqueta + " · " + p.negocio;
+    S.anim = primera;
+    S.m = GB.motor(p, cli.respuestas, d.hoy, { abierto: true });
+    var html = heroHTML() + '<main class="cuerpo">';
+    if (YO) html += '<div class="previa aparece">' + ICO("ojo", 18) + "Vista previa: así lo ve tu cliente. Lo que toques aquí no se guarda.</div>";
+    if (cli.estado === "pausado") html += '<div class="previa aparece">' + ICO("reloj", 18) + e(p.etiqueta) + " está en pausa por ahora.</div>";
+    var bloques = [encuestaHTML(), tocaHTML(), garantiaHTML(), maquinaHTML(), videosHTML(), novedadesHTML(), resultadosHTML(), planHTML(), pagosHTML(), asesorHTML()].filter(Boolean);
+    html += bloques.map(function (b, i) { return primera ? b.replace('class="', 'style="animation-delay:' + (120 + i * 80) + 'ms" class="aparece ') : b; }).join("");
+    html += '<p class="pie">' + e(d.ajustes.marca) + (d.ajustes.nombre ? " · " + e(d.ajustes.nombre) : "") + "</p></main>";
+    if (d.ajustes.whatsapp) html += '<a class="fab" href="' + e(linkWa(saludoWa())) + '" target="_blank" rel="noopener" aria-label="Escríbeme por WhatsApp">' + ICO("whatsapp", 28) + "</a>";
+    html += miniHTML();
+    var y = window.scrollY;
+    $("app").innerHTML = html;
+    window.scrollTo(0, y);
+    animarGB($("app"), !primera);
+    vigilarHero();
+    if (primera && !leer("gb_bienv_" + cli.id) && p.bienvenida) mostrarBienvenida();
+  }
+  function saludoWa() { var p = S.d.cliente.proyecto; return "Hola " + yo() + ", te escribo por " + GB.minus(p.etiqueta) + " de " + p.negocio + ": "; }
+
+  function heroHTML() {
+    var d = S.d, cli = d.cliente, p = cli.proyecto, hoy = d.hoy, m = S.m;
+    var x = m.actual >= 0 ? m.pasos[m.actual] : null, cur = x ? x.paso : null;
+    var estado = m.terminado ? "listo" : x && x.estado === "trabado" ? "trabado" : "girando";
+    var ap = function (ms) { return S.anim ? ' aparece" style="animation-delay:' + ms + 'ms' : ""; };
+    var h = '<header class="hero" id="hero"><div class="hero-in">' +
+      '<div class="hero-top"><span class="marca"><i>' + e(d.ajustes.marca.charAt(0)) + "</i>" + e(d.ajustes.marca) + '</span><button class="btn-ico vidrio" type="button" data-accion="actualizar" aria-label="Actualizar">' + ICO("recargar", 18) + "</button></div>" +
+      '<div class="hero-cliente' + ap(0) + '"><div class="avatar">' + logo(cli, p) + "</div><div><small>" + e(p.etiqueta) + "</small><h1>" + e(p.negocio) + "</h1></div></div>" +
+      '<div class="hero-motor' + ap(80) + '">' + trio(estado, cur ? icoPaso(cur.nombre) : "trofeo") + '<div class="hero-txt">';
+    if (!m.pasos.length) h += '<small>Empezamos</small><p class="ahora">Estamos armando tu camino</p>';
+    else if (cur) h += "<small>Estamos en</small><p class=\"ahora\">" + e(cur.nombre) + '</p><div class="hero-chips"><span class="chip vidrio">Paso ' + (m.actual + 1) + " de " + m.pasos.length + "</span>" + (cur.fecha ? '<span class="chip vidrio">' + ICO(cur.fecha < hoy ? "reloj" : "calendario", 13) + (cur.fecha < hoy ? "Lo estoy terminando" : e(GB.cap(GB.cuando(cur.fecha, hoy)))) + "</span>" : "") + "</div>";
+    else if (m.terminado) h += '<small>Llegamos</small><p class="ahora">¡Todo listo!</p><div class="hero-chips"><span class="chip vidrio">Mira tus resultados</span></div>';
+    else h += '<small>Casi listo</small><p class="ahora">Mi parte está hecha</p><div class="hero-chips"><span class="chip vidrio">Falta un poquito de tu lado</span></div>';
+    h += "</div></div>";
+    // La barra del motor: se llena con cada engranaje listo, de los dos lados
+    if (m.pasos.length) {
+      h += '<div class="hero-barra' + ap(160) + '"><div class="hb-top"><b><span data-contar="' + m.pct + '">0</span><small>%</small></b><div><span>' + m.listos + " de " + m.cuantos + " engranajes listos</span>" +
+        (p.objetivo ? "<em>" + ICO("bandera", 13) + "Objetivo: " + e(p.objetivo) + "</em>" : "<em>Cada cosa que se completa, de mi lado o del tuyo, la llena.</em>") + "</div></div>" + motorBarra(m, { oscuro: true });
+      var f = m.freno;
+      if (f && f.quien === "cliente") {
+        var g = f.engranaje, tarde = f.nivel === 3;
+        h += '<button class="hero-freno' + (tarde ? " tarde" : "") + '" type="button" data-accion="ir-freno">' + ICO(tarde ? "pausa" : "mano", 20) + "<span><small>" + (tarde ? "Esto frena tu campaña" : "Lo que mueve tu campaña ahora") + "</small><b>" + e(g.nombre) + "</b><em>Lo necesita «" + e(f.paso.paso.nombre) + "»" + (tarde ? " · era para " + e(GB.cuando(g.fecha, hoy)) : "") + "</em></span>" + ICO("derecha", 18) + "</button>";
+      }
+      h += "</div>";
+    }
+    if (cur && p.fechaClave && p.fechaClave >= hoy) {
+      var falta = GB.diasEntre(hoy, p.fechaClave);
+      h += '<div class="hero-cuenta' + (S.anim ? " aparece" : "") + '" style="animation-delay:160ms"><b>' + (falta === 0 ? "Hoy" : falta) + "</b><span>" + (falta === 0 ? e(p.fechaClaveNombre || "Tu fecha clave") : (falta === 1 ? "día para " : "días para ") + e(GB.minus(p.fechaClaveNombre || "tu fecha clave"))) + "<em>" + e(GB.cap(GB.diaLargo(p.fechaClave))) + "</em></span></div>";
+    }
+    return h + "</div></header>";
+  }
+  function miniHTML() {
+    var cli = S.d.cliente, p = cli.proyecto, m = S.m, cur = m.actual >= 0 ? m.pasos[m.actual].paso : null;
+    return '<div class="mini" id="mini"><div class="mini-in"><div class="avatar">' + logo(cli, p) + '</div><div class="mini-txt"><b>' + e(p.negocio) + "</b><span>" + (cur ? "Estamos en: " + e(cur.nombre) : m.terminado ? "Todo listo" : "Falta un poquito de tu lado") + '</span></div><span class="pct">' + m.pct + '%</span></div><span class="mini-prog"><i style="width:' + m.pct + '%"></i></span></div>';
+  }
+  var observador;
+  function vigilarHero() {
+    if (observador) observador.disconnect();
+    if (!("IntersectionObserver" in window)) return;
+    observador = new IntersectionObserver(function (es) { var m = $("mini"); if (m) m.classList.toggle("ver", !es[0].isIntersecting); }, { rootMargin: "-120px 0px 0px 0px" });
+    observador.observe($("hero"));
+  }
+
+  function tocaHTML() {
+    var d = S.d, p = d.cliente.proyecto, r = d.cliente.respuestas, hoy = d.hoy;
+    // Ahora: lo atrasado y lo de los próximos 3 días. Lo de más adelante va aparte, para no abrumar.
+    var pronto = GB.sumarDias(hoy, 3), todas = GB.tareasAbiertas(p, r);
+    var tareas = todas.filter(function (t) { return !t.fecha || t.fecha <= pronto; });
+    var luego = todas.filter(function (t) { return t.fecha && t.fecha > pronto; });
+    var videos = GB.videosPorAprobar(p, r), gar = GB.estadoGarantia(p);
+    // La segunda mitad de la garantía le toca recién cuando llegan sus clientes; la que no se cobra, nunca
+    var pagos = p.pagos.filter(function (x) {
+      if (x.estado !== "pendiente" || (r.pagos && r.pagos[x.id])) return false;
+      if (x.garantia) return !!(gar && gar.lista);
+      return x.vence && x.vence <= hoy;
+    });
+    var esperando = GB.tareasPorConfirmar(p, r);
+    var total = tareas.length + videos.length + pagos.length;
+    var luegoHTML = luego.length ? '<details class="luego"><summary>' + ICO("calendario", 16) + "Más adelante (" + luego.length + ")" + ICO("derecha", 14) + "</summary>" +
+      luego.map(function (t) { return "<div><b>" + e(t.nombre) + "</b><span>" + e(GB.cap(GB.cuando(t.fecha, hoy))) + "</span></div>"; }).join("") + "</details>" : "";
+    var esperandoHTML = esperando.map(function (t) { return '<div class="esperando">' + ICO("check", 16) + "<span>Marcaste: " + e(GB.minus(t.nombre)) + ". " + e(yo()) + ' lo confirma.</span><button class="enlace" type="button" data-accion="deshacer-tarea" data-id="' + e(t.id) + '">Deshacer</button></div>'; }).join("");
+    if (!total) {
+      return '<section class="card sec toca nada"><div class="sec-cab" style="margin:0"><span class="burbuja">' + ICO("check", 22) + '</span><div class="todo-ok">' + (luego.length ? "Por ahora no te falta nada" : "No te falta nada") + "<small>Ahora todo depende de mí. Te aviso cuando necesite algo.</small></div></div>" +
+        esperandoHTML + luegoHTML + "</section>";
+    }
+    var h = '<section class="card sec toca" id="toca"><div class="sec-cab"><span class="burbuja">' + ICO("tareas", 21) + "</span><div><h2>Te toca</h2><p>" + (total === 1 ? "El engranaje que mueves tú ahora" : "Los " + total + " engranajes que mueves tú ahora") + "</p></div></div>";
+    tareas.forEach(function (t) {
+      var vencida = t.fecha && t.fecha < hoy;
+      h += '<div class="tarea' + (vencida ? " vencida" : "") + '"><span class="t-ico">' + ICO(vencida ? "alerta" : "reloj", 20) + "</span><div>" +
+        "<h3>" + e(t.nombre) + "</h3>" +
+        (t.fecha ? '<div class="cuando"><span class="chip ' + (vencida ? "rojo" : t.fecha === hoy ? "ambar" : "azul") + '">' + (vencida ? "Era para " : "Para ") + e(GB.cuando(t.fecha, hoy)) + "</span></div>" : "") +
+        (t.porque ? '<p class="porque">' + e(t.porque) + "</p>" : "") + mueve(t.id) +
+        (t.como ? "<details><summary>Cómo se hace " + ICO("derecha", 14) + '</summary><p class="texto">' + e(t.como) + "</p></details>" : "") +
+        '<div class="acc"><button class="btn exito chico" type="button" data-accion="ya-hice" data-id="' + e(t.id) + '">' + ICO("check", 16) + "Ya lo hice</button></div></div></div>";
+    });
+    videos.forEach(function (v) {
+      h += '<div class="tarea"><span class="t-ico" style="background:var(--blue-soft);color:var(--blue)">' + ICO("ojo", 20) + "</span><div><h3>Tu ok al video «" + e(v.titulo) + "»</h3>" +
+        (v.fechaPub ? '<div class="cuando"><span class="chip azul">Sale ' + e(GB.cuando(v.fechaPub, hoy)) + "</span></div>" : "") +
+        '<p class="porque">Míralo y dime si sale así o qué cambiamos. Sin tu ok no se publica.</p>' + mueve(okId()) +
+        '<div class="acc"><button class="btn primario chico" type="button" data-accion="video" data-id="' + e(v.id) + '">' + ICO("play", 15) + "Verlo y responder</button></div></div></div>";
+    });
+    pagos.forEach(function (x) {
+      var porGar = x.garantia && gar && gar.lista;
+      h += '<div class="tarea' + (!porGar && x.vence < hoy ? " vencida" : "") + '"><span class="t-ico">' + ICO("billetera", 20) + "</span><div><h3>" + e(x.concepto) + ": " + GB.bs(x.monto) + " Bs</h3>" +
+        '<div class="cuando">' + (porGar ? '<span class="chip verde">Llegaron tus ' + gar.n + " clientes</span>" : '<span class="chip ' + (x.vence < hoy ? "rojo" : "ambar") + '">' + (x.vence < hoy ? "Venció " : "Vence ") + e(GB.cuando(x.vence, hoy)) + "</span>") + "</div>" +
+        (x.condicion ? '<p class="porque">' + e(GB.cap(x.condicion)) + ".</p>" : "") + mueve(x.id) +
+        '<div class="acc"><button class="btn primario chico" type="button" data-accion="pagar">' + ICO("qr", 16) + "Ver cómo pagar</button></div></div></div>";
+    });
+    return h + esperandoHTML + luegoHTML + "</section>";
+  }
+
+  /** Al terminar: del 0 al 10, ¿me recomendarías? Con 9-10 te pide su testimonio; con menos, te dice que lo llames. */
+  function encuestaHTML() {
+    var d = S.d, r = d.cliente.respuestas || {}, m = S.m;
+    var alFinal = m.pasos.length && (m.actual < 0 || m.actual === m.pasos.length - 1);
+    if (!alFinal) return "";
+    var enc = r.encuesta;
+    if (enc) {
+      return '<section class="card sec encuesta hecha"><div class="sec-cab" style="margin:0"><span class="burbuja">' + ICO("trofeo", 21) + "</span><div><h2>¡Gracias por tu " + enc.nota + "/10!</h2><p>" +
+        (enc.nota >= 9 ? "¿Me ayudas con 1 minuto en video contando cómo te fue? Me abre puertas con otros dueños." : "Lo que me dijiste me sirve para que lo próximo sea un 10.") + "</p></div></div>" +
+        (enc.nota >= 9 && d.ajustes.whatsapp ? '<a class="btn wa ancho" style="margin-top:14px" href="' + e(linkWa("Hola " + yo() + ", te mando mi video contando cómo me fue: ")) + '" target="_blank" rel="noopener">' + ICO("whatsapp", 18) + "Mandarle mi video</a>" : "") + "</section>";
+    }
+    var botones = "";
+    for (var n = 0; n <= 10; n++) botones += '<button type="button" data-accion="nota" data-valor="' + n + '"' + (S.nota === n ? ' aria-pressed="true"' : "") + ">" + n + "</button>";
+    return '<section class="card sec encuesta" id="encuesta"><div class="sec-cab"><span class="burbuja">' + ICO("brillo", 21) + "</span><div><h2>¿Cómo te fue?</h2><p>Me ayuda muchísimo saberlo</p></div></div>" +
+      '<p class="pregunta">Del 0 al 10, ¿qué tan probable es que me recomiendes a otro dueño de negocio?</p><div class="notas">' + botones + '</div><div class="extremos"><span>Nada probable</span><span>Muy probable</span></div>' +
+      '<p class="pregunta" style="margin-top:18px">Y una más: ¿supiste siempre en qué iba tu campaña?</p><div class="seg-sn">' + [["si", "Sí"], ["no", "No"]].map(function (o) { return '<button type="button" data-accion="supo" data-valor="' + o[0] + '"' + (S.supo === o[0] ? ' aria-pressed="true"' : "") + ">" + o[1] + "</button>"; }).join("") + "</div>" +
+      (S.nota != null ? '<label class="etq" for="enc-com" style="margin-top:14px">¿Por qué ese número? (opcional)</label><textarea class="inp" id="enc-com" maxlength="600"></textarea><button class="btn primario ancho" type="button" data-accion="enviar-nota" style="margin-top:12px">' + ICO("enviar", 17) + "Enviar</button>" : "") + "</section>";
+  }
+
+  // ---------- cómo se mueve tu campaña: cada paso es un engranaje y adentro está lo que lo hace girar ----------
+  /** "Mueve: «Tu primer video al aire»": a qué paso empuja algo que te toca. */
+  function mueve(ref) {
+    var x = ref && S.m.ubicar[ref];
+    return x ? '<span class="mueve">' + ICO("engranaje", 13) + "<span>Mueve: " + e(x.paso.nombre) + "</span></span>" : "";
+  }
+  /** Tu ok a un video: el primero mueve «Tu primer video al aire»; los demás, el paso de la publicidad. */
+  function okId() {
+    var g = S.m.engranajes.find(function (x) { return x.tipo === "ok" && !x.hecho; });
+    if (g) S.m.ubicar["ok-" + g.id] = g.en;
+    return g ? "ok-" + g.id : "";
+  }
+  var ESTADO_NODO = { listo: ["verde", "Listo"], falta: ["ambar", "Falta algo tuyo"], girando: ["azul", "Girando ahora"], trabado: ["ambar", "Espera algo tuyo"], riesgo: ["ambar", "Necesita algo tuyo"], espera: ["", ""] };
+  function maquinaHTML() {
+    var p = S.d.cliente.proyecto, m = S.m;
+    if (!m.pasos.length) return "";
+    var listos = m.pasos.filter(function (x) { return x.estado === "listo"; }).length;
+    var ocultar = !S.verHechos && listos > 2;
+    var h = '<section class="card sec maquina" id="maquina"><div class="sec-cab"><span class="burbuja">' + ICO("engranaje", 22) + "</span><div><h2>Cómo se mueve tu campaña</h2><p>" +
+      m.pasos.length + " pasos · " + listos + (listos === 1 ? " listo" : " listos") + '</p></div><button class="btn-ico chico der" type="button" data-accion="como-se-lee" aria-label="Cómo se lee">' + ICO("ayuda", 17) + "</button></div>" +
+      '<p class="maq-intro">Cada paso es un engranaje. Gira cuando se mueve lo que tiene adentro: unas cosas las hago yo y otras tú. Al final está el objetivo.</p>';
+    if (ocultar) h += '<button class="ver-hechos" type="button" data-accion="ver-hechos">' + ICO("check", 16) + "Ver los " + listos + " pasos listos" + ICO("abajo", 16) + "</button>";
+    h += '<ol class="cadena">';
+    m.pasos.forEach(function (x, i) { if (!(ocultar && x.estado === "listo")) h += nodoHTML(x, i === m.actual); });
+    h += '<li class="nodo meta' + (m.terminado ? " lograda" : "") + '"><span class="meta-ico">' + ICO(m.terminado ? "trofeo" : "bandera", 24) + '</span><div class="nodo-c"><small>' + (m.terminado ? "Llegamos al objetivo" : "El objetivo") + "</small><b>" + e(p.objetivo || "Tus resultados") + "</b></div></li>";
+    return h + "</ol></section>";
+  }
+  function nodoHTML(x, esActual) {
+    var s = x.paso, hoy = S.d.hoy, est = ESTADO_NODO[x.estado];
+    var etiqueta = x.estado === "falta" && x.porConfirmar ? "Lo confirmo yo" : est[1];
+    var fecha = x.estado === "listo" ? (s.hechoEl ? "Listo " + GB.cuando(s.hechoEl.slice(0, 10), hoy) : "Listo")
+      : s.fecha ? (esActual ? (s.fecha < hoy ? "Lo estoy terminando" : "Para " + GB.cuando(s.fecha, hoy)) : GB.cap(GB.diaCorto(s.fecha))) : "";
+    var h = '<li class="nodo e-' + x.estado + (esActual ? " actual" : "") + '" id="paso-' + x.indice + '">' + rueda(x.estado, icoPaso(s.nombre), esActual ? 56 : 44) +
+      '<div class="nodo-c"><div class="nodo-cab"><b>' + e(s.nombre) + "</b>" + (etiqueta ? '<span class="chip ' + est[0] + '">' + e(etiqueta) + "</span>" : "") + "</div>" +
+      (fecha ? '<small class="nodo-fecha">' + e(fecha) + "</small>" : "");
+    if (esActual) {
+      h += (x.para ? '<p class="nodo-para">' + e(x.para) + "</p>" : "") + (s.detalle ? '<p class="nodo-det">' + e(s.detalle) + "</p>" : "");
+      return h + '<div class="engs-tit">' + ICO("engranaje", 13) + "Lo que lo hace girar</div><ul class=\"engs\">" + x.engranajes.map(engHTML).join("") + "</ul></div></li>";
+    }
+    // En los demás: lo tuyo que falta, a la vista; lo demás, en pastillas
+    var tuyo = x.estado === "listo" ? [] : x.faltaCliente.filter(function (g) { return g.puede && !g.espera && (g.estado === "atrasado" || g.estado === "hoy" || x.estado === "falta"); });
+    var resto = x.engranajes.filter(function (g) { return tuyo.indexOf(g) < 0; });
+    if (tuyo.length) h += '<ul class="engs">' + tuyo.map(engHTML).join("") + "</ul>";
+    if (resto.length) h += '<div class="pildoras">' + resto.map(pildora).join("") + "</div>";
+    return h + "</div></li>";
+  }
+  function quienEs(g) { return g.quien === "yo" ? yo() : "Tú"; }
+  function engHTML(g) {
+    var hoy = S.d.hoy, sub = [quienEs(g)];
+    if (g.detalle) sub.push(g.detalle);
+    if (g.estado === "espera") sub.push(g.tipo === "pago" ? "Avisaste que pagaste · " + yo() + " lo confirma" : "Lo marcaste · " + yo() + " lo confirma");
+    else if (!g.hecho && g.fecha) sub.push((g.estado === "atrasado" ? "Era para " : "Para ") + GB.cuando(g.fecha, hoy));
+    else if (!g.hecho && g.tipo === "ok" && !g.puede) sub.push("Te aviso cuando esté para que lo veas");
+    else if (g.hecho) sub.push("Listo");
+    return '<li class="eng e-' + g.estado + " q-" + g.quien + '">' + engIco(g, 32) + '<div class="eng-txt"><b>' + e(g.nombre) + "</b><small>" + e(sub.join(" · ")) + "</small></div>" + accionEng(g) + "</li>";
+  }
+  function accionEng(g) {
+    if (g.quien !== "cliente" || g.hecho || g.espera || !g.puede) return "";
+    var b = function (accion, id, txt, clase) { return '<button class="btn chico ' + (clase || "exito") + '" type="button" data-accion="' + accion + '"' + (id ? ' data-id="' + e(id) + '"' : "") + ">" + txt + "</button>"; };
+    if (g.tipo === "tarea") return b("ya-hice", g.ref, "Ya lo hice");
+    if (g.tipo === "pago") return b("pagar", "", "Pagar", "primario");
+    if (g.tipo === "ok") return b("video", g.video, "Verlo", "primario");
+    if (g.tipo === "opinion") return b("ir-encuesta", "", "Calificar", "primario");
+    return "";
+  }
+  function pildora(g) {
+    return '<span class="pild e-' + g.estado + " q-" + g.quien + '" title="' + e(quienEs(g)) + '">' + engIco(g, 20) + "<span>" + e(g.nombre) + "</span></span>";
+  }
+  function hojaComoSeLee() {
+    var p = S.d.cliente.proyecto;
+    var li = function (fig, tit, txt) { return "<li>" + fig + "<div><b>" + e(tit) + '</b><span class="t">' + e(txt) + "</span></div></li>"; };
+    hoja('<h3>Cómo se lee ' + e(GB.minus(p.etiqueta)) + '</h3><p class="sub">Funciona como una máquina: cada parte empuja a la siguiente.</p><ul class="leer">' +
+      li(rueda("girando", "camara", 46), "Cada paso es un engranaje", "El azul es el que gira ahora. Los verdes ya están listos.") +
+      li(engIco({ estado: "pendiente", quien: "cliente", tipo: "tarea", nombre: "acceso" }, 38), "Adentro está lo que lo hace girar", "Unas cosas las hago yo y otras tú. Cada una dice de quién es.") +
+      li('<span class="barrita"><i class="l"></i><i class="l"></i><i class="g"></i><i></i></span>', "La barra se llena con cada cosa lista", "De mi lado y del tuyo. Cuando llega al final, llegamos al objetivo.") +
+      li(rueda("trabado", "llave", 46), "Amarillo: espera algo tuyo", "Si algo tuyo falta, ese paso se queda esperando. Arriba te digo qué es.") +
+      li('<span class="caja-ico">' + ICO("bandera", 22) + "</span>", "Al final, el objetivo", p.objetivo || "Lo que vamos a lograr juntos.") +
+      '</ul><div class="acc"><button class="btn primario" type="button" data-cerrar>Entendido</button></div>');
+  }
+
+  function videosHTML() {
+    var d = S.d, p = d.cliente.proyecto, r = d.cliente.respuestas, hoy = d.hoy;
+    if (!p.videos.length) return "";
+    var listos = p.videos.filter(function (v) { var x = GB.estadoVideo(v, r); return x === "aprobado" || x === "publicado"; }).length;
+    var h = '<section class="card sec"><div class="sec-cab"><span class="burbuja">' + ICO("pelicula", 20) + "</span><div><h2>Tus videos</h2><p>Toca uno para verlo</p></div></div><div class=\"carrusel\">";
+    p.videos.forEach(function (v) {
+      var ev = GB.estadoVideo(v, r), paso = ev === "cambios" ? 3 : GB.ORDEN_VIDEO.indexOf(ev);
+      var pie = ev === "publicado" && v.fechaPub ? "Salió " + GB.cuando(v.fechaPub, hoy) : v.fechaPub ? "Sale " + GB.cuando(v.fechaPub, hoy) : "";
+      h += '<button class="vid ' + ev + '" type="button" data-accion="video" data-id="' + e(v.id) + '"><span class="vid-chip"><span class="chip">' + e(GB.VIDEO[ev].cliente) + "</span></span>" +
+        '<span class="vid-ico">' + ICO(icoVideo(ev), 24) + '</span><span class="vid-pie"><b>' + e(v.titulo) + "</b>" + (pie ? "<small>" + e(pie) + "</small>" : "") +
+        '<span class="vid-dots">' + GB.ORDEN_VIDEO.map(function (_, i) { return "<i" + (i <= paso ? ' class="si"' : "") + "></i>"; }).join("") + "</span></span></button>";
+    });
+    h += '</div><div class="vid-resumen"><span>' + listos + " de " + p.videos.length + ' listos</span><div class="barra-prog verde"><i style="width:' + Math.round(listos / p.videos.length * 100) + '%"></i></div></div>';
+    return h + "</section>";
+  }
+  function hojaVideo(id) {
+    var d = S.d, p = d.cliente.proyecto, r = d.cliente.respuestas, hoy = d.hoy;
+    var v = p.videos.find(function (x) { return x.id === id; }); if (!v) return;
+    var ev = GB.estadoVideo(v, r), resp = GB.respuestaVideo(v, r);
+    var paso = ev === "cambios" ? 3 : GB.ORDEN_VIDEO.indexOf(ev);
+    var nombres = ["Guion", "Grabado", "En edición", "Para que lo veas", "Aprobado", "Publicado"];
+    var html = '<span class="chip ' + (ev === "aprobado" || ev === "publicado" ? "verde" : ev === "aprobar" ? "azul" : ev === "cambios" ? "ambar" : "") + '">' + e(GB.VIDEO[ev].cliente) + "</span>" +
+      '<h3 style="margin-top:10px">' + e(v.titulo) + "</h3>" +
+      '<p class="sub">' + (v.fechaPub ? (ev === "publicado" ? "Salió " : "Sale ") + e(GB.cuando(v.fechaPub, hoy)) : "Todavía sin fecha de salida") + (v.version > 1 ? " · versión " + v.version : "") + "</p>" +
+      '<ul class="etapas">' + GB.ORDEN_VIDEO.map(function (k, i) { return '<li class="' + (i < paso || (i === paso && (ev === "aprobado" || ev === "publicado")) ? "si" : i === paso ? "ahora" : "") + '">' + ICO(i < paso || ev === "publicado" ? "check" : icoVideo(k), 16) + e(nombres[i]) + "</li>"; }).join("") + "</ul>";
+    if (ev === "cambios" && resp) html += '<p class="nota-cambio">Pediste: «' + e(resp.nota) + "». Lo estoy corrigiendo y te aviso con la nueva versión.</p>";
+    var acc = [];
+    if (v.previa && (ev === "aprobar" || ev === "cambios" || ev === "aprobado")) acc.push('<a class="btn" href="' + e(v.previa) + '" target="_blank" rel="noopener">' + ICO("play", 16) + "Ver el video</a>");
+    if (ev === "aprobar") {
+      acc.push('<button class="btn exito" type="button" data-accion="aprobar" data-id="' + e(v.id) + '">' + ICO("check", 17) + "Lo apruebo</button>");
+      acc.push('<button class="btn suave" type="button" data-accion="cambios" data-id="' + e(v.id) + '">' + ICO("globo", 17) + "Pedir un cambio</button>");
+    }
+    if ((ev === "aprobado" || ev === "publicado") && v.descarga) acc.push('<a class="btn" href="' + e(v.descarga) + '" target="_blank" rel="noopener">' + ICO("bajar", 17) + "Bajar el video</a>");
+    if ((ev === "aprobado" || ev === "publicado") && v.texto) acc.push('<button class="btn" type="button" data-accion="copiar-texto" data-id="' + e(v.id) + '">' + ICO("copiar", 17) + "Copiar su texto</button>");
+    if (ev === "publicado" && v.publicado) acc.push('<a class="btn primario" href="' + e(v.publicado) + '" target="_blank" rel="noopener">' + ICO("afuera", 17) + "Verlo publicado</a>");
+    if (!acc.length) html += '<p class="sub" style="margin:16px 0 0">Te aviso apenas esté listo para que lo veas.</p>';
+    else html += '<div class="acc">' + acc.join("") + "</div>";
+    hoja(html);
+  }
+
+  function novedadesHTML() {
+    var d = S.d, lista = d.novedades || [], hoy = d.hoy, aj = d.ajustes;
+    var h = '<section class="card sec"><div class="sec-cab"><span class="burbuja">' + ICO("globo", 20) + "</span><div><h2>Novedades</h2><p>Lo que voy haciendo, día por día</p></div></div>";
+    if (!lista.length) return h + '<div class="vacio">' + ICO("globo", 30) + "<br>Aquí te cuento lo que voy haciendo cada día.</div></section>";
+    var ver = S.todasNov ? lista : lista.slice(0, 3);
+    var ini = e(iniciales(aj.nombre || aj.marca));
+    ver.forEach(function (n) {
+      var tipo = { entrega: ["Entrega", "verde"], aviso: ["Aviso", "ambar"], resultado: ["Resultados", "azul"] }[n.tipo];
+      h += '<div class="msj"><div class="avatar">' + ini + '</div><div class="msj-burbuja"><div class="msj-cab"><b>' + e(aj.nombre ? GB.primerNombre(aj.nombre) : aj.marca) + "</b><span>" + e(GB.cap(GB.cuando(n.fecha.slice(0, 10), hoy))) + " · " + e(n.fecha.slice(11)) + "</span>" + (tipo ? '<span class="chip ' + tipo[1] + '">' + tipo[0] + "</span>" : "") + "</div>" +
+        '<p class="texto">' + e(n.texto) + "</p>" + (n.link ? '<a class="enlace" href="' + e(n.link) + '" target="_blank" rel="noopener">' + ICO("afuera", 15) + "Ver</a>" : "") + "</div></div>";
+    });
+    if (lista.length > 3 && !S.todasNov) h += '<button class="btn suave chico ancho" type="button" data-accion="todas-nov" style="margin-top:14px">Ver las ' + lista.length + " novedades</button>";
+    return h + "</section>";
+  }
+
+  function icoNumero(n) {
+    n = String(n).toLowerCase();
+    var reglas = [[/vista/, "ojo"], [/alcanz|persona/, "gente"], [/seguidor/, "persona"], [/mensaje|consulta|interesad/, "globo"], [/vendid|bs/, "billetera"], [/public/, "megafono"], [/compr/, "check"], [/lleg/, "casa"], [/conoc/, "diana"]];
+    for (var i = 0; i < reglas.length; i++) if (reglas[i][0].test(n)) return reglas[i][1];
+    return "grafica";
+  }
+  function resultadosHTML() {
+    var p = S.d.cliente.proyecto, hoy = S.d.hoy;
+    var nums = p.resultados.filter(function (x) { return x.valor; });
+    var h = '<section class="card sec"><div class="sec-cab"><span class="burbuja">' + ICO("grafica", 20) + "</span><div><h2>Resultados</h2><p>" + (nums.length && p.resultadosFecha ? "Al " + e(GB.diaLargo(p.resultadosFecha)) + (p.resultadosFecha === hoy ? " (hoy)" : "") : "Tus números") + "</p></div></div>";
+    if (!nums.length) return h + '<div class="vacio">' + ICO("grafica", 30) + "<br>Cuando tu primer video esté al aire, aquí vas a ver tus números.</div></section>";
+    return h + '<div class="nums">' + nums.map(function (x) { return '<div class="num">' + ICO(icoNumero(x.nombre), 20) + '<b data-contar="' + e(x.valor) + '">' + e(x.valor) + "</b><span>" + e(x.nombre) + "</span>" + (x.nota ? "<small>" + e(x.nota) + "</small>" : "") + antesAhora(x) + "</div>"; }).join("") + "</div></section>";
+  }
+  /** "Antes 3.200 · ×15": lo que cambió desde que empezamos. */
+  function aNumero(s) { var t = String(s || "").replace(/\s/g, "").replace(/\./g, "").replace(",", "."); return /^-?\d+(\.\d+)?$/.test(t) ? parseFloat(t) : null; }
+  function antesAhora(x) {
+    if (!x.antes) return "";
+    var a = aNumero(x.antes), b = aNumero(x.valor), cambio = "";
+    if (a != null && b != null && a > 0 && b !== a) {
+      var k = b / a;
+      cambio = k >= 2 ? '<span class="chip verde">×' + (k >= 10 ? Math.round(k) : k.toLocaleString("es-BO", { maximumFractionDigits: 1 })) + "</span>"
+        : '<span class="chip ' + (b > a ? "verde" : "ambar") + '">' + (b > a ? "+" : "−") + Math.round(Math.abs(k - 1) * 100) + "%</span>";
+    }
+    return '<div class="antes-ahora">Antes ' + e(x.antes) + cambio + "</div>";
+  }
+
+  function planHTML() {
+    var p = S.d.cliente.proyecto;
+    if (!p.objetivo && !p.incluye.length && !p.queEsperar) return "";
+    return '<section class="card sec"><div class="sec-cab"><span class="burbuja">' + ICO("brillo", 20) + "</span><div><h2>Tu plan</h2><p>Lo que hacemos juntos</p></div></div>" +
+      (p.objetivo ? '<div class="objetivo">' + ICO("diana", 22) + "<div><small>El objetivo</small><p>" + e(p.objetivo) + "</p></div></div>" : "") +
+      (p.incluye.length ? '<ul class="incluye">' + p.incluye.map(function (x) { return "<li>" + ICO("check", 14) + "<span>" + e(x) + "</span></li>"; }).join("") + "</ul>" : "") +
+      (p.queEsperar ? '<div class="esperar">' + ICO("foco", 20) + '<div><b>Qué esperar</b><p class="texto">' + e(p.queEsperar) + "</p></div></div>" : "") + "</section>";
+  }
+
+  /** Tu garantía: tu número, cuántos llegaron y lo único que te pido (tu parte). */
+  /**
+   * Tu garantía: tu número, cuántos llegaron y tus 5 cosas, cada una con lo que dice el panel (✓ o lo que falta),
+   * con una sola línea arriba: «Tu garantía sigue en pie ✓» o lo que falta para que siga en pie.
+   */
+  function garantiaHTML() {
+    var d = S.d, p = d.cliente.proyecto, gar = GB.estadoGarantia(p), segunda = p.pagos.find(function (x) { return x.garantia || x.estado === "anulado"; });
+    if (!gar || !segunda) return "";
+    var pagada = segunda.estado === "pagado", anulada = segunda.estado === "anulado", D = GB.GAR.diasExtra;
+    var paso = !!p.fechaClave && d.hoy > p.fechaClave, ext = GB.extensionGarantia(p, d.hoy);
+    var txt = pagada ? "Llegaron tus " + gar.n + " clientes: recuperaste lo que pusiste. ¡Gracias por confiar!"
+      : anulada ? "No llegaron tus " + gar.n + " y cumpliste tu parte: la segunda mitad no se paga. Te quedas con todo lo que funcionó."
+      : gar.lista ? "¡Llegaron tus " + gar.n + " clientes! Recuperaste lo que pusiste: ahora sí te toca la segunda mitad (" + GB.bs(segunda.monto) + " Bs)."
+      : paso && ext && !ext.termino ? "No llegaron en tu fecha: como quedamos, sigo " + D + " días más con tu video ganador, sin costo (hasta el " + GB.diaCorto(ext.hasta) + "). Van " + gar.llegaron + " de " + gar.n + "."
+      : paso && !ext ? "Terminó tu fecha y llegaron " + gar.llegaron + " de " + gar.n + ". Como quedamos, sigo " + D + " días más con tu video ganador, sin costo."
+      : paso ? "Terminaron los " + D + " días más y llegaron " + gar.llegaron + " de " + gar.n + ". Si cumpliste tu parte, la segunda mitad no se paga."
+      : "Cuando te lleguen tus " + gar.n + " clientes con su cupón, recuperaste lo que pusiste" + (gar.inversion ? " (" + GB.bs(gar.inversion) + " Bs)" : "") + ", y recién ahí me pagas la otra mitad. Si en tu fecha no llegan, sigo " + D + " días más con tu video ganador, sin costo; y si igual no llegan, no me la pagas.";
+    var cg = !pagada && !anulada ? GB.cosasGarantia(p, d.cliente.respuestas || {}, d.ahora) : null, ICOC = { ok: "check", espera: "reloj", riesgo: "alerta", rota: "x" };
+    return '<section class="card sec gar-c" id="garantia"><div class="sec-cab"><span class="burbuja">' + ICO("diana", 21) + "</span><div><h2>Tu garantía</h2><p>" + (gar.al ? "Contado desde tu cupón " + e(GB.hace(gar.al, d.ahora)) : "Cada cupón que validas en tu tienda cuenta, compre o no") + "</p></div></div>" +
+      '<div class="g-num"><b data-contar="' + gar.llegaron + '">' + gar.llegaron + "</b><span>de " + gar.n + " clientes con su cupón</span></div>" +
+      '<div class="barra-prog verde"><i style="width:' + gar.pct + '%"></i></div><p class="g-txt' + (gar.lista || pagada ? " listo" : "") + '">' + e(txt) + "</p>" +
+      (cg ? '<div class="g-tu"><small>Lo único que te pido: tu parte</small><p class="g-linea' + (cg.enPie && !cg.riesgo ? "" : " mal") + '">' + e(cg.linea) + "</p><ul>" + cg.cosas.map(function (c) {
+        return '<li class="' + c.estado + '">' + ICO(ICOC[c.estado], 15) + "<span>" + e(c.texto) + (c.detalle ? '<em class="g-det">' + e(GB.cap(c.detalle)) + "</em>" : "") + "</span></li>";
+      }).join("") + "</ul></div>" : "") + "</section>";
+  }
+  /** El pago que le toca ahora (la segunda mitad de la garantía, solo cuando llegaron sus clientes). */
+  function pagoPendiente(p, r) {
+    var gar = GB.estadoGarantia(p);
+    return p.pagos.find(function (x) { return x.estado === "pendiente" && !(r.pagos && r.pagos[x.id]) && (!x.garantia || (gar && gar.lista)); });
+  }
+  function pagosHTML() {
+    var d = S.d, p = d.cliente.proyecto, r = d.cliente.respuestas, hoy = d.hoy;
+    if (!p.pagos.length) return "";
+    var s = GB.saldo(p, r), pend = pagoPendiente(p, r), gar = GB.estadoGarantia(p);
+    var h = '<section class="billetera" id="pagos"><div class="sec-cab"><span class="burbuja">' + ICO("billetera", 20) + "</span><div><h2>Pagos</h2><p>Lo pagado y lo que falta</p></div></div>" +
+      (function () {
+        // Lo que espera a sus clientes no es deuda todavía: va aparte
+        var espera = p.pagos.filter(function (x) { return x.garantia && x.estado === "pendiente" && !(gar && gar.lista); }).reduce(function (t, x) { return t + x.monto; }, 0), ya = s.pendiente - espera;
+        return '<div class="saldo-grande"><small>' + (ya ? "Saldo por pagar" : espera ? "Por ahora no debes nada" : "Todo pagado") + "</small><b>" + GB.bs(ya || (espera ? 0 : s.total)) + " Bs</b><span>Pagaste " + GB.bs(s.pagado) + " de " + GB.bs(s.total) + " Bs" +
+          (espera ? " · " + GB.bs(espera) + " Bs cuando te lleguen tus clientes" : "") + "</span></div>";
+      })() +
+      '<div class="barra-prog verde"><i style="width:' + (s.total ? Math.round(s.pagado / s.total * 100) : 0) + '%"></i></div>';
+    p.pagos.forEach(function (x) {
+      var avisado = r.pagos && r.pagos[x.id], anulado = x.estado === "anulado", aguarda = x.garantia && x.estado === "pendiente" && !(gar && gar.lista);
+      var sub = x.estado === "pagado" ? "Pagado" + (x.pagadoEl ? " " + GB.cuando(x.pagadoEl.slice(0, 10), hoy) : "")
+        : anulado ? "No se paga: es tu garantía"
+        : avisado ? "Avisaste que pagaste · " + yo() + " lo confirma"
+        : aguarda ? (gar ? "Cuando te lleguen tus " + gar.n + " clientes (van " + gar.llegaron + ")" : x.condicion || "Cuando te lleguen tus clientes")
+        : x.garantia ? "Llegaron tus clientes: ya te toca"
+        : (x.vence ? (x.vence < hoy ? "Venció " : "Vence ") + GB.cuando(x.vence, hoy) : "") + (x.condicion ? (x.vence ? " · " : "") + x.condicion : "");
+      h += '<div class="pago' + (x.estado === "pagado" || anulado ? " pagado" : "") + '"><span class="p-ico">' + ICO(x.estado === "pagado" ? "check" : anulado ? "diana" : avisado ? "reloj" : aguarda ? "diana" : "calendario", 17) + "</span><div><b>" + e(x.concepto) + "</b><small>" + e(GB.cap(sub)) + "</small></div><b" + (anulado ? ' style="text-decoration:line-through;opacity:.7"' : "") + ">" + GB.bs(x.monto) + " Bs</b></div>";
+    });
+    if (pend) h += '<div class="acc"><button class="btn blanco" type="button" data-accion="pagar">' + ICO("qr", 17) + 'Pagar</button><button class="btn vidrio" type="button" data-accion="ya-pague" data-id="' + e(pend.id) + '">Ya pagué</button></div>';
+    return h + "</section>";
+  }
+  function hojaPagar() {
+    var d = S.d, aj = d.ajustes, p = d.cliente.proyecto, r = d.cliente.respuestas;
+    var pend = pagoPendiente(p, r);
+    var html = "<h3>Cómo pagar</h3><p class=\"sub\">" + (pend ? e(pend.concepto) + ": <b>" + GB.bs(pend.monto) + " Bs</b>" : "No tienes pagos pendientes.") + "</p>" +
+      (aj.qr ? '<img class="qr-hoja" src="' + e(aj.qr) + '" alt="QR para pagar">' : "") +
+      (aj.pagoTexto ? '<div class="datos-pago texto">' + e(aj.pagoTexto) + "</div>" : (!aj.qr ? '<p class="sub">Escríbeme y te paso los datos.</p>' : "")) +
+      '<div class="acc">' + (aj.pagoTexto ? '<button class="btn" type="button" data-accion="copiar-pago">' + ICO("copiar", 17) + "Copiar datos</button>" : "") +
+      (pend ? '<button class="btn exito" type="button" data-accion="ya-pague" data-id="' + e(pend.id) + '">' + ICO("check", 17) + "Ya pagué</button>" : "") + "</div>";
+    hoja(html);
+  }
+
+  function asesorHTML() {
+    var aj = S.d.ajustes, p = S.d.cliente.proyecto;
+    if (!aj.nombre && !aj.whatsapp) return "";
+    var lineas = [];
+    if (aj.horaParte) lineas.push([ "calendario", "Todos los días a las " + aj.horaParte + " te escribo cómo vamos." ]);
+    if (aj.horarios) aj.horarios.split("\n").forEach(function (l) { if (l.trim()) lineas.push(["reloj", l.trim()]); });
+    return '<section class="card sec"><div class="asesor"><div class="avatar">' + e(iniciales(aj.nombre || aj.marca)) + "</div><div><b>" + e(aj.nombre || aj.marca) + "</b><span>Quien hace tu campaña · " + e(aj.marca) + "</span></div></div>" +
+      (lineas.length ? '<div class="lineas">' + lineas.map(function (l) { return "<div>" + ICO(l[0], 17) + "<span>" + e(l[1]) + "</span></div>"; }).join("") + "</div>" : "") +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">' + (aj.whatsapp ? '<a class="btn wa" style="flex:1" href="' + e(linkWa(saludoWa())) + '" target="_blank" rel="noopener">' + ICO("whatsapp", 18) + "Escríbeme</a>" : "") +
+      (p.bienvenida ? '<button class="btn suave" style="flex:1" type="button" data-accion="ver-bienv">Ver la bienvenida</button>' : "") + "</div></section>";
+  }
+
+  // ---------- bienvenida ----------
+  function mostrarBienvenida() {
+    var d = S.d, cli = d.cliente, p = cli.proyecto, aj = d.ajustes;
+    var v = document.createElement("div");
+    v.className = "bienv"; v.id = "bienv";
+    v.innerHTML = '<div class="bienv-in"><div class="logos aparece"><div class="avatar">' + logo(cli, p) + '</div><span class="mas">+</span><div class="avatar" style="background:#fff;color:var(--blue-2)">' + e(aj.marca.charAt(0)) + "</div></div>" +
+      '<h1 class="aparece" style="animation-delay:90ms">Hola' + (p.contacto ? " " + e(GB.primerNombre(p.contacto)) : "") + "</h1>" +
+      '<p class="txt texto aparece" style="animation-delay:180ms">' + e(p.bienvenida) + "</p>" + (aj.nombre ? '<p class="firma aparece" style="animation-delay:240ms">' + e(aj.nombre) + "</p>" : '<div style="height:24px"></div>') +
+      '<ul class="aparece" style="animation-delay:300ms"><li>' + ICO("bandera", 20) + "Ves en qué vamos, paso a paso</li><li>" + ICO("tareas", 20) + "Te aviso lo que te toca, con fecha</li><li>" + ICO("play", 20) + "Apruebas tus videos con un toque</li></ul>" +
+      '<button class="btn blanco aparece" style="animation-delay:380ms" type="button" id="empezar">Ver ' + e(GB.minus(p.etiqueta)) + " " + ICO("derecha", 18) + "</button></div>";
+    document.body.appendChild(v);
+    document.body.style.overflow = "hidden";
+    $("empezar").addEventListener("click", function () { guardar("gb_bienv_" + cli.id, "1"); v.remove(); document.body.style.overflow = ""; });
+  }
+
+  // ---------- responder ----------
+  function responder(tipo, id, valor, nota, aviso, extra) {
+    if (YO) { toast("Es tu vista previa: no se guarda."); cerrarHoja(); return Promise.resolve(); }
+    return api(Object.assign({ accion: "responder", c: C, k: K, tipo: tipo, id: id, valor: valor, nota: nota || "" }, extra || {})).then(function (res) {
+      if (!res.ok) {
+        var m = { "no-toca": "Esto ya cambió. Actualizo.", nota: "Cuéntame qué cambiamos.", clave: "Este link ya no funciona." };
+        toast(m[res.error] || "No se pudo guardar. Intenta otra vez.", true);
+        if (res.error === "no-toca") { cerrarHoja(); cargar(true); }
+        return;
+      }
+      S.d.cliente.respuestas = res.respuestas;
+      pintar(false);
+      if (aviso && S.d.ajustes.whatsapp) {
+        hoja('<div style="text-align:center;padding-top:6px"><span class="burbuja" style="width:64px;height:64px;border-radius:50%;display:inline-grid;place-items:center;background:var(--lima-soft);color:var(--lima-2);margin-bottom:12px">' + ICO("check", 30) + "</span>" +
+          "<h3>Listo, quedó marcado</h3><p class=\"sub\">" + e(yo()) + " lo ve en su panel. Si quieres, avísale también por WhatsApp.</p></div>" +
+          '<div class="acc"><a class="btn wa" href="' + e(linkWa(aviso)) + '" target="_blank" rel="noopener" data-cerrar>' + ICO("whatsapp", 18) + 'Avisar</a><button class="btn suave" type="button" data-cerrar>Listo</button></div>');
+      } else { cerrarHoja(); toast("Listo, quedó marcado"); }
+    }).catch(function () { toast("No se pudo conectar. Revisa tu internet.", true); });
+  }
+  function buscar(lista, id) { return lista.find(function (x) { return x.id === id; }); }
+  /** Baja hasta una sección (debajo de la barra pequeña de arriba) y la hace brillar un momento. */
+  function irA(id) {
+    var el = $(id); if (!el) return;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: "smooth" });
+    el.classList.remove("brilla"); void el.offsetWidth; el.classList.add("brilla");
+  }
+  function pedirNota(tit, sub, etiqueta, obligatoria, boton, alListo) {
+    hoja("<h3>" + e(tit) + '</h3><p class="sub">' + e(sub) + '</p><label class="etq" for="nota">' + e(etiqueta) + '</label><textarea class="inp" id="nota" maxlength="400"></textarea>' +
+      '<div class="acc"><button class="btn suave" type="button" data-cerrar>Cancelar</button><button class="btn primario" type="button" id="enviar-nota">' + e(boton) + "</button></div>", function () {
+      $("nota").focus();
+      $("enviar-nota").addEventListener("click", function () {
+        var n = $("nota").value.trim();
+        if (obligatoria && !n) { toast("Cuéntame qué cambiamos", true); return; }
+        this.disabled = true; this.textContent = "Guardando…";
+        alListo(n);
+      });
+    });
+  }
+
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-accion]"); if (!b || !S.d) return;
+    var a = b.dataset.accion, p = S.d.cliente.proyecto, id = b.dataset.id;
+    if (a === "ver-bienv") { mostrarBienvenida(); return; }
+    if (a === "como-se-lee") { hojaComoSeLee(); return; }
+    if (a === "ir-paso") {
+      var i = +b.dataset.i, x = S.m.pasos[i];
+      if (x && x.estado === "listo" && !S.verHechos) { S.verHechos = true; pintar(false); }
+      irA("paso-" + i);
+      return;
+    }
+    if (a === "ir-freno") { irA($("toca") ? "toca" : "maquina"); return; }
+    if (a === "ir-encuesta") { irA("encuesta"); return; }
+    if (a === "actualizar") { cargar(true).then(function () { toast("Actualizado"); }); return; }
+    if (a === "todas-nov") { S.todasNov = true; pintar(false); return; }
+    if (a === "ver-hechos") { S.verHechos = true; pintar(false); return; }
+    if (a === "nota") { S.nota = parseInt(b.dataset.valor, 10); pintar(false); var com = $("enc-com"); if (com) com.focus({ preventScroll: true }); return; }
+    if (a === "supo") { var cm = ($("enc-com") || {}).value; S.supo = S.supo === b.dataset.valor ? null : b.dataset.valor; pintar(false); if (cm && $("enc-com")) $("enc-com").value = cm; return; }
+    if (a === "enviar-nota") {
+      if (S.nota == null) return;
+      var nota = S.nota, comentario = ($("enc-com") || {}).value || "";
+      b.disabled = true; b.textContent = "Enviando…";
+      responder("encuesta", "", nota, comentario.trim(), "Hola " + yo() + ", te califiqué con " + nota + "/10." + (comentario.trim() ? " " + comentario.trim() : ""), { supo: S.supo === "si" ? true : S.supo === "no" ? false : null }).then(function () { S.nota = null; S.supo = null; });
+      return;
+    }
+    if (a === "video") { hojaVideo(id); return; }
+    if (a === "pagar") { hojaPagar(); return; }
+    if (a === "copiar-pago") { copiar(S.d.ajustes.pagoTexto, "Datos copiados"); return; }
+    if (a === "copiar-texto") { var vt = buscar(p.videos, id); if (vt) copiar(vt.texto, "Texto copiado: pégalo al publicar"); return; }
+    if (a === "ya-hice") {
+      var t = buscar(p.tareas, id); if (!t) return;
+      pedirNota("¿Ya está: " + GB.minus(t.nombre) + "?", "Lo marco como hecho y " + yo() + " lo confirma.", "¿Algo que quieras contarle? (opcional)", false, "Sí, ya lo hice", function (n) {
+        responder("tarea", id, true, n, "Hola " + yo() + ", ya está: " + GB.minus(t.nombre) + "." + (n ? " " + n : ""));
+      });
+      return;
+    }
+    if (a === "deshacer-tarea") { responder("tarea", id, false, ""); return; }
+    if (a === "aprobar") {
+      var v = buscar(p.videos, id); if (!v) return;
+      hoja('<div style="text-align:center;padding-top:6px"><span class="burbuja" style="width:64px;height:64px;border-radius:50%;display:inline-grid;place-items:center;background:var(--lima-soft);color:var(--lima-2);margin-bottom:12px">' + ICO("check", 30) + "</span>" +
+        "<h3>¿Apruebas «" + e(v.titulo) + "»?</h3><p class=\"sub\">Con tu ok, lo publico" + (v.fechaPub ? " " + e(GB.cuando(v.fechaPub, S.d.hoy)) : "") + ".</p></div>" +
+        '<div class="acc"><button class="btn suave" type="button" data-cerrar>Todavía no</button><button class="btn exito" type="button" id="si-aprobar">Sí, lo apruebo</button></div>', function () {
+        $("si-aprobar").addEventListener("click", function () { this.disabled = true; responder("video", id, "aprobado", "", "Hola " + yo() + ", ya aprobé el video «" + v.titulo + "»."); });
+      });
+      return;
+    }
+    if (a === "cambios") {
+      var vc = buscar(p.videos, id); if (!vc) return;
+      pedirNota("¿Qué cambiamos en «" + vc.titulo + "»?", "Dime qué quieres distinto. Lo corrijo y te mando la nueva versión.", "El cambio", true, "Enviar", function (n) {
+        responder("video", id, "cambios", n, "Hola " + yo() + ", te pedí un cambio en «" + vc.titulo + "»: " + n);
+      });
+      return;
+    }
+    if (a === "ya-pague") {
+      var x = buscar(p.pagos, id); if (!x) return;
+      pedirNota("¿Ya pagaste " + GB.bs(x.monto) + " Bs?", yo() + " lo revisa y lo confirma.", "¿Cómo pagaste? (opcional: QR, transferencia, efectivo)", false, "Sí, ya pagué", function (n) {
+        responder("pago", id, true, n, "Hola " + yo() + ", ya pagué " + GB.bs(x.monto) + " Bs (" + GB.minus(x.concepto) + ")." + (n ? " " + n : ""));
+      });
+    }
+  });
+
+  cargar();
+})();
+</script>
+</body>
+</html>

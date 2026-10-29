@@ -1,0 +1,2 @@
+window.PANEL_ENDPOINT = "https://script.google.com/macros/s/AKfycbxAZlBWx0QsSF7vPTqDRE9rEBDBeHfk2vHI8imGzCEyIncO_5NXA8QonbrSNPLYY5_L/exec";   // la URL /exec de la hoja de tu panel (ver LEEME.md, paso 2)
+window.CUPON_ENDPOINT = "https://script.google.com/macros/s/AKfycbws4AGm0kshhDovA-KX0jXEQWIqCB9wKd6769iscRMj-Ptrk7f55dDNqW5DXwb56_hV/exec";   // tu app de cupones: para traer las llegadas de cada lanzamiento

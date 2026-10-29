@@ -922,6 +922,42 @@
   .hop:hover { border-color: var(--c, var(--blue)); background: #fff; }
   .hop.nose { color: var(--ink-3); }
   .hueco-mini { margin-top: 16px; }
+  /* ---------- tu estudio inteligente (v12) ---------- */
+  .ritmo { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; padding: 18px 20px; border-radius: var(--r-lg); margin-bottom: 14px; color: #fff; background: linear-gradient(135deg, #0f7a4f, #0b4bb0 70%, #3a2a8f); box-shadow: var(--sh-2); }
+  .rt-t { flex: 1; min-width: 220px; display: grid; gap: 2px; }
+  .rt-t small { font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
+  .rt-t b { font-family: var(--display); font-size: 22px; letter-spacing: -.01em; }
+  .rt-t span { font-weight: 700; opacity: .9; }
+  .rt-acc { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ritmo-l { display: flex; gap: 12px; align-items: center; padding: 12px 14px; margin: 10px 0 14px; border-radius: var(--r-lg); background: linear-gradient(135deg, #eafaf0, #eef4ff); border: 1px solid #cfe9db; text-decoration: none; color: inherit; }
+  .ritmo-l span { flex: 1; display: grid; gap: 1px; font-size: 13.5px; font-weight: 700; } .ritmo-l b { font-size: 14.5px; } .ritmo-l small { color: var(--ink-3); font-weight: 600; }
+  .kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(230px, 1fr); grid-template-columns: none; gap: 10px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+  .tb-col { background: var(--surface-2); border-radius: 16px; padding: 10px; display: grid; align-content: start; gap: 8px; scroll-snap-align: start; min-height: 160px; }
+  .tb-cab { display: flex; gap: 6px; align-items: center; font-size: 13px; padding: 2px 4px 4px; }
+  .tb-cab b { flex: 1; } .tb-cab span { min-width: 22px; height: 22px; border-radius: 99px; display: grid; place-items: center; background: #fff; font-size: 12px; font-weight: 800; color: var(--ink-3); }
+  .tb-vacia { text-align: center; color: var(--ink-4, #b4bccb); font-weight: 800; padding: 14px 0; }
+  .tj { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 10px; display: grid; gap: 7px; box-shadow: var(--sh-1); transition: transform .15s, box-shadow .15s; }
+  .tj:hover { transform: translateY(-1px); box-shadow: var(--sh-2); }
+  .tj.apura { border-color: #f0c36b; box-shadow: 0 0 0 2px rgba(240, 195, 107, .35); }
+  .tj-t { font-weight: 800; font-size: 14px; line-height: 1.3; color: inherit; text-decoration: none; }
+  .tj-chips { display: flex; gap: 4px; flex-wrap: wrap; } .tj-chips .chip { font-size: 11px; padding: 2px 7px; }
+  .tj-pasos { display: flex; gap: 4px; align-items: center; } .tj-pasos i { width: 22px; height: 5px; border-radius: 99px; background: var(--surface-2); } .tj-pasos i.si { background: var(--lima-2, #17a34a); } .tj-pasos small { margin-left: 4px; color: var(--ink-3); font-weight: 700; font-size: 11.5px; }
+  .tj-sig { justify-content: flex-start; }
+  .ct-ok { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 6px; }
+  .ct-ok li { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; font-weight: 600; color: var(--ink-3); } .ct-ok li.si { color: var(--ink); } .ct-ok li.si svg { color: var(--lima-2, #17a34a); }
+  body.sin-scroll { overflow: hidden; }
+  .telef { position: fixed; inset: 0; z-index: 9999; background: #05070d; color: #fff; display: flex; flex-direction: column; }
+  .tf-barra { display: flex; gap: 8px; align-items: center; padding: 10px 12px; background: rgba(255, 255, 255, .06); }
+  .tf-barra button { min-width: 44px; height: 44px; border-radius: 12px; border: 0; background: rgba(255, 255, 255, .12); color: #fff; font-weight: 800; font-size: 15px; display: inline-flex; gap: 6px; align-items: center; justify-content: center; padding: 0 12px; cursor: pointer; }
+  .tf-etq { font-weight: 800; font-size: 12px; opacity: .7; }
+  .tf-barra b { min-width: 22px; text-align: center; font-size: 16px; } .tf-esp { flex: 1; }
+  .tf-barra .tf-play { background: #17a34a; }
+  .tf-texto { flex: 1; overflow-y: auto; padding: 0 8vw; font-family: var(--display); line-height: 1.35; letter-spacing: -.01em; cursor: pointer; scrollbar-width: none; }
+  .tf-texto::-webkit-scrollbar { display: none; }
+  .tf-texto p { margin: 0 0 .9em; }
+  .tf-aire { height: 40vh; }
+  .tf-linea { position: fixed; left: 0; right: 0; top: 40%; height: 2px; background: rgba(23, 163, 74, .45); pointer-events: none; }
+  @media (max-width: 620px) { .kanban { grid-auto-columns: 82%; } .rt-t b { font-size: 19px; } }
   /* ---------- tus objetivos (v10) ---------- */
   .obj { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px; margin-bottom: 14px; box-shadow: var(--sh-1); }
   .obj.k-rojo { border-color: #f1b3ae; }
@@ -4097,6 +4133,170 @@
       F.primeras.map(function (x) { return '<div class="latente"><b>' + e(x.nombre) + ' <span class="chip ambar">Sin confirmar</span></b><span>' + tx(x.que, "frase") + "</span></div>"; }).join("") + "</div>";
     return { html: top + rec + lat, n: lista.length };
   }
+  // ---------- tu estudio inteligente (v12): el tablero, tu ritmo, «Hazlo con Claude» y el teleprompter ----------
+  /** El objetivo que manda ahora: el activo con la fecha más cercana. */
+  function objetivoAhora() { return (ag().objetivos || []).filter(function (o) { return o.estado === "activo" && o.fecha; }).sort(function (a, b) { return a.fecha.localeCompare(b.fecha); })[0] || null; }
+  function ritmoTexto(o) {
+    var r = GB.ritmoObjetivo(o, hoy());
+    if (r.paso === "listo") return { r: r, txt: "Cumpliste: " + r.total + " de " + r.total + ".", sub: "Lo que sigue es mirar qué ángulo se movió." };
+    if (r.paso === "tarde") return { r: r, txt: "Se pasó su fecha y faltan " + r.faltan + ".", sub: "Ponle una fecha nueva en Objetivos, sin culpa: lo que importa es terminarlas." };
+    return { r: r, txt: r.hechas + " de " + r.total + " · " + (r.dias === 1 ? "hoy es el último día" : "quedan " + r.dias + " días, hoy incluido"), sub: "Hoy te tocan " + r.hoy + (r.hoy === 1 ? " para llegar." : " para llegar. Las más rápidas: reel base y carrusel base.") };
+  }
+  /** En Hoy: tu ritmo hacia el objetivo que manda, en una línea que lleva a tu tablero. */
+  function ritmoLinea() {
+    var o = objetivoAhora(); if (!o) return "";
+    var t = ritmoTexto(o);
+    return '<a class="ritmo-l" href="#/contenido/tablero">' + anillo(Math.round(t.r.hechas / Math.max(1, t.r.total) * 100), 34, 5, "verde") + "<span><b>" + e(o.titulo) + "</b>" + e(t.txt) + "<small>" + e(t.sub) + "</small></span>" + ICO("derecha", 15) + "</a>";
+  }
+  var COLS_T = [["guion", "Guion", "lapiz"], ["grabar", "Grabar", "camara"], ["editar", "Editar", "tijera"], ["descripcion", "Descripción", "cuaderno"], ["subir", "Subir", "enviar"], ["prueba", "En prueba", "megafono"], ["listas", "Listas", "check"]];
+  /** Las tareas de tus objetivos que todavía no tienen su pieza (las de un reel o un carrusel). */
+  function tareasSinPieza() {
+    var out = [];
+    (ag().objetivos || []).forEach(function (o) {
+      if (o.estado !== "activo") return;
+      o.plan.forEach(function (p) { p.tareas.forEach(function (t) { if (/^(reel|carrusel)/i.test(t.texto) && !piezaDeTarea(o.id, t.id)) out.push({ o: o, p: p, t: t }); }); });
+    });
+    return out;
+  }
+  function tableroHTML() {
+    var o = objetivoAhora(), h0 = hoy(), gs = col("guiones"), sin = tareasSinPieza();
+    var html = "";
+    if (o) {
+      var t = ritmoTexto(o);
+      html += '<div class="ritmo" data-fuera-de-capa>' + anillo(Math.round(t.r.hechas / Math.max(1, t.r.total) * 100), 64, 7, "blanco") + '<div class="rt-t"><small>' + e(o.titulo) + "</small><b>" + e(t.txt) + "</b><span>" + e(t.sub) + '</span></div><div class="rt-acc">' +
+        (sin.length ? '<button class="btn blanco" type="button" data-accion="pz-traer">' + ICO("capas", 16) + "Traer sus " + sin.length + " piezas al tablero</button>" : "") +
+        '<button class="btn vidrio chico" type="button" data-accion="c-nuevo-para" data-c="pieza">' + ICO("mas", 15) + "Nueva pieza</button></div></div>";
+    } else html += '<div class="acc" style="margin-bottom:12px" data-fuera-de-capa><button class="btn primario chico" type="button" data-accion="c-nuevo-para" data-c="pieza">' + ICO("mas", 15) + "Nueva pieza</button></div>";
+    var por = {}; COLS_T.forEach(function (c) { por[c[0]] = []; });
+    col("piezas").forEach(function (pz) {
+      var g = gs.find(function (x) { return x.cliente === "pieza" && x.video === pz.id; }) || null, s = GB.siguientePieza(pz, g, h0), k = s.et === "publicada" ? "listas" : s.et;
+      (por[k] || por.listas).push({ pz: pz, s: s, g: g });
+    });
+    if (!col("piezas").length) return html + '<div class="card vacio grande" data-fuera-de-capa>' + ICO("capas", 34) + "<br><b>Tu tablero está vacío.</b><br>" + (sin.length ? "Toca «Traer sus piezas al tablero»: cada reel y cada carrusel de tu objetivo se vuelve una tarjeta que avanza de columna en columna." : "Crea tu primera pieza con «Nueva pieza».") + "</div>";
+    html += '<div class="kanban" data-fuera-de-capa>' + COLS_T.map(function (c) {
+      var xs = por[c[0]];
+      return '<div class="tb-col"><div class="tb-cab">' + ICO(c[2], 15) + "<b>" + e(c[1]) + "</b><span>" + xs.length + "</span></div>" + (xs.length ? xs.map(tarjetaHTML).join("") : '<div class="tb-vacia">—</div>') + "</div>";
+    }).join("") + "</div>";
+    return html;
+  }
+  function tarjetaHTML(x) {
+    var pz = x.pz, s = x.s, an = GB.anguloDe(ag(), pz.angulo), fm = GB.formatoDe(pz.formato), pg = GB.progresoGuion(x.g, pz);
+    return '<div class="tj' + (s.apura ? " apura" : "") + '"><a class="tj-t" href="#/v/pieza/' + encodeURIComponent(pz.id) + '/gancho">' + e(pz.titulo) + "</a>" +
+      '<div class="tj-chips">' + (fm ? '<span class="chip">' + ICO(fm.ico || "pelicula", 11) + e(fm.nombre) + "</span>" : '<span class="chip ambar">Sin formato</span>') + (an ? '<span class="chip" title="' + e(an.nombre) + '">' + ICO("diana", 11) + e(an.nombre.replace(/[«»]/g, "").slice(0, 26)) + "</span>" : "") + '<span class="chip verde">' + e(CAMP_NOM[pz.campana] || "") + "</span></div>" +
+      (s.et === "guion" || s.et === "grabar" ? '<div class="tj-pasos">' + ["gancho", "cuerpo", "llamado"].map(function (k) { return '<i class="' + (pg[k] ? "si" : "") + '"></i>'; }).join("") + "<small>" + ["gancho", "cuerpo", "llamado"].filter(function (k) { return pg[k]; }).length + " de 3 del guion</small></div>" : "") +
+      '<button class="btn chico ' + (s.apura ? "exito" : "primario") + ' tj-sig" type="button" data-accion="pz-sig" data-id="' + e(pz.id) + '" data-que="' + s.accion + '">' + ICO(s.ico, 14) + e(s.txt) + "</button>" +
+      (s.rapido ? '<button class="btn chico suave" type="button" data-accion="' + s.rapido.accion + '" data-id="' + e(pz.id) + '">' + ICO("check", 13) + e(s.rapido.txt) + "</button>" : "") + "</div>";
+  }
+  /** El paso de una tarjeta: abre justo lo que toca (Claude, el teleprompter, la edición, la descripción o la prueba). */
+  function pasoPieza(id, que) {
+    var ref = { c: "pieza", v: id };
+    if (que === "claude") return abrirClaudeTodo(id);
+    if (que === "tele") { S.vref = ref; return abrirTeleFull(); }
+    if (que === "editar") return abrirPasada(ref);
+    if (que === "material") { S.vtab = "material"; return ir("#/v/pieza/" + encodeURIComponent(id) + "/material"); }
+    if (que === "desc") { S.vtab = "cta"; return ir("#/v/pieza/" + encodeURIComponent(id) + "/cta"); }
+    if (que === "lanzar" || que === "prueba") return abrirPrueba(id);
+    S.vtab = "gancho"; ir("#/v/pieza/" + encodeURIComponent(id) + "/gancho");
+  }
+  /** Trae al tablero cada reel y cada carrusel de tus objetivos: los que ya hiciste entran editados («Falta su descripción»). */
+  function traerPiezas() {
+    var ts = tareasSinPieza(); if (!ts.length) return;
+    var n = 0, cola = Promise.resolve(), ahoraS = ahora();
+    toast("Trayendo " + ts.length + " piezas…");
+    ts.forEach(function (x) {
+      var tx = x.t.texto.toLowerCase(), m = /^p-(d\d)$/.exec(x.p.id), carr = /carrusel/.test(tx);
+      var d = { titulo: (/^(reel|carrusel) (base)?$/i.test(x.t.texto.trim()) ? x.t.texto.trim() + " · " + x.p.texto.replace(/[«»]/g, "") : x.t.texto).slice(0, 120), angulo: m ? m[1] : "", formato: carr ? (/contraste/.test(tx) ? "contraste" : "carrusel") : "base",
+        campana: "venta", video: "", carpeta: "", transcripcion: "", texto: "", tarea: { o: x.o.id, p: x.p.id, t: x.t.id }, prueba: { estado: "" } };
+      if (x.t.hecha) { d.prep = ahoraS; d.grabado = ahoraS; if (!carr) { d.pasada = 4; d.pasadasEl = { 1: ahoraS, 2: ahoraS, 3: ahoraS, 4: ahoraS }; } }
+      cola = cola.then(function () { return crearItem("piezas", d).then(function () { n++; toast("Trayendo tus piezas: " + n + " de " + ts.length + "…"); }); });
+    });
+    cola.then(function () { toast(n + " piezas en tu tablero. Las de reel van como reel base y las de carrusel como carrusel base: cámbialo con un toque si quieres"); repintar(); }).catch(falloRed);
+  }
+  /** Un toque: ya la grabaste, o ya está editada. Avanza de columna y se festeja. */
+  function avanzarPieza(id, que) {
+    var pz = deCol("piezas", id); if (!pz) return;
+    var s = ahora(), fm = GB.formatoDe(pz.formato), carr = !!(fm && fm.tipo === "carrusel");
+    if (que === "grabado") pz.grabado = pz.grabado || s;
+    if (que === "editado") { pz.prep = pz.prep || s; if (!carr) { pz.grabado = pz.grabado || s; pz.pasada = 4; pz.pasadasEl = pz.pasadasEl || {}; [1, 2, 3, 4].forEach(function (k) { if (!pz.pasadasEl[k]) pz.pasadasEl[k] = s; }); } }
+    guardarPieza(pz); registrarAhora({ tipo: "paso", grupo: "contenido", quien: "Tu pieza", detalle: "«" + pz.titulo + "»: " + (que === "grabado" ? "grabada" : "editada") });
+    celebrar("«" + pz.titulo + "» · " + (que === "grabado" ? "grabada" : carr ? "láminas listas" : "editada")); repintar();
+  }
+
+  /**
+   * «Hazlo con Claude»: un solo pedido para toda la pieza (con su ángulo, su regalo, su formato y su campaña), y una sola pegada
+   * que llena el gancho, las frases o las láminas con lo que se ve, el llamado y la descripción. O pegas tu propio guion y se parte solo.
+   */
+  function abrirClaudeTodo(id) {
+    var pz = deCol("piezas", id); if (!pz) return;
+    var ref = { c: "pieza", v: id }, g = guionDe(ref) || {}, an = GB.anguloDe(ag(), pz.angulo), fm = GB.formatoDe(pz.formato);
+    var pedido = GB.pedidoTodo({ titulo: pz.titulo, angulo: an, formato: pz.formato, campana: pz.campana, gancho: (g.gancho || {}).texto, cuerpo: (g.filas || []).map(function (f) { return f.dice; }).filter(Boolean).join("\n") || g.cuerpo || "", transcripcion: pz.transcripcion });
+    S.ctId = id; S.ctModo = S.ctModo || "claude";
+    hoja('<span class="chip oro" style="margin-bottom:10px">' + ICO("brillo", 13) + "Hazlo con Claude</span><h3>«" + e(pz.titulo) + '»</h3><p class="sub">' + e([an ? an.nombre : "Sin ángulo", fm ? fm.nombre : "formato a elegir", CAMP_NOM[pz.campana]].join(" · ")) + "</p>" +
+      '<div class="seg" id="ct-modos"><button type="button" data-accion="ct-modo" data-valor="claude" aria-pressed="' + (S.ctModo === "claude") + '">Que lo arme Claude</button><button type="button" data-accion="ct-modo" data-valor="mio" aria-pressed="' + (S.ctModo === "mio") + '">Ya tengo mi guion</button></div>' +
+      '<div id="ct-claude"' + (S.ctModo === "claude" ? "" : " hidden") + '><div class="pasos-n" style="margin-top:14px"><div><i>1</i><span>Copia el pedido y pégalo en Claude. Ya lleva tu ángulo, su regalo, el formato y la campaña.</span></div></div>' +
+      '<button class="btn primario chico" type="button" data-accion="copiar" data-texto="' + e(pedido) + '" data-aviso="Pedido copiado: pégalo en Claude">' + ICO("copiar", 15) + "Copiar el pedido</button>" +
+      '<div class="pasos-n" style="margin-top:14px"><div><i>2</i><span>Pega aquí toda su respuesta, tal cual.</span></div></div></div>' +
+      '<div id="ct-mio"' + (S.ctModo === "mio" ? "" : " hidden") + '><p class="ayuda" style="margin-top:12px">Pégalo de corrido o por líneas. La primera frase va al gancho, la última al llamado (si pide algo) y lo del medio a frases, cada una con lo que se ve propuesto.</p></div>' +
+      '<textarea class="inp" id="ct-texto" rows="8" placeholder="Pega aquí"></textarea><div class="acc" style="margin-top:8px"><button class="btn chico" type="button" data-accion="ct-ver">' + ICO("ojo", 15) + "Ver cómo queda</button></div><div id=\"ct-prev\"></div>");
+  }
+  function leerClaudeTodo() {
+    var t = ($("ct-texto") || {}).value || "", r = S.ctModo === "mio" ? GB.guionDeTexto(t) : GB.leerTodo(t);
+    S.ctLeido = r;
+    var ok = function (si, txt) { return "<li class=\"" + (si ? "si" : "") + "\">" + ICO(si ? "check" : "x", 14) + "<span>" + e(txt) + "</span></li>"; };
+    if (!r.gancho && !r.filas.length) { $("ct-prev").innerHTML = '<p class="g-nota">' + ICO("alerta", 15) + "<span>No encontré nada que leer. Si es la respuesta de Claude, que venga con las etiquetas (GANCHO:, FRASE:, LLAMADO:…).</span></p>"; return; }
+    $("ct-prev").innerHTML = '<ul class="ct-ok">' + ok(!!r.gancho, r.gancho ? "Gancho: " + r.gancho : "Sin gancho") + ok(r.filas.length > 0, r.filas.length + (r.filas.length === 1 ? " frase o lámina" : " frases o láminas") + (r.filas.filter(function (f) { return f.ve; }).length ? ", con lo que se ve" : "")) +
+      ok(!!r.llamado, r.llamado ? "Llamado: " + r.llamado : "Sin llamado") + (S.ctModo === "mio" ? "" : ok(!!r.descripcion, r.descripcion ? "La descripción, lista" : "Sin descripción")) + (r.ganchoIA ? ok(true, "El prompt de Higgsfield del gancho") : "") + "</ul>" +
+      '<div class="acc"><button class="btn exito" type="button" data-accion="ct-poner">' + ICO("check", 16) + "Ponerlo en la pieza</button></div>";
+  }
+  function ponerClaudeTodo() {
+    var r = S.ctLeido, pz = deCol("piezas", S.ctId); if (!r || !pz) return;
+    S.vref = { c: "pieza", v: pz.id };
+    var g = guionVivo(true);
+    if ((g.filas || []).some(function (f) { return f.dice; }) && r.filas.length && !window.confirm("Esta pieza ya tiene frases. ¿Las reemplazo con las nuevas?")) return;
+    if (r.gancho) { g.gancho = Object.assign({}, g.gancho || {}, { texto: r.gancho }); }
+    if (r.filas.length) g.filas = r.filas.slice(0, 24);
+    if (r.ganchoIA) g.filas.unshift({ momento: "", dice: r.gancho || "El gancho", ve: "El gancho con IA (Higgsfield)", tipo: "animar", prompt: r.ganchoIA, hecho: false });
+    if (r.llamado) { var sug = GB.ctaSugerido(ag(), pz.angulo, "cuenta"); g.cta = { tipo: (g.cta && g.cta.tipo) || (sug ? sug.clave : ""), texto: r.llamado }; }
+    g.angulo = g.angulo || pz.angulo; g.formato = g.formato || pz.formato || r.formato || "";
+    guardarGuion(g);
+    if (r.descripcion) pz.texto = r.descripcion;
+    if (r.titulo && /^(pieza nueva|reel|carrusel)/i.test(pz.titulo)) pz.titulo = r.titulo;
+    if (r.formato && !pz.formato) pz.formato = r.formato;
+    guardarPieza(pz); cerrarHoja();
+    celebrar("Guion listo: " + r.filas.length + (r.filas.length === 1 ? " frase" : " frases"));
+    S.vtab = "cuerpo"; ir("#/v/pieza/" + encodeURIComponent(pz.id) + "/cuerpo");
+  }
+
+  /** El teleprompter: tu guion entero, grande, que se desplaza solo. Tocas el texto para pausar; la velocidad y la letra se quedan guardadas. */
+  var TF = { anda: false, raf: 0 };
+  function abrirTeleFull() {
+    var g = guionVivo(false); if (!g) { toast("Primero escribe su guion", true); return; }
+    var lineas = [(g.gancho || {}).texto].concat((g.filas || []).map(function (f) { return f.dice; })).concat([(g.cta || {}).texto]).filter(function (x) { return x && String(x).trim(); });
+    if (!lineas.length) { toast("Primero escribe su guion", true); return; }
+    var vel = +(leerLocal("gb-tele-vel") || 3), tam = +(leerLocal("gb-tele-tam") || 34);
+    var d = document.createElement("div"); d.className = "telef"; d.id = "telef";
+    d.innerHTML = '<div class="tf-barra"><button type="button" data-accion="tf-cerrar" title="Cerrar">' + ICO("x", 18) + '</button><span class="tf-esp"></span><small class="tf-etq">Velocidad</small>' +
+      '<button type="button" data-accion="tf-vel" data-n="-1">' + ICO("abajo", 16) + '</button><b id="tf-vel">' + vel + '</b><button type="button" data-accion="tf-vel" data-n="1">' + ICO("arriba", 16) + "</button>" +
+      '<button type="button" data-accion="tf-tam" data-n="-4">A−</button><button type="button" data-accion="tf-tam" data-n="4">A+</button>' +
+      '<button type="button" class="tf-play" data-accion="tf-play">' + ICO("play", 18) + "<span>Empezar</span></button></div>" +
+      '<div class="tf-texto" id="tf-texto" data-accion="tf-play" style="font-size:' + tam + 'px"><div class="tf-aire"></div>' + lineas.map(function (l) { return "<p>" + e(l) + "</p>"; }).join("") + '<div class="tf-aire"></div></div><div class="tf-linea"></div>';
+    document.body.appendChild(d); document.body.classList.add("sin-scroll");
+    TF.vel = vel; TF.anda = false;
+  }
+  function teleAnda(si) {
+    TF.anda = si; var b = document.querySelector(".tf-play"); if (b) b.innerHTML = ICO(si ? "pausa" : "play", 18) + "<span>" + (si ? "Pausa" : "Seguir") + "</span>";
+    cancelAnimationFrame(TF.raf);
+    if (!si) return;
+    var tx = $("tf-texto"), prev = performance.now();
+    var paso = function (t) { if (!TF.anda || !tx) return; tx.scrollTop += (t - prev) * TF.vel * 0.012; prev = t; if (tx.scrollTop + tx.clientHeight >= tx.scrollHeight - 2) { teleAnda(false); return; } TF.raf = requestAnimationFrame(paso); };
+    TF.raf = requestAnimationFrame(paso);
+  }
+  function cerrarTele() {
+    teleAnda(false); var d = $("telef"); if (d) d.remove(); document.body.classList.remove("sin-scroll");
+    var r = S.vref, vd = r && videoDe(r);
+    if (vd && !vd.obj.grabado && r.c === "pieza") hoja('<h3>¿La grabaste?</h3><p class="sub">Si ya está, marca y pasa a editarla.</p><div class="acc"><button class="btn exito" type="button" data-accion="pz-grabado" data-id="' + e(r.v) + '">' + ICO("check", 16) + 'Sí, ya la grabé</button><button class="btn suave" type="button" data-cerrar>Todavía no</button></div>');
+  }
+
   // ---------- las piezas de tu cuenta (v11): un reel o un carrusel de un ángulo, o un anuncio, con su prueba de pauta ----------
   var CAMP_NOM = { venta: "Venta", seguidores: "Seguidores", organico: "Orgánico" };
   function piezaDeTarea(o, t) { return col("piezas").find(function (p) { return p.tarea && p.tarea.o === o && p.tarea.t === t; }) || null; }
@@ -4351,6 +4551,7 @@
     };
     var vivos = items.filter(function (x) { return x.etapa !== "publicado"; }), urg = vivos.slice().sort(function (a, b) { return b.nivel - a.nivel; })[0];
     var rp = recetasPartes();
+    var tabsTablero = [{ clave: "tablero", nombre: "Tablero", ico: "capas", cuenta: col("piezas").length || "", rojo: piezasVivas().some(function (p) { return p.nivel >= 3; }), html: tableroHTML() }];
     var tabs = CO.etapas.map(function (et) {
       var xs = por[et.clave] || [], nPub = et.clave === "publicacion" ? vivos.filter(function (x) { return !x.fecha && !x.cuenta; }).length : xs.length;
       return { clave: et.clave, nombre: et.nombre, ico: et.ico, cuenta: nPub || "", rojo: xs.some(function (x) { return x.nivel >= 3; }), ayuda: et.clave === "publicacion" ? "Los que todavía no tienen su fecha" : "", html: panel(et) };
@@ -4361,7 +4562,8 @@
       { clave: "ediciones", nombre: "Tus ediciones", ico: "pelicula", cuenta: col("ediciones").length || "", html: edicionesHTML() },
       { clave: "recetas", nombre: "Recetas", ico: "estrella", cuenta: rp.n || "", html: rp.html }
     ]);
-    html += pestanas("contenido", tabs, tabDe("contenido", tabs.map(function (t) { return t.clave; }), urg && urg.nivel >= 2 ? urg.etapa : "guion"));
+    tabs = tabsTablero.concat(tabs);
+    html += pestanas("contenido", tabs, tabDe("contenido", tabs.map(function (t) { return t.clave; }), "tablero"));
     pintar(html);
   }
   /** Lo que escribes en un video desde Contenido: su descripción, su link para verlo y su link publicado. */
@@ -5535,7 +5737,7 @@
         '<button class="btn suave" type="button" data-accion="t-pendiente" style="margin-top:12px">' + ICO("ojo", 16) + "Ver lo pendiente, ya reacomodado</button>";
       return { html: html, i0: iv, soloEso: true };
     }
-    html += constanciaLinea(k);
+    html += constanciaLinea(k) + ritmoLinea();
     // El lunes: lo que terminaste la semana pasada
     if (GB.diaISO(h) === 1 && leerLocal("gb-semana-vista") !== h) {
       var lunesP = GB.sumarDias(GB.lunesDe(h), -7), np = GB.numerosSemana({ prospectos: col("prospectos"), clientes: clientesVivos() }, lunesP);
@@ -5767,7 +5969,7 @@
       '<div class="vid-hero' + (cuenta ? " cuenta" : "") + (anim ? " aparece" : "") + '"><div class="vh-top"><div class="vh-chips"><span class="chip">' + ICO(cuenta ? "camara" : "persona", 12) + e(vd.quien) + "</span>" +
       (an ? '<span class="chip">' + ICO("diana", 12) + e(an.nombre) + "</span>" : "") + (fmt ? '<span class="chip">' + ICO(fmt.ico || "pelicula", 12) + e(fmt.nombre) + "</span>" : "") + (an && an.regalo && cuenta ? '<span class="chip">' + ICO("regalo", 12) + "Regalo " + e(an.regalo) + "</span>" : "") + (fecha ? '<span class="chip">' + ICO("calendario", 12) + e(fecha) + "</span>" : "") + "</div>" +
       anillo(Math.round(pg.hechos / 5 * 100), 46, 5, "blanco") + "</div>" + titulo +
-      '<div class="vh-sigue"><span>' + e(sigue.txt) + "</span>" + sigue.btn + "</div></div>";
+      '<div class="vh-sigue"><span>' + e(sigue.txt) + "</span>" + (vd.pieza && !pg.cuerpo ? '<button class="btn blanco" type="button" data-accion="pz-claude" data-id="' + e(r.v) + '">' + ICO("brillo", 17) + "Hazlo con Claude</button>" : "") + (pg.cuerpo && !pg.grabado && !carrusel ? '<button class="btn vidrio" type="button" data-accion="tele-full">' + ICO("camara", 17) + "Teleprompter</button>" : "") + sigue.btn + "</div></div>";
     html += '<div class="stepper" role="tablist">' + PASOS_V.filter(function (p) { return !(carrusel && p[0] === "grabar"); }).map(function (p, i) {
       var hecho = pg[p[2]], act = t === p[0];
       return '<button type="button" role="tab" aria-selected="' + act + '" class="st' + (act ? " activa" : "") + (hecho ? " hecho" : "") + '" data-accion="v-tab" data-tab="' + p[0] + '"><i>' + (hecho ? ICO("check", 14) : i + 1) + "</i><span>" + e(p[1]) + "</span></button>";
@@ -5915,7 +6117,7 @@
         (g.cuerpo ? '<div class="card bloque"><p class="g-que" style="margin-top:0">Ya tienes el cuerpo escrito de corrido. Pásalo a frases y aquí te sale una por una.</p><button class="btn chico primario" type="button" data-accion="v-cuerpo-filas">' + ICO("lapiz", 15) + "Pasarlo a frases</button></div>" : "") + expres;
     }
     var grab = filas.filter(function (f) { return f.grabada; }).length;
-    var h = '<div class="card bloque cab-paso"><span class="cp-ico">' + ICO("camara", 22) + '</span><div><b>Tu guion para grabar</b><p>' + grab + " de " + filas.length + ' frases grabadas.</p></div><button class="btn primario" type="button" data-accion="tp-abrir" data-i="' + Math.max(0, filas.findIndex(function (f) { return !f.grabada; })) + '">' + ICO("play", 16) + "Leer en grande</button></div>" +
+    var h = '<div class="card bloque cab-paso"><span class="cp-ico">' + ICO("camara", 22) + '</span><div><b>Tu guion para grabar</b><p>' + grab + " de " + filas.length + ' frases grabadas.</p></div><button class="btn primario" type="button" data-accion="tele-full">' + ICO("play", 16) + 'Teleprompter</button><button class="btn" type="button" data-accion="tp-abrir" data-i="' + Math.max(0, filas.findIndex(function (f) { return !f.grabada; })) + '">' + ICO("play", 16) + "Leer en grande</button></div>" +
       '<div class="antes-g">' + CG.antes.map(function (t) { return "<span>" + ICO("check", 12) + e(t) + "</span>"; }).join("") + "</div>";
     h += '<div class="frases">' + filas.map(function (f, i) {
       var tp = SIS.fabrica.tiposVe.find(function (x) { return x.clave === f.tipo; });
@@ -6181,6 +6383,19 @@
       case "barrida": abrirBarrida(); return true;
       case "ag-version": otraVersion(); return true;
       case "ag-version-igual": { var sv2 = semanaAg(true); sv2.version = (sv2.version || 2) + 1; guardarAgenciaLuego(); cerrarHoja(); toast("Versión " + sv2.version + ": la curva decide"); repintar(); return true; }
+      case "pz-sig": cerrarHoja(); pasoPieza(b.dataset.id, b.dataset.que); return true;
+      case "pz-grabado": cerrarHoja(); avanzarPieza(b.dataset.id, "grabado"); return true;
+      case "pz-editado": avanzarPieza(b.dataset.id, "editado"); return true;
+      case "pz-traer": traerPiezas(); return true;
+      case "pz-claude": abrirClaudeTodo(b.dataset.id); return true;
+      case "ct-modo": S.ctModo = b.dataset.valor; document.querySelectorAll("#ct-modos button").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.valor === S.ctModo)); }); $("ct-claude").hidden = S.ctModo !== "claude"; $("ct-mio").hidden = S.ctModo !== "mio"; $("ct-prev").innerHTML = ""; return true;
+      case "ct-ver": leerClaudeTodo(); return true;
+      case "ct-poner": ponerClaudeTodo(); return true;
+      case "tele-full": abrirTeleFull(); return true;
+      case "tf-cerrar": cerrarTele(); return true;
+      case "tf-play": teleAnda(!TF.anda); return true;
+      case "tf-vel": TF.vel = Math.max(1, Math.min(12, TF.vel + +b.dataset.n)); guardarLocal("gb-tele-vel", String(TF.vel)); $("tf-vel").textContent = TF.vel; return true;
+      case "tf-tam": { var tfx = $("tf-texto"), tfs = Math.max(20, Math.min(64, parseInt(tfx.style.fontSize, 10) + +b.dataset.n)); tfx.style.fontSize = tfs + "px"; guardarLocal("gb-tele-tam", String(tfs)); return true; }
       case "pz-de-tarea": piezaDeTareaNueva({ o: b.dataset.o, p: b.dataset.p, t: b.dataset.t }); return true;
       case "pz-prueba": cerrarHoja(); abrirPrueba(b.dataset.id); return true;
       case "pz-lance": {

@@ -426,6 +426,109 @@
     return { clave: "poco", texto: "Todavía tiene pocas vistas para decir algo: mira si la pauta de verdad corrió." };
   }
 
+  // ---------- tu estudio inteligente (v12): una sola ida y vuelta con Claude, tu guion pegado, el tablero y tu ritmo ----------
+  /** Lo que pide cada formato en el pedido a Claude: qué tiene que devolver. */
+  var PIDE_FORMATO = {
+    base: "Es un REEL BASE: yo leo el guion a cámara en mi cuarto, y los motion graphics van en el 35% de la pantalla. En cada FRASE, «lo que se ve» es el motion graphic que acompaña esa frase (qué se anima, en pocas palabras), y el tipo es motion.",
+    ia: "Es un REEL CON GANCHO DE IA: el gancho lo grabo en la calle y en Higgsfield le sumo lo que lo hace llamativo. Agrega una línea GANCHO_IA con el prompt para Higgsfield (qué se transforma o aparece en los primeros 2 o 3 segundos). Las FRASES van a cámara, con su motion o su toma.",
+    carrusel: "Es un CARRUSEL BASE (fondo blanco, el que hace la IA). En vez de FRASE, una línea LAMINA por lámina: el texto de la lámina | el prompt de su imagen (si lleva). Máximo 8 láminas, la primera es el gancho y la última el llamado.",
+    contraste: "Es un CARRUSEL DE CONTRASTE: en cada lámina, arriba lo correcto (lo que hago yo como experto) y abajo lo que hace todo el mundo. Cuenta una historia: cada lámina en un escenario distinto de la situación, y yo soy el avatar en las dos mitades. Una línea LAMINA por lámina: arriba (lo correcto) | abajo (lo que hace todo el mundo) | el prompt para Nano Banana del escenario (vertical, yo de avatar arriba y abajo). Máximo 8 láminas.",
+    improvisado: "Es un video IMPROVISADO, con mucha edición. Dame las FRASES con lo que se ve en cada una (motion o clip)."
+  };
+  /**
+   * El pedido único para Claude: con el ángulo (su dolor y su regalo), el formato, la campaña y lo que ya escribiste.
+   * Pide una respuesta con etiquetas fijas (TITULO, GANCHO, FRASE, LAMINA, LLAMADO, DESCRIPCION, GANCHO_IA) para que el panel la lea entera de una vez.
+   */
+  function pedidoTodo(o) {
+    var f = o.formato ? formatoDe(o.formato) : null, a = o.angulo, camp = (CO.descCampana || []).find(function (x) { return x.clave === o.campana; });
+    var carr = f && f.tipo === "carrusel";
+    var l = ["Arma esta pieza de mi cuenta de TikTok (Grow Business: le hablo a dueños de tienda de La Paz que invierten). Usa mis documentos: mi forma de hacer guiones, mi promesa y mis características, y el mapa de dolores y regalos.", ""];
+    l.push("La pieza: " + (o.titulo || "sin nombre"));
+    if (a) l.push("El dolor que toca: " + a.nombre + (a.regalo ? " · el regalo con que cierra: " + a.regalo : ""));
+    l.push("El formato: " + (f ? f.nombre + ". " + (PIDE_FORMATO[f.clave] || f.que) : "elige tú entre reel base y carrusel base, el que mejor cuente esta idea, y dime cuál en la línea FORMATO."));
+    if (camp) l.push("La campaña: " + camp.nombre + ". La descripción va para eso.");
+    if (o.gancho) l.push("El gancho que ya tengo (mejóralo solo si hace falta): " + o.gancho);
+    if (o.cuerpo) l.push("Lo que ya tengo escrito:\n" + o.cuerpo);
+    if (o.transcripcion) l.push("La transcripción del video ya grabado (respeta lo que digo):\n" + o.transcripcion);
+    l.push("", "Respóndeme SOLO así, una cosa por línea, sin nada más:");
+    l.push("TITULO: el nombre corto de la pieza");
+    if (!f) l.push("FORMATO: base o carrusel");
+    l.push("GANCHO: lo que se dice o se lee en los primeros 3 segundos");
+    if (f && f.clave === "ia") l.push("GANCHO_IA: el prompt para Higgsfield");
+    if (carr) l.push(f.clave === "contraste" ? "LAMINA: arriba | abajo | prompt (una línea por lámina)" : "LAMINA: texto | prompt (una línea por lámina)");
+    else l.push("FRASE: lo que digo | lo que se ve | tipo (motion, toma, ia, texto) | prompt si es imagen (una línea por frase, en el orden del video)");
+    l.push("LLAMADO: lo que pido al final" + (a && a.regalo ? " (el regalo " + a.regalo + ")" : ""));
+    l.push("DESCRIPCION: la descripción para " + (camp ? camp.nombre.toLowerCase() : "publicar") + ", en un solo párrafo, sin emojis, con 3 a 5 etiquetas al final");
+    return l.join("\n");
+  }
+  var TIPOS_OK = ["toma", "ia", "animar", "motion", "texto", "comodin"];
+  function tipoDe(t) { t = String(t || "").toLowerCase().replace(/[^a-zóá ]/g, "").trim(); if (TIPOS_OK.indexOf(t) >= 0) return t; if (/anim/.test(t)) return "animar"; if (/imag|ia|nano|higgs/.test(t)) return "ia"; if (/motion|graf/.test(t)) return "motion"; if (/texto/.test(t)) return "texto"; return "toma"; }
+  /**
+   * Lee la respuesta de Claude entera: las etiquetas pueden venir en negrita, con viñetas o en tabla, y la DESCRIPCION puede ocupar varias líneas.
+   * Devuelve { titulo, formato, gancho, ganchoIA, filas, llamado, descripcion } con lo que encontró.
+   */
+  function leerTodo(texto) {
+    var r = { titulo: "", formato: "", gancho: "", ganchoIA: "", filas: [], llamado: "", descripcion: "" }, ultima = "";
+    String(texto || "").replace(/\r/g, "").split("\n").forEach(function (lin) {
+      var s = lin.replace(/\*\*/g, "").replace(/^\s*[-•*>]\s*/, "").replace(/^\s*\d+[.)]\s*/, "").trim();
+      var m = s.match(/^(TITULO|TÍTULO|FORMATO|GANCHO_IA|GANCHO IA|GANCHO|FRASE|LAMINA|LÁMINA|LLAMADO|CTA|DESCRIPCION|DESCRIPCIÓN)\s*\d*\s*[:：-]\s*(.*)$/i);
+      if (!m) { if (ultima === "descripcion" && s) r.descripcion += (r.descripcion ? "\n" : "") + s; else if (ultima === "llamado" && s && !/\|/.test(s)) r.llamado += " " + s; return; }
+      var et = m[1].toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(" ", "_"), v = m[2].trim(), p = v.split("|").map(function (x) { return x.trim(); });
+      ultima = "";
+      if (et === "TITULO") r.titulo = v.slice(0, 120);
+      else if (et === "FORMATO") { var fv = v.toLowerCase(); r.formato = /contraste/.test(fv) ? "contraste" : /carrusel/.test(fv) ? "carrusel" : /ia|higgs/.test(fv) ? "ia" : /base|reel/.test(fv) ? "base" : ""; }
+      else if (et === "GANCHO_IA") r.ganchoIA = v.slice(0, 600);
+      else if (et === "GANCHO") r.gancho = v.slice(0, 300);
+      else if (et === "FRASE") { if (p[0]) r.filas.push({ momento: "", dice: p[0].slice(0, 300), ve: (p[1] || "").slice(0, 240), tipo: tipoDe(p[2] || (p[1] ? "motion" : "toma")), prompt: (p[3] || "").slice(0, 600), hecho: false }); }
+      else if (et === "LAMINA") {
+        if (!p[0]) return;
+        var tres = p.length >= 3;
+        r.filas.push({ momento: "", dice: (tres ? "Arriba: " + p[0] + " / Abajo: " + p[1] : p[0]).slice(0, 300), ve: tres ? "Lámina de contraste: arriba lo correcto, abajo lo de todos, contigo de avatar" : (p[1] ? "La imagen de la lámina" : "Lámina con fondo blanco"), tipo: tres || p[1] ? "ia" : "texto", prompt: (tres ? p[2] : p[1] || "").slice(0, 600), hecho: false });
+      }
+      else if (et === "LLAMADO" || et === "CTA") { r.llamado = v.slice(0, 400); ultima = "llamado"; }
+      else if (et === "DESCRIPCION") { r.descripcion = v; ultima = "descripcion"; }
+    });
+    r.descripcion = r.descripcion.slice(0, 2200); r.llamado = r.llamado.trim().slice(0, 400);
+    return r;
+  }
+  var RE_LLAMADO = /(comenta|escribe|escr[ií]beme|link|perfil|s[ií]gueme|toca|fecha|marketing|revisa|reserva|cup[oó]n)/i;
+  /**
+   * Tu guion pegado tal cual (de corrido o por líneas): la primera frase es el gancho, la última es el llamado si pide algo,
+   * y lo del medio son las frases, cada una con «lo que se ve» propuesto (la primera opción de tu menú).
+   */
+  function guionDeTexto(texto) {
+    var t = String(texto || "").replace(/\r/g, "").trim(); if (!t) return { gancho: "", filas: [], llamado: "" };
+    var partes = t.split(/\n+/).map(function (x) { return x.trim(); }).filter(Boolean);
+    if (partes.length < 3) partes = t.replace(/([.!?…])\s+/g, "$1\n").split("\n").map(function (x) { return x.trim(); }).filter(Boolean);
+    var gancho = partes.shift() || "", llamado = partes.length && RE_LLAMADO.test(partes[partes.length - 1]) ? partes.pop() : "";
+    var filas = partes.slice(0, 24).map(function (d) {
+      var op = GB.opcionesVe ? GB.opcionesVe(d, null, []) : { opciones: [] }, o = op.opciones[0];
+      return { momento: "", dice: d.slice(0, 300), ve: o ? o.ve : "", tipo: o ? o.tipo : "toma", prompt: "", hecho: false };
+    });
+    return { gancho: gancho.slice(0, 300), filas: filas, llamado: llamado.slice(0, 400) };
+  }
+  /** Lo que toca hacer con una pieza, en un botón: el siguiente paso de verdad y, si se puede, el atajo de un toque. */
+  function siguientePieza(pz, g, hoy) {
+    var et = etapaPieza(pz, g), f = formatoDe(pz.formato), carr = !!(f && f.tipo === "carrusel"), pr = pz.prueba || {};
+    if (et === "guion") return { et: et, txt: "Armar su guion", ico: "brillo", accion: "claude", rapido: null };
+    if (et === "grabar") return { et: et, txt: "Grabarla con el teleprompter", ico: "camara", accion: "tele", rapido: { accion: "pz-grabado", txt: "Ya la grabé" } };
+    if (et === "editar") return carr ? { et: et, txt: "Hacer sus láminas", ico: "capas", accion: "material", rapido: { accion: "pz-editado", txt: "Ya están" } }
+      : { et: et, txt: "Editarla", ico: "tijera", accion: "editar", rapido: { accion: "pz-editado", txt: "Ya está editada" } };
+    if (et === "descripcion") return { et: et, txt: "Su descripción", ico: "cuaderno", accion: "desc", rapido: null };
+    if (et === "subir") return { et: et, txt: "Subirla y lanzar su prueba", ico: "megafono", accion: "lanzar", rapido: null };
+    if (pr.estado === "corriendo") { var fin = finPrueba(pz); return hoy >= fin ? { et: "prueba", txt: "Anotar sus números y decidir", ico: "grafica", accion: "prueba", rapido: null, apura: true } : { et: "prueba", txt: "En prueba hasta el " + GB.diaCorto(fin), ico: "reloj", accion: "prueba", rapido: null }; }
+    if (pr.estado === "sigue") return { et: "prueba", txt: hoy >= pr.hasta ? "Terminó su pauta: anota" : "Sigue hasta el " + GB.diaCorto(pr.hasta), ico: "play", accion: "prueba", rapido: null, apura: hoy >= pr.hasta };
+    return { et: "listas", txt: pr.estado === "apagada" ? "Apagada" : pr.estado === "terminada" ? "Terminó su pauta" : "Publicada", ico: "check", accion: "abrir", rapido: pz.lanzadaEl ? null : { accion: "pz-prueba", txt: "Lanzar su prueba" } };
+  }
+  /**
+   * Tu ritmo hacia un objetivo: cuántas tareas faltan, cuántos días quedan (hoy incluido) y cuántas te tocan hoy para llegar.
+   */
+  function ritmoObjetivo(o, hoy) {
+    var p = progresoObjetivo2(o), dias = o.fecha ? Math.max(0, GB.diasEntre(hoy, o.fecha)) + 1 : 0, faltan = p.total - p.hechas;
+    return { hechas: p.hechas, total: p.total, faltan: faltan, dias: o.fecha ? dias : null, hoy: dias ? Math.ceil(faltan / dias) : faltan, paso: o.fecha && hoy > o.fecha ? "tarde" : faltan === 0 ? "listo" : "va" };
+  }
+  function progresoObjetivo2(o) { var h = 0, t = 0; (o.plan || []).forEach(function (p) { (p.tareas || []).forEach(function (x) { t++; if (x.hecha) h++; }); }); return { hechas: h, total: t }; }
+
   // ---------- el espacio de un cliente (Cambio 18) ----------
   /** Cuánto ocupa un cliente de su celda (45.000 letras): el % y si ya pasa del 80%. */
   function espacioCliente(p) { var n = JSON.stringify(p || {}).length, pct = Math.round(n / 45000 * 100); return { pct: pct, aviso: pct >= 80 }; }
@@ -435,6 +538,7 @@
     piezas: piezas, porPublicar: porPublicar, itemsPublicar: itemsPublicar, traePor1000: traePor1000, statsContenido: statsContenido, veredictos: veredictos, tablaFunciona: tablaFunciona,
     planSemanas: planSemanas, calendarioMesa: calendarioMesa, estadoPieza: estadoPieza, descripcionRapida: descripcionRapida, pedidoCuerpo: pedidoCuerpo,
     claveProceso: claveProceso, procesoDe: procesoDe, pasosDeTexto: pasosDeTexto, espacioCliente: espacioCliente,
+    pedidoTodo: pedidoTodo, leerTodo: leerTodo, guionDeTexto: guionDeTexto, siguientePieza: siguientePieza, ritmoObjetivo: ritmoObjetivo,
     etapaPieza: etapaPieza, nombreEtapaPieza: nombreEtapaPieza, piezaTerminada: piezaTerminada, finPrueba: finPrueba, itemsPiezas: itemsPiezas, sugerenciaPrueba: sugerenciaPrueba,
     progresoGuion: progresoGuion, mesMas: mesMas, mesCalendario: mesCalendario, pedidoCalendario: pedidoCalendario, leerCalendario: leerCalendario
   });

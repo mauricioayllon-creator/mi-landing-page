@@ -25,11 +25,21 @@
   var PAGINA = "https://mauricio-ayllon.com";
 
   return {
-    version: 11,
+    version: 12,
     fecha: "2026-10-29",
 
     // ---------- lo que cambió (lo más nuevo arriba) ----------
     cambios: [
+      {
+        version: 12, fecha: "2026-10-29", titulo: "Tu tablero, una sola ida y vuelta con Claude, el teleprompter y tu ritmo hasta el domingo",
+        que: [
+          "Contenido abre en tu Tablero: cada pieza es una tarjeta que avanza de columna (guion, grabar, editar, descripción, subir, en prueba, listas), con su siguiente paso en un botón y el atajo de un toque («Ya la grabé», «Ya está editada»).",
+          "«Traer sus piezas al tablero» crea de una vez las piezas de tu objetivo: las que ya hiciste entran editadas.",
+          "«Armar su guion»: un solo pedido para Claude con el ángulo, su regalo, el formato y la campaña. Pegas su respuesta entera y se llenan el gancho, las frases o las láminas con lo que se ve, el llamado y la descripción. O pegas tu propio guion y se parte solo.",
+          "El teleprompter: tu guion entero en pantalla completa, grande, que se desplaza solo. Tú eliges la velocidad y la letra. Al cerrarlo te pregunta si ya la grabaste.",
+          "Tu ritmo: arriba del tablero y en Hoy, cuántas llevas, cuántos días quedan y cuántas te tocan hoy para llegar."
+        ]
+      },
       {
         version: 11, fecha: "2026-10-29", titulo: "Las piezas de tu cuenta, su prueba de 3 días con aviso, y tus tareas que se marcan solas",
         que: [

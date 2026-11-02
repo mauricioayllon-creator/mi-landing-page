@@ -7,6 +7,9 @@ function segmentoBase(extra) { return { nombre: '', cuantos: '', compraAnio: '',
 function ofertaVacia() {
   return { activa: false, lineaId: '', usarEnCuenta: false, deseo: '', tiempo: '', precio: '', valorProducto: '', bonos: [], garantia: 'ninguna', usoGarantia: 5, urgencia: 'ninguna', pago: 'contado', segmentos: [] };
 }
+function anunciosVacios() {
+  return { plataforma: 'tiktok', objetivo: 'auto', alcance: 'auto', tc: '', cupon: true, costoResultadoReal: '', cpmReal: '' };
+}
 function prospectoVacio() {
   return {
     negocio: { nombre: '', rubro: '', ciudad: '', facturacion: '', gastosFijos: '', caja: '', temporadaAlta: '', cobroDias: '' },
@@ -18,6 +21,7 @@ function prospectoVacio() {
     compromiso: { tiempo: true, aplicaGuia: true, aprueba: true, pagaPublicidad: true, pagoTarjeta: '' },
     capacidad: { actuales: '', maxHoy: '', contrataria: '', porPersona: '', mesesContratar: '', mensajesDia: '', mercado: '' },
     oferta: ofertaVacia(),
+    anuncios: anunciosVacios(),
     supuestos: supuestosBase(),
     plan: { duracionManual: '', herramientas: '', inicial: '', ahorro: '' },
     rangos: {},
@@ -38,6 +42,7 @@ function ejemploBrisa() {
   p.hoy = { numerosDe: 'linea', interesadosMes: 120, clientesMes: 1, respuesta: 'dia', seguimiento: 'nunca', diasPropuesta: 7, quienVende: 'dueno', viejos: 47, pautaMes: 1500, ventasPautaMes: 0, quienPauta: 'agencia', equipoContenido: false, contenidoPrueba: 'poco', mide: 'no' };
   p.servicio.presupuesto = 6500;
   p.compromiso.pagoTarjeta = 'si';
+  p.anuncios = { ...anunciosVacios(), plataforma: 'meta' };
   p.capacidad = { actuales: 18, maxHoy: 26, contrataria: 1, porPersona: 10, mesesContratar: 2, mensajesDia: 10, mercado: 220 };
   p.plan = { duracionManual: '', herramientas: 1000, inicial: 4000, ahorro: 3500 };
   p.rangos = { 'linea:l2:vidaMeses': { min: 24, max: 48 }, 'hoy.interesadosMes': { min: 90, max: 150 } };
@@ -92,6 +97,7 @@ function ejemploJoyeria() {
   ];
   p.hoy = { numerosDe: 'negocio', interesadosMes: 300, clientesMes: 70, respuesta: 'hora', seguimiento: 'aveces', diasPropuesta: '', quienVende: 'equipo', viejos: 60, pautaMes: 6000, ventasPautaMes: 25, quienPauta: 'dueno', equipoContenido: true, contenidoPrueba: 'bastante', mide: 'aveces' };
   p.compromiso.pagoTarjeta = 'si';
+  p.anuncios = { ...anunciosVacios(), plataforma: 'meta' };
   p.capacidad = { actuales: 130, maxHoy: 200, contrataria: 1, porPersona: 60, mesesContratar: 1, mensajesDia: 25, mercado: '' };
   p.plan = { duracionManual: '', herramientas: 300, inicial: '', ahorro: '' };
   p.oferta = {
@@ -119,12 +125,12 @@ function ejemploMinimoBase(o) {
   return p;
 }
 function ejemploMinPlata() {
-  return ejemploMinimoBase({ nombre: 'Joyería mínima 1: plata del día a día', rubro: 'Aretes, cadenas y anillos de plata; tienda chica e Instagram', linea: 'Joyas de plata', fact: 20000, gastos: 9000, caja: 7000, margen: 60, tipo: 'repetida', ticket: 220, ppy: 4, anios: 2, ciclo: 2, tv: 'b2cBajo', inter: 380, cli: 32, ads: 750, cap: [90, 180] });
+  return ejemploMinimoBase({ nombre: 'Joyería mínima 1: plata del día a día', rubro: 'Aretes, cadenas y anillos de plata; tienda chica e Instagram', linea: 'Joyas de plata', fact: 18000, gastos: 8100, caja: 6000, margen: 60, tipo: 'repetida', ticket: 220, ppy: 4, anios: 2, ciclo: 2, tv: 'b2cBajo', inter: 345, cli: 29, ads: 500, cap: [82, 164] });
 }
 function ejemploMinAnillos() {
-  return ejemploMinimoBase({ nombre: 'Joyería mínima 2: anillos de compromiso', rubro: 'Anillos de compromiso y aros de matrimonio a pedido', linea: 'Anillos de compromiso', fact: 33000, gastos: 11100, caja: 8000, margen: 45, tipo: 'unica', ticket: 4500, ciclo: 21, tv: 'b2cAlto', inter: 198, cli: 7, ads: 2750, cap: [8, 16] });
+  return ejemploMinimoBase({ nombre: 'Joyería mínima 2: anillos de compromiso', rubro: 'Anillos de compromiso y aros de matrimonio a pedido', linea: 'Anillos de compromiso', fact: 23000, gastos: 7800, caja: 6000, margen: 45, tipo: 'unica', ticket: 4500, ciclo: 21, tv: 'b2cAlto', inter: 130, cli: 5, ads: 1250, cap: [5, 10] });
 }
 function ejemploMinEmpresas() {
-  return ejemploMinimoBase({ nombre: 'Joyería mínima 3: regalos para empresas', rubro: 'Joyas y detalles grabados para regalos de empresas', linea: 'Regalos para empresas', fact: 43000, gastos: 12900, caja: 23000, margen: 40, tipo: 'repetida', ticket: 6000, ppy: 3, anios: 3, ciclo: 30, tv: 'b2b', cobro: 30, inter: 97, cli: 3, ads: 3500, cap: [7, 14] });
+  return ejemploMinimoBase({ nombre: 'Joyería mínima 3: regalos para empresas', rubro: 'Joyas y detalles grabados para regalos de empresas', linea: 'Regalos para empresas', fact: 38000, gastos: 11400, caja: 23000, margen: 40, tipo: 'repetida', ticket: 6000, ppy: 3, anios: 3, ciclo: 30, tv: 'b2b', cobro: 30, inter: 65, cli: 2, ads: 3500, cap: [6, 13] });
 }
 /*EJEMPLOS-FIN*/

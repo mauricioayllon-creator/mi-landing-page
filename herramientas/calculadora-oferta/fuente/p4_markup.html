@@ -11,6 +11,9 @@
       <div><h1>Calculadora de Oferta</h1><p id="sub-negocio">Diagnóstico en la llamada</p></div>
     </div>
     <div class="acciones">
+      <button class="btn-g btn-guia" id="btn-guia" type="button" aria-pressed="false" title="Muestra qué preguntar en cada parte de la llamada (atajo: tecla G)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg><span class="txt">Guía de llamada</span></button>
+      <button class="btn-g btn-cli" id="btn-cliente" type="button" aria-pressed="false" title="Pantalla limpia para mostrarle al cliente"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/></svg><span class="txt">Vista del cliente</span></button>
+      <button class="btn-g" id="btn-imprimir" type="button" title="Guardar la vista del cliente como PDF">Guardar PDF</button>
       <details class="pop" id="menu-ejemplos">
         <summary class="btn-g">Ejemplos</summary>
         <div class="pop-menu" role="menu">
@@ -45,6 +48,7 @@
 <main class="app" id="app" data-vista="preguntas">
   <section class="col-preguntas" id="col-preguntas" aria-label="Preguntas">
     <div class="titulo-col"><h2>Llamada de diagnóstico</h2><p>Pregúntale como si conversaran. Si no sabe un número, toca <b>¿No sabe?</b> y te doy preguntas más fáciles. Si duda, escribe un rango: <b>20 a 30</b>.</p></div>
+    <div id="ruta"></div>
     <div id="banner"></div>
     <div class="progreso" id="progreso"></div>
     <div class="pasos" role="tablist" aria-label="Pasos" id="pasos"></div>

@@ -83,7 +83,7 @@ function normalizarProspecto(p) {
   p = p || {};
   const base = prospectoVacio();
   const out = { ...base, ...p };
-  for (const k of ['negocio', 'meta', 'hoy', 'servicio', 'compromiso', 'capacidad', 'plan']) out[k] = { ...base[k], ...(p[k] || {}) };
+  for (const k of ['negocio', 'meta', 'hoy', 'servicio', 'compromiso', 'capacidad', 'plan', 'anuncios']) out[k] = { ...base[k], ...(p[k] || {}) };
   const sb = supuestosBase();
   out.supuestos = {};
   for (const k of Object.keys(sb)) out.supuestos[k] = { ...sb[k], ...(((p.supuestos || {})[k]) || {}) };
@@ -108,6 +108,8 @@ const estado = {
   actualId: leerLocal('co4.actual'),
   abiertas: new Set(),
   paso: leerLocal('co4.paso') || 1,
+  guia: leerLocal('co4.guia') === true,
+  cliente: false,
   vista: 'preguntas',
   tab: leerLocal('co4.tab') || 'resumen',
   tipoAjustes: null,
@@ -152,7 +154,7 @@ function valorMostrado(clave, fmt) {
 }
 function pregunta({ clave, q, ayuda = '', pre = '', suf = '', fmt = '', nota = '', importante = false, ph = '', rango = true }) {
   const id = 'f-' + idSeguro(clave);
-  return `<div class="fila" data-pregunta="${esc(clave)}">
+  return `<div class="fila" data-pregunta="${esc(clave)}">${htmlGuia(clave)}
     <div class="fila-cab"><label for="${id}">${esc(q)}</label>${htmlBadge(clave, importante)}</div>
     <div class="fila-in"><div class="campo-in">${pre ? `<span class="pre">${esc(pre)}</span>` : ''}<input id="${id}" class="num" inputmode="${rango ? 'text' : 'decimal'}" autocomplete="off" data-clave="${esc(clave)}" data-fmt="${fmt}"${rango ? ' data-rango="1"' : ''} value="${esc(valorMostrado(clave, fmt))}" placeholder="${esc(ph)}">${suf ? `<span class="suf">${esc(suf)}</span>` : ''}</div>${ayuda ? btnNoSabe(clave, ayuda) : ''}</div>
     ${nota ? `<p class="nota">${esc(nota)}</p>` : ''}
@@ -161,21 +163,21 @@ function pregunta({ clave, q, ayuda = '', pre = '', suf = '', fmt = '', nota = '
 }
 function chips({ clave, q, opciones, estructura = false, nota = '' }) {
   const id = 'q-' + idSeguro(clave), v = String(getValor(clave) ?? '');
-  return `<div class="fila"><div class="fila-cab"><span class="q" id="${id}">${esc(q)}</span></div>
+  return `<div class="fila">${htmlGuia(clave)}<div class="fila-cab"><span class="q" id="${id}">${esc(q)}</span></div>
     <div class="chips" role="radiogroup" aria-labelledby="${id}">${opciones.map(([val, t]) => `<button type="button" role="radio" aria-checked="${String(val) === v}" data-chip="${esc(clave)}" data-valor="${esc(val)}"${estructura ? ' data-estructura="1"' : ''}>${esc(t)}</button>`).join('')}</div>
     ${nota ? `<p class="nota">${esc(nota)}</p>` : ''}</div>`;
 }
 function texto({ clave, q, ph = '', nota = '' }) {
   const id = 'f-' + idSeguro(clave);
-  return `<div class="fila"><div class="fila-cab"><label for="${id}">${esc(q)}</label></div><div class="campo-in"><input id="${id}" autocomplete="off" data-clave="${esc(clave)}" data-tipo="txt" value="${esc(getValor(clave) ?? '')}" placeholder="${esc(ph)}"></div>${nota ? `<p class="nota">${esc(nota)}</p>` : ''}</div>`;
+  return `<div class="fila">${htmlGuia(clave)}<div class="fila-cab"><label for="${id}">${esc(q)}</label></div><div class="campo-in"><input id="${id}" autocomplete="off" data-clave="${esc(clave)}" data-tipo="txt" value="${esc(getValor(clave) ?? '')}" placeholder="${esc(ph)}"></div>${nota ? `<p class="nota">${esc(nota)}</p>` : ''}</div>`;
 }
 function interruptor({ clave, q, estructura = false, nota = '' }) {
   const id = 'f-' + idSeguro(clave);
-  return `<div class="fila"><label class="switch-fila" for="${id}"><span>${esc(q)}</span><input type="checkbox" role="switch" class="switch" id="${id}" data-clave="${esc(clave)}" data-tipo="chk"${estructura ? ' data-estructura="1"' : ''}${getValor(clave) ? ' checked' : ''}></label>${nota ? `<p class="nota">${esc(nota)}</p>` : ''}</div>`;
+  return `<div class="fila">${htmlGuia(clave)}<label class="switch-fila" for="${id}"><span>${esc(q)}</span><input type="checkbox" role="switch" class="switch" id="${id}" data-clave="${esc(clave)}" data-tipo="chk"${estructura ? ' data-estructura="1"' : ''}${getValor(clave) ? ' checked' : ''}></label>${nota ? `<p class="nota">${esc(nota)}</p>` : ''}</div>`;
 }
 function seleccion({ clave, q, opciones }) {
   const id = 'f-' + idSeguro(clave), v = String(getValor(clave) ?? '');
-  return `<div class="fila"><div class="fila-cab"><label for="${id}">${esc(q)}</label></div><div class="campo-in"><select id="${id}" data-clave="${esc(clave)}" data-tipo="sel">${opciones.map(([val, t]) => `<option value="${esc(val)}"${String(val) === v ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></div></div>`;
+  return `<div class="fila">${htmlGuia(clave)}<div class="fila-cab"><label for="${id}">${esc(q)}</label></div><div class="campo-in"><select id="${id}" data-clave="${esc(clave)}" data-tipo="sel">${opciones.map(([val, t]) => `<option value="${esc(val)}"${String(val) === v ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></div></div>`;
 }
 // Casilla chica para listas (regalos, tipos de cliente)
 function celda({ clave, ph = '', pre = '', tipo = 'num', aria = '' }) {

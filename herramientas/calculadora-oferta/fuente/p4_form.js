@@ -2,7 +2,7 @@
 // =================== Pasos del formulario ===================
 const PASOS = [
   { id: 1, nombre: 'El negocio' }, { id: 2, nombre: 'Lo que quiere' }, { id: 3, nombre: 'Lo que vende' }, { id: 4, nombre: 'Sus clientes' },
-  { id: 5, nombre: '¿Le alcanza?' }, { id: 6, nombre: 'Su oferta' }, { id: 7, nombre: 'Tu servicio' }, { id: 8, nombre: 'Ajustes' },
+  { id: 5, nombre: '¿Le alcanza?' }, { id: 6, nombre: 'Su oferta' }, { id: 7, nombre: 'Anuncios' }, { id: 8, nombre: 'Tu servicio' }, { id: 9, nombre: 'Ajustes' },
 ];
 function lineaFoco() {
   const p = estado.prospecto;
@@ -71,6 +71,12 @@ function htmlAjustes(tipo) {
       ${estado.reglas.bono ? reg('bonoPct', 'Premio: parte de lo que pase de lo mínimo', { suf: 'de 100' }) : ''}
       <div class="fila"><div class="fila-cab"><label for="r-moneda">Moneda</label></div><div class="campo-in"><input id="r-moneda" data-regla="moneda" data-tipo="txt" value="${esc(estado.reglas.moneda)}"></div></div>
     </div>
+    <p class="grupo-titulo">Lo que ve el cliente</p>
+    <div class="grupo">
+      <div class="fila"><div class="fila-cab"><label for="r-marca">Tu nombre o marca (arriba de la vista del cliente)</label></div><div class="campo-in"><input id="r-marca" data-regla="marca" data-tipo="txt" value="${esc(estado.reglas.marca || '')}"></div></div>
+      <div class="fila"><div class="fila-cab"><label for="r-garantia">Tu garantía, con tus palabras (vacío = la de siempre)</label></div><div class="campo-in"><input id="r-garantia" data-regla="garantiaTexto" data-tipo="txt" value="${esc(estado.reglas.garantiaTexto || '')}" placeholder="Usa {meses} y {promesa} para que se llenen solos"></div><p class="nota">Ejemplo: «Pagas la mitad al empezar y la otra mitad cuando lleguen ${'{promesa}'}. Si no llegan, no la pagas.»</p></div>
+      <div class="fila"><label class="switch-fila" for="r-caso"><span>Mostrar el caso real de Sneaker Fashion en la vista del cliente</span><input type="checkbox" role="switch" class="switch" id="r-caso" data-regla="casoReal" data-tipo="chk"${estado.reglas.casoReal !== false ? ' checked' : ''}></label></div>
+    </div>
     <p class="grupo-titulo">Cuánto sueles mejorar anuncios que ya existen</p>
     <div class="grupo">
       ${reg('mejora.piso', 'Lo mínimo', { suf: '% más barato' })}
@@ -80,7 +86,7 @@ function htmlAjustes(tipo) {
     <p class="grupo-titulo">Valores típicos de «${esc(t.nombre)}»</p>
     <div class="grupo">
       <div class="fila"><p class="nota">Los uso cuando no hay datos. No son medidos: cámbialos por tus números reales. También aceptan rangos («20 a 40»).</p></div>
-      ${pregunta({ clave: `${b}.costoInteresado`, q: '¿Cuánto cuesta en anuncios que una persona escriba?', pre: mon, ayuda: 'costoInteresado' })}
+      <div class="fila"><p class="nota">Lo que cuestan los anuncios (vistas, mensajes, cupones) ya no va aquí: sale del paso 7, «Anuncios», según la plataforma y el objetivo.</p></div>
       ${pregunta({ clave: `${b}.calificaPct`, q: 'De cada 100 que escriben, ¿cuántos sí le pueden comprar?', suf: 'de 100', ayuda: 'califica' })}
       ${pregunta({ clave: `${b}.cierrePct`, q: 'De esos, ¿cuántos compran si los atienden bien?', suf: 'de 100', ayuda: 'cierre' })}
       ${pregunta({ clave: `${b}.organico`, q: '¿Cuántas personas al mes trae el contenido?', suf: 'al mes', ayuda: 'organico' })}
@@ -194,7 +200,7 @@ function renderForm() {
         <button type="button" class="btn-borde btn-chico" data-quitar-seg="${i}" aria-label="Quitar tipo de cliente ${i + 1}">Quitar</button></div>`).join('');
     html = `<div class="explica"><b>Primero, a quién.</b> No todos los clientes valen lo mismo. Anota sus tipos de clientes y la calculadora te dice cuál es el <b>cliente ideal</b>: al que conviene hablarle en el contenido y los anuncios.</div>
       <p class="grupo-titulo">Cliente ideal</p><div class="grupo">
-      <div class="fila"><div class="lista-filas">${segs || '<p class="nota">Todavía no hay tipos de clientes. Ejemplo: «clínicas», «oficinas», «restaurantes».</p>'}</div>
+      <div class="fila">${htmlGuia('oferta.segmentos')}<div class="lista-filas">${segs || '<p class="nota">Todavía no hay tipos de clientes. Ejemplo: «clínicas», «oficinas», «restaurantes».</p>'}</div>
       <div><button class="btn-g btn-chico" type="button" id="btn-agregar-seg">+ Agregar tipo de cliente</button></div></div></div>
       <div id="vivo-icp">${htmlVivoICP()}</div>
       <div class="explica"><b>Después, qué le ofrecemos.</b> Una oferta irresistible hace que el cliente sienta que sería tonto decir que no: lo que quiere, rápido, fácil y sin riesgo. Aquí ves cuánto cuesta armarla y si sigue dejando ganancia.</div>
@@ -208,7 +214,7 @@ function renderForm() {
       ${pregunta({ clave: 'oferta.precio', q: '¿A cuánto lo vendemos?', pre: mon, fmt: 'dinero', ph: lineaO && n(lineaO.ticket) > 0 ? fmtN(n(lineaO.ticket)) : '', nota: 'Vacío = el precio de hoy.', rango: false })}
       ${pregunta({ clave: 'oferta.valorProducto', q: '¿Cuánto vale para el cliente? (lo que le costaría resolverlo de otra forma)', pre: mon, fmt: 'dinero', ph: 'igual al precio', rango: false })}</div>
       <p class="grupo-titulo">3. Regalos que le quitan trabajo o miedo</p><div class="grupo">
-      <div class="fila"><div class="lista-filas">${bonos || '<p class="nota">Sin regalos todavía. Lo ideal: que te cuesten poco y valgan mucho para él.</p>'}</div>
+      <div class="fila">${htmlGuia('oferta.bonos')}<div class="lista-filas">${bonos || '<p class="nota">Sin regalos todavía. Lo ideal: que te cuesten poco y valgan mucho para él.</p>'}</div>
       <div class="chips chips-chicos" aria-label="Ideas de regalos">${IDEAS_BONOS.map(t => `<button type="button" data-idea-bono="${esc(t)}">+ ${esc(t)}</button>`).join('')}</div>
       <div><button class="btn-g btn-chico" type="button" id="btn-agregar-bono">+ Agregar regalo</button></div></div></div>
       <p class="grupo-titulo">4. Quitarle el miedo</p><div class="grupo">
@@ -220,26 +226,43 @@ function renderForm() {
       ${interruptor({ clave: 'oferta.usarEnCuenta', q: 'Usar esta oferta en las cuentas', nota: 'Cambia el precio y lo que le queda por venta. No cambia cuántos compran: eso se mide cuando salga.' })}</div>
       <div id="vivo-oferta">${htmlVivoOferta()}</div>` : ''}`;
   } else if (paso === 7) {
+    const ad = ultimo && ultimo.ev ? ultimo.ev.ads : null, A = p.anuncios;
+    const objEf = A.objetivo && A.objetivo !== 'auto' ? A.objetivo : (ad ? ad.objetivo : 'mensajes');
+    const resNom = ad ? ad.resultadoNombre : 'resultado';
+    html = `<div class="explica"><b>Dónde y cómo se pauta.</b> Elige la plataforma y qué quieres que haga la gente al ver el anuncio. Con eso calculo cuántas personas lo ven, cuántas escriben o piden el cupón, cuántas llegan y cuántas compran.<span>Los números son promedios de mercado aproximados y prudentes para Bolivia. Si ya pautó, anota sus datos reales abajo y uso esos.</span></div>
+      <p class="grupo-titulo">La campaña</p><div class="grupo">
+      ${chips({ clave: 'anuncios.plataforma', q: '¿Dónde se pauta?', opciones: [['tiktok', 'TikTok'], ['meta', 'Facebook e Instagram'], ['ambas', 'Las dos']] })}
+      ${chips({ clave: 'anuncios.alcance', q: '¿De dónde vienen sus clientes?', opciones: [['auto', 'Que lo decida la calculadora'], ['barrio', 'De su zona'], ['ciudad', 'De toda la ciudad'], ['pais', 'De todo el país'], ['empresas', 'Son empresas']], nota: ad && ad.alcanceAuto ? `Ahora uso: ${ad.alcanceNombre.toLowerCase()}.` : '' })}
+      ${chips({ clave: 'anuncios.objetivo', q: 'Cuando alguien ve el anuncio, ¿qué queremos que haga?', opciones: [['auto', 'Que lo decida la calculadora'], ['local', 'Que venga a la tienda'], ['mensajes', 'Que escriba por WhatsApp'], ['formulario', 'Que deje sus datos'], ['web', 'Que compre en la web'], ['conocer', 'Que lo conozca']], estructura: true, nota: ad && ad.objetivoAuto ? `Ahora uso: «${ad.objetivoNombre}».` : '' })}
+      ${objEf === 'local' ? interruptor({ clave: 'anuncios.cupon', q: 'Habrá cupón o regalo para la primera visita', nota: 'Con un regalo que a él le cueste poco y al cliente le valga harto, llega mucha más gente.' }) : ''}
+      </div>
+      <p class="grupo-titulo">La plata</p><div class="grupo">
+      ${pregunta({ clave: 'servicio.presupuesto', q: '¿Cuánto pondría en anuncios al mes? (lo paga directo a la plataforma)', pre: mon, fmt: 'dinero', nota: `Tu mínimo: ${fmtM(n(estado.reglas.anunciosMinimo), mon)}. Si lo dejas vacío, lo sugiero yo.`, rango: false })}
+      ${pregunta({ clave: 'anuncios.tc', q: '¿A cuánto le cobra el banco cada dólar?', suf: 'Bs por dólar', ph: fmtN(TC_DEF, 2), nota: 'Desde abril de 2026 las tarjetas pagan al tipo de cambio del Banco Central (en noviembre de 2026, Bs 12,09). Confírmalo el día de la llamada en bcb.gob.bo.' })}
+      ${chips({ clave: 'compromiso.pagoTarjeta', q: '¿Tiene tarjeta que acepte pagos en dólares?', opciones: [['si', 'Sí'], ['no', 'No'], ['nose', 'No sabe']], nota: 'Las tarjetas de débito tienen límite para pagos en el exterior. Sin una tarjeta que funcione, los anuncios no salen.' })}
+      ${chips({ clave: 'servicio.reemplazaPauta', q: 'Si ya pone anuncios, ¿estos los reemplazan?', opciones: [['auto', 'Automático'], ['si', 'Sí'], ['no', 'No, son aparte']] })}</div>
+      <div id="vivo-ads">${htmlVivoAds()}</div>
+      <p class="grupo-titulo">Si ya pautó antes (opcional)</p><div class="grupo">
+      ${pregunta({ clave: 'anuncios.costoResultadoReal', q: `¿Cuánto le costaba cada ${objEf === 'local' ? 'persona que pedía el cupón o escribía' : objEf === 'formulario' ? 'formulario' : objEf === 'web' ? 'visita a la web' : 'conversación (mensaje)'}?`, pre: mon, nota: 'Si lo sabe, uso su dato real en vez del promedio de mercado.' })}
+      ${pregunta({ clave: 'anuncios.cpmReal', q: '¿Cuánto le costaban mil vistas?', pre: mon, nota: 'Está en el administrador de anuncios como «CPM».' })}</div>`;
+  } else if (paso === 8) {
     html = `<p class="grupo-titulo">Qué trabajo es</p><div class="grupo">
       ${chips({ clave: 'servicio.modo', q: '¿Qué vas a hacer?', opciones: [['auto', 'Que lo decida la calculadora'], ['crecer', 'Traer clientes nuevos'], ['optimizar', 'Mejorar sus anuncios']] })}
       ${chips({ clave: 'servicio.contenido', q: 'Contenido', opciones: [['auto', 'Automático'], ['completo', 'Lo hago yo'], ['direccion', 'Solo ideas y guiones'], ['no', 'No']] })}
       ${chips({ clave: 'servicio.campanas', q: 'Anuncios', opciones: [['auto', 'Automático'], ['si', 'Sí'], ['no', 'No']] })}
       ${chips({ clave: 'servicio.guia', q: 'Guía para vender', opciones: [['auto', 'Automático'], ['si', 'Sí'], ['no', 'No']] })}
       ${chips({ clave: 'servicio.automatizacion', q: 'Respuesta automática por WhatsApp', opciones: [['auto', 'No'], ['si', 'Sí']] })}</div>
-      <p class="grupo-titulo">Plata para anuncios</p><div class="grupo">
-      ${pregunta({ clave: 'servicio.presupuesto', q: '¿Cuánto pondría en anuncios al mes durante el plan?', pre: mon, fmt: 'dinero', nota: 'Si lo dejas vacío, lo sugiero yo.', rango: false })}
-      ${chips({ clave: 'servicio.reemplazaPauta', q: 'Esos anuncios, ¿reemplazan a los que ya tiene?', opciones: [['auto', 'Automático'], ['si', 'Sí'], ['no', 'No, son aparte']] })}
-      ${chips({ clave: 'compromiso.pagoTarjeta', q: '¿Tiene cómo pagar los anuncios? (tarjeta que acepte pagos en dólares)', opciones: [['si', 'Sí'], ['no', 'No'], ['nose', 'No sabe']], nota: 'En Bolivia muchos bancos ponen límites a los pagos en dólares. Sin eso, los anuncios no salen.' })}</div>
       <p class="grupo-titulo">Lo que el dueño acepta</p><div class="grupo">
       ${interruptor({ clave: 'compromiso.tiempo', q: 'Dar una hora por semana para revisar resultados' })}
       ${interruptor({ clave: 'compromiso.aplicaGuia', q: 'Seguir tu guía: contestar rápido y volver a escribir' })}
       ${interruptor({ clave: 'compromiso.aprueba', q: 'Aprobar el contenido en 2 días' })}
-      ${interruptor({ clave: 'compromiso.pagaPublicidad', q: 'Pagar los anuncios directo a Facebook o Google' })}</div>`;
+      ${interruptor({ clave: 'compromiso.pagaPublicidad', q: 'Pagar los anuncios directo a la plataforma, desde su cuenta' })}</div>`;
   } else {
     const tipo = (ultimo && ultimo.ev) ? ultimo.ev.tipo : (p.lineas[0]?.tipoVenta || 'b2b');
     estado.tipoAjustes = tipo;
     html = htmlAjustes(tipo);
   }
+  html = htmlGuiaPaso(paso) + html;
   const ant = PASOS.find(x => x.id === paso - 1), sig = PASOS.find(x => x.id === paso + 1);
   html += `<div class="siguiente">${ant ? `<button class="btn-g btn-grande" type="button" data-ir-paso="${ant.id}">‹ ${esc(ant.nombre)}</button>` : '<span></span>'}${sig ? `<button class="btn-azul btn-grande" type="button" data-ir-paso="${sig.id}">Siguiente: ${esc(sig.nombre)} ›</button>` : ''}</div>`;
   $('#form').innerHTML = html;
@@ -281,7 +304,14 @@ function htmlVivoICP() {
   if (!r || !r.icp) return '';
   return `<div class="vivo">${htmlICPTabla(r.icp, true)}</div>`;
 }
+function htmlVivoAds() {
+  const r = ultimo;
+  if (!r || !r.ev) return `<div class="vivo"><p class="texto">Cuando anotes lo que vende (paso 3), aquí ves el embudo de los anuncios.</p></div>`;
+  if (!r.ev.ads) return `<div class="vivo"><p class="texto">${r.ev.modo === 'optimizar' ? 'El trabajo es mejorar sus anuncios de hoy: los números salen de lo que hoy le cuesta cada venta (paso 4).' : 'Sin anuncios en el plan (paso 8, «Anuncios: No»).'}</p></div>`;
+  return `<div class="vivo">${htmlEmbudoAds(r, true)}</div>`;
+}
 function actualizarVivos() {
+  const ad = $('#vivo-ads'); if (ad) ad.innerHTML = htmlVivoAds();
   const m = $('#vivo-meta'); if (m) m.innerHTML = htmlVivoMeta();
   const c = $('#vivo-cap'); if (c) c.innerHTML = htmlVivoCap();
   const o = $('#vivo-oferta'); if (o) o.innerHTML = htmlVivoOferta();

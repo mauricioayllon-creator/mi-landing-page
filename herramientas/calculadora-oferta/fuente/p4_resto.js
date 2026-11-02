@@ -49,6 +49,7 @@ function datosIA(r) {
     metaDelDueno: md ? { quiere: tituloMeta(md, ev.R.moneda), clientesPorDia: +md.clientesDia.toFixed(2), coberturaDelPlan: Math.round(md.cobertura * 100) + '%' } : null,
     capacidad: { leAlcanzaAtender: (ev.chequeos.find(c => c.id === 'capacidad') || {}).detalle, mensajesPorDiaConElPlan: +ev.mensajesDiaNec.toFixed(1), puedeContestar: n(p.capacidad.mensajesDia) || null },
     clienteIdeal: r.icp ? r.icp.lista.map(s => ({ tipo: s.nombre, gananciaAlAnio: Math.round(s.gananciaCliente), puntos: s.puntaje })) : null,
+    anuncios: ev.ads ? { plataforma: ev.ads.nombrePlataforma, objetivo: ev.ads.objetivoNombre, presupuestoBs: ev.presupuesto, usd: Math.round(ev.ads.usd), vistasMes: Math.round(ev.ads.vistas), resultadosMes: Math.round(ev.ads.resultados), queSonResultados: ev.ads.resultadoNombre, llegadasMes: +ev.ads.llegadas.toFixed(1), comprasMes: +ev.ads.clientes.toFixed(1), avisos: ev.ads.avisos } : null,
     oferta: O ? { producto: O.nombre, loQueLogra: O.deseo, rapidez: O.tiempo, precio: O.precio, regalos: O.bonos.map(b => b.nombre), garantia: O.garantia, urgencia: O.urgencia, puntos: O.puntaje, valeVecesElPrecio: +O.ratio.toFixed(1) } : null,
     hallazgos: r.hallazgos.map(h => h.titulo + ': ' + h.texto), comoEstaHoy: ev.diag.etapas.map(e => ({ parte: e.nombre, problemas: e.notas })), numerosAdivinados: ev.estimados,
     plan: { meses: ev.D, precioMes: ev.precio, promesa: promesaDe(ev).frase }, revision: ev.chequeos.map(c => ({ punto: c.nombre, estado: c.estado, detalle: c.detalle })), alternativas: r.alternativas };
@@ -120,7 +121,8 @@ function textoResumen() {
   l.push(`Le prometo: ${pr.frase}.`);
   l.push(`Servicios: ${Object.entries(ev.alc).filter(([, v]) => v).map(([k]) => SERVICIOS.find(s => s.id === k).nombre.toLowerCase()).join(', ')}`);
   l.push(`Precio: ${fmtM(ev.precio, mon)} cada mes (se paga mes a mes). Para ver el resultado completo: ${ev.D} meses`);
-  if (ev.alc.campanas) l.push(`Anuncios: ${fmtM(ev.presupuesto, mon)} al mes (${fmtM(ev.presupuesto / 30, mon)} por día), pagados directo a las plataformas`);
+  if (ev.ads) { const a = ev.ads; l.push(`Anuncios: ${a.nombrePlataforma}, objetivo «${a.objetivoNombre}», ${fmtM(ev.presupuesto, mon)} al mes (unos USD ${fmtN(a.usd)} a Bs ${fmtN(a.tc, 2)}), pagados directo a la plataforma`); l.push(`En un mes normal: unas ${fmtN(a.vistas)} vistas → ${fmtN(a.resultados)} ${a.resultadoNombre}${a.llegadas > 0 ? ` → ${f1(a.llegadas)} llegan a la tienda` : ''} → ${f1(a.clientes)} compran (lo esperado). Cada cliente cuesta ${fmtM(a.costoClienteBs, mon)} en anuncios.`); }
+  else if (ev.alc.campanas) l.push(`Anuncios: ${fmtM(ev.presupuesto, mon)} al mes, pagados directo a las plataformas`);
   l.push(`Clientes nuevos: lo mínimo ${f1(E.piso.N)} · lo esperado ${f1(E.meta.N)} · si sale muy bien ${f1(E.techo.N)}${ev.limitadoPorCapacidad ? ' (ya quité los que no le caben)' : ''}`);
   l.push(`Él pone ${fmtM(E.meta.invNeta, mon)} y gana en un año: lo mínimo ${fmtM(E.piso.V1, mon)} (${fmtN(E.piso.roi1, 1)} veces), lo esperado ${fmtM(E.meta.V1, mon)}`);
   l.push(`Recupera su plata: ${E.meta.recupero === null ? 'no en 3 años' : 'en el mes ' + E.meta.recupero}`);
@@ -209,6 +211,23 @@ let tReglas = null, guardandoReglas = false, reglasPend = false;
 function programarGuardarReglas() { guardarLocal('co4.reglas', estado.reglas); clearTimeout(tReglas); tReglas = setTimeout(subirReglas, 1200); }
 async function subirReglas() { if (!DB || esDueno === false) return; if (guardandoReglas) { reglasPend = true; return; } guardandoReglas = true; try { await DB.doc('ajustes/principal').set({ reglas: clonar(estado.reglas), fecha: new Date().toISOString() }); } catch { } guardandoReglas = false; if (reglasPend) { reglasPend = false; subirReglas(); } }
 
+// ---------- Guía de llamada y vista del cliente ----------
+function aplicarGuia() {
+  document.documentElement.dataset.guia = estado.guia ? 'on' : 'off';
+  const b = $('#btn-guia'); if (b) { b.setAttribute('aria-pressed', String(estado.guia)); b.querySelector('.txt').textContent = estado.guia ? 'Guía: activada' : 'Guía de llamada'; }
+}
+function alternarGuia() { estado.guia = !estado.guia; guardarLocal('co4.guia', estado.guia); aplicarGuia(); aviso(estado.guia ? 'Guía de llamada activada (tecla G para quitarla)' : 'Guía de llamada oculta'); }
+function alternarCliente() {
+  estado.cliente = !estado.cliente;
+  document.documentElement.dataset.cliente = estado.cliente ? 'on' : 'off';
+  $('#app').dataset.cliente = estado.cliente ? 'on' : 'off';
+  const b = $('#btn-cliente'); b.setAttribute('aria-pressed', String(estado.cliente)); b.querySelector('.txt').textContent = estado.cliente ? 'Salir de la vista del cliente' : 'Vista del cliente';
+  cerrarDetalle();
+  renderPanel(ultimo);
+  if (!estado.cliente && estado.tab === 'plata') dibujarGrafico();
+  window.scrollTo({ top: 0 }); const cp = $('#col-panel'); if (cp) cp.scrollTop = 0;
+}
+
 // ---------- Vista (teléfono) ----------
 function cambiarVista(v) {
   estado.vista = v; $('#app').dataset.vista = v;
@@ -246,6 +265,17 @@ function iniciar() {
   });
   $('#lista-prospectos').addEventListener('click', onClicLista);
   $('#detalle-cerrar').addEventListener('click', cerrarDetalle);
+  $('#ruta').innerHTML = htmlRutaLlamada();
+  aplicarGuia();
+  $('#btn-guia').addEventListener('click', alternarGuia);
+  $('#btn-cliente').addEventListener('click', alternarCliente);
+  $('#btn-imprimir').addEventListener('click', () => { try { window.print(); } catch (e) { aviso('No se pudo abrir la impresión en esta página.'); } });
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'g' || e.key === 'G') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const t = e.target; if (t && (t.matches('input, textarea, select') || t.isContentEditable)) return;
+      e.preventDefault(); alternarGuia();
+    }
+  });
   $('#detalle').addEventListener('click', e => { if (e.target === $('#detalle')) cerrarDetalle(); });
   $('#detalle').addEventListener('close', () => { estado.detalle = null; });
   $$('.vista-switch [data-vista]').forEach(b => b.addEventListener('click', () => cambiarVista(b.dataset.vista)));
@@ -259,7 +289,7 @@ async function conectarCapacidades() {
   if (USER) { try { esDueno = await USER.isOwner(); } catch { esDueno = null; } }
   if (db && esDueno !== false) {
     DB = db;
-    try { const snap = await DB.doc('ajustes/principal').get(); if (snap.exists) { const d = snap.data(); if (d && d.reglas) { estado.reglas = normalizarReglas(d.reglas); guardarLocal('co4.reglas', estado.reglas); if (estado.paso === 8) renderForm(); } } } catch { }
+    try { const snap = await DB.doc('ajustes/principal').get(); if (snap.exists) { const d = snap.data(); if (d && d.reglas) { estado.reglas = normalizarReglas(d.reglas); guardarLocal('co4.reglas', estado.reglas); if (estado.paso === 9) renderForm(); } } } catch { }
     if (!$('#panel-lista').classList.contains('oculto')) suscribirLista();
   }
   recalcular();

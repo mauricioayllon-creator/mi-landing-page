@@ -34,6 +34,9 @@ const REGLAS_BASE = {
   moneda: 'Bs',
   precioMinimo: 2200,
   anunciosMinimo: 500,
+  marca: 'Mauricio Ayllón · Grow Business',
+  garantiaTexto: '',
+  casoReal: true,
   partePct: 20,
   bono: false,
   bonoPct: 20,
@@ -77,7 +80,7 @@ function fmtM(x, mon = 'Bs') {
 function fmtP(x, dec = 0) { return Number.isFinite(x) ? fmtN(x * 100, dec) + '%' : '—'; }
 function fmtPorDia(x, dec = 1) {
   if (!(x > 0)) return '0 por día';
-  if (x >= 0.95) return fmtN(x, x < 10 ? dec : 0) + ' por día';
+  if (x >= 0.95) return fmtN(x, x < 10 && Math.abs(x - Math.round(x)) >= 0.05 ? dec : 0) + ' por día';
   const d = Math.round(1 / x);
   return d <= 1 ? '1 por día' : `1 cada ${d} días`;
 }
@@ -243,6 +246,162 @@ function diagnosticar(p, T, cierre) {
   return { etapas, restriccion: orden[0].sev > 0 ? orden[0] : null };
 }
 
+// ---------- Anuncios: plataforma, objetivo de campaña y embudo ----------
+// Promedios de mercado APROXIMADOS y conservadores para Bolivia (nov. 2026). Si el cliente ya pautó, se usan sus datos reales.
+// Calibrado con un caso real (tienda de tenis en La Paz, sept. 2026): Bs 512 de publicidad, 236 mil vistas, unas 26 ventas.
+// Con estos promedios ese caso queda cerca del escenario «si sale muy bien», no del esperado.
+const TC_DEF = 12.09; // Bs por dólar: tipo de cambio del BCB (nov. 2026). Desde abril de 2026 las tarjetas pagan a este cambio, no a 6,96.
+const ADS_PLATAFORMAS = {
+  tiktok: { nombre: 'TikTok Ads', organico: 1.5, minDia: 20, minDiaPromo: 3, aprendizaje: 50 },
+  meta: { nombre: 'Facebook e Instagram', organico: 1.05, minDia: 1, minDiaPromo: 1, aprendizaje: 50 },
+};
+const ADS_OBJETIVOS = {
+  local: { nombre: 'Que vengan a la tienda (con cupón)', resultado: 'personas que piden el cupón', campana: { tiktok: 'Alcance o Vistas de video, solo en la zona cercana a la tienda', meta: 'Reconocimiento o Alcance, solo en la zona cercana' }, cpm: { tiktok: 0.9, meta: 1.2 } },
+  mensajes: { nombre: 'Que le escriban por WhatsApp', resultado: 'conversaciones', campana: { tiktok: 'Clientes potenciales → Mensajes (o Tráfico a su WhatsApp)', meta: 'Interacción → Mensajes de WhatsApp' }, cpm: { tiktok: 2.0, meta: 2.5 }, clic: { tiktok: 0.007, meta: 0.010 }, inicio: { tiktok: 0.30, meta: 0.45 } },
+  formulario: { nombre: 'Que deje sus datos en un formulario', resultado: 'formularios', campana: { tiktok: 'Clientes potenciales → Formulario instantáneo', meta: 'Clientes potenciales → Formulario instantáneo' }, cpm: { tiktok: 2.0, meta: 2.5 }, clic: { tiktok: 0.008, meta: 0.009 }, completa: { tiktok: 0.12, meta: 0.15 } },
+  web: { nombre: 'Que compre en su página web', resultado: 'visitas a la web', campana: { tiktok: 'Tráfico (o Ventas, cuando ya tenga muchas compras)', meta: 'Tráfico o Ventas' }, cpm: { tiktok: 1.5, meta: 2.0 }, clic: { tiktok: 0.009, meta: 0.011 } },
+  conocer: { nombre: 'Que lo conozcan', resultado: 'personas que escriben solas', campana: { tiktok: 'Alcance o Vistas de video', meta: 'Reconocimiento' }, cpm: { tiktok: 0.6, meta: 0.8 } },
+};
+// Por tipo de venta: precio de referencia y tasas del embudo (proporciones)
+const ADS_TIPO = {
+  b2cBajo: { ref: 60, interes: 0.007, llegada: 0.30, compraLocal: 0.70, web: 0.020, espontaneo: 0.0010 },
+  b2cAlto: { ref: 800, interes: 0.005, llegada: 0.22, compraLocal: 0.50, web: 0.010, espontaneo: 0.0006 },
+  b2b: { ref: 5000, interes: 0.002, llegada: 0.15, compraLocal: 0.40, web: 0.005, espontaneo: 0.0003 },
+};
+const ADS_ALCANCE = {
+  barrio: { nombre: 'Gente de su zona (tienda o local)', audiencia: 80000 },
+  ciudad: { nombre: 'Toda su ciudad (entregas o atención)', audiencia: 600000 },
+  pais: { nombre: 'Todo el país (envíos)', audiencia: 3000000 },
+  empresas: { nombre: 'Empresas (le vende a negocios)', audiencia: 40000 },
+};
+function alcanceNegocioDe(p, tipo) {
+  const a = (p.anuncios || {}).alcance;
+  if (a && a !== 'auto' && ADS_ALCANCE[a]) return { alcance: a, auto: false };
+  return { alcance: tipo === 'b2b' ? 'empresas' : tipo === 'b2cBajo' ? 'barrio' : 'ciudad', auto: true };
+}
+function objetivoAdsDe(p, tipo, alcanceNeg) {
+  const o = (p.anuncios || {}).objetivo;
+  if (o && o !== 'auto' && ADS_OBJETIVOS[o]) return { objetivo: o, auto: false };
+  if (alcanceNeg === 'empresas' || tipo === 'b2b') return { objetivo: 'formulario', auto: true };
+  if (alcanceNeg === 'barrio') return { objetivo: 'local', auto: true };
+  return { objetivo: 'mensajes', auto: true };
+}
+// Un solo embudo, para una plataforma
+function embudoPlataforma(plat, obj, bs, c) {
+  const P = ADS_PLATAFORMAS[plat], O = ADS_OBJETIVOS[obj], T = ADS_TIPO[c.tipo] || ADS_TIPO.b2cAlto;
+  const usd = bs / c.tc;
+  const cpmBase = c.cpmRealUsd > 0 ? c.cpmRealUsd : O.cpm[plat];
+  const cpm = cpmBase * c.factorCosto;
+  const vistasPagadas = cpm > 0 ? usd / cpm * 1000 : 0;
+  const orgFactor = (obj === 'local' || obj === 'conocer') ? P.organico : 1 + (P.organico - 1) * 0.2;
+  const vistas = vistasPagadas * orgFactor;
+  const frecuencia0 = c.pulsos ? 2.5 : 3;
+  let alcance = vistas / frecuencia0, saturado = false;
+  const tope = c.audiencia * 0.6;
+  if (alcance > tope) { alcance = tope; saturado = true; }
+  const fPrecio = clamp(Math.pow(T.ref / Math.max(1, c.ticket), 0.25), 0.6, 1.4);
+  const califPlat = plat === 'tiktok' ? (c.tipo === 'b2b' ? 0.7 : 0.9) : 1;
+  const r = { plat, usd, cpm, vistasPagadas, vistas, alcance, saturado, clics: 0, resultados: 0, contactados: 0, calificados: 0, llegadas: 0, clientes: 0, prospectar: 0, mensajes: 0, promesa: 0 };
+  if (obj === 'local') {
+    const fOferta = (c.cupon ? 1.3 : 0.6) * (c.ofertaBuena ? 1.15 : 1);
+    r.resultados = alcance * T.interes * fPrecio * fOferta;
+    r.llegadas = r.resultados * T.llegada;
+    r.clientes = r.llegadas * T.compraLocal * fPrecio * (0.75 + 0.25 * c.factorAtencion);
+    r.prospectar = r.resultados; r.mensajes = r.resultados * 0.5; r.promesa = r.llegadas;
+  } else if (obj === 'mensajes') {
+    r.clics = vistasPagadas * O.clic[plat];
+    r.resultados = r.clics * O.inicio[plat];
+    r.calificados = r.resultados * c.calif * califPlat;
+    r.clientes = r.calificados * c.cierrePlan;
+    r.prospectar = r.resultados; r.mensajes = r.resultados; r.promesa = r.calificados;
+  } else if (obj === 'formulario') {
+    r.clics = vistasPagadas * O.clic[plat];
+    r.resultados = r.clics * O.completa[plat];
+    r.contactados = r.resultados * 0.6;
+    r.calificados = r.contactados * c.calif * califPlat * 0.8;
+    r.clientes = r.calificados * c.cierrePlan;
+    r.prospectar = r.resultados; r.mensajes = r.contactados; r.promesa = r.calificados;
+  } else if (obj === 'web') {
+    r.clics = vistasPagadas * O.clic[plat];
+    r.resultados = r.clics;
+    r.clientes = r.clics * T.web;
+    r.mensajes = r.clics * 0.02; r.promesa = r.clics;
+  } else {
+    r.resultados = alcance * T.espontaneo;
+    r.calificados = r.resultados * c.calif * califPlat;
+    r.clientes = r.calificados * c.cierrePlan;
+    r.mensajes = r.resultados; r.promesa = alcance;
+  }
+  // Si ya pautó: su costo real por resultado manda (los pasos de abajo siguen igual)
+  if (c.costoRealBs > 0 && obj !== 'conocer' && r.resultados > 0) {
+    const f = (bs / (c.costoRealBs * c.factorCosto)) / r.resultados;
+    for (const k of ['clics', 'resultados', 'contactados', 'calificados', 'llegadas', 'clientes', 'prospectar', 'mensajes']) r[k] *= f;
+    if (obj !== 'conocer') r.promesa *= f;
+  }
+  r.frecuencia = alcance > 0 ? vistas / alcance : 0;
+  return r;
+}
+function modeloAds(p, c) {
+  const A = p.anuncios || {};
+  const platSel = ['tiktok', 'meta', 'ambas'].includes(A.plataforma) ? A.plataforma : 'tiktok';
+  const { alcance: alcanceNeg, auto: alcanceAuto } = alcanceNegocioDe(p, c.tipo);
+  const { objetivo, auto: objetivoAuto } = objetivoAdsDe(p, c.tipo, alcanceNeg);
+  const tc = n(A.tc) > 0 ? n(A.tc) : TC_DEF;
+  const reparto = platSel === 'ambas' ? [['tiktok', 0.7], ['meta', 0.3]] : [[platSel, 1]];
+  const O = ADS_OBJETIVOS[objetivo];
+  const partes = [], avisos = [];
+  const conversion = ['mensajes', 'formulario', 'web'].includes(objetivo);
+  for (const [plat, sh] of reparto) {
+    const P = ADS_PLATAFORMAS[plat];
+    const bs = c.presupuesto * sh, usd = bs / tc;
+    let modo = 'continuo', dias = 30, factorModo = 1;
+    if (plat === 'tiktok') {
+      if (usd / 30 >= P.minDia) modo = 'continuo';
+      else if (usd >= P.minDia * 3) { modo = 'pulsos'; dias = Math.min(30, Math.floor(usd / P.minDia)); }
+      else { modo = 'promocionar'; dias = clamp(Math.floor(usd / P.minDiaPromo), 1, 30); factorModo = 0.85; }
+    }
+    const e = embudoPlataforma(plat, objetivo, bs, { ...c, tc, pulsos: modo !== 'continuo', audiencia: ADS_ALCANCE[alcanceNeg].audiencia, cpmRealUsd: n(A.cpmReal) > 0 ? n(A.cpmReal) / tc : 0, costoRealBs: n(A.costoResultadoReal) });
+    let aprendizaje = false;
+    if (conversion && e.resultados / 4.3 < P.aprendizaje && !(n(A.costoResultadoReal) > 0)) { aprendizaje = true; factorModo *= 0.85; }
+    if (n(A.costoResultadoReal) > 0) factorModo = 1; // su costo real ya incluye cómo pautó
+    if (factorModo !== 1) for (const k of ['clics', 'resultados', 'contactados', 'calificados', 'llegadas', 'clientes', 'prospectar', 'mensajes', 'promesa']) e[k] *= factorModo;
+    partes.push({ ...e, sh, bs, modo, dias, aprendizaje, nombre: P.nombre, campana: O.campana[plat] });
+  }
+  const suma = k => partes.reduce((s, x) => s + (x[k] || 0), 0);
+  const out = {
+    plataforma: platSel, nombrePlataforma: platSel === 'ambas' ? 'TikTok y Meta' : ADS_PLATAFORMAS[platSel].nombre,
+    objetivo, objetivoAuto, objetivoNombre: O.nombre, resultadoNombre: O.resultado, alcanceNegocio: alcanceNeg, alcanceAuto, alcanceNombre: ADS_ALCANCE[alcanceNeg].nombre,
+    presupuesto: c.presupuesto, tc, usd: c.presupuesto / tc, partes,
+    vistasPagadas: suma('vistasPagadas'), vistas: suma('vistas'), alcance: suma('alcance'), clics: suma('clics'), resultados: suma('resultados'),
+    contactados: suma('contactados'), calificados: suma('calificados'), llegadas: suma('llegadas'), clientes: suma('clientes'), prospectar: suma('prospectar'), mensajes: suma('mensajes'), promesa: suma('promesa'),
+    saturado: partes.some(x => x.saturado), aprendizaje: partes.some(x => x.aprendizaje), fuente: n(A.costoResultadoReal) > 0 || n(A.cpmReal) > 0 ? 'real' : 'mercado',
+    cupon: c.cupon, avisos,
+  };
+  out.frecuencia = out.alcance > 0 ? out.vistas / out.alcance : 0;
+  out.cpmBs = out.vistasPagadas > 0 ? c.presupuesto / out.vistasPagadas * 1000 : 0;
+  out.costoResultadoBs = out.resultados > 0 ? c.presupuesto / out.resultados : 0;
+  out.costoLlegadaBs = out.llegadas > 0 ? c.presupuesto / out.llegadas : 0;
+  out.costoClienteBs = out.clientes > 0 ? c.presupuesto / out.clientes : 0;
+  // Videos que hacen falta (en TikTok los videos se gastan rápido)
+  const tk = partes.find(x => x.plat === 'tiktok');
+  out.videosMes = tk && tk.modo !== 'continuo' ? Math.max(4, 4 * Math.ceil(tk.dias / 4)) : clamp(Math.ceil(out.usd / 50), 4, 20);
+  if (tk && tk.modo !== 'continuo') out.videosMes = clamp(out.videosMes, 4, 12);
+  // Avisos de experto
+  for (const x of partes) {
+    if (x.plat !== 'tiktok') continue;
+    if (x.modo === 'pulsos') avisos.push(`En TikTok Ads el mínimo es USD 20 por día. Con ${fmtM(x.bs)} (unos USD ${fmtN(x.usd)}) no alcanza para tenerlo prendido todo el mes: mejor en ${x.dias} días fuertes, como un lanzamiento de fin de semana o cerca de fin de mes, cuando la gente cobra.`);
+    if (x.modo === 'promocionar') avisos.push(`Con ${fmtM(x.bs)} (unos USD ${fmtN(x.usd)}), TikTok Ads solo da para ${Math.max(0, Math.floor(x.usd / 20))} días. Mejor usar «Promocionar» desde la app (desde unos USD 3 por día) para empujar los videos que ya gustaron.`);
+  }
+  if (out.aprendizaje) avisos.push(`Con unas ${fmtN(out.resultados / 4.3)} ${O.resultado} por semana, la campaña no termina de aprender (las plataformas piden unas 50 por semana). Funciona, pero sale un poco más caro: conviene juntar la plata en menos días.`);
+  if (out.saturado) avisos.push('La zona es chica para esta plata: la misma gente vería el anuncio demasiadas veces. Amplía la zona o baja la plata.');
+  if (tc < 9) avisos.push(`Ojo con el dólar: desde abril de 2026 las tarjetas pagan al tipo de cambio del Banco Central (en noviembre de 2026, unos Bs ${fmtN(TC_DEF, 2)}). Con ${fmtN(tc, 2)} los números salen inflados.`);
+  if ((c.tipo === 'b2b' || alcanceNeg === 'empresas') && platSel !== 'meta') avisos.push('En TikTok hay pocos dueños y gerentes buscando proveedores. Si le vende a empresas, prueba también Facebook, Instagram o LinkedIn, y usa un formulario con preguntas que filtren.');
+  if (objetivo === 'local' && !c.cupon) avisos.push('Sin cupón o regalo, menos gente se anima a ir. Con un regalo para la primera visita llegan más.');
+  if (objetivo === 'conocer') avisos.push('Con «que lo conozcan» casi nadie escribe al tiro: sirve para calentar a la gente antes de un lanzamiento. Para clientes este mes, usa mensajes o cupón.');
+  if (objetivo === 'local' && c.tipo === 'b2b') avisos.push('A las empresas no se les trae a una tienda con cupón: para ellas usa formulario o mensajes.');
+  return out;
+}
+
 // ---------- Evaluación completa ----------
 function evaluar(p, reglas, an, focoId) {
   const R = normalizarReglasMotor(reglas);
@@ -322,16 +481,24 @@ function evaluar(p, reglas, an, focoId) {
   const D = n(p.plan?.duracionManual) > 0 ? clamp(Math.round(n(p.plan.duracionManual)), 2, 24) : Dauto;
   const L = Math.max(0, Math.round(ciclo / 30));
 
+  // Anuncios del plan (traer clientes nuevos): embudo por plataforma y objetivo
+  let ads = null;
+  if (alc.campanas && modo === 'crecer' && presupuesto > 0) {
+    let ofertaBuena = false;
+    try { const ofr = p.oferta && p.oferta.activa ? evaluarOferta(p) : null; ofertaBuena = !!(ofr && !ofr.incompleta && ofr.puntaje >= 75 && ofr.lineaId === foco.id); } catch (e) { }
+    ads = modeloAds(p, { presupuesto, tipo, ticket: mt.ticket, calif, cierrePlan, factorAtencion: clamp(factorPlan, 0.4, 1), cupon: (p.anuncios || {}).cupon !== false, ofertaBuena, factorCosto: n((p.anuncios || {})._factorCosto) || 1 });
+  }
+
   // Resultado en un mes normal (ya en marcha), escenario meta, por fuente
-  const cpl = Math.max(0.01, n(sup.costoInteresado));
+  const cpl = ads && ads.resultados > 0 ? presupuesto / ads.resultados : Math.max(0.01, n(sup.costoInteresado));
   const leadsCont = alc.contenido ? n(sup.organico) : alc.direccion ? n(sup.organico) * 0.6 : 0;
   const fuentes = { campanas: 0, contenido: 0, guia: 0 };
   let opt = null;
   let leadsPagaMes = 0;
   const leadsViejaPauta = ventasPautaHoy > 0 && cierreHoy > 0 ? ventasPautaHoy / (calif * cierreHoy) : 0;
   if (modo === 'crecer') {
-    leadsPagaMes = alc.campanas ? presupuesto / cpl : 0;
-    fuentes.campanas = Math.max(0, leadsPagaMes * calif * cierrePlan - (alc.campanas && reemplaza ? ventasPautaHoy : 0));
+    leadsPagaMes = ads ? ads.resultados : 0;
+    fuentes.campanas = Math.max(0, (ads ? ads.clientes : 0) - (alc.campanas && reemplaza ? ventasPautaHoy : 0));
     fuentes.contenido = leadsCont * calif * cierrePlan;
     const baseGuia = Math.max(0, interesados - (alc.campanas && reemplaza ? leadsViejaPauta : 0));
     fuentes.guia = guiaActiva ? baseGuia * calif * Math.max(0, cierrePlan - cierreHoy) : 0;
@@ -381,13 +548,24 @@ function evaluar(p, reglas, an, focoId) {
     return { porMes, dentro, cola, total: dentro + cola };
   }
 
-  // Precio
+  // Precio: una parte de lo que le haces ganar en un mes normal (contando lo mínimo y solo los clientes que le caben),
+  // sin que tu precio + los anuncios pasen de 15 de cada 100 bolivianos que vende, y nunca menos de tu mínimo.
   const g1 = mt.g1, gL = mt.gL;
+  const cap = capacidadDe(p, mt, D);
   const fuPiso = fuentesDe('piso');
-  const mesNormalPiso = fuPiso.campanas + fuPiso.contenido + fuPiso.guia;
+  let ratioCapPiso = 1;
+  {
+    const cvP = curvaMes(fuPiso, factores.piso);
+    if (cap.sabe && !cap.legado) { let rc = cargaYRecorte(cvP.porMes, cap, D, false, true); if (rc.recorto && cap.extra > 0) rc = cargaYRecorte(cvP.porMes, cap, D, true, true); ratioCapPiso = cvP.total > 0 ? rc.total / cvP.total : 1; }
+    else if (cap.legado && cvP.total > cap.libre) ratioCapPiso = cap.libre / cvP.total;
+  }
+  const mesNormalPiso = (fuPiso.campanas + fuPiso.contenido + fuPiso.guia) * ratioCapPiso;
   const valorMesPiso = mesNormalPiso * g1;
   const precioValor = n(R.partePct) / 100 * valorMesPiso;
-  const precio = Math.max(n(R.precioMinimo), r100(precioValor));
+  const techoPeso = an.factNegocio > 0 ? Math.floor((0.15 * an.factNegocio - extraPauta) / 100) * 100 : Infinity;
+  const precioSinTope = r100(precioValor);
+  const topePorBolsillo = precioSinTope > techoPeso && precioSinTope > n(R.precioMinimo);
+  const precio = Math.max(n(R.precioMinimo), Math.min(precioSinTope, techoPeso));
   const forzado = precioValor < n(R.precioMinimo);
   const horas = Object.entries(alc).filter(([k, v]) => v && R.horas[k] !== undefined).reduce((s, [k]) => s + n(R.horas[k]), 0);
 
@@ -396,7 +574,6 @@ function evaluar(p, reglas, an, focoId) {
     inicial: Math.max(0, n(p.plan?.inicial)),
     ahorro: Math.max(0, n(p.plan?.ahorro)),
   };
-  const cap = capacidadDe(p, mt, D);
   const retrasoCobro = Math.max(0, Math.round(n(p.negocio?.cobroDias) / 30));
   const escenarios = {};
   let limitadoPorCapacidad = false;
@@ -435,7 +612,7 @@ function evaluar(p, reglas, an, focoId) {
     escenarios[k] = {
       N, dentro: cv.dentro, mesNormal: tot, cierres: cv.porMes, cola: cv.cola, ...fl, V1, VL: N * gL, valorFuente,
       dependencia: V1 > 0 ? valorGuia / V1 : 0,
-      roi1: fl.invNeta > 0 ? V1 / fl.invNeta : Infinity,
+      roi1: fl.invNeta > 0 ? V1 / fl.invNeta : Infinity, ventas1: mt.m > 0 ? V1 / mt.m : 0,
       honorarios: precio * D, capInfo,
     };
   }
@@ -451,15 +628,19 @@ function evaluar(p, reglas, an, focoId) {
   // Promesa
   const promesa = {};
   if (modo === 'crecer') {
-    let leadsPiso = 0;
+    const obj = ads ? ads.objetivo : null;
+    const suma = obj === 'local' || obj === 'web' || obj === 'conocer';
+    let piso = 0;
     for (let m = 2; m <= D; m++) {
-      const i = m - 2;
-      leadsPiso += (leadsPagaMes * RAMPA.campanas[Math.min(i, 2)] + leadsCont * RAMPA.contenido[Math.min(i, 2)]) * calif * (2 / 3);
+      const i = m - 2, rc = RAMPA.campanas[Math.min(i, 2)], rco = RAMPA.contenido[Math.min(i, 2)];
+      piso += ((ads ? ads.promesa : 0) * rc + (suma ? 0 : leadsCont * calif * rco)) * (2 / 3);
     }
-    promesa.tipo = 'interesados';
-    promesa.interesadosPiso = Math.floor(leadsPiso);
-    promesa.costoInteresadoBueno = cpl / calif;
-    promesa.leadsMesMeta = (leadsPagaMes + leadsCont) * calif;
+    promesa.tipo = obj === 'local' ? 'llegadas' : obj === 'web' ? 'visitas' : obj === 'conocer' ? 'alcance' : 'interesados';
+    promesa.valorPiso = Math.floor(piso);
+    promesa.interesadosPiso = promesa.valorPiso;
+    promesa.costoResultado = ads ? (obj === 'local' ? ads.costoLlegadaBs : obj === 'web' || obj === 'conocer' ? (ads.promesa > 0 ? presupuesto / ads.promesa : 0) : (ads.calificados > 0 ? presupuesto / ads.calificados : 0)) : 0;
+    promesa.costoInteresadoBueno = promesa.costoResultado || cpl / Math.max(0.0001, calif);
+    promesa.leadsMesMeta = ads ? ads.promesa : leadsCont * calif;
   } else {
     promesa.tipo = 'ventas';
     promesa.ventasHoy = ventasPautaHoy;
@@ -536,7 +717,7 @@ function evaluar(p, reglas, an, focoId) {
   }
   // Mensajes que tendrá que contestar
   const leadsNuevosMes = modo === 'crecer'
-    ? Math.max(0, leadsPagaMes + leadsCont - (alc.campanas && reemplaza ? leadsViejaPauta : 0))
+    ? Math.max(0, (ads ? ads.mensajes : 0) + leadsCont - (alc.campanas && reemplaza ? leadsViejaPauta : 0))
     : Math.max(0, opt.esc.meta.ventasPlan - ventasPautaHoy) / Math.max(0.0001, calif * cierrePlan) + leadsCont;
   const mensajesMes = Math.max(0, n(h.interesadosMes)) + leadsNuevosMes;
   const mensajesDiaNec = mensajesMes / dias;
@@ -560,8 +741,10 @@ function evaluar(p, reglas, an, focoId) {
       clientesMes = mt.ticket > 0 ? aumento / (mt.ticket * factorAcum) : 0;
     }
     const conv = calif * cierrePlan;
-    const interesadosMesNec = conv > 0 ? clientesMes / conv : 0;
-    const anunciosMesNec = modo === 'optimizar' && opt ? clientesMes * opt.cpaPlanMeta * 1.25 : Math.max(0, interesadosMesNec - leadsCont) * cpl;
+    const resPorCliente = ads && ads.clientes > 0 ? ads.resultados / ads.clientes : (conv > 0 ? 1 / conv : 0);
+    const interesadosMesNec = clientesMes * resPorCliente;
+    const cacAds = ads && ads.clientes > 0 ? presupuesto / ads.clientes : cpl / Math.max(0.0001, conv);
+    const anunciosMesNec = modo === 'optimizar' && opt ? clientesMes * opt.cpaPlanMeta * 1.25 : Math.max(0, clientesMes - fuentes.contenido) * cacAds;
     const planMes = escenarios.meta.mesNormal;
     const cz = escenarios.meta.cierres || [];
     const mEval = mt.tipo === 'unica' ? Math.min(plazo, D + L) : plazo;
@@ -573,7 +756,7 @@ function evaluar(p, reglas, an, focoId) {
       else if (k === mEval) planAumento += x * mt.ticket;
     }
     metaDueno = {
-      tipo: tipoM, valor: n(M.valor), aumento, plazo, dias, factorAcum, clientesMes, clientesDia: clientesMes / dias,
+      tipo: tipoM, valor: n(M.valor), aumento, plazo, dias, factorAcum, clientesMes, clientesDia: clientesMes / dias, resultadoNombre: ads ? ads.resultadoNombre : 'personas que le escriben',
       interesadosMes: interesadosMesNec, interesadosDia: interesadosMesNec / dias, anunciosMes: anunciosMesNec, anunciosDia: anunciosMesNec / 30,
       ventasMes: aumento, ventasDia: aumento !== null ? aumento / dias : null,
       planMes, planDia: planMes / dias, planAumento, planAumentoDia: planAumento / dias, planGanancia: planAumento * mt.m, mEval,
@@ -607,6 +790,16 @@ function evaluar(p, reglas, an, focoId) {
   const mercado = n(p.capacidad?.mercado);
   if (mercado > 0) { const q = E.meta.N / mercado; add('mercado', 'Hay suficientes clientes posibles', q <= 0.1 ? 'ok' : q <= 0.2 ? 'ojo' : 'no', false, `Lo esperado es ${fmtN(q * 100, 1)} de cada 100 clientes posibles (${fmtN(mercado)}).`, q <= 0.1 ? '' : 'Hay pocos clientes posibles: baja lo esperado o busquen en más zonas.'); }
   else add('mercado', 'Hay suficientes clientes posibles', 'na', false, 'No se sabe cuántos clientes posibles hay.', '');
+  if (ads) {
+    const prob = [];
+    if (ads.saturado) prob.push('la zona es chica para esa plata');
+    if (ads.aprendizaje) prob.push('pocos resultados por semana para que la campaña aprenda');
+    if (ads.tc < 9) prob.push('el dólar está puesto muy barato');
+    if (ads.objetivo === 'conocer') prob.push('el objetivo «que lo conozcan» casi no trae clientes al tiro');
+    add('anuncios', 'Los anuncios están bien armados', prob.length ? 'ojo' : 'ok', false,
+      `${ads.nombrePlataforma}, objetivo «${ads.objetivoNombre}». Con ${fmtM(presupuesto, R.moneda)} al mes (unos USD ${fmtN(ads.usd)}) salen unas ${fmtN(ads.vistas)} vistas y ${fmtN(ads.resultados)} ${ads.resultadoNombre}.`,
+      prob.length ? `Revisa: ${prob.join('; ')}.` : '');
+  }
   const faltanComp = [];
   if (alc.guia && !compromiso.aplicaGuia) faltanComp.push('seguir tu guía para vender');
   if (!compromiso.aprueba) faltanComp.push('aprobar el contenido en 2 días');
@@ -630,7 +823,8 @@ function evaluar(p, reglas, an, focoId) {
     R, foco, tipo, T, sup, modo, avisoModo, alc, cont, guiaActiva, cierre, presupuesto, pautaHoy, extraPauta, reemplaza, focoEsPrincipal, D, Dauto, L, ciclo,
     cpl, leadsPagaMes, leadsCont, fuentes, opt, reactivados, precio, precioValor, forzado, valorMesPiso, mesNormalPiso, horas,
     escenarios, promesa, chequeos: ch, veredicto, puntaje, estimados, diag, g1, gL, cac, ltvcac, limitadoPorCapacidad, pesoMes, costosCliente,
-    cap, dias, metaDueno, mensajesDiaNec, leadsNuevosMes, mesPrimeros, retrasoCobro, inicio,
+    cap, dias, metaDueno, mensajesDiaNec, leadsNuevosMes, mesPrimeros, retrasoCobro, inicio, ads, topePorBolsillo, techoPeso, precioSinTope,
+    equilibrio: (() => { const gv = mt.tipo === 'recurrente' ? mt.gMes : mt.ticket * mt.m, cm = precio + presupuesto + costosCliente.herramientas; return { ganVenta: gv, costoMes: cm, ventas: gv > 0 ? cm / gv : null }; })(),
   };
 }
 
@@ -717,6 +911,7 @@ const DIR_PRUDENTE = {
   costoInteresado: 'max', calificaPct: 'min', cierrePct: 'min', organico: 'min', reactivacionPct: 'min',
   'meta.presupuestoTotal': 'min', 'meta.paciencia': 'min', 'meta.valor': 'max', 'meta.diasMes': 'min',
   'oferta.precio': 'min', 'oferta.usoGarantia': 'max', 'servicio.presupuesto': 'min',
+  'anuncios.costoResultadoReal': 'max', 'anuncios.cpmReal': 'max', 'anuncios.tc': 'max',
 };
 function dirDe(clave) { if (DIR_PRUDENTE[clave]) return DIR_PRUDENTE[clave]; const last = clave.split(/[.:]/).pop(); return DIR_PRUDENTE[last] || 'min'; }
 function setEn(p, clave, v) {
@@ -832,7 +1027,7 @@ function sensibilidad(p, reglas, focoId, base) {
   const vars = [['Lo que gana en cada venta', 'precio y ganancia', q => { L(q).ticket = n(L(q).ticket) * 0.8; }]];
   vars.push(['Cuántos compran de los que escriben', 'cómo atienden', q => { S(q).cierrePct = n(sup.cierrePct) * 0.8; }]);
   if (base.modo === 'optimizar') vars.push(['Las ventas que hoy le traen sus anuncios', 'punto de partida', q => { q.hoy.ventasPautaMes = n(q.hoy.ventasPautaMes) * 0.8; }]);
-  else if (base.alc.campanas) vars.push(['Cuánto cuesta que alguien escriba', 'anuncios', q => { S(q).costoInteresado = n(sup.costoInteresado) * 1.25; }]);
+  else if (base.alc.campanas) vars.push(['Cuánto cuestan los anuncios', 'anuncios', q => { q.anuncios = { ...(q.anuncios || {}), _factorCosto: 1.25 }; }]);
   if (linea.tipo === 'recurrente') vars.push(['Cuántos meses se queda un cliente', 'clientes fieles', q => { const l = L(q); l.vidaMeses = (vacio(l.vidaMeses) ? 12 : n(l.vidaMeses)) * 0.8; }]);
   if (linea.tipo === 'repetida') vars.push(['Cuántas veces vuelve a comprar', 'clientes fieles', q => { const l = L(q); l.comprasAnio = (vacio(l.comprasAnio) ? 2 : n(l.comprasAnio)) * 0.8; }]);
   if (base.leadsCont > 0) vars.push(['Lo que trae el contenido', 'contenido', q => { S(q).organico = n(sup.organico) * 0.8; }]);
@@ -866,7 +1061,7 @@ function minimoAceptable(p, reglas, focoId, base) {
     if (!mejor || ev.escenarios.piso.roi1 > mejor.ev.escenarios.piso.roi1) mejor = { pres, ev };
     if (sirve(ev)) { hallado = { pres, ev }; break; }
   }
-  const costoCliente = base.cpl / Math.max(0.0001, base.cierre.calif * base.cierre.plan);
+  const costoCliente = base.ads && base.ads.clientes > 0 ? base.presupuesto / base.ads.clientes : base.cpl / Math.max(0.0001, base.cierre.calif * base.cierre.plan);
   const out = { adsMin, tope, g1: base.g1, costoCliente, presHoy: base.presupuesto };
   if (!hallado) return { ...out, imposible: true, mejorRoi: mejor ? mejor.ev.escenarios.piso.roi1 : 0, mejorPres: mejor ? mejor.pres : null };
   const ev = hallado.ev, E = ev.escenarios;

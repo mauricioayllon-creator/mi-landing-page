@@ -26,15 +26,18 @@ Cómo está hecha: es **un solo archivo** (`index.html`) que funciona solo, sin 
 |---|---|
 | **Precio mínimo: Bs 2.200 al MES** | Es un cobro **mensual**, mes a mes. **No** es un pago por todo el plan. Los «X meses» del plan son solo cuánto tarda en verse el resultado completo. |
 | **Anuncios mínimos: Bs 500 al mes** | Con menos, la calculadora dice «Todavía no» (es un chequeo crítico). Se puede cambiar en Ajustes (`anunciosMinimo`). |
-| **El precio sale del valor** | Cobra una parte (por defecto 20 de cada 100) de lo que le hace ganar en un mes normal, contando lo mínimo. Nunca menos del mínimo. |
+| **El precio sale del valor** | Cobra una parte (por defecto 20 de cada 100) de lo que le hace ganar en un mes normal, contando lo mínimo y solo los clientes que le caben. Nunca menos del mínimo. Desde la v7, tampoco más de lo que el negocio aguanta: tu precio + anuncios ≤ 15 de cada 100 que vende. |
 | **«Apto» = la promesa se puede cumplir** | El veredicto sale de chequeos. Si falla un chequeo «importante», el veredicto es «Todavía no». |
-| **Se promete lo que él controla** | Si el trabajo es traer clientes nuevos, se prometen **personas interesadas**, no ventas. Si es mejorar anuncios que ya venden, se prometen ventas por anuncios. |
+| **Se promete lo que él controla** | Si el trabajo es traer clientes nuevos, se prometen **personas interesadas**, no ventas. En campañas de tienda con cupón se prometen **llegadas a la tienda** (cupones validados), igual que la garantía real de Mauricio. Si es mejorar anuncios que ya venden, se prometen ventas por anuncios. |
 | **Su servicio** | Contenido + anuncios + **guía para vender** (enseña; el cliente no tiene que contratar a nadie). Si el cliente ya tiene equipo de contenido, se le dan ideas y guiones. |
 | **Lenguaje para un niño de 10 años** | Frases cortas y palabras de todos los días. Sin siglas como CAC, LTV o ICP. «De cada 100 que cobra, le quedan 45» en lugar de «margen de 45%». |
 | **Diseño estilo Apple** | Tarjetas, colores de iOS, controles segmentados, modo claro y oscuro, y que funcione en el celular. |
 | **Pensada para Bolivia** | Bolivianos (Bs), IVA 13% + IT 3%, cargas sociales de más o menos 30%, cobros a 30, 60 o 90 días, límites de las tarjetas para pagar anuncios en dólares. |
 | **Llenable en una llamada** | Si el dueño no sabe un número, hay preguntas más fáciles («¿No sabe?») y se puede escribir un rango («20 a 30»). |
 | **No volver a preguntar lo mismo** | Si un dato ya se anotó, se reutiliza. Nunca se pisa lo que el dueño dijo. |
+| **TikTok primero** | Mauricio se enfoca en TikTok Ads. Es la plataforma por defecto; Facebook e Instagram quedan como opción. |
+| **Dólar real** | La publicidad se paga en dólares con tarjeta: desde abril de 2026 al tipo de cambio del Banco Central (Bs 12,09 en noviembre de 2026), no a 6,96. Se pregunta en cada llamada. |
+| **La vista del cliente le habla de tú** | Todo lo que ve el cliente está en segunda persona («te pueden comprar», «tu tienda») y sin datos internos (veredicto, chequeos, cómo sale tu precio). |
 
 ---
 
@@ -137,13 +140,14 @@ El panel se organizó en pestañas: Resumen, Meta, Estrategia, Plata y Revisión
   - Ventas mínimas al mes (tu precio + anuncios ≤ 15 de cada 100 que vende).
   - Plata guardada mínima.
   - Que cada cliente nuevo le deje en un año más de lo que cuesta conseguirlo.
-- **Tres ejemplos**, cada uno en su límite:
+- **Tres ejemplos**, cada uno en su límite. Los números de abajo son los de la v7, recalculados con el nuevo cálculo de anuncios de TikTok. En la v5, con el cálculo viejo, eran Bs 750 / 2.750 / 3.500 de anuncios y Bs 20.000 / 33.000 / 38.000 de ventas.
 
 | | Plata (Bs 220, vuelve 4 veces al año) | Anillos (Bs 4.500, una vez) | Empresas (Bs 6.000, 3 veces al año, pagan a 30 días) |
 |---|---|---|---|
-| Anuncios mínimos | Bs 750 | Bs 2.750 | Bs 3.500 |
-| Ventas mínimas al mes | Bs 20.000 | Bs 33.000 | Bs 38.000 |
-| Plata guardada mínima | Bs 6.300 | Bs 7.150 | Bs 23.000 |
+| Campaña (TikTok) | Tienda con cupón | Mensajes por WhatsApp | Formulario |
+| Anuncios mínimos | Bs 500 (tu piso) | Bs 1.250 | Bs 3.500 |
+| Ventas mínimas al mes | Bs 18.000 | Bs 23.000 | Bs 38.000 |
+| Plata guardada mínima | Bs 6.000 | Bs 6.000 | Bs 23.000 |
 
 - **Lo que se aprendió:**
   - Con solo Bs 500 en anuncios, ninguna joyería llega, porque el precio mínimo pesa 4 veces más que los anuncios.
@@ -165,6 +169,65 @@ El panel se organizó en pestañas: Resumen, Meta, Estrategia, Plata y Revisión
   - **Recupera su plata:** se explica como una **alcancía**. Barras de lo que sale (naranja) y entra (verde) cada mes, la línea de la alcancía, el punto más bajo, el mes en que vuelve a cero y **por qué tarda** en ese caso concreto.
   - **Le cobras:** horas por servicio, cuánto sale la hora y la cuenta del precio.
 
+### Versión 7: vista para el cliente, guía de llamada SPIN y anuncios inteligentes (TikTok)
+**Pedido:** «Un panel para mostrarle al cliente su retorno de inversión en piso, meta y techo, que demuestre autoridad y que todo está calculado. Más inteligente en la pauta: depende del objetivo, del tipo de negocio, si es local o no y del objetivo de campaña; me voy a enfocar en TikTok Ads. Con Bs 500, ¿en qué campaña va, cuántos clientes potenciales, cuántos hay que prospectar, cuántos llegan al local y cuántos compran? Un botón que muestre con una flechita azul qué preguntar en cada cálculo y para qué sirve, con preguntas estratégicas y el método SPIN, con tres puntitos para ver más, que se prenda y apague fluido. Después perfecciona la inteligencia y publícalo.»
+
+**Qué se hizo:**
+
+1. **Vista del cliente** (botón «Vista del cliente» arriba). Es una pantalla limpia para compartir en la llamada o guardar como PDF. Esconde las preguntas, el veredicto interno, los chequeos y la guía. Muestra:
+   - Portada con tu marca y la fecha.
+   - Dónde está hoy y lo que quiere lograr.
+   - **Tres escenarios** (conservador = piso, esperado = meta, optimista = techo): clientes nuevos, ventas del primer año, ganancia, inversión total, retorno (×) y en qué mes recupera.
+   - El **embudo de la publicidad**.
+   - El **punto de equilibrio**: cuántas ventas cubren la inversión del mes. Si le pagan cada mes, dice en qué mes se llega.
+   - La alcancía mes a mes.
+   - **Cómo lo calculamos**: cada dato con su origen («Dato tuyo», «Calculado con tus datos», «Promedio de mercado»).
+   - El plan, la inversión, lo que necesitas de él, la garantía y el caso real de Sneaker Fashion (se puede apagar en Ajustes).
+   - En Ajustes se cambian la marca y la garantía con tus palabras (usa {meses} y {promesa}).
+2. **Guía de llamada** (botón «Guía de llamada» o tecla **G**). Sobre cada pregunta aparece un globo azul con flechita. Lleva la pregunta estratégica para el dueño, su tipo SPIN (Situación, Problema, Implicación, Necesidad, más Cierre y «Para ti»), para qué sirve ese número y «•••» con consejos y la siguiente pregunta. Además:
+   - Cada paso tiene su objetivo, sus minutos, la frase para abrir y la frase para pasar al siguiente.
+   - Arriba aparece la **ruta de la llamada** (unos 30 minutos).
+   - En el panel hay globos de cómo presentar cada parte.
+   - Se dibuja siempre y solo se muestra u oculta, así que prender y apagar es instantáneo. En la vista del cliente se oculta sola.
+3. **Anuncios inteligentes** (nuevo paso 7, «Anuncios»): plataforma (TikTok por defecto, Meta o las dos), de dónde vienen sus clientes (zona, ciudad, país o empresas) y objetivo de campaña.
+   - **Objetivos:** tienda con cupón, mensajes por WhatsApp, formulario, web o que lo conozcan. Si no se elige, la calculadora lo decide.
+   - **Embudo:** vistas (pagadas + las que TikTok regala) → personas distintas → piden el cupón o escriben → llegan a la tienda o sí pueden comprar → compran.
+   - **Costos:** cada persona, cada llegada y cada cliente, y cuántas ventas pagan la publicidad.
+   - **Trabajo:** cuánto le toca prospectar (mensajes, formularios, cupones por mandar).
+   - **Cómo armarla:** nombre de la campaña en TikTok Ads Manager, cómo gastar, a quién mostrarla, cuántos videos nuevos al mes y cuándo lanzar.
+   - **Reglas de experto:**
+     - TikTok Ads pide un mínimo de USD 20 por día por grupo de anuncios. Con poca plata se arma en **días fuertes** (pulsos) o con **Promocionar** desde la app (desde unos USD 3 por día).
+     - Fase de aprendizaje: con menos de unas 50 respuestas por semana, sale más caro.
+     - Zona chica para mucha plata: la misma gente ve el anuncio demasiadas veces.
+     - Dólar al cambio del Banco Central.
+     - Con cupón llega más gente que sin él, y una oferta irresistible suma.
+     - A precio más alto, menos gente se anima.
+     - TikTok rinde menos para venderle a empresas.
+   - **Datos reales:** si el cliente ya pautó, su costo real por resultado y por mil vistas reemplaza a los promedios. También aceptan rangos.
+   - **Calibración:** caso real de Sneaker Fashion (Bs 512 de publicidad, 236 mil vistas, unas 26 ventas). Con estos promedios, ese caso queda cerca del escenario optimista, no del esperado: la calculadora es prudente.
+4. **Inteligencia general:**
+   - El precio ahora solo cuenta los clientes que le caben, y nunca hace que tu precio + anuncios pasen de 15 de cada 100 que vende.
+   - Punto de equilibrio y ventas del primer año en cada escenario.
+   - La promesa sale del objetivo de campaña: personas interesadas, **llegadas a la tienda**, visitas a la web o alcance.
+   - «Los números que más pesan» ahora mueve el costo de los anuncios.
+   - La segunda opinión de Claude recibe el embudo.
+   - El resumen para copiar incluye la campaña.
+
+**Promedios de anuncios que usa** (aproximados y prudentes para Bolivia, noviembre de 2026; se reemplazan con los datos del cliente):
+
+| Objetivo | TikTok: USD por mil vistas | Meta: USD por mil vistas | Embudo |
+|---|---|---|---|
+| Tienda con cupón | 0,9 | 1,2 | de 100 personas que lo ven, piden el cupón 0,2 a 0,7 (según el tipo de venta y si hay cupón); llegan 15 a 30 de cada 100; compran 40 a 70 de cada 100 de los que llegan |
+| Mensajes por WhatsApp | 2,0 | 2,5 | tocan 0,7 (TikTok) o 1,0 (Meta) de cada 100 vistas; escriben 30 o 45 de cada 100 que tocan |
+| Formulario | 2,0 | 2,5 | tocan 0,8 o 0,9 de cada 100; lo llenan 12 o 15 de cada 100; contestan cuando les escribes 60 de cada 100 |
+| Web | 1,5 | 2,0 | tocan 0,9 o 1,1 de cada 100; compran 0,5 a 2 de cada 100 visitas |
+| Que lo conozcan | 0,6 | 0,8 | casi nadie escribe solo (0,03 a 0,1 de cada 100 personas) |
+
+Fuentes consultadas para calibrar:
+- Ayuda oficial de TikTok sobre presupuestos (mínimos de USD 50 por campaña y USD 20 por grupo de anuncios, agosto de 2025).
+- Guías públicas de costos de TikTok en Latinoamérica.
+- El tipo de cambio del Banco Central de Bolivia (Bs 12,09 por dólar en noviembre de 2026).
+
 ---
 
 ## 4. Cómo calcula (lo esencial)
@@ -175,12 +238,12 @@ El panel se organizó en pestañas: Resumen, Meta, Estrategia, Plata y Revisión
    - Si compra una vez: precio × margen.
 2. **Cuántos compran:** valores típicos según a quién vende (empresas / personas que compran caro / personas que compran rápido). Con la guía de venta, si el dueño acepta seguirla, recorre la mitad de lo que le falta para llegar a un negocio ordenado.
 3. **Clientes por mes del plan:**
-   - Anuncios: presupuesto ÷ costo de que alguien escriba × de cada 100 que escriben, cuántos pueden comprar × de esos, cuántos compran.
+   - Anuncios (desde la v7): presupuesto en Bs → dólares al cambio del día → vistas según la plataforma y el objetivo → el embudo de ese objetivo (ver la versión 7) → compras.
    - Más lo que trae el contenido.
    - Más lo que se gana por atender mejor.
    - Los primeros meses rinden menos y los clientes llegan después de lo que tarda una venta.
 4. **Capacidad:** recorta a los clientes que no le caben (ver la versión 4).
-5. **Precio** = máx(precio mínimo, parte% × clientes de un mes normal en el mínimo × `g1`).
+5. **Precio** = máx(precio mínimo, mín(parte% × clientes de un mes normal en el mínimo que le caben × `g1`, 15% de lo que vende − anuncios extra)).
 6. **Flujo de la plata mes a mes:** lo que sale (precio + anuncios extra + herramientas + gasto de una vez − ahorros) contra lo que entra (la ganancia de los clientes, con el retraso de cobro). De ahí salen el punto más bajo y el **mes en que recupera**.
 7. **Chequeos** (los críticos marcados con ★):
    - ★ Aunque salga lo mínimo, él gana al menos 1,2 veces lo que pone.
@@ -189,16 +252,16 @@ El panel se organizó en pestañas: Resumen, Meta, Estrategia, Plata y Revisión
    - ★ Cada cliente deja más de lo que cuesta traerlo.
    - ★ El dueño se compromete.
    - ★ Pone lo mínimo en anuncios.
-   - Además: se nota el cambio, recupera rápido, aguanta los primeros meses, no le cuesta demasiado, le cabe, puede contestar, su meta, su bolsillo, su paciencia, hay mercado, los números son reales y aguanta números más bajos.
+   - Además: se nota el cambio, recupera rápido, aguanta los primeros meses, no le cuesta demasiado, le cabe, puede contestar, su meta, su bolsillo, su paciencia, hay mercado, los números son reales, aguanta números más bajos y los anuncios están bien armados.
    - Veredicto: si falla algún crítico → «Todavía no». Si hay algo para cuidar → «Sí, con condiciones». Si no → «Sí».
 
-**Valores típicos que son supuestos** (no medidos; se pueden cambiar en Ajustes por tipo de venta):
+**Valores típicos que son supuestos** (no medidos; se pueden cambiar en Ajustes por tipo de venta). El costo de la publicidad ya no está aquí: desde la v7 sale del paso 7 (ver la versión 7).
 
-| Tipo | Costo de que alguien escriba | De 100 que escriben, pueden comprar | De esos, compran |
-|---|---|---|---|
-| Empresas | Bs 100 | 35 | 11 |
-| Personas, compra grande | Bs 25 | 40 | 12 |
-| Personas, compra rápida | Bs 5 | 70 | 15 |
+| Tipo | De 100 que escriben, pueden comprar | De esos, compran |
+|---|---|---|
+| Empresas | 35 | 11 |
+| Personas, compra grande | 40 | 12 |
+| Personas, compra rápida | 70 | 15 |
 
 Los rangos típicos de margen por tipo de negocio también son referencias aproximadas.
 
@@ -213,12 +276,13 @@ public/calculadora/index.html           ← la página completa (un solo archivo
 herramientas/calculadora-oferta/
   MEJORAS.md        ← este documento
   fuente/           ← las piezas con las que se arma index.html
-  motor4.js         ← todas las cuentas (sin pantalla): evaluar, chequeos, capacidad, meta, oferta, cliente ideal, sensibilidad, mínimo aceptable
+  motor4.js         ← todas las cuentas (sin pantalla): evaluar, chequeos, capacidad, meta, oferta, cliente ideal, sensibilidad, mínimo aceptable y el modelo de anuncios (modeloAds)
+  guia.js           ← la guía de llamada: ruta, guía por paso, globos por pregunta (SPIN) y globos del panel
   ayudas4.js        ← las subcalculadoras («¿No sabe?»), con métodos, valores típicos y ayudas dentro de ayudas
   ejemplos4.js      ← prospecto vacío y ejemplos (Brisa, Joyería Aurora, Café, y las 3 joyerías mínimas)
   p4_base.js        ← utilidades, rangos, estado, preguntas y subcalculadoras en pantalla
-  p4_form.js        ← los 8 pasos, vistas en vivo, eventos y llenado automático
-  p4_panel.js       ← el panel: veredicto, pestañas, meta, capacidad, estrategia, oferta, plata, revisión y hojas de detalle
+  p4_form.js        ← los 9 pasos, vistas en vivo, eventos y llenado automático
+  p4_panel.js       ← el panel: veredicto, pestañas, meta, capacidad, estrategia, anuncios, oferta, plata, revisión, hojas de detalle y la vista del cliente
   p4_resto.js       ← gráfico, segunda opinión de Claude, resumen para copiar, guardar y arranque
   p4_markup.html    ← la estructura de la página
   estilos_v4.css    ← el diseño (claro y oscuro)
@@ -237,7 +301,10 @@ herramientas/calculadora-oferta/
 ## 6. Cómo se probó
 
 Las pruebas usaron un navegador automático (Playwright), en computadora (1440 px, modo claro) y celular (390 px, modo oscuro):
-- Se recorrieron los 8 pasos y las 5 pestañas, con todos los ejemplos y con un prospecto vacío.
+- Se recorrieron los 9 pasos y las 5 pestañas, con todos los ejemplos y con un prospecto vacío.
+- Guía de llamada: prender y apagar con el botón y con la tecla G (no se apaga mientras se escribe), «•••» y globos en cada paso.
+- Vista del cliente en computadora y celular (claro y oscuro), con todos los ejemplos: sin preguntas, sin guía y sin botones internos.
+- Paso 7: cambio de plataforma y objetivo, cupón, datos reales con rango y el escenario peor.
 - Rangos, valores típicos, subcalculadoras de 3 niveles, regalos y tipos de cliente.
 - Llenado automático, incluido que **no pise** un dato escrito a mano.
 - Las hojas de detalle.
@@ -250,6 +317,9 @@ Errores encontrados y corregidos al probar:
 - Un clic en «Usar el rango» se perdía porque el botón se redibujaba.
 - Una caja de texto se partía en pedazos.
 - Una tabla no entraba en el celular.
+- (v7) El interruptor del cupón aparecía un paso tarde al cambiar el objetivo.
+- (v7) Textos de la vista del cliente en tercera persona («le pueden comprar», «el dueño»).
+- (v7) El punto de equilibrio confundía en negocios que cobran cada mes.
 
 ---
 
@@ -257,4 +327,5 @@ Errores encontrados y corregidos al probar:
 
 - El plan automático es corto (3 meses) en negocios de venta rápida, y eso castiga el resultado. Se puede alargar a mano en Ajustes.
 - La oferta irresistible **no cambia cuántos compran**: se dejó así a propósito, para no prometer algo que no está medido.
-- Los valores típicos de Bolivia se podrían ajustar con los resultados reales de los clientes de Mauricio.
+- Los valores típicos de Bolivia se podrían ajustar con los resultados reales de los clientes de Mauricio. Lo ideal: después de cada lanzamiento, anotar vistas, cupones pedidos, llegadas y ventas, y recalibrar la tabla de promedios de anuncios (en `motor4.js`: ADS_OBJETIVOS y ADS_TIPO).
+- El tipo de cambio por defecto (Bs 12,09) hay que actualizarlo cuando cambie (`TC_DEF` en `motor4.js`).

@@ -16,9 +16,15 @@ function porDiaPartes(x) {
   const d = Math.round(1 / x);
   return d <= 1 ? { num: '1', uni: 'por día' } : { num: '1', uni: `cada ${d} días` };
 }
+const NOMBRES_PROMESA = {
+  interesados: ['personas', 'interesadas que sí le pueden comprar', 'personas interesadas que sí le pueden comprar'],
+  llegadas: ['personas', 'que llegan a su tienda con el cupón', 'personas que llegan a la tienda con el cupón'],
+  visitas: ['visitas', 'de personas a su página web', 'personas que entran a su página web'],
+  alcance: ['personas', 'de su zona que ven sus videos', 'personas de su zona que ven sus videos'],
+};
 function promesaDe(ev) {
   const P = ev.promesa, mon = ev.R.moneda;
-  if (P.tipo === 'interesados') return { grande: fmtN(P.interesadosPiso), unidad: 'personas', texto: `interesadas que sí le pueden comprar, entre el mes 2 y el ${ev.D}. Esto depende de ti.`, frase: `al menos ${fmtN(P.interesadosPiso)} personas interesadas que sí le pueden comprar` };
+  if (P.tipo !== 'ventas') { const [uni, cola, fr] = NOMBRES_PROMESA[P.tipo] || NOMBRES_PROMESA.interesados, v = P.valorPiso ?? P.interesadosPiso; return { grande: fmtN(v), unidad: uni, texto: `${cola}, entre el mes 2 y el ${ev.D}. Esto depende de ti.`, frase: `al menos ${fmtN(v)} ${fr}` }; }
   return { grande: f1(P.ventasPiso), unidad: 'ventas al mes', texto: `por anuncios (hoy tiene ${f1(P.ventasHoy)}), ${ev.presupuesto > ev.pautaHoy ? 'poniendo ' + fmtM(ev.presupuesto, mon) + ' al mes' : 'con la misma plata'}.`, frase: `pasar de ${f1(P.ventasHoy)} a al menos ${f1(P.ventasPiso)} ventas al mes por anuncios` };
 }
 let ultimoVer = null;
@@ -29,7 +35,7 @@ function recalcular() {
   catch (err) { console.error(err); $('#panel').innerHTML = '<section class="tarjeta"><p>Algo en los datos no se pudo calcular. Revisa el último número que cambiaste.</p></section>'; return; }
   ultimo = r;
   renderProgreso();
-  if (estado.paso === 8 && r.ev && estado.tipoAjustes !== r.ev.tipo && !$('#form').contains(document.activeElement)) renderForm();
+  if (estado.paso === 9 && r.ev && estado.tipoAjustes !== r.ev.tipo && !$('#form').contains(document.activeElement)) renderForm();
   const pres = document.querySelector('[data-clave="servicio.presupuesto"]'); if (pres && r.ev) pres.placeholder = `Sugerido: ${fmtN(r.ev.presupuesto)}`;
   const dur = document.querySelector('[data-clave="plan.duracionManual"]'); if (dur && r.ev) dur.placeholder = `Yo calculo: ${r.ev.Dauto}`;
   const plz = document.querySelector('[data-clave="meta.plazo"]'); if (plz && r.ev) plz.placeholder = String(r.ev.D);
@@ -43,6 +49,7 @@ function renderPanel(r) {
   $('#sub-negocio').textContent = [p.negocio.nombre || 'Prospecto sin nombre', p.negocio.ciudad].filter(Boolean).join(' · ');
   const cont = $('#panel');
   if (!r) return;
+  if (estado.cliente) { cont.innerHTML = htmlVistaCliente(r); return; }
   if (r.incompleto) {
     cont.innerHTML = `${htmlCabPanel(r)}<section class="tarjeta hero v-nada"><div class="hero-top"><div class="anillo">${anillo(0, 'var(--gray)')}</div>
       <div class="hero-txt"><p class="kicker">¿Le podemos cumplir?</p><h2 class="respuesta">Faltan respuestas</h2><p class="frase">Para empezar, pregúntale cuánto paga en promedio un cliente (paso 3, «Lo que vende»).</p></div></div></section>${htmlFaltan()}`;
@@ -52,12 +59,12 @@ function renderPanel(r) {
   const ev = r.ev, tab = estado.tab;
   let cuerpo;
   if (tab === 'meta') cuerpo = [htmlMeta(r), htmlCapacidad(r), htmlDia(r)];
-  else if (tab === 'estrategia') cuerpo = [htmlEstrategia(r), htmlOferta(r), htmlICP(r), htmlMesa(r)];
+  else if (tab === 'estrategia') cuerpo = [htmlEstrategia(r), htmlAnuncios(r), htmlOferta(r), htmlICP(r), htmlMesa(r)];
   else if (tab === 'plata') cuerpo = [htmlDeDonde(r), htmlPlata(r), htmlSens(r), htmlPrecio(r)];
   else if (tab === 'revision') cuerpo = [htmlRevision(r), htmlFaltan(), htmlMas(r)];
   else cuerpo = [htmlMosaico(r), htmlMinimo(r), htmlMetaMini(r), htmlClientes(r), htmlSalud(r), htmlTesoro(r), htmlFaltan()];
   const scrollPanel = $('#col-panel') ? $('#col-panel').scrollTop : 0;
-  cont.innerHTML = htmlCabPanel(r) + htmlEscenario(r) + htmlHero(r) + htmlTabs() + `<div class="tab-cuerpo" role="tabpanel">${cuerpo.join('')}</div>`;
+  cont.innerHTML = htmlCabPanel(r) + htmlEscenario(r) + htmlGuiaPanel('hero') + htmlHero(r) + htmlGuiaPanel('cliente') + htmlTabs() + `<div class="tab-cuerpo" role="tabpanel">${htmlGuiaPanel('tab-' + tab)}${cuerpo.join('')}</div>`;
   if ($('#col-panel')) $('#col-panel').scrollTop = scrollPanel;
   if (tab === 'plata') dibujarGrafico();
   if (tab === 'revision') conectarIA();
@@ -103,7 +110,7 @@ function htmlMosaico(r) {
   const w = (id, ic, col, tit, grande, chico, txt) => `<button type="button" class="widget tocable" data-detalle="${id}"><div class="widget-cab">${icoSq(ic, col)}${esc(tit)}<span class="ver-mas">Ver más ›</span></div><div class="grande">${esc(grande)}${chico ? ` <small>${esc(chico)}</small>` : ''}</div><p>${esc(txt)}</p></button>`;
   return `<div class="mosaico">
     ${w('prometes', 'objetivo', 'blue', 'Le prometes', pr.grande, pr.unidad, pr.texto)}
-    ${w('cobras', 'moneda', 'green', 'Le cobras', fmtM(ev.precio, mon), 'cada mes', ev.forzado ? `Tu precio mínimo, mes a mes. Para ver todo el resultado: ${ev.D} meses.` : `Mes a mes. Es ${fraccion(n(ev.R.partePct), mon)} que le haces ganar.`)}
+    ${w('cobras', 'moneda', 'green', 'Le cobras', fmtM(ev.precio, mon), 'cada mes', ev.forzado ? `Tu precio mínimo, mes a mes. Para ver todo el resultado: ${ev.D} meses.` : ev.topePorBolsillo ? 'Mes a mes. Lo bajé para que, con los anuncios, no pase de 15 de cada 100 que vende.' : `Mes a mes. Es ${fraccion(n(ev.R.partePct), mon)} que le haces ganar.`)}
     ${w('gana', 'sube', 'indigo', 'Él gana', fmtN(E.piso.roi1, 1) + '×', 'lo que pone', `Por cada Bs 1 que pone, le vuelven Bs ${fmtN(E.piso.roi1, 1)}, aunque salga lo mínimo.`)}
     ${w('recupera', 'reloj', 'orange', 'Recupera su plata', rec === null ? 'No' : rec === 0 ? 'Desde ya' : 'Mes ' + rec, '', rec === null ? 'No la recupera en 3 años.' : 'El mes en que ya le volvió todo lo que puso.')}
   </div>`;
@@ -210,7 +217,10 @@ function htmlDia(r) {
     t('chat', 'green', 'Mensajes para contestar', porDiaPartes(ev.mensajesDiaNec), `De esos, ${f1(nuevosDia)} son nuevos por el plan.`),
     t('personas', 'teal', 'Clientes nuevos', porDiaPartes(E.meta.mesNormal / dias), 'En un mes normal del plan, lo esperado.'),
   ];
-  if (ev.alc.campanas) tiles.push(t('sube', 'orange', 'En anuncios', { num: fmtM(ev.presupuesto / 30, mon), uni: 'por día' }, `${fmtM(ev.presupuesto, mon)} al mes, pagados directo a la plataforma.`));
+  if (ev.alc.campanas) {
+    const tk = ev.ads && ev.ads.partes.find(x => x.plat === 'tiktok' && x.modo !== 'continuo');
+    tiles.push(tk ? t('sube', 'orange', 'En anuncios', { num: fmtM(tk.bs / tk.dias, mon), uni: `por día, ${tk.dias} días al mes` }, `${fmtM(ev.presupuesto, mon)} al mes, juntados en días fuertes.`) : t('sube', 'orange', 'En anuncios', { num: fmtM(ev.presupuesto / 30, mon), uni: 'por día' }, `${fmtM(ev.presupuesto, mon)} al mes, pagados directo a la plataforma.`));
+  }
   tiles.push(t('megafono', 'pink', 'Contenido', ev.alc.contenido ? { num: '3', uni: 'videos por semana' } : ev.alc.direccion ? { num: '3', uni: 'guiones por semana' } : { num: '—', uni: '' }, ev.alc.contenido ? 'Tú los haces; él los aprueba en 2 días.' : ev.alc.direccion ? 'Tú das las ideas; su equipo graba.' : 'Su equipo ya hace su contenido.'));
   return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('sol', 'orange')}Un día normal con el plan</h3><p>desde el mes ${ev.mesPrimeros}</p></div>
     <div class="mosaico">${tiles.join('')}</div>
@@ -296,7 +306,7 @@ function htmlEstrategia(r) {
       O ? `Oferta ${O.puntaje >= 75 ? 'irresistible' : O.puntaje >= 50 ? 'buena' : 'floja'} (${O.puntaje} de 100). Detalle abajo.` : 'Ármala en el paso 6: ahí ves cuánto cuesta y si deja ganancia.'],
     ['megafono', 'orange', 'Qué publicamos', ev.alc.contenido ? '3 videos por semana. Tú los haces; él los aprueba.' : ev.alc.direccion ? 'Tú das 3 guiones por semana; su equipo los graba.' : 'Su equipo sigue con su contenido; tú le das ideas cada mes.',
       'De cada 10 publicaciones: 6 enseñan (errores, precios, cómo elegir), 3 muestran casos y clientes reales, 1 invita a comprar.'],
-    ['sube', 'green', 'Cómo lo promocionamos', ev.alc.campanas ? `${fmtM(ev.presupuesto, mon)} al mes en anuncios (${fmtM(ev.presupuesto / 30, mon)} por día). Usamos como anuncio los videos que más gustaron.` : 'Sin anuncios por ahora: contenido y recomendaciones.',
+    ['sube', 'green', 'Cómo lo promocionamos', ev.ads ? `${ev.ads.nombrePlataforma}, objetivo «${ev.ads.objetivoNombre}», con ${fmtM(ev.presupuesto, mon)} al mes. Usamos como anuncio los videos que más gustaron. Detalle abajo.` : ev.alc.campanas ? `${fmtM(ev.presupuesto, mon)} al mes en anuncios. Usamos como anuncio los videos que más gustaron.` : 'Sin anuncios por ahora: contenido y recomendaciones.',
       ev.alc.campanas && cplMax > 0 ? `Lo máximo que conviene pagar para que alguien escriba: ${fmtM(cplMax, mon)}. Si cuesta más, se cambia el anuncio.` : ''],
     ['chat', 'teal', 'Cómo cerramos la venta', 'Contestar en menos de 5 minutos, mandar el precio en menos de 2 días y volver a escribir a los 1, 3 y 7 días.',
       `Con el plan le escribirían unas ${f1(ev.mensajesDiaNec)} personas por día.${resp ? ` Hoy contesta ${resp}.` : ''}`],
@@ -468,8 +478,8 @@ function htmlPrecio(r) {
   return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('herramienta', 'gray')}El servicio y el precio</h3><p>${esc(fmtM(ev.precio, mon))} cada mes</p></div>
     <div>${serv}</div>
     <p class="texto"><b>Tu precio es mensual:</b> ${esc(fmtM(ev.precio, mon))} por cada mes de trabajo, mes a mes. El plan sugerido es de ${ev.D} meses porque es lo que tarda en verse todo el resultado.</p>
-    <p class="texto"><b>Por qué cobras ${esc(fmtM(ev.precio, mon))}:</b> en un mes normal, contando lo mínimo, llegan unos ${f1(ev.mesNormalPiso)} clientes nuevos. Cada uno le deja ${esc(fmtM(ev.g1, mon))} en un año. Te quedas con ${fraccion(n(R.partePct), mon)}${ev.forzado ? `, pero eso es menos que tu mínimo, así que cobras ${esc(fmtM(n(R.precioMinimo), mon))}` : ''}. Son unas ${fmtN(ev.horas)} horas tuyas al mes${Number.isFinite(hora) ? ` (${esc(fmtM(hora, mon))} por hora)` : ''}.</p>
-    <p class="texto"><b>Garantía:</b> si al mes ${ev.D} no llegamos a ${esc(pr.frase)}, sigo trabajando sin cobrar hasta llegar. Vale si él cumple su parte: aprobar rápido, pagar los anuncios${ev.guiaActiva ? ', seguir tu guía' : ''} y anotar de dónde viene cada cliente.</p></section>`;
+    <p class="texto"><b>Por qué cobras ${esc(fmtM(ev.precio, mon))}:</b> en un mes normal, contando lo mínimo, llegan unos ${f1(ev.mesNormalPiso)} clientes nuevos. Cada uno le deja ${esc(fmtM(ev.g1, mon))} en un año. Te quedas con ${fraccion(n(R.partePct), mon)}${ev.forzado ? `, pero eso es menos que tu mínimo, así que cobras ${esc(fmtM(n(R.precioMinimo), mon))}` : ev.topePorBolsillo ? `: saldrían ${esc(fmtM(ev.precioSinTope, mon))}, pero lo bajé a ${esc(fmtM(ev.precio, mon))} para que tu precio más los anuncios no pasen de 15 de cada 100 bolivianos que vende` : ''}. Son unas ${fmtN(ev.horas)} horas tuyas al mes${Number.isFinite(hora) ? ` (${esc(fmtM(hora, mon))} por hora)` : ''}.</p>
+    <p class="texto"><b>Garantía:</b> ${esc(textoGarantia(ev))} Vale si él cumple su parte: aprobar rápido, pagar los anuncios${ev.guiaActiva ? ', seguir tu guía' : ''} y anotar de dónde viene cada cliente.</p></section>`;
 }
 
 // ---------- Revisión ----------
@@ -501,7 +511,7 @@ function htmlMas(r) {
     ['Cuántos compran', `Un negocio ordenado de su tipo vende a ${fmtN(c.bench * 100, 1)} de cada 100 personas que sí pueden comprar.${ev.guiaActiva ? ' Con tu guía, si la sigue, recorre la mitad del camino que le falta.' : ''}`, `Hoy: ${fmtN(c.hoy * 100, 1)} de cada 100${c.medido ? '' : ' (lo adiviné por cómo atiende)'}\nCon el plan: ${fmtN(c.plan * 100, 1)} de cada 100`],
     ['Qué trae el plan en un mes normal', ev.modo === 'optimizar' ? 'La misma plata en anuncios, pero cada venta cuesta menos.' : 'Personas nuevas de tus anuncios y tu contenido, más las que compran porque atiende mejor.',
       ev.modo === 'optimizar' ? `Hoy cada venta cuesta ${fmtM(ev.opt.cpaHoy, mon)}\nVentas al mes: ${f1(ev.promesa.ventasHoy)} → mínimo ${f1(ev.promesa.ventasPiso)}, esperado ${f1(ev.promesa.ventasMeta)}`
-        : `Anuncios: ${fmtM(ev.presupuesto, mon)} ÷ ${fmtM(ev.cpl, mon)} = ${f1(ev.leadsPagaMes)} personas\nContenido: ${f1(ev.leadsCont)} personas\nClientes nuevos al mes: anuncios ${f1(ev.fuentes.campanas)} · contenido ${f1(ev.fuentes.contenido)} · atender mejor ${f1(ev.fuentes.guia)}`],
+        : `${ev.ads ? `Anuncios (${ev.ads.nombrePlataforma}, «${ev.ads.objetivoNombre}»): ${fmtM(ev.presupuesto, mon)} = USD ${fmtN(ev.ads.usd)} → ${fmtN(ev.ads.vistas)} vistas → ${fmtN(ev.ads.resultados)} ${ev.ads.resultadoNombre}${ev.ads.llegadas > 0 ? ` → ${f1(ev.ads.llegadas)} llegan` : ''} → ${f1(ev.ads.clientes)} compran` : 'Sin anuncios'}\nContenido: ${f1(ev.leadsCont)} personas\nClientes nuevos al mes: anuncios ${f1(ev.fuentes.campanas)} · contenido ${f1(ev.fuentes.contenido)} · atender mejor ${f1(ev.fuentes.guia)}`],
     ['Si le caben', 'Cada cliente nuevo ocupa un lugar: si le pagan cada mes, mientras siga pagando; si vuelve a comprar, cada vez que vuelve. Si no hay lugar, ese cliente no lo cuento.', ev.cap.sabe && !ev.cap.legado ? `Lugares libres: ${fmtN(ev.cap.libre)}${ev.cap.extra > 0 ? ` (+${fmtN(ev.cap.extra)} si contrata, desde el mes ${ev.cap.mesContrata + 1})` : ''}\nEl plan necesita hasta ${f1(E.meta.capInfo.necesita)} en el mes ${E.meta.capInfo.mesPico}` : 'Falta saber cuánto puede atender.'],
     ['Cuántos meses dura', 'Un mes para preparar y 4 vueltas de venta: 2 para aprender y 2 para cosechar. Al principio rinde menos.', `1 + 4 × ${fmtN(ev.ciclo)} días ÷ 30 → ${ev.Dauto} meses${ev.D !== ev.Dauto ? ` (lo cambiaste a ${ev.D})` : ''}\nLo mínimo es 2/3 de lo esperado; lo mejor, 4/3.`],
     ['Cuánto cobras', `Te quedas con ${fraccion(n(R.partePct), mon)} que le haces ganar en un mes normal, contando lo mínimo. Nunca menos de ${fmtM(n(R.precioMinimo), mon)}.`, `${f1(ev.mesNormalPiso)} clientes × ${fmtM(ev.g1, mon)} = ${fmtM(ev.valorMesPiso, mon)} al mes\n× ${fmtN(n(R.partePct))} de cada 100 = ${fmtM(ev.precioValor, mon)} → cobras ${fmtM(ev.precio, mon)}`],
@@ -627,10 +637,21 @@ function detalleCobras(r) {
 }
 function detallePrometes(r) {
   const ev = r.ev, pr = promesaDe(ev), mon = ev.R.moneda, P = ev.promesa;
+  const que = {
+    interesados: `Prometes <b>personas interesadas que sí pueden comprar</b>, no ventas: traerlas depende de ti (anuncios y contenido). Que compren depende también de cómo atienden ellos.`,
+    llegadas: `Prometes <b>personas que llegan a la tienda con el cupón</b>, no ventas: traerlas depende de ti (videos, anuncios y cupón). Lo que pasa adentro de la tienda (precio, atención, producto) depende de ellos. Se cuentan los cupones validados en la tienda.`,
+    visitas: `Prometes <b>personas que entran a su página web</b>: eso depende de tus anuncios. Que compren depende de su web, sus precios y su atención.`,
+    alcance: `Prometes <b>personas de su zona que ven sus videos</b>. Ojo: eso solo calienta a la gente; para clientes este mes conviene otro objetivo.`,
+  }[P.tipo];
   return `<div class="grande-frase"><span>Le prometes</span><b class="enorme">${esc(pr.grande)}</b><span>${esc(pr.unidad)}</span></div>
-    <p class="texto">${esc(pr.frase[0].toUpperCase() + pr.frase.slice(1))}, ${P.tipo === 'interesados' ? `entre el mes 2 y el ${ev.D}.` : 'en lo que dura el plan.'}</p>
-    <p class="texto">${P.tipo === 'interesados' ? `Prometes <b>personas interesadas que sí pueden comprar</b>, no ventas: traerlas depende de ti (anuncios y contenido). Que compren depende también de cómo atienden ellos. Cada persona interesada te cuesta unos ${esc(fmtM(P.costoInteresadoBueno, mon))} en anuncios. Es el número más bajo esperado: lo normal es llegar a más.` : `Prometes <b>ventas por anuncios</b> porque ya tiene anuncios que venden y sabemos cuánto le cuesta cada venta hoy (${esc(fmtM(P.cpaHoy, mon))}). Con lo mínimo, cada venta costaría unos ${esc(fmtM(P.cpaPiso, mon))}.`}</p>
-    <p class="texto"><b>Garantía:</b> si no llegas, sigues trabajando sin cobrar hasta llegar, siempre que él cumpla su parte.</p>`;
+    <p class="texto">${esc(pr.frase[0].toUpperCase() + pr.frase.slice(1))}, ${P.tipo !== 'ventas' ? `entre el mes 2 y el ${ev.D}.` : 'en lo que dura el plan.'}</p>
+    <p class="texto">${P.tipo !== 'ventas' ? `${que} ${P.costoResultado > 0 ? `Cada una cuesta unos ${esc(fmtM(P.costoResultado, mon))} en anuncios.` : ''} Es el número más bajo esperado: lo normal es llegar a más.` : `Prometes <b>ventas por anuncios</b> porque ya tiene anuncios que venden y sabemos cuánto le cuesta cada venta hoy (${esc(fmtM(P.cpaHoy, mon))}). Con lo mínimo, cada venta costaría unos ${esc(fmtM(P.cpaPiso, mon))}.`}</p>
+    <p class="texto"><b>Garantía:</b> ${esc(textoGarantia(ev))}</p>`;
+}
+function textoGarantia(ev) {
+  const t = String(ev.R.garantiaTexto || '').trim(), fr = promesaDe(ev).frase;
+  if (t) return t.replace(/\{meses\}/g, String(ev.D)).replace(/\{promesa\}/g, fr);
+  return `si al mes ${ev.D} no llegamos a ${fr}, sigo trabajando sin cobrar hasta llegar, siempre que el dueño cumpla su parte.`;
 }
 function abrirDetalle(tipo) {
   const dlg = $('#detalle'); if (!dlg || !ultimo || !ultimo.ev) return;
@@ -641,3 +662,215 @@ function abrirDetalle(tipo) {
   if (!dlg.open) { try { dlg.showModal(); } catch { dlg.setAttribute('open', ''); } }
 }
 function cerrarDetalle() { const dlg = $('#detalle'); estado.detalle = null; if (dlg && dlg.open) { try { dlg.close(); } catch { dlg.removeAttribute('open'); } } }
+
+// =================== Anuncios: embudo y recomendación ===================
+function pasosEmbudo(a) {
+  const P = [], add = (etq, v, nota, tasa = true) => P.push({ etq, v, nota, tasa });
+  add('Vistas del anuncio', a.vistas, a.plataforma !== 'meta' && a.vistas - a.vistasPagadas > 1 ? `${fmtN(a.vistasPagadas)} pagadas + unas ${fmtN(a.vistas - a.vistasPagadas)} que la plataforma da gratis cuando el video gusta` : '', false);
+  if (a.objetivo === 'local' || a.objetivo === 'conocer') add('Personas distintas que lo ven', a.alcance, `cada una lo ve unas ${fmtN(a.frecuencia, 1)} veces`, false);
+  if (a.objetivo === 'mensajes' || a.objetivo === 'formulario') add('Tocan el anuncio', a.clics, '', false);
+  if (a.objetivo === 'web') add('Entran a la web', a.clics, '', false);
+  if (a.objetivo === 'local') { add('Piden el cupón o escriben', a.resultados); add('Llegan a la tienda', a.llegadas); }
+  if (a.objetivo === 'mensajes') { add('Le escriben por WhatsApp', a.resultados); add('Sí pueden comprar', a.calificados); }
+  if (a.objetivo === 'formulario') { add('Dejan sus datos', a.resultados); add('Contestan cuando les escribes', a.contactados); add('Sí pueden comprar', a.calificados); }
+  if (a.objetivo === 'conocer') { add('Le escriben solas', a.resultados); add('Sí pueden comprar', a.calificados); }
+  add('Compran', a.clientes);
+  return P;
+}
+function htmlFunnel(a) {
+  const P = pasosEmbudo(a), max = Math.max(1, ...P.map(x => x.v));
+  return `<ol class="embudo">${P.map((x, i) => {
+    const w = 18 + 82 * (x.v > 1 ? Math.log(x.v) / Math.log(max) : 0);
+    const prev = i > 0 ? P[i - 1].v : 0, tasa = x.tasa && prev > 0 ? x.v / prev * 100 : null;
+    return `<li><div class="emb-barra" style="width:${clamp(w, 18, 100)}%"><b>${esc(x.v >= 100 ? fmtN(x.v) : f1(x.v))}</b><span>${esc(x.etq)}</span></div>${tasa !== null ? `<small class="emb-tasa">${tasa >= 1 ? fmtN(tasa) : fmtN(tasa, 1)} de cada 100</small>` : ''}${x.nota ? `<small class="emb-nota">${esc(x.nota)}</small>` : ''}</li>`;
+  }).join('')}</ol>`;
+}
+function textoTrabajoAds(a) {
+  if (a.objetivo === 'local') return `Mandar el cupón y un recordatorio a unas ${fmtN(a.prospectar)} personas al mes (${fmtPorDia(a.prospectar / 30)}).`;
+  if (a.objetivo === 'mensajes') return `Contestar unas ${fmtN(a.resultados)} conversaciones al mes (${fmtPorDia(a.resultados / 30)}) y volver a escribir a unas ${fmtN(Math.max(0, a.calificados - a.clientes))} que podían comprar y no compraron.`;
+  if (a.objetivo === 'formulario') return `Llamar o escribir a unos ${fmtN(a.resultados)} formularios al mes (${fmtPorDia(a.resultados / 30)}); contestan unos ${fmtN(a.contactados)}.`;
+  if (a.objetivo === 'web') return `Contestar dudas de unas ${fmtN(a.mensajes)} personas al mes.`;
+  return `Contestar a unas ${fmtN(a.resultados)} personas que escriben solas.`;
+}
+function htmlEmbudoAds(r, compacto) {
+  const ev = r.ev, a = ev.ads, mon = ev.R.moneda; if (!a) return '';
+  const gv = ev.equilibrio ? ev.equilibrio.ganVenta : 0;
+  const ventasPaga = gv > 0 ? ev.presupuesto / gv : null;
+  const tile = (k, v, s) => `<div class="mesa-item"><span class="kicker">${esc(k)}</span><span class="grande">${esc(v)}</span><p>${esc(s)}</p></div>`;
+  const tiles = [
+    tile(a.objetivo === 'local' ? 'Cada persona que llega' : `Cada ${a.objetivo === 'formulario' ? 'formulario' : a.objetivo === 'web' ? 'visita' : a.objetivo === 'mensajes' ? 'conversación' : 'persona'}`, fmtM(a.objetivo === 'local' ? a.costoLlegadaBs : a.costoResultadoBs, mon), a.objetivo === 'local' ? `Y cada persona que pide el cupón: ${fmtM(a.costoResultadoBs, mon)}.` : 'Lo que cuesta en anuncios.'),
+    tile('Cada cliente', fmtM(a.costoClienteBs, mon), 'Lo que cuesta en anuncios que alguien compre.'),
+  ];
+  if (ventasPaga !== null) tiles.push(tile('Los anuncios se pagan con', `${f1(ventasPaga)} ventas`, `Cada venta le deja ${fmtM(gv, mon)}.`));
+  const cab = `<div class="ads-cab"><span class="etq azul">${esc(a.nombrePlataforma)}</span><span class="etq">${esc(a.objetivoNombre)}</span>${a.fuente === 'real' ? '<span class="etq ok">con sus datos reales</span>' : '<span class="etq">promedios de mercado</span>'}</div>
+    <p class="texto">Con <b>${esc(fmtM(ev.presupuesto, mon))}</b> al mes (unos USD ${fmtN(a.usd)}, al cambio de Bs ${fmtN(a.tc, 2)}), en un mes normal, cuando la campaña ya aprendió:</p>`;
+  const rango = `<p class="texto">Compras por anuncios al mes: lo mínimo <b>${f1(a.clientes * 2 / 3)}</b> · lo esperado <b>${f1(a.clientes)}</b> · si sale muy bien <b>${f1(a.clientes * 4 / 3)}</b>.</p>`;
+  if (compacto) return cab + htmlFunnel(a) + rango + `<div class="mesa">${tiles.join('')}</div>` + (a.avisos.length ? `<p class="texto">${ICO.ojo} ${esc(a.avisos[0])}</p>` : '');
+  return cab + htmlFunnel(a) + rango + `<div class="mesa">${tiles.join('')}</div>` + `<p class="texto"><b>Trabajo que esto le da:</b> ${esc(textoTrabajoAds(a))}</p>`;
+}
+function htmlArmadoAds(r) {
+  const ev = r.ev, a = ev.ads, mon = ev.R.moneda, p = estado.prospecto;
+  const ciudad = p.negocio.ciudad || 'su ciudad', ta = n(p.negocio.temporadaAlta);
+  const filas = [];
+  for (const x of a.partes) {
+    filas.push([`${x.nombre}${a.partes.length > 1 ? ` (${fmtN(x.sh * 100)} de cada 100 Bs)` : ''}`, `Campaña: «${x.campana}».`]);
+    filas.push(['Cómo gastar la plata', x.modo === 'continuo' ? `Todo el mes: unos ${fmtM(x.bs / 30, mon)} (USD ${fmtN(x.usd / 30, 1)}) por día.` : x.modo === 'pulsos' ? `En ${x.dias} días fuertes, unos USD ${fmtN(x.usd / x.dias, 1)} por día (el mínimo de TikTok Ads es USD 20 por día). Ideal: de jueves a domingo, cerca de fin de mes o de la quincena.` : `Con «Promocionar» desde la app: unos USD ${fmtN(x.usd / x.dias, 1)} por día durante ${x.dias} días, sobre los videos que mejor van.`]);
+  }
+  filas.push(['A quién mostrarlo', a.alcanceNegocio === 'barrio' ? 'Solo a gente que vive o trabaja a 3–5 km de la tienda, en la edad de su cliente.' : a.alcanceNegocio === 'ciudad' ? `A toda ${ciudad}, por intereses de su rubro.` : a.alcanceNegocio === 'pais' ? 'A todo Bolivia, solo donde llegan sus envíos.' : 'A dueños y encargados de negocios, con un formulario que pregunte rubro y tamaño para filtrar.']);
+  filas.push(['Videos que hacen falta', `${a.videosMes} videos nuevos al mes. En TikTok un anuncio se cansa en 1 o 2 semanas: hay que cambiarlo seguido.`]);
+  filas.push(['Cuándo', `Cerca de fin de mes o de la quincena, cuando la gente cobra${ta ? `, y fuerte antes de ${MESES[ta - 1]}, su mes más fuerte` : ''}.`]);
+  const sup = [];
+  sup.push(['Dólar', `Bs ${fmtN(a.tc, 2)} por dólar`, n(p.anuncios.tc) > 0 ? 'dato del cliente' : 'Banco Central, nov. 2026']);
+  sup.push(['Mil vistas pagadas cuestan', fmtM(a.cpmBs, mon), n(p.anuncios.cpmReal) > 0 ? 'dato del cliente' : 'promedio aproximado']);
+  const pe = pasosEmbudo(a);
+  for (let i = 1; i < pe.length; i++) if (pe[i].tasa && pe[i - 1].v > 0) sup.push([`De cada 100 «${minus1(pe[i - 1].etq)}», ${minus1(pe[i].etq)}`, fmtN(pe[i].v / pe[i - 1].v * 100, 1), n(p.anuncios.costoResultadoReal) > 0 && i <= 2 ? 'calculado con su costo real' : 'promedio aproximado']);
+  return `<div class="tabla-envoltura"><table class="tabla-armado"><tbody>${filas.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</tbody></table></div>
+    ${a.avisos.length ? `<ul class="avisos">${a.avisos.map(x => `<li>${ICO.ojo}<span>${esc(x)}</span></li>`).join('')}</ul>` : ''}
+    <details><summary class="btn-borde" style="display:inline-flex;cursor:pointer">De dónde salen estos números</summary>
+      <div class="tabla-envoltura"><table><thead><tr><th>Supuesto</th><th class="n">Valor</th><th>Fuente</th></tr></thead><tbody>${sup.map(([k, v, f]) => `<tr><td>${esc(k)}</td><td class="n">${esc(v)}</td><td><span class="etq ${f.startsWith('dato') || f.startsWith('calculado') ? 'ok' : ''}">${esc(f)}</span></td></tr>`).join('')}</tbody></table></div>
+      <p class="texto">Son promedios aproximados y prudentes para Bolivia. Los calibré con un caso real en La Paz: con estos promedios, ese caso queda cerca de «si sale muy bien», no de lo esperado. Cuando el cliente ya pautó, anota sus datos reales en el paso 7 y se usan esos.</p></details>`;
+}
+function htmlAnuncios(r) {
+  const ev = r.ev;
+  const cab = `<div class="tarjeta-cab"><h3>${icoSq('megafono', 'orange')}Los anuncios, paso a paso</h3><p>${ev.ads ? 'un mes normal' : ''}</p></div>`;
+  if (!ev.ads) return `<section class="tarjeta">${cab}<p class="texto">${ev.modo === 'optimizar' ? 'El trabajo es mejorar sus anuncios de hoy: los números salen de lo que hoy le cuesta cada venta.' : 'Este plan no tiene anuncios.'}</p></section>`;
+  return `<section class="tarjeta" id="sec-anuncios">${cab}${htmlEmbudoAds(r, false)}<h4 class="sub-titulo">${icoSq('herramienta', 'gray')}Cómo armar la campaña</h4>${htmlArmadoAds(r)}</section>`;
+}
+
+// =================== Vista del cliente (para mostrar en la llamada) ===================
+const NOMBRE_ESC = { piso: ['Escenario conservador', 'Piso: si las cosas salen por debajo de lo normal'], meta: ['Escenario esperado', 'Meta: lo que esperamos con estos números'], techo: ['Escenario optimista', 'Techo: si los videos y la oferta pegan fuerte'] };
+function fuenteDato(clave, valorDefecto) {
+  const P = estado.prospecto, v = getValor(clave);
+  if (vacio(v)) return valorDefecto ? ['Promedio prudente', ''] : ['—', ''];
+  const f = P.fuentes[clave];
+  if (f === 'estimado') return ['Estimado', 'ojo'];
+  if (f === 'calculado') return ['Calculado con tus datos', 'azul'];
+  return ['Dato tuyo', 'ok'];
+}
+function htmlVistaCliente(r) {
+  const p = estado.prospecto, R = estado.reglas, mon = R.moneda;
+  const fecha = new Date().toLocaleDateString('es-BO', { day: 'numeric', month: 'long', year: 'numeric' });
+  const nom = p.negocio.nombre || 'tu negocio';
+  const portada = `<header class="vc-portada"><p class="vc-marca">${esc(R.marca || '')}</p><h1>Proyección de resultados</h1><p class="vc-para">para <b>${esc(nom)}</b> · ${esc(fecha)}</p>
+    <p class="vc-sub">Calculada con los números de tu negocio y con promedios de mercado prudentes. Te muestro tres escenarios: el conservador, el esperado y el optimista.</p></header>`;
+  if (!r || r.incompleto || !r.ev) return `<div class="vc">${portada}<section class="vc-sec"><p class="texto">Todavía faltan datos para armar la proyección: anota al menos cuánto paga un cliente (paso 3).</p></section></div>`;
+  const ev = r.ev, E = ev.escenarios, mt = ev.foco.mt, a = ev.ads, md = ev.metaDueno, pr = promesaDe(ev), D = ev.D;
+  // Hoy
+  const hoyT = [];
+  if (n(p.negocio.facturacion) > 0) hoyT.push(['Vendes al mes', fmtM(n(p.negocio.facturacion), mon)]);
+  if (n(p.hoy.clientesMes) > 0) hoyT.push(['Clientes nuevos al mes', f1(n(p.hoy.clientesMes))]);
+  if (n(p.hoy.interesadosMes) > 0) hoyT.push(['Te escriben o preguntan', `${fmtPorDia(n(p.hoy.interesadosMes) / ev.dias)}`]);
+  if (n(p.hoy.interesadosMes) > 0 && n(p.hoy.clientesMes) > 0) hoyT.push(['De cada 100 que preguntan, compran', fmtN(Math.min(100, n(p.hoy.clientesMes) / n(p.hoy.interesadosMes) * 100), 1)]);
+  const hoy = hoyT.length ? `<section class="vc-sec"><h2>Dónde estás hoy</h2><div class="vc-tiles">${hoyT.map(([k, v]) => `<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}</div></section>` : '';
+  // Meta
+  const meta = md ? `<section class="vc-sec"><h2>Lo que quieres lograr</h2><p class="vc-grande-txt">${esc(tituloMeta(md, mon).replace(/^Quiere/, 'Quieres'))}.</p>
+    <p class="texto">${md.tipo === 'clientes' ? `Eso es ${esc(fmtPorDia(md.clientesDia))} clientes nuevos.` : `Eso es ${esc(fmtM(md.ventasDia, mon))} más en ventas por día.`} ${esc(coberturaCliente(md, mon))}</p>
+    <div class="cobertura"><i class="${estCob(md.cobertura)}" style="width:${clamp(md.cobertura, 0, 1) * 100}%"></i></div></section>` : '';
+  // Tres escenarios
+  const tarjeta = k => {
+    const e = E[k], roi = e.roi1, rec = e.recupero;
+    return `<article class="vc-esc vc-${k}"><p class="vc-esc-tit">${NOMBRE_ESC[k][0]}</p><p class="vc-esc-sub">${NOMBRE_ESC[k][1]}</p>
+      <div class="vc-roi"><b>${fmtN(roi, 1)}×</b><span>por cada Bs 1 que inviertes, te vuelven Bs ${fmtN(roi, 1)}</span></div>
+      <dl>
+        <div><dt>Clientes nuevos</dt><dd>${f1(e.N)}</dd></div>
+        <div><dt>Ventas nuevas en su primer año</dt><dd>${esc(fmtM(e.ventas1, mon))}</dd></div>
+        <div><dt>Ganancia en su primer año</dt><dd>${esc(fmtM(e.V1, mon))}</dd></div>
+        <div><dt>Inversión total (${D} meses)</dt><dd>${esc(fmtM(e.invNeta, mon))}</dd></div>
+        <div><dt>Retorno</dt><dd>${roi >= 1 ? '+' : ''}${fmtN((roi - 1) * 100)}%</dd></div>
+        <div><dt>Recuperas tu inversión</dt><dd>${rec === null ? 'después de 3 años' : rec === 0 ? 'desde el inicio' : 'en el mes ' + rec}</dd></div>
+      </dl></article>`;
+  };
+  const maxB = Math.max(...['piso', 'meta', 'techo'].map(k => Math.max(E[k].V1, E[k].invNeta)), 1);
+  const barras = ['piso', 'meta', 'techo'].map(k => `<div class="grupo-barras"><h4>${NOMBRE_ESC[k][0]}</h4>${barraH('Inviertes', E[k].invNeta, maxB, 'var(--gray)', fmtM(E[k].invNeta, mon))}${barraH('Ganas', E[k].V1, maxB, k === 'piso' ? 'var(--s2)' : k === 'meta' ? 'var(--s1)' : 'var(--s3)', fmtM(E[k].V1, mon))}</div>`).join('');
+  const escenarios = `<section class="vc-sec"><h2>Tres escenarios</h2><p class="texto">«Ganancia» es lo que te queda después de pagar tu producto, no lo que te pagan. Cuento el primer año de cada cliente nuevo; si siguen comprando, ganas más.</p>
+    <div class="vc-escenarios">${tarjeta('piso')}${tarjeta('meta')}${tarjeta('techo')}</div>
+    <div class="grupos-barras vc-barras">${barras}</div>
+    ${ev.limitadoPorCapacidad ? `<p class="texto">${ICO.ojo} Con lo que hoy puedes atender, no te caben más clientes${ev.cap.extra > 0 ? ', aunque contrates a quien dijiste' : ''}: por eso el escenario optimista no sube más. Si sumas gente, sube.</p>` : ''}</section>`;
+  // Embudo
+  const embudo = a ? `<section class="vc-sec"><h2>Cómo llegamos a esos números</h2>
+    <p class="texto">Con <b>${esc(fmtM(ev.presupuesto, mon))}</b> al mes en ${esc(a.nombrePlataforma)} (los pagas directo a la plataforma, desde tu cuenta), en un mes normal del escenario esperado:</p>
+    ${htmlFunnel(a)}
+    <p class="texto">Cada cliente te cuesta unos <b>${esc(fmtM(a.costoClienteBs, mon))}</b> en publicidad${a.objetivo === 'local' ? `, y cada persona que llega a tu tienda, unos <b>${esc(fmtM(a.costoLlegadaBs, mon))}</b>` : ''}.</p></section>` : '';
+  // Alcancía
+  const hasta = Math.min(E.meta.H, Math.max(D + 4, (E.meta.recupero || 0) + 2));
+  const alcancia = `<section class="vc-sec"><h2>Tu inversión, mes a mes</h2>
+    <p class="texto">Piensa en una alcancía. Cada mes sale plata para el servicio y la publicidad (naranja) y tus clientes nuevos van metiendo plata de vuelta (verde). La línea azul es cómo va la alcancía. ${E.meta.recupero ? `En el mes ${E.meta.recupero} vuelve a cero: ya recuperaste todo, y desde ahí todo es ganancia.` : ''}</p>
+    ${graficoMeses(ev, hasta)}</section>`;
+  // Punto de equilibrio
+  const eq = ev.equilibrio;
+  let equilibrio = '';
+  if (eq && eq.ventas) {
+    if (mt.tipo === 'recurrente') {
+      let acum = 0, mesCubre = null; const cz = E.meta.cierres || [];
+      for (let m = 1; m < cz.length; m++) { acum += cz[m] || 0; if (acum >= eq.ventas) { mesCubre = m; break; } }
+      equilibrio = `<section class="vc-sec vc-destacado"><h2>Tu punto de equilibrio</h2><p class="vc-grande-txt">Con <b>${f1(eq.ventas)} clientes nuevos</b> pagándote cada mes, cubres toda la inversión del mes.</p>
+        <p class="texto">La inversión del mes es ${esc(fmtM(eq.costoMes, mon))} (servicio + publicidad) y cada cliente te deja ${esc(fmtM(eq.ganVenta, mon))} cada mes. Como los clientes se van sumando mes a mes, ${mesCubre ? `en el escenario esperado ya los tienes en el mes ${mesCubre}` : 'en el escenario esperado todavía no se llega en este plan'}.</p></section>`;
+    } else {
+      const cubre = E.meta.mesNormal >= eq.ventas;
+      equilibrio = `<section class="vc-sec vc-destacado"><h2>Tu punto de equilibrio</h2><p class="vc-grande-txt">Con <b>${f1(eq.ventas)} ventas nuevas</b> al mes cubres toda la inversión del mes.</p>
+        <p class="texto">La inversión del mes es ${esc(fmtM(eq.costoMes, mon))} (servicio + publicidad) y cada venta te deja ${esc(fmtM(eq.ganVenta, mon))}. En un mes normal del escenario esperado llegan unos ${f1(E.meta.mesNormal)} clientes nuevos: ${cubre ? 'más de lo que necesitas para cubrirla' : 'todavía no alcanza para cubrirla en un solo mes, pero cada cliente vuelve a comprar después'}.</p></section>`;
+    }
+  }
+  // Cómo lo calculamos
+  const k = c => `linea:${ev.foco.id}:${c}`;
+  const filas = [['Precio promedio de una venta', fmtM(mt.ticket, mon), fuenteDato(k('ticket'))], ['De cada 100 Bs que cobras, te quedan', fmtN(mt.m * 100), fuenteDato(k('margen'), true)]];
+  if (mt.tipo === 'recurrente') filas.push(['Meses que se queda un cliente', fmtN(mt.vida), fuenteDato(k('vidaMeses'), true)]);
+  if (mt.tipo === 'repetida') { filas.push(['Veces que te compra al año', fmtN(mt.ppy, 1), fuenteDato(k('comprasAnio'), true)]); filas.push(['Años que te sigue comprando', fmtN(mt.anios, 1), fuenteDato(k('aniosCliente'), true)]); }
+  filas.push(['Días entre la primera pregunta y el pago', fmtN(ev.ciclo), fuenteDato(k('cicloDias'), true)]);
+  filas.push(['De cada 100 que pueden comprar, compran', `hoy ${fmtN(ev.cierre.hoy * 100, 1)} → con el plan ${fmtN(ev.cierre.plan * 100, 1)}`, ev.cierre.medido ? ['Calculado con tus datos', 'azul'] : ['Promedio prudente', '']]);
+  if (a) {
+    filas.push(['Dólar para pagar la publicidad', `Bs ${fmtN(a.tc, 2)}`, n(p.anuncios.tc) > 0 ? ['Dato tuyo', 'ok'] : ['Banco Central (nov. 2026)', '']]);
+    filas.push(['Mil vistas pagadas cuestan', fmtM(a.cpmBs, mon), n(p.anuncios.cpmReal) > 0 ? ['Dato tuyo', 'ok'] : ['Promedio de mercado', '']]);
+    if (n(p.anuncios.costoResultadoReal) > 0) filas.push([`Cada ${a.resultadoNombre.replace(/s$/, '')} cuesta`, fmtM(n(p.anuncios.costoResultadoReal), mon), ['Dato tuyo', 'ok']]);
+  }
+  const calculo = `<section class="vc-sec"><h2>Cómo lo calculamos</h2><p class="texto">Cada número tiene su origen. Donde no hay un dato tuyo, uso un promedio prudente: prefiero quedarme corto que prometerte de más.</p>
+    <div class="tabla-envoltura"><table class="vc-tabla"><thead><tr><th>Dato</th><th class="n">Valor</th><th>De dónde sale</th></tr></thead><tbody>${filas.map(([t, v, [f, c]]) => `<tr><td>${esc(t)}</td><td class="n">${esc(v)}</td><td><span class="etq ${c}">${esc(f)}</span></td></tr>`).join('')}</tbody></table></div></section>`;
+  // Plan
+  const fases = fasesPlan(ev);
+  const plan = `<section class="vc-sec"><h2>El plan, mes a mes</h2><ol class="calendario">${fases.map(f => `<li><span class="cal-mes">${f.desde === f.hasta ? `Mes ${f.desde}` : `Meses ${f.desde}–${f.hasta}`}</span><b>${esc(f.t)}</b><p>${esc(f.x)}</p></li>`).join('')}</ol></section>`;
+  // Inversión e incluye
+  const serv = SERVICIOS.filter(s => ev.alc[s.id]).map(s => ({ nombre: s.nombre.replace(' (lo haces tú)', '').replace(' (ellos graban)', ' (tu equipo graba)'), detalle: SERV_CLIENTE[s.id] || s.detalle }));
+  const inversion = `<section class="vc-sec"><h2>Tu inversión</h2><div class="vc-tiles"><div><span>Mi servicio</span><b>${esc(fmtM(ev.precio, mon))} al mes</b></div>${ev.alc.campanas ? `<div><span>Publicidad (la pagas tú, directo)</span><b>${esc(fmtM(ev.presupuesto, mon))} al mes</b></div>` : ''}<div><span>Plan sugerido</span><b>${D} meses</b></div></div>
+    <ul class="vc-lista">${serv.map(s => `<li>${ICO.ok}<span><b>${esc(s.nombre)}.</b> ${esc(s.detalle)}</span></li>`).join('')}</ul>
+    <p class="texto">Pagas mes a mes. El plan sugerido es de ${D} meses porque es lo que tarda en verse todo el resultado.</p></section>`;
+  // Lo que necesito de ti
+  const C = p.compromiso, nec = ['Una hora por semana para revisar los resultados juntos.', 'Aprobar los videos en 2 días como máximo.'];
+  if (ev.alc.campanas) nec.push('Pagar la publicidad directo a la plataforma, desde tu cuenta: ves cada boliviano que se gasta.');
+  if (ev.alc.guia) nec.push('Contestar rápido y volver a escribir a quien no compró (te enseño cómo).');
+  nec.push('Anotar de dónde viene cada cliente, para medir lo que funciona.');
+  const necesito = `<section class="vc-sec"><h2>Lo que necesito de ti</h2><ul class="vc-lista">${nec.map(x => `<li>${ICO.ok}<span>${esc(x)}</span></li>`).join('')}</ul></section>`;
+  // Garantía
+  const frC = fraseCliente(ev);
+  const garantia = `<section class="vc-sec vc-destacado"><h2>Mi garantía</h2><p class="vc-grande-txt">${esc(garantiaCliente(ev))}</p><p class="texto">Lo que te garantizo: ${esc(frC)}. Eso depende de mi trabajo.</p></section>`;
+  // Caso real
+  const caso = R.casoReal !== false ? `<section class="vc-sec"><h2>Un caso real</h2><div class="vc-caso"><b>Sneaker Fashion</b><span>Tienda de tenis · La Paz</span><p>Invirtió <b>1.512 Bs</b> (servicio + publicidad) y vendió <b>21.100 Bs</b>: casi 14 Bs en ventas por cada 1 invertido. Más de 236 mil vistas en 5 videos.</p></div></section>` : '';
+  const pie = `<footer class="vc-pie"><p>Estas son proyecciones hechas con tus números y promedios prudentes, no una promesa de ventas. Lo que te garantizo: ${esc(frC)}.</p><p>${esc(R.marca || '')} · ${esc(fecha)}</p></footer>`;
+  return `<div class="vc">${portada}${hoy}${meta}${escenarios}${embudo}${equilibrio}${alcancia}${calculo}${plan}${inversion}${necesito}${garantia}${caso}${pie}</div>`;
+}
+
+function coberturaCliente(md, mon) {
+  const c = md.cobertura, llega = c >= 1 ? 'llegas a tu meta y la pasas' : `llegas a ${fmtN(c * 100)} de cada 100 de tu meta`;
+  if (md.tipo === 'clientes') return `Con este plan tendrías unos ${f1(md.planMes)} clientes nuevos en un mes normal: ${llega}.`;
+  return `Con este plan, en el mes ${md.plazo} venderías unos ${fmtM(md.planAumento, mon)} más al mes: ${llega}.`;
+}
+
+// Textos para el cliente (le hablan de tú)
+const SERV_CLIENTE = {
+  estrategia: 'Tu cliente ideal, tu oferta, tus mensajes y el plan. Una reunión al mes para ver resultados.',
+  contenido: 'Guiones, grabación guiada, edición y publicación de tus videos.',
+  direccion: 'Ideas y guiones cada semana; tu equipo graba.',
+  campanas: 'Armo tu publicidad con los videos que mejor funcionan y la mido por ventas, no por «me gusta».',
+  guia: 'Te enseño qué responder, cuándo volver a escribir y cómo cerrar la venta.',
+  automatizacion: 'Respuesta automática por WhatsApp: contesta al instante, hace preguntas y agenda.',
+};
+function fraseCliente(ev) {
+  const P = ev.promesa;
+  if (P.tipo === 'ventas') return `pasar de ${f1(P.ventasHoy)} a al menos ${f1(P.ventasPiso)} ventas al mes por publicidad`;
+  const v = fmtN(P.valorPiso ?? P.interesadosPiso);
+  return { interesados: `al menos ${v} personas interesadas que sí te pueden comprar`, llegadas: `al menos ${v} personas que llegan a tu tienda con el cupón`, visitas: `al menos ${v} personas que entran a tu página web`, alcance: `al menos ${v} personas de tu zona que ven tus videos` }[P.tipo] || `al menos ${v} personas interesadas`;
+}
+function garantiaCliente(ev) {
+  const t = String(ev.R.garantiaTexto || '').trim(), fr = fraseCliente(ev);
+  if (t) { const x = t.replace(/\{meses\}/g, String(ev.D)).replace(/\{promesa\}/g, fr); return x[0].toUpperCase() + x.slice(1); }
+  return `Si al mes ${ev.D} no llegamos a ${fr}, sigo trabajando sin cobrarte hasta llegar, siempre que cumplas tu parte.`;
+}

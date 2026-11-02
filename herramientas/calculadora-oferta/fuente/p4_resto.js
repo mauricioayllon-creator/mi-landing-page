@@ -46,13 +46,17 @@ function datosIA(r) {
   return { moneda: ev.R.moneda, negocio: { nombre: p.negocio.nombre, rubro: p.negocio.rubro, ciudad: p.negocio.ciudad, ventasMes: n(p.negocio.facturacion) },
     productos: r.an.lista.map(x => ({ nombre: x.nombre, ventasMes: x.facturacion, deCada100LeQueda: Math.round(x.mt.m * 100), comoPaga: x.l.tipo, precio: x.mt.ticket, aQuien: TIPOS_VENTA[x.l.tipoVenta]?.nombre, competencia: x.l.competencia, puntos: x.puntaje })),
     potenciar: ev.foco.nombre, trabajo: ev.modo, servicios: Object.entries(ev.alc).filter(([, v]) => v).map(([k]) => k), respuesta: TXT_VER_CORTO[ev.veredicto],
-    metaDelDueno: md ? { quiere: tituloMeta(md, ev.R.moneda), clientesPorDia: +md.clientesDia.toFixed(2), coberturaDelPlan: Math.round(md.cobertura * 100) + '%' } : null,
-    capacidad: { leAlcanzaAtender: (ev.chequeos.find(c => c.id === 'capacidad') || {}).detalle, mensajesPorDiaConElPlan: +ev.mensajesDiaNec.toFixed(1), puedeContestar: n(p.capacidad.mensajesDia) || null },
+    metaDelDueno: !md ? null : r.lanz ? { tipo: md.tipo, quiere: Math.round(md.quiere), daElLanzamiento: Math.round(md.daLanz), daElPlanDeCadaMes: Math.round(md.daPlan) }
+      : { quiere: tituloMeta(md, ev.R.moneda), clientesPorDia: +md.clientesDia.toFixed(2), coberturaDelPlan: Math.round(md.cobertura * 100) + '%' },
+    capacidad: r.lanz ? { diaDelCanje: (ev.chequeos.find(c => c.id === 'atiende') || {}).detalle || null, stock: (ev.chequeos.find(c => c.id === 'stock') || {}).detalle || null, puedeContestar: n(p.capacidad.mensajesDia) || null }
+      : { leAlcanzaAtender: (ev.chequeos.find(c => c.id === 'capacidad') || {}).detalle, mensajesPorDiaConElPlan: +ev.mensajesDiaNec.toFixed(1), puedeContestar: n(p.capacidad.mensajesDia) || null },
     clienteIdeal: r.icp ? r.icp.lista.map(s => ({ tipo: s.nombre, gananciaAlAnio: Math.round(s.gananciaCliente), puntos: s.puntaje })) : null,
     anuncios: ev.ads ? { plataforma: ev.ads.nombrePlataforma, objetivo: ev.ads.objetivoNombre, presupuestoBs: ev.presupuesto, usd: Math.round(ev.ads.usd), vistasMes: Math.round(ev.ads.vistas), resultadosMes: Math.round(ev.ads.resultados), queSonResultados: ev.ads.resultadoNombre, llegadasMes: +ev.ads.llegadas.toFixed(1), comprasMes: +ev.ads.clientes.toFixed(1), avisos: ev.ads.avisos } : null,
     oferta: O ? { producto: O.nombre, loQueLogra: O.deseo, rapidez: O.tiempo, precio: O.precio, regalos: O.bonos.map(b => b.nombre), garantia: O.garantia, urgencia: O.urgencia, puntos: O.puntaje, valeVecesElPrecio: +O.ratio.toFixed(1) } : null,
     hallazgos: r.hallazgos.map(h => h.titulo + ': ' + h.texto), comoEstaHoy: ev.diag.etapas.map(e => ({ parte: e.nombre, problemas: e.notas })), numerosAdivinados: ev.estimados,
-    plan: { meses: ev.D, precioMes: ev.precio, promesa: promesaDe(ev).frase }, revision: ev.chequeos.map(c => ({ punto: c.nombre, estado: c.estado, detalle: c.detalle })), alternativas: r.alternativas };
+    plan: r.lanz ? { tipo: 'lanzamiento con fecha y cupón', precio: ev.precio, dosMitades: [ev.mitad1, ev.mitad2], numeroDeLaGarantia: ev.N, cuentaLaGarantia: ev.unidadGar[1], fechaDelCanje: p.lanzamiento.fecha || null, porque: p.lanzamiento.porque || null, publicidad: ev.publicidad, llegan: { minimo: +ev.escenarios.piso.unidades.toFixed(1), esperado: +ev.escenarios.meta.unidades.toFixed(1) }, compran: +ev.escenarios.meta.compras.toFixed(1), planDeCadaMes: ev.plan.ofrecer ? { precio: ev.plan.precio, conCompromiso: ev.plan.precioComp } : null }
+      : { meses: ev.D, precioMes: ev.precio, promesa: promesaDe(ev).frase },
+    revision: ev.chequeos.map(c => ({ punto: c.nombre, estado: c.estado, detalle: c.detalle })), alternativas: r.alternativas };
 }
 function claveIA(r) { try { return JSON.stringify(datosIA(r)); } catch { return ''; } }
 function promptIA(r) {
@@ -110,6 +114,7 @@ function conectarIA() { const b = $('#btn-ia'); if (b) b.addEventListener('click
 // ---------- Resumen ----------
 function textoResumen() {
   const r = ultimo; if (!r || !r.ev) return 'Faltan datos para armar el resumen.';
+  if (r.lanz) return textoResumenLanz();
   const ev = r.ev, mon = ev.R.moneda, E = ev.escenarios, p = estado.prospecto, pr = promesaDe(ev), l = [], md = ev.metaDueno;
   l.push(`${p.negocio.nombre || 'Prospecto'}${p.negocio.rubro ? ' (' + p.negocio.rubro + ')' : ''}`);
   l.push(`¿Le podemos cumplir? ${TXT_VER_CORTO[ev.veredicto]} (${ev.puntaje}/100)${r.hayRangos ? ` · números: ${({ prudente: 'lo peor', normal: 'lo normal', optimista: 'lo mejor' })[r.esc]} de cada rango` : ''}`);
@@ -153,7 +158,7 @@ function aviso(t) { const a = $('#aviso'); a.textContent = t; a.classList.add('v
 // ---------- Guardar ----------
 let DB = null, USER = null, esDueno = null, listaItems = [], listaCargada = false, listaNota = '', confirmarBorrar = null, unsubLista = null;
 function slug(s) { return (String(s || 'prospecto').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'prospecto') + '-' + Math.random().toString(36).slice(2, 7); }
-function resumenDoc() { const ev = ultimo && ultimo.ev; return { nombre: estado.prospecto.negocio.nombre || 'Sin nombre', rubro: estado.prospecto.negocio.rubro || '', fecha: new Date().toISOString(), veredicto: ev ? ev.veredicto : 'incompleta', puntaje: ev ? ev.puntaje : null, foco: ev ? ev.foco.nombre : '', precio: ev ? ev.precio : null, meses: ev ? ev.D : null, datos: clonar(estado.prospecto) }; }
+function resumenDoc() { const ev = ultimo && ultimo.ev; return { nombre: estado.prospecto.negocio.nombre || 'Sin nombre', rubro: estado.prospecto.negocio.rubro || '', fecha: new Date().toISOString(), veredicto: ev ? ev.veredicto : 'incompleta', puntaje: ev ? ev.puntaje : null, foco: ev ? ev.foco.nombre : '', precio: ev ? ev.precio : null, meses: ev && ev.D ? ev.D : null, modelo: estado.prospecto.modelo, datos: clonar(estado.prospecto) }; }
 function mensajeDb(e) { const c = e && e.code; if (c === 'invalid_argument') return 'Solo la dueña o el dueño de la calculadora puede guardar aquí.'; if (c === 'quota_exceeded') return 'Se llenó el espacio. Borra prospectos viejos.'; if (c === 'resource_exhausted') return 'Muchos guardados seguidos. Espera unos segundos.'; if (c === 'revoked') return 'Ya no tienes acceso para guardar.'; return 'No se pudo guardar. Revisa tu conexión.'; }
 async function guardarProspecto() {
   const doc = resumenDoc(), btn = $('#btn-guardar'); btn.disabled = true;
@@ -177,7 +182,7 @@ function renderLista() {
   const mon = estado.reglas.moneda;
   cont.innerHTML = listaItems.map(it => {
     const fecha = it.fecha ? new Date(it.fecha).toLocaleDateString('es-BO', { day: 'numeric', month: 'short', year: 'numeric' }) : '', conf = confirmarBorrar === it.id;
-    return `<div class="prospecto"><div><h4>${esc(it.nombre)} ${etqVer(it.veredicto)}</h4><p>${esc(fecha)}${it.foco ? ' · ' + esc(it.foco) : ''}${it.precio != null ? ' · ' + esc(fmtM(it.precio, mon)) + '/mes' : ''}</p></div>
+    return `<div class="prospecto"><div><h4>${esc(it.nombre)} ${etqVer(it.veredicto)}</h4><p>${esc(fecha)}${it.foco ? ' · ' + esc(it.foco) : ''}${it.precio != null ? ' · ' + esc(fmtM(it.precio, mon)) + (it.modelo === 'lanzamiento' ? ' por lanzamiento' : '/mes') : ''}</p></div>
       <div class="btns">${conf ? `<span class="texto">¿Borrar para siempre?</span><button class="btn-g btn-chico" type="button" data-borrar-si="${esc(it.id)}">Sí, borrar</button><button class="btn-g btn-chico" type="button" data-borrar-no="1">No</button>` : `<button class="btn-g btn-chico" type="button" data-abrir="${esc(it.id)}">Abrir</button><button class="btn-borde btn-chico" type="button" data-borrar="${esc(it.id)}">Borrar</button>`}</div></div>`;
   }).join('');
 }
@@ -196,6 +201,7 @@ function cargarProspecto(datos, id) {
   estado.prospecto = normalizarProspecto(clonar(datos)); estado.actualId = id || null; estado.abiertas = new Set(); estado.paso = 1;
   guardarLocal('co4.actual', estado.actualId); guardarLocal('co4.borrador', estado.prospecto); guardarLocal('co4.paso', 1);
   iaEstado = { resp: null, clave: '', error: '', cargando: false };
+  $('#ruta').innerHTML = htmlRutaLlamada();
   recalcular(); renderForm();
 }
 function suscribirLista() {
@@ -251,11 +257,14 @@ function iniciar() {
     const es = e.target.closest('[data-esc]'); if (es && !es.disabled) { estado.prospecto.escenarioDatos = es.dataset.esc; recalcular(); programarBorrador(); const nb = document.querySelector(`[data-esc="${CSS.escape(es.dataset.esc)}"]`); if (nb) nb.focus(); }
   });
   $$('[data-ejemplo]').forEach(b => b.addEventListener('click', () => {
-    const k = b.dataset.ejemplo, f = { brisa: ejemploBrisa, joyeria: ejemploJoyeria, cafe: ejemploCafe, minPlata: ejemploMinPlata, minAnillos: ejemploMinAnillos, minEmpresas: ejemploMinEmpresas }[k];
+    const k = b.dataset.ejemplo, f = { brisa: ejemploBrisa, joyeria: ejemploJoyeria, cafe: ejemploCafe, minPlata: ejemploMinPlata, minAnillos: ejemploMinAnillos, minEmpresas: ejemploMinEmpresas, lanzTenis: ejemploLanzTenis, lanzBebe: ejemploLanzBebe, lanzHeladeria: ejemploLanzHeladeria }[k];
     cargarProspecto({ ...f(), _ejemplo: k }, null); $('#menu-ejemplos').open = false; aviso('Ejemplo cargado.');
   }));
   document.addEventListener('click', e => { const m = $('#menu-ejemplos'); if (m.open && !m.contains(e.target)) m.open = false; });
-  $('#btn-nuevo').addEventListener('click', () => { cargarProspecto(prospectoVacio(), null); aviso('Prospecto nuevo.'); const el = document.querySelector('[data-clave="negocio.nombre"]'); if (el) el.focus(); });
+  // Lanzamiento o plan mensual: el selector está arriba de las preguntas y en el panel
+  document.addEventListener('click', e => { const b = e.target.closest('[data-modelo]'); if (b) { cambiarModelo(b.dataset.modelo); const nb = document.querySelector(`#modelo [data-modelo="${CSS.escape(b.dataset.modelo)}"]`); if (nb && b.closest('#modelo')) nb.focus(); } });
+  // «Nuevo» sigue en el modo en que estabas
+  $('#btn-nuevo').addEventListener('click', () => { cargarProspecto({ ...prospectoVacio(), modelo: estado.prospecto.modelo || leerLocal('co4.modelo') || 'mensual' }, null); aviso('Prospecto nuevo.'); const el = document.querySelector('[data-clave="negocio.nombre"]'); if (el) el.focus(); });
   $('#btn-guardar').addEventListener('click', guardarProspecto);
   $('#btn-copiar').addEventListener('click', copiarResumen);
   $('#btn-lista').addEventListener('click', () => {

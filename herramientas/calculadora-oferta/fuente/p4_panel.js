@@ -37,38 +37,44 @@ function recalcular() {
   renderProgreso();
   if (estado.paso === 9 && r.ev && estado.tipoAjustes !== r.ev.tipo && !$('#form').contains(document.activeElement)) renderForm();
   const pres = document.querySelector('[data-clave="servicio.presupuesto"]'); if (pres && r.ev) pres.placeholder = `Sugerido: ${fmtN(r.ev.presupuesto)}`;
-  const dur = document.querySelector('[data-clave="plan.duracionManual"]'); if (dur && r.ev) dur.placeholder = `Yo calculo: ${r.ev.Dauto}`;
-  const plz = document.querySelector('[data-clave="meta.plazo"]'); if (plz && r.ev) plz.placeholder = String(r.ev.D);
+  const dur = document.querySelector('[data-clave="plan.duracionManual"]'); if (dur && r.ev && r.ev.Dauto) dur.placeholder = `Yo calculo: ${r.ev.Dauto}`;
+  const plz = document.querySelector('[data-clave="meta.plazo"]'); if (plz && r.ev && r.ev.D) plz.placeholder = String(r.ev.D);
+  const pubL = document.querySelector('[data-clave="lanzamiento.publicidad"]'); if (pubL && r.ev && r.lanz) pubL.placeholder = `Sugerido: ${fmtN(r.ev.pubSegura !== null ? Math.max(r.ev.adsMin, r.ev.pubSegura) : r.ev.adsMin)}`;
+  const topeC = document.querySelector('[data-clave="lanzamiento.topeCupones"]'); if (topeC && r.ev && r.lanz) topeC.placeholder = r.ev.stock !== null ? `Igual al stock: ${fmtN(r.ev.stock)}` : '';
   actualizarVivos();
   renderPanel(r);
 }
 const TABS = [['resumen', 'Resumen'], ['meta', 'Meta'], ['estrategia', 'Estrategia'], ['plata', 'Plata'], ['revision', 'Revisión']];
-function htmlTabs() { return `<div class="tabs-panel"><div class="segmento" role="tablist" aria-label="Partes del panel">${TABS.map(([v, t]) => `<button type="button" role="tab" aria-selected="${estado.tab === v}" data-tab="${v}">${t}</button>`).join('')}</div></div>`; }
+function htmlTabs(lanz) { return `<div class="tabs-panel"><div class="segmento" role="tablist" aria-label="Partes del panel">${(lanz ? TABS_LANZ : TABS).map(([v, t]) => `<button type="button" role="tab" aria-selected="${estado.tab === v}" data-tab="${v}">${t}</button>`).join('')}</div></div>`; }
 function renderPanel(r) {
   const p = estado.prospecto;
   $('#sub-negocio').textContent = [p.negocio.nombre || 'Prospecto sin nombre', p.negocio.ciudad].filter(Boolean).join(' · ');
   const cont = $('#panel');
   if (!r) return;
-  if (estado.cliente) { cont.innerHTML = htmlVistaCliente(r); return; }
+  if (estado.cliente) { cont.innerHTML = r.lanz ? htmlVistaClienteLanz(r) : htmlVistaCliente(r); return; }
   if (r.incompleto) {
     cont.innerHTML = `${htmlCabPanel(r)}<section class="tarjeta hero v-nada"><div class="hero-top"><div class="anillo">${anillo(0, 'var(--gray)')}</div>
       <div class="hero-txt"><p class="kicker">¿Le podemos cumplir?</p><h2 class="respuesta">Faltan respuestas</h2><p class="frase">Para empezar, pregúntale cuánto paga en promedio un cliente (paso 3, «Lo que vende»).</p></div></div></section>${htmlFaltan()}`;
     $('#mini-panel').innerHTML = `<span class="mini-anillo">${anillo(0, 'var(--gray)', 40, 6, false)}</span><span class="t"><b>Faltan respuestas</b>Sigue preguntando</span><span class="ir">Ver panel ›</span>`;
     ultimoVer = null; return;
   }
-  const ev = r.ev, tab = estado.tab;
+  const ev = r.ev, lanz = !!r.lanz;
+  if (lanz && estado.tab === 'meta') estado.tab = 'lanzamiento';
+  if (!lanz && estado.tab === 'lanzamiento') estado.tab = 'meta';
+  const tab = estado.tab;
   let cuerpo;
-  if (tab === 'meta') cuerpo = [htmlMeta(r), htmlCapacidad(r), htmlDia(r)];
+  if (lanz) cuerpo = cuerpoLanz(r, tab);
+  else if (tab === 'meta') cuerpo = [htmlMeta(r), htmlCapacidad(r), htmlDia(r)];
   else if (tab === 'estrategia') cuerpo = [htmlEstrategia(r), htmlAnuncios(r), htmlOferta(r), htmlICP(r), htmlMesa(r)];
   else if (tab === 'plata') cuerpo = [htmlDeDonde(r), htmlPlata(r), htmlSens(r), htmlPrecio(r)];
   else if (tab === 'revision') cuerpo = [htmlRevision(r), htmlFaltan(), htmlMas(r)];
   else cuerpo = [htmlMosaico(r), htmlMinimo(r), htmlMetaMini(r), htmlClientes(r), htmlSalud(r), htmlTesoro(r), htmlFaltan()];
   const scrollPanel = $('#col-panel') ? $('#col-panel').scrollTop : 0;
-  cont.innerHTML = htmlCabPanel(r) + htmlEscenario(r) + htmlGuiaPanel('hero') + htmlHero(r) + htmlGuiaPanel('cliente') + htmlTabs() + `<div class="tab-cuerpo" role="tabpanel">${htmlGuiaPanel('tab-' + tab)}${cuerpo.join('')}</div>`;
+  cont.innerHTML = htmlCabPanel(r) + htmlEscenario(r) + htmlGuiaPanel('hero') + htmlHero(r) + htmlGuiaPanel('cliente') + htmlTabs(lanz) + `<div class="tab-cuerpo" role="tabpanel">${htmlGuiaPanel('tab-' + tab)}${cuerpo.join('')}</div>`;
   if ($('#col-panel')) $('#col-panel').scrollTop = scrollPanel;
-  if (tab === 'plata') dibujarGrafico();
+  if (tab === 'plata' && !lanz) dibujarGrafico();
   if (tab === 'revision') conectarIA();
-  $('#mini-panel').innerHTML = `<span class="mini-anillo">${anillo(ev.puntaje, COLOR_VER[ev.veredicto], 40, 6, false)}</span><span class="t"><b>${esc(TXT_VER_CORTO[ev.veredicto])} · ${ev.puntaje}/100</b>${esc(fmtM(ev.precio, ev.R.moneda))} cada mes</span><span class="ir">Ver panel ›</span>`;
+  $('#mini-panel').innerHTML = `<span class="mini-anillo">${anillo(ev.puntaje, COLOR_VER[ev.veredicto], 40, 6, false)}</span><span class="t"><b>${esc(TXT_VER_CORTO[ev.veredicto])} · ${ev.puntaje}/100</b>${esc(fmtM(ev.precio, ev.R.moneda))} ${lanz ? 'por lanzamiento' : 'cada mes'}</span><span class="ir">Ver panel ›</span>`;
   ultimoVer = ev.veredicto;
   if (estado.detalle && $('#detalle') && $('#detalle').open) abrirDetalle(estado.detalle);
 }
@@ -76,8 +82,9 @@ function htmlCabPanel(r) {
   const p = estado.prospecto;
   const ops = r.an ? [['auto', 'La que elija la calculadora'], ...r.an.lista.filter(x => x.completa).map(x => [x.id, x.nombre])] : [];
   const sel = p.foco || 'auto';
+  const verbo = esLanz() ? 'Lanzamiento de' : 'Potenciar';
   return `<div class="panel-cab"><div><h2>Panel del negocio</h2><p>${esc(p.negocio.nombre || 'Prospecto sin nombre')}${p.negocio.rubro ? ' · ' + esc(p.negocio.rubro) : ''}</p></div>
-    ${ops.length > 1 ? `<div class="campo-in"><select id="sel-foco" aria-label="Qué potenciar">${ops.map(([v, t]) => `<option value="${esc(v)}"${v === sel ? ' selected' : ''}>Potenciar: ${esc(t)}</option>`).join('')}</select></div>` : ''}</div>`;
+    ${ops.length > 1 ? `<div class="campo-in"><select id="sel-foco" aria-label="${esLanz() ? 'Producto del lanzamiento' : 'Qué potenciar'}">${ops.map(([v, t]) => `<option value="${esc(v)}"${v === sel ? ' selected' : ''}>${verbo}: ${esc(t)}</option>`).join('')}</select></div>` : ''}</div>${htmlModelo(true)}`;
 }
 function htmlEscenario(r) {
   const hay = r.hayRangos, actual = hay ? (estado.prospecto.escenarioDatos || 'normal') : 'normal';
@@ -100,7 +107,7 @@ function htmlHero(r) {
   return `<section class="tarjeta hero v-${ev.veredicto}" id="r-veredicto">
     <div class="hero-top"><div class="anillo" role="img" aria-label="${ev.puntaje} de 100">${anillo(ev.puntaje, COLOR_VER[ev.veredicto])}</div>
       <div class="hero-txt"><p class="kicker">¿Le podemos cumplir?</p><h2 class="respuesta">${esc(TXT_VER[ev.veredicto])}</h2><p class="frase">${esc(frase)}</p>
-      <div class="etiquetas"><span class="etq azul">Potenciar: ${esc(ev.foco.nombre)}</span><span class="etq">${ev.modo === 'optimizar' ? 'Mejorar sus anuncios' : 'Traer clientes nuevos'}</span>${nEst ? `<span class="etq ojo">${nEst} número${nEst > 1 ? 's' : ''} adivinado${nEst > 1 ? 's' : ''}</span>` : '<span class="etq ok">Números del dueño</span>'}</div></div></div>
+      <div class="etiquetas"><span class="etq azul">${ev.modo === 'lanzamiento' ? 'Lanzamiento de' : 'Potenciar'}: ${esc(ev.foco.nombre)}</span><span class="etq">${ev.modo === 'lanzamiento' ? (ev.fecha ? `Canje el ${esc(fmtFecha(ev.fecha, false))}` : 'Lanzamiento sin fecha') : ev.modo === 'optimizar' ? 'Mejorar sus anuncios' : 'Traer clientes nuevos'}</span>${nEst ? `<span class="etq ojo">${nEst} número${nEst > 1 ? 's' : ''} adivinado${nEst > 1 ? 's' : ''}</span>` : '<span class="etq ok">Números del dueño</span>'}</div></div></div>
     ${ev.avisoModo ? `<p class="texto">${esc(ev.avisoModo)}</p>` : ''}
     ${lista ? `<ul class="filas-lista">${lista}</ul>` : ''}
   </section>`;
@@ -452,7 +459,8 @@ function htmlSens(r) {
   const max = Math.max(1, ...items.map(s => -s.delta));
   const filas = items.map(s => {
     const anio = -s.delta > 1, cambia = ev.veredicto !== 'no' && s.veredicto === 'no';
-    return `<div class="sens-fila"><div class="eti">${esc(s.nombre)}${cambia ? ' <span class="etq no">ya no se cumple</span>' : ''}<small>${anio ? `gana ${esc(fmtM(-s.delta, mon))} menos el primer año` : `el primer año no cambia; en total, ${esc(fmtM(-s.deltaLargo, mon))} menos`}</small></div><div class="pista"><i style="width:${anio ? clamp(-s.delta / max * 100, 3, 100) : 3}%"></i></div></div>`;
+    const cuando = r.lanz ? 'en el lanzamiento' : 'el primer año';
+    return `<div class="sens-fila"><div class="eti">${esc(s.nombre)}${cambia ? ' <span class="etq no">ya no se cumple</span>' : ''}${r.lanz && s.llega === false ? ' <span class="etq ojo">ya no llegan los de la garantía</span>' : ''}<small>${anio ? `gana ${esc(fmtM(-s.delta, mon))} menos ${cuando}` : r.lanz ? 'no cambia: manda otro tope (stock o atención)' : `el primer año no cambia; en total, ${esc(fmtM(-s.deltaLargo, mon))} menos`}</small></div><div class="pista"><i style="width:${anio ? clamp(-s.delta / max * 100, 3, 100) : 3}%"></i></div></div>`;
   }).join('');
   const top = items.find(s => -s.delta > 1) || items[0];
   return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('balanza', 'orange')}Los números que más pesan</h3><p>si cada uno sale 20% peor</p></div>
@@ -656,9 +664,12 @@ function textoGarantia(ev) {
 function abrirDetalle(tipo) {
   const dlg = $('#detalle'); if (!dlg || !ultimo || !ultimo.ev) return;
   estado.detalle = tipo;
-  $('#detalle-tit').textContent = TIT_DETALLE[tipo] || 'Detalle';
-  const f = { gana: detalleGana, recupera: detalleRecupera, cobras: detalleCobras, prometes: detallePrometes }[tipo];
-  $('#detalle-cuerpo').innerHTML = f ? f(ultimo) : '';
+  if (ultimo.lanz) { const [tit, cuerpo] = abrirDetalleLanz(tipo); $('#detalle-tit').textContent = tit; $('#detalle-cuerpo').innerHTML = cuerpo; }
+  else {
+    $('#detalle-tit').textContent = TIT_DETALLE[tipo] || 'Detalle';
+    const f = { gana: detalleGana, recupera: detalleRecupera, cobras: detalleCobras, prometes: detallePrometes }[tipo];
+    $('#detalle-cuerpo').innerHTML = f ? f(ultimo) : '';
+  }
   if (!dlg.open) { try { dlg.showModal(); } catch { dlg.setAttribute('open', ''); } }
 }
 function cerrarDetalle() { const dlg = $('#detalle'); estado.detalle = null; if (dlg && dlg.open) { try { dlg.close(); } catch { dlg.removeAttribute('open'); } } }
@@ -670,7 +681,7 @@ function pasosEmbudo(a) {
   if (a.objetivo === 'local' || a.objetivo === 'conocer') add('Personas distintas que lo ven', a.alcance, `cada una lo ve unas ${fmtN(a.frecuencia, 1)} veces`, false);
   if (a.objetivo === 'mensajes' || a.objetivo === 'formulario') add('Tocan el anuncio', a.clics, '', false);
   if (a.objetivo === 'web') add('Entran a la web', a.clics, '', false);
-  if (a.objetivo === 'local') { add('Piden el cupón o escriben', a.resultados); add('Llegan a la tienda', a.llegadas); }
+  if (a.objetivo === 'local') { add(a.lanz ? 'Reservan su cupón' : 'Piden el cupón o escriben', a.resultados); add(a.lanz ? 'Llegan con su cupón' : 'Llegan a la tienda', a.llegadas); }
   if (a.objetivo === 'mensajes') { add('Le escriben por WhatsApp', a.resultados); add('Sí pueden comprar', a.calificados); }
   if (a.objetivo === 'formulario') { add('Dejan sus datos', a.resultados); add('Contestan cuando les escribes', a.contactados); add('Sí pueden comprar', a.calificados); }
   if (a.objetivo === 'conocer') { add('Le escriben solas', a.resultados); add('Sí pueden comprar', a.calificados); }

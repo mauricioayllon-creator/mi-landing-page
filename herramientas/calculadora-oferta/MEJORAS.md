@@ -38,6 +38,12 @@ Cómo está hecha: es **un solo archivo** (`index.html`) que funciona solo, sin 
 | **TikTok primero** | Mauricio se enfoca en TikTok Ads. Es la plataforma por defecto; Facebook e Instagram quedan como opción. |
 | **Dólar real** | La publicidad se paga en dólares con tarjeta: desde abril de 2026 al tipo de cambio del Banco Central (Bs 12,09 en noviembre de 2026), no a 6,96. Se pregunta en cada llamada. |
 | **La vista del cliente le habla de tú** | Todo lo que ve el cliente está en segunda persona («te pueden comprar», «tu tienda») y sin datos internos (veredicto, chequeos, cómo sale tu precio). |
+| **Dos formas de cobrar** (v8) | Arriba se elige **«Un lanzamiento»** o **«Plan mensual»**. Cada prospecto recuerda la suya. Las reglas del mensual (Bs 2.200 al mes, etc.) no se tocan en modo lanzamiento, y al revés. |
+| **El lanzamiento: Bs 2.500 en dos mitades** (v8) | La mitad para empezar y la otra cuando lleguen los clientes de la garantía. Decidido por Mauricio el 24/10/2026. Se cambia en Ajustes (`precioLanzamiento`, `primeraMitadPct`). |
+| **El número de la garantía** (v8) | N = lo que pone (servicio + publicidad) ÷ lo que le deja una venta de la promo, redondeado hacia arriba. Cuenta cupones validados en la tienda, compre o no. Tope: 25 (`topeGarantia`). Si no llegan en su fecha: 7 días más con el video ganador (`diasExtraGarantia`); si igual no, la segunda mitad no se paga. Decidido el 24/10 y el 28/10/2026. |
+| **Sus 5 cosas** (v8) | Accesos en la sesión de arranque, aprobar cada video en 24 horas, su publicidad desde Bs 500 (`anunciosMinimoLanz`), su stock separado y validar cada cupón. Si falta una, la garantía no vale. |
+| **Llega 1 de cada 2 que reservan** (v8) | Es el supuesto de Mauricio hasta tener 10 reservas contadas de lanzamientos terminados (`llegadaLanzPct`). Se marca como «tu supuesto», no como dato. |
+| **El tope de cupones es el stock** (v8) | Su regla del 30/09/2026. Se respeta por defecto; hay un campo opcional «Tope de cupones» y un aviso cuando el stock sobra (ver la versión 8). |
 
 ---
 
@@ -228,6 +234,44 @@ Fuentes consultadas para calibrar:
 - Guías públicas de costos de TikTok en Latinoamérica.
 - El tipo de cambio del Banco Central de Bolivia (Bs 12,09 por dólar en noviembre de 2026).
 
+### Versión 8: el modo lanzamiento
+**Pedido:** «No hay un modelo de negocio de lanzamiento, solo un cobro mensual. Añádelo bien, como debería ser y que tenga sentido. Si tengo una reunión de venta que va a ser para un lanzamiento, tengo que estar en esa configuración. Ultra inteligente tiene que ser.» (2 de noviembre de 2026)
+
+**Qué se hizo:**
+
+1. **Un selector arriba de las preguntas** (y en el panel, en el celular): «Un lanzamiento» o «Plan mensual». Cada prospecto guarda el suyo (`modelo`). «Nuevo» sigue en el modo en que estabas.
+2. **Un motor propio** (`evaluarLanzamiento` en `motor4.js`). No es el mensual con otro precio, porque un lanzamiento funciona distinto:
+   - Lo que deja cada venta = precio de la promo − costo del producto − costo del regalo. Si armaste la oferta de ese producto en el paso 6, entra sola (el regalo es la promo).
+   - **El número de la garantía** (N), con su tope.
+   - El embudo de anuncios del paso 7, pero con el cupón que tiene día y hora: llegan los de `llegadaLanzPct` (o el dato del dueño), y compran los del dato del dueño o un promedio prudente.
+   - **Tres topes**: las reservas, hasta el tope de cupones; los que llegan, hasta lo que puede atender en los días del canje; las compras, hasta su stock.
+   - **La publicidad sugerida**: lo menos con lo que llegan los N aunque salga lo mínimo.
+   - Por escenario: reservan, llegan, compran, vende, le deja, lo que pone, el retorno, si llegan los de la garantía y **cuánto te paga** (las dos mitades o solo la primera).
+   - **El plan de cada mes** después: Bs 2.500 cada 4 semanas o Bs 2.000 con 3 meses, con el mismo embudo y los mismos topes.
+   - **La fecha**: fechas fuertes de Bolivia (Black Friday, Navidad, Día de la Madre…, con el canje unos días antes en las fechas de regalo), el calendario de 14 días con fechas reales (cerrar, susurro, provocación, grito, canje, agotado, 7 días más) y **hasta cuándo hay que cerrar** (17 días antes del canje).
+3. **Chequeos del lanzamiento** (★ = importante):
+   - ★ Pone lo mínimo en publicidad.
+   - ★ El número se puede prometer (N ≤ tope).
+   - ★ Llegan los de la garantía (en lo mínimo = segura; solo en lo esperado = ajustada, te cubren los 7 días).
+   - ★ Aunque salga lo mínimo, recupera lo que pone.
+   - ★ Le alcanza el stock (si separa muy poco, no se puede llegar a N).
+   - ★ Da una hora para la sesión de arranque.
+   - Además: los que llegan compran, puede atender en el canje, puede mandar los recordatorios, tiene fecha y porqué, le sirve un lanzamiento (no a empresas), no le cuesta demasiado, tiene la plata para empezar, le alcanza el bolsillo, cumple sus 5 cosas, el plan de cada mes le conviene, tu hora y los números son reales.
+4. **Preguntas propias** en los pasos 5 («El canje»: stock, tope de cupones, días de canje, cuántos atiende por día, mensajes), 7 («La fecha»: fecha, porqué, campaña, publicidad, lo que sabe de su tienda) y 8 («Sus 5 cosas» y el plan de cada mes). En Ajustes, un grupo «Tu lanzamiento» y otro «El plan de cada mes».
+5. **Panel propio**:
+   - Widgets: le prometes N, le cobras Bs 2.500 en dos mitades, él gana, y «Tu segunda mitad» (segura, ajustada o en riesgo).
+   - Tarjetas: tu garantía y su número (con la cuenta y las barras de cada escenario contra N), lo mínimo para aceptarlo, el calendario, el día del canje, su meta, la publicidad paso a paso, lo que le queda (videos, lista, perfil), su plata, el plan de cada mes, los números que más pesan y el precio.
+6. **Vista del cliente del lanzamiento**: tu promo, tres escenarios, el embudo, la garantía con la cuenta, el calendario con fechas, lo que incluye, tus 5 cosas, lo que te queda, lo que sigue y de dónde sale cada número.
+7. **Guía de llamada del lanzamiento**: una ruta propia, la guía de los pasos 5 a 8 y preguntas SPIN para la fecha, el stock, el canje y las 5 cosas.
+8. **Tres ejemplos de lanzamiento**: tienda de tenis (Black Friday; el stock se agota antes de tiempo), tienda de bebé (cunas de Bs 1.900; número chico) y heladería (el helado no da; las tortas heladas sí, y la calculadora las elige sola).
+
+**Lo que se descubrió al probar (punto ciego de la regla «tope de cupones = stock»):** como llega 1 de cada 2 que reservan y compra más o menos la mitad, con un tope igual al stock se acaban los cupones y se vende más o menos la cuarta parte del stock. Por ejemplo, con 60 unidades se venden unas 15 y el dueño no recupera en el lanzamiento. Se respetó la regla por defecto y se agregó:
+- un campo opcional «Tope de cupones»;
+- un aviso que propone dar hasta stock ÷ los que llegan (así nadie que llega se queda sin su producto);
+- y el chequeo «Los que llegan, compran», porque la garantía cuenta llegadas, compren o no.
+
+**Que no se rompa nada:** los 6 ejemplos mensuales dan exactamente los mismos números que en la v7 (probado comparando el motor viejo con el nuevo en Node).
+
 ---
 
 ## 4. Cómo calcula (lo esencial)
@@ -283,13 +327,15 @@ herramientas/calculadora-oferta/
   p4_base.js        ← utilidades, rangos, estado, preguntas y subcalculadoras en pantalla
   p4_form.js        ← los 9 pasos, vistas en vivo, eventos y llenado automático
   p4_panel.js       ← el panel: veredicto, pestañas, meta, capacidad, estrategia, anuncios, oferta, plata, revisión, hojas de detalle y la vista del cliente
+  p4_lanz.js        ← el modo lanzamiento: selector, preguntas de los pasos 5, 7 y 8, panel, hojas de detalle, vista del cliente y resumen
   p4_resto.js       ← gráfico, segunda opinión de Claude, resumen para copiar, guardar y arranque
   p4_markup.html    ← la estructura de la página
   estilos_v4.css    ← el diseño (claro y oscuro)
   construir.py      ← junta todo en public/calculadora/index.html  →  python3 construir.py
+  construir.js      ← lo mismo, con Node, para cuando no hay Python  →  node construir.js
 ```
 
-**Para cambiar algo:** edita la pieza en `herramientas/calculadora-oferta/fuente/`, corre `python3 construir.py` y sube el cambio. No edites `public/calculadora/index.html` a mano, porque se pisa al construir.
+**Para cambiar algo:** edita la pieza en `herramientas/calculadora-oferta/fuente/`, corre `python3 construir.py` (o `node construir.js`) y sube el cambio. No edites `public/calculadora/index.html` a mano, porque se pisa al construir. El orden de las piezas importa: `p4_lanz.js` va antes de `p4_resto.js`, que es el que arranca la página.
 
 **Fuera de Claude:**
 - «Guardar» guarda en el navegador (localStorage), no en la nube.
@@ -313,6 +359,13 @@ Las pruebas usaron un navegador automático (Playwright), en computadora (1440 p
 
 Resultado: **sin errores de consola** y **sin desborde horizontal** en el celular.
 
+En la v8 se probó además:
+- El motor en Node: los 6 ejemplos mensuales dan lo mismo que en la v7, y los 3 ejemplos de lanzamiento dan números con sentido (el ejemplo de tenis da N = 18, cerca de los 15 del ejemplo de Mauricio sin regalo).
+- En el navegador, los 9 ejemplos: los 9 pasos, las 5 pestañas, las 4 hojas de detalle, la vista del cliente, el resumen y los datos para Claude, sin errores.
+- El selector con clics reales, «Nuevo» en modo lanzamiento y la vuelta al mensual.
+- Las fechas fuertes, con un porqué que no pisa lo que escribió el usuario.
+- El celular (375 px) sin desborde.
+
 Errores encontrados y corregidos al probar:
 - Un clic en «Usar el rango» se perdía porque el botón se redibujaba.
 - Una caja de texto se partía en pedazos.
@@ -329,3 +382,6 @@ Errores encontrados y corregidos al probar:
 - La oferta irresistible **no cambia cuántos compran**: se dejó así a propósito, para no prometer algo que no está medido.
 - Los valores típicos de Bolivia se podrían ajustar con los resultados reales de los clientes de Mauricio. Lo ideal: después de cada lanzamiento, anotar vistas, cupones pedidos, llegadas y ventas, y recalibrar la tabla de promedios de anuncios (en `motor4.js`: ADS_OBJETIVOS y ADS_TIPO).
 - El tipo de cambio por defecto (Bs 12,09) hay que actualizarlo cuando cambie (`TC_DEF` en `motor4.js`).
+- (v8) Decidir si el tope de cupones por defecto sigue siendo el stock, o pasa a ser el stock ÷ los que llegan.
+- (v8) Cambiar «llega 1 de cada 2» por el dato real cuando haya 10 reservas contadas de lanzamientos terminados (Ajustes › Tu lanzamiento).
+- (v8) Las fechas fuertes (`FECHAS_FUERTES` en `motor4.js`) son fijas. Vuelta a clases es aproximada (inicio de febrero) y Carnaval no está porque cambia cada año.

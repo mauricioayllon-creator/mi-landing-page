@@ -134,6 +134,50 @@ const GUIA_PANEL = {
   'tab-plata': { s: 'I', q: 'Usa la alcancía: «al principio pones, y en el mes X ya recuperaste todo».', para: 'Explica por qué tarda antes de que él lo pregunte.' },
   'tab-revision': { s: 'T', q: 'Lo que esté en naranja, acuérdalo antes de cerrar.', para: 'Cada punto naranja es una condición de la garantía.' },
 };
+// ----- En modo lanzamiento (2026-11-02): la llamada lleva a una fecha, un número de garantía y la primera mitad -----
+const GUIA_RUTA_LANZ = [
+  ['Apertura', '1 min', 'T', '«Gracias por tu tiempo. Hoy quiero entender tu tienda con números y, al final, mostrarte si una promo con fecha te conviene. Si no te conviene, te lo voy a decir. ¿Te parece?»'],
+  ['Situación', '4 min', 'S', 'Pasos 1 y 3: cuánto vende y qué producto le deja más por venta.'],
+  ['Su meta', '2 min', 'N', 'Paso 2: qué quiere lograr. Al final le muestras cuánto lo acerca el lanzamiento.'],
+  ['Problemas', '5 min', 'P', 'Paso 4: cómo le llegan hoy y qué hace cuando bajan las ventas (¿rebaja?).'],
+  ['El canje', '3 min', 'I', 'Paso 5: cuánto stock separa y cuántos atiende en un día. «Si te llegan 40 juntos, ¿qué pasa?»'],
+  ['La promo y la fecha', '6 min', 'N', 'Pasos 6 y 7: el regalo, la fecha fuerte y su porqué. Que él diga por qué funcionaría.'],
+  ['Los números', '5 min', 'T', 'Botón «Vista del cliente»: los tres escenarios, el embudo y el número de la garantía.'],
+  ['Cierre', '4 min', 'C', 'Paso 8: sus 5 cosas, la primera mitad hoy y la sesión de arranque con fecha.'],
+];
+const GUIA_PASOS_LANZ = {
+  5: { s: 'I', min: '3', obj: 'Que la tienda aguante el día del canje: stock separado y gente para atender. Si no, los que llegan se van molestos.', abre: '«Si el sábado te llegan 40 personas con su cupón, ¿qué pasa en tu tienda?»', pasa: '«Bien. Ahora armemos lo que va en el cupón: algo mejor que una rebaja.»' },
+  6: { s: 'N', min: '5', obj: 'Armar con él la promo: el producto, el precio, el regalo y por qué ahora. Una oferta mejor que una rebaja.', abre: '«¿Qué es lo que más te piden? ¿Qué podrías regalar que a ti te cueste poco y al cliente le valga harto?»', pasa: '«Con esa promo, elijamos la fecha.»' },
+  7: { s: 'N', min: '5', obj: 'Elegir la fecha fuerte con su porqué y la publicidad, y mostrarle el número de la garantía.', abre: '«¿Cuál es tu próxima fecha fuerte? ¿El Black Friday, Navidad, tu aniversario?»', pasa: '«Ya tengo todo. Déjame mostrarte los números.» Toca «Vista del cliente» y comparte pantalla.' },
+  8: { s: 'C', min: '4', obj: 'Acordar sus 5 cosas, cobrar la primera mitad y ponerle fecha a la sesión de arranque.', abre: '«Para que la garantía valga, necesito 5 cosas de ti…»', pasa: '«Para llegar a tu fecha empezamos a más tardar el día que te marca el calendario. ¿Hacemos la sesión de arranque el lunes o el martes?» Dale dos opciones: las dos son un sí.' },
+};
+const GUIA_CAMPOS_LANZ = {
+  'meta.presupuestoTotal': { s: 'S', q: '¿Cuánto tenías pensado invertir en una promo, sumando todo?', para: 'Ver si le alcanza para tu servicio más la publicidad.', mas: ['Si se asusta con el total, recuérdale que la segunda mitad la paga con lo que ya vendió.'] },
+  'lanzamiento.stock': { s: 'S', q: '¿Cuántas unidades separarías para la promo?', para: 'Es el tope de cupones: cuando se acaban, se anuncia que se agotó.', mas: ['Haz la cuenta en voz alta: «llega 1 de cada 2: con 20 cupones llegan unas 10 personas».'] },
+  'lanzamiento.topeCupones': { s: 'T', q: 'Tú decides: puedes dar más cupones que unidades, porque no llegan todos.', para: 'Que se vendan las unidades sin dejar a nadie sin su producto.' },
+  'lanzamiento.diasCanje': { s: 'S', q: '¿Prefieres un día de canje o dos? ¿Qué día atiendes más tranquilo?', para: 'Con más días, la gente llega más repartida.' },
+  'lanzamiento.atiendeDia': { s: 'I', q: 'Si en un día te llegan 40 personas con su cupón, ¿las puedes atender bien?', para: 'Si se hacen filas, se van molestos y hablan mal.', sigue: ['I', '¿Quién te podría ayudar ese día?'] },
+  'lanzamiento.fecha': { s: 'N', q: '¿Cuál es tu próxima fecha fuerte? ¿Cuándo te compran más?', para: 'La fecha da la urgencia de verdad. De la fecha sale hasta cuándo tienes que cerrar.', mas: ['Si dice «cualquier día», propón una fecha fuerte de la lista: sin fecha no hay urgencia.', 'El primer video sale unos 14 días antes del canje.'] },
+  'lanzamiento.porque': { s: 'N', q: '¿Por qué alguien debería venir justo ese día?', para: 'Sin un porqué real, la promo suena a desesperación.' },
+  'lanzamiento.publicidad': { s: 'N', q: '¿Cuánto pondrías en publicidad para esta promo, pagado directo desde tu cuenta?', para: 'De aquí salen el número de la garantía y cuántos llegan.', mas: ['Muéstrale el número y di: «si no te llegan, no me pagas la segunda mitad».', 'Tu mínimo por lanzamiento es Bs 500.'] },
+  'lanzamiento.compraPct': { s: 'S', q: 'De cada 10 que entran a tu tienda preguntando por esto, ¿cuántos se lo llevan?', para: 'Con su dato real, el resultado es más preciso.' },
+  'lanzamiento.llegadaPct': { s: 'T', q: 'Tu supuesto: llega 1 de cada 2 que reservan. Cámbialo cuando tengas tus datos.', para: 'Es lo que más mueve cuántos llegan.' },
+  'lanzamiento.ofrecerPlan': { s: 'T', q: 'El plan de cada mes se ofrece el día que se completa la garantía, no hoy.', para: 'Hoy solo siembras: «si sale bien, cada mes hacemos una promo chica».' },
+  'lanzamiento.pautaPlan': { s: 'T', q: 'Lo que pondría en publicidad cada mes, en el plan.' },
+  'compromiso.accesos': { s: 'C', q: 'En la sesión de arranque me das los accesos a tu TikTok y a tu cuenta de publicidad, sin contraseñas por chat. ¿Va?', para: 'Sin accesos, el primer video no sale a tiempo.' },
+  'compromiso.aprueba': { s: 'C', q: '¿Puedes aprobar cada video en 24 horas?', para: 'El calendario es de 14 días: un día de atraso se come la promo.' },
+  'compromiso.pagaPublicidad': { s: 'C', q: 'La publicidad la pagas directo desde tu cuenta, desde Bs 500. ¿Te parece?', para: 'Transparencia: él ve cada boliviano que se gasta.' },
+  'compromiso.stockSeparado': { s: 'C', q: '¿Separas las unidades de la promo para que no se vendan antes?', para: 'Sin stock separado, el que llega con su cupón se va con las manos vacías.' },
+  'compromiso.validaCupon': { s: 'C', q: '¿Validas cada cupón en la tienda? Es un toque en el celular.', para: 'Así se cuentan las llegadas de la garantía y se sabe qué video vendió.' },
+  'compromiso.tiempo': { s: 'C', q: '¿Puedes darme una hora para la sesión de arranque?', para: 'Ahí se arma la promo, se dan los accesos y se graba.' },
+  'compromiso.aplicaGuia': { s: 'C', q: 'Te enseño qué decir cuando llega alguien con el cupón. ¿Lo aplicas con tu equipo?', para: 'La garantía cuenta llegadas, pero lo que pasa adentro es de él.' },
+};
+const GUIA_PANEL_LANZ = {
+  cliente: { s: 'T', q: 'Cuando él ya dijo su problema y su fecha, toca «Vista del cliente» y comparte pantalla.', para: 'Empieza por el escenario conservador y termina en la garantía: «si no te llegan los X, no me pagas la segunda mitad».', mas: ['En la vista del cliente esta guía se oculta sola.', 'Después del escenario esperado pregunta: «¿Qué harías con esas ventas?» (Necesidad).', 'Cierra con el calendario: «para tu fecha, empezamos a más tardar el…».'] },
+  'tab-resumen': { s: 'T', q: 'Antes de ofrecer la garantía, mira «Tu segunda mitad» y «Lo mínimo para aceptarlo».', para: 'Si la segunda mitad está en riesgo, sube la publicidad o cambia el producto antes de prometer.' },
+  'tab-lanzamiento': { s: 'N', q: 'Muéstrale el calendario con fechas: «para tu fecha, empezamos a más tardar el…».', para: 'La fecha límite para cerrar es urgencia de verdad.' },
+  'tab-plata': { s: 'I', q: '«Lo más que pones de tu bolsillo antes de vender es X. La segunda mitad la pagas con lo que ya vendiste.»', para: 'Baja el miedo al precio total.' },
+};
 function claveGuia(clave) {
   if (clave.startsWith('linea:')) return 'linea.' + clave.split(':')[2];
   return clave;
@@ -150,10 +194,10 @@ function htmlBurbuja(g, extraClase = '') {
     ${hayMas ? `<details class="guia-mas"><summary title="Ver más" aria-label="Ver más">•••</summary><div class="guia-mas-cuerpo">${mas ? `<ul>${mas}</ul>` : ''}${sigue}<p class="guia-spin-txt"><b>${esc(sp.nombre)}:</b> ${esc(sp.txt)}</p></div></details>` : ''}
   </div></div>`;
 }
-function htmlGuia(clave) { const g = GUIA_CAMPOS[claveGuia(clave)]; return g ? htmlBurbuja(g) : ''; }
-function htmlGuiaPanel(id) { const g = GUIA_PANEL[id]; return g ? htmlBurbuja(g, 'guia-panel') : ''; }
+function htmlGuia(clave) { const k = claveGuia(clave), g = (esLanz() && GUIA_CAMPOS_LANZ[k]) || GUIA_CAMPOS[k]; return g ? htmlBurbuja(g) : ''; }
+function htmlGuiaPanel(id) { const g = (esLanz() && GUIA_PANEL_LANZ[id]) || GUIA_PANEL[id]; return g ? htmlBurbuja(g, 'guia-panel') : ''; }
 function htmlGuiaPaso(nro) {
-  const g = GUIA_PASOS[nro]; if (!g) return '';
+  const g = (esLanz() && GUIA_PASOS_LANZ[nro]) || GUIA_PASOS[nro]; if (!g) return '';
   const sp = SPIN[g.s] || SPIN.T;
   return `<div class="guia guia-paso" role="note"><div class="guia-burbuja">
     <span class="spin spin-${esc(g.s)}">Paso ${nro} · ${esc(sp.nombre)}${g.min !== '0' ? ` · ${esc(g.min)} min` : ''}</span>
@@ -165,7 +209,7 @@ function htmlGuiaPaso(nro) {
 function htmlRutaLlamada() {
   return `<section class="guia ruta" role="note" aria-label="Ruta de la llamada"><div class="ruta-in">
     <div class="ruta-cab"><b>Ruta de la llamada</b><span>unos 30 minutos · método SPIN</span></div>
-    <ol>${GUIA_RUTA.map(([t, min, s, x]) => `<li><span class="spin spin-${s}">${s === 'T' || s === 'C' ? esc(SPIN[s].nombre) : s}</span><div><b>${esc(t)}</b> <small>${esc(min)}</small><p>${esc(x)}</p></div></li>`).join('')}</ol>
+    <ol>${(esLanz() ? GUIA_RUTA_LANZ : GUIA_RUTA).map(([t, min, s, x]) => `<li><span class="spin spin-${s}">${s === 'T' || s === 'C' ? esc(SPIN[s].nombre) : s}</span><div><b>${esc(t)}</b> <small>${esc(min)}</small><p>${esc(x)}</p></div></li>`).join('')}</ol>
     <p class="ruta-pie"><b>Regla de oro (Rackham):</b> haz pocas preguntas de Situación y muchas de Implicación y Necesidad. No muestres la solución hasta que él diga que el problema es grande.</p>
   </div></section>`;
 }

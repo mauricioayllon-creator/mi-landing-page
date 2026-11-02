@@ -4,6 +4,9 @@ const PASOS = [
   { id: 1, nombre: 'El negocio' }, { id: 2, nombre: 'Lo que quiere' }, { id: 3, nombre: 'Lo que vende' }, { id: 4, nombre: 'Sus clientes' },
   { id: 5, nombre: '¿Le alcanza?' }, { id: 6, nombre: 'Su oferta' }, { id: 7, nombre: 'Anuncios' }, { id: 8, nombre: 'Tu servicio' }, { id: 9, nombre: 'Ajustes' },
 ];
+// En un lanzamiento cambian tres pasos: el día del canje, la fecha con su publicidad y las 5 cosas del dueño
+const PASOS_LANZ = PASOS.map(x => x.id === 5 ? { id: 5, nombre: 'El canje' } : x.id === 6 ? { id: 6, nombre: 'Su promo' } : x.id === 7 ? { id: 7, nombre: 'La fecha' } : x.id === 8 ? { id: 8, nombre: 'Sus 5 cosas' } : x);
+const pasosActuales = () => esLanz() ? PASOS_LANZ : PASOS;
 function lineaFoco() {
   const p = estado.prospecto;
   if (ultimo && ultimo.ev) return p.lineas.find(x => x.id === ultimo.ev.foco.id) || p.lineas[0];
@@ -24,6 +27,14 @@ function clavesImportantes() {
   }
   out.push({ clave: 'hoy.interesadosMes', paso: 4, txt: '¿Cuántas personas le escriben al mes?' });
   out.push({ clave: 'hoy.clientesMes', paso: 4, txt: '¿Cuántos clientes nuevos consigue al mes?' });
+  if (esLanz()) {
+    out.push({ clave: 'lanzamiento.stock', paso: 5, txt: '¿Cuántas unidades separa para la promo?' });
+    out.push({ clave: 'lanzamiento.atiendeDia', paso: 5, txt: '¿Cuántas personas atiende bien en un día de canje?' });
+    out.push({ clave: 'capacidad.mensajesDia', paso: 5, txt: '¿Cuántos mensajes pueden mandar bien por día?' });
+    out.push({ clave: 'lanzamiento.fecha', paso: 7, txt: '¿Qué día es el canje?' });
+    out.push({ clave: 'lanzamiento.porque', paso: 7, txt: '¿Por qué ese día?' });
+    return out.map(x => ({ ...x, estado: vacio(getValor(x.clave)) ? 'falta' : estado.prospecto.fuentes[x.clave] === 'estimado' ? 'estimado' : 'ok' }));
+  }
   if (p.hoy.quienPauta !== 'nadie') { out.push({ clave: 'hoy.pautaMes', paso: 4, txt: '¿Cuánto paga en anuncios al mes?' }); out.push({ clave: 'hoy.ventasPautaMes', paso: 4, txt: '¿Cuántas ventas le traen los anuncios?' }); }
   out.push({ clave: 'capacidad.actuales', paso: 5, txt: '¿Cuánto atiende hoy?' });
   out.push({ clave: 'capacidad.maxHoy', paso: 5, txt: '¿Cuánto podría atender como máximo?' });
@@ -33,7 +44,7 @@ function clavesImportantes() {
 function renderProgreso() {
   const items = clavesImportantes(), ok = items.filter(x => x.estado === 'ok').length;
   $('#progreso').innerHTML = `<div class="progreso-fila"><span>Respuestas importantes</span><b>${ok} de ${items.length}</b></div><div class="barrita"><i style="width:${items.length ? ok / items.length * 100 : 0}%"></i></div>`;
-  $('#pasos').innerHTML = PASOS.map(ps => {
+  $('#pasos').innerHTML = pasosActuales().map(ps => {
     const its = items.filter(x => x.paso === ps.id), listo = its.length > 0 && its.every(x => x.estado === 'ok');
     return `<button type="button" role="tab" class="paso-btn${listo ? ' listo' : ''}" aria-selected="${estado.paso === ps.id}" data-paso="${ps.id}"><span class="nro">${listo ? '✓' : ps.id}</span>${esc(ps.nombre)}</button>`;
   }).join('');
@@ -62,7 +73,23 @@ function htmlLinea(l, i, total) {
 function htmlAjustes(tipo) {
   const t = TIPOS_VENTA[tipo], b = `supuestos.${tipo}`, mon = estado.reglas.moneda;
   const reg = (c, q, extra = {}) => { const v = getPath(estado.reglas, c), id = 'r-' + idSeguro(c); return `<div class="fila"><div class="fila-cab"><label for="${id}">${esc(q)}</label></div><div class="campo-in">${extra.pre ? `<span class="pre">${esc(extra.pre)}</span>` : ''}<input id="${id}" class="num" inputmode="decimal" data-regla="${esc(c)}" value="${esc(vacio(v) ? '' : extra.pre ? fmtN(v) : String(v))}">${extra.suf ? `<span class="suf">${esc(extra.suf)}</span>` : ''}</div>${extra.nota ? `<p class="nota">${esc(extra.nota)}</p>` : ''}</div>`; };
-  return `<p class="grupo-titulo">Tu precio</p>
+  const lanz = `<p class="grupo-titulo">Tu lanzamiento</p>
+    <div class="grupo">
+      ${reg('precioLanzamiento', 'Precio de un lanzamiento', { pre: mon, nota: 'Se cobra en dos mitades.' })}
+      ${reg('primeraMitadPct', 'Lo que se paga para empezar', { suf: 'de 100', nota: '50 = la mitad al empezar y la otra cuando lleguen los clientes de la garantía.' })}
+      ${reg('anunciosMinimoLanz', 'Lo mínimo en publicidad por lanzamiento', { pre: mon, nota: 'Es una de sus 5 cosas: con menos, no aceptas.' })}
+      ${reg('topeGarantia', 'Tope del número de la garantía', { suf: 'clientes', nota: 'Si sale más, eliges con él otro producto antes de ofrecer la garantía.' })}
+      ${reg('diasExtraGarantia', 'Días más con el video ganador si no llegan', { suf: 'días' })}
+      ${reg('llegadaLanzPct', 'De cada 100 que reservan, llegan', { suf: 'de 100', nota: 'Tu supuesto hasta tener 10 reservas contadas de lanzamientos terminados. Cámbialo con tus datos.' })}
+      ${reg('horasLanzamiento', 'Tus horas por lanzamiento', { suf: 'horas' })}
+    </div>
+    <p class="grupo-titulo">El plan de cada mes (después del lanzamiento)</p>
+    <div class="grupo">
+      ${reg('planMes', 'Precio cada 4 semanas', { pre: mon })}
+      ${reg('planMesCompromiso', 'Precio con compromiso', { pre: mon })}
+      ${reg('mesesCompromiso', 'Meses de compromiso', { suf: 'meses' })}
+    </div>`;
+  return `${esLanz() ? lanz : ''}<p class="grupo-titulo">Tu precio (plan mensual)</p>
     <div class="grupo">
       ${reg('precioMinimo', 'Tu precio mínimo al mes', { pre: mon, nota: 'Nunca cobras menos que esto.' })}
       ${reg('anunciosMinimo', 'Lo mínimo en anuncios al mes', { pre: mon, nota: 'Si el cliente no puede poner esto, no lo aceptas.' })}
@@ -106,7 +133,7 @@ function htmlAjustes(tipo) {
       ${SERVICIOS.map(s => reg('horas.' + s.id, s.nombre, { suf: 'horas' })).join('')}
       ${reg('horaObjetivo', 'Lo mínimo que quieres ganar por hora (0 = no revisar)', { pre: mon })}
       <div class="fila"><button class="btn-g btn-chico" type="button" id="btn-reglas-reset">Volver a mis valores de inicio</button></div>
-    </div>`;
+    </div>${esLanz() ? '' : lanz}`;
 }
 const TXT_META = {
   aumento: { q: '¿Cuánto más quiere vender al mes?', pre: true, corto: 'vender más' },
@@ -118,7 +145,8 @@ const IDEAS_BONOS = ['Diagnóstico o revisión gratis', 'Instalación o entrega 
 function renderForm() {
   const p = estado.prospecto, mon = estado.reglas.moneda, paso = estado.paso;
   const ej = p._ejemplo;
-  const nomEj = { brisa: ' (Brisa Técnica)', joyeria: ' (una joyería)', cafe: ' (un café de barrio)' }[ej];
+  const nomEj = { brisa: ' (Brisa Técnica)', joyeria: ' (una joyería)', cafe: ' (un café de barrio)', lanzTenis: ' de lanzamiento (una tienda de tenis)', lanzBebe: ' de lanzamiento (una tienda de bebé)', lanzHeladeria: ' de lanzamiento (una heladería)' }[ej];
+  renderModelo();
   $('#banner').innerHTML = !ej ? '' : String(ej).startsWith('min')
     ? `<div class="aviso-ejemplo"><b>Ejemplo en el mínimo que puedes aceptar.</b> Datos inventados, puestos justo en el límite: si cualquiera de sus números baja, ya no conviene. Mira la tarjeta «Lo mínimo para aceptarlo» en el panel.</div>`
     : `<div class="aviso-ejemplo"><b>Es un ejemplo${nomEj || ''}.</b> Los datos son inventados. Toca «Nuevo» para un cliente real.</div>`;
@@ -137,13 +165,13 @@ function renderForm() {
       <p class="grupo-titulo">Su meta</p><div class="grupo">
       ${chips({ clave: 'meta.tipo', q: '¿Qué quiere?', opciones: [['aumento', 'Vender más'], ['ganancia', 'Ganar más'], ['total', 'Llegar a vender X'], ['clientes', 'Más clientes']], estructura: true })}
       ${pregunta({ clave: 'meta.valor', q: tm.q, ayuda: 'metaValor', pre: tm.pre ? mon : '', fmt: tm.pre ? 'dinero' : '', suf: tm.pre ? 'al mes' : 'al mes', importante: true })}
-      ${pregunta({ clave: 'meta.plazo', q: '¿En cuántos meses quiere lograrlo?', suf: 'meses', ph: ultimo && ultimo.ev ? String(ultimo.ev.D) : '6' })}
+      ${pregunta({ clave: 'meta.plazo', q: '¿En cuántos meses quiere lograrlo?', suf: 'meses', ph: ultimo && ultimo.ev && ultimo.ev.D ? String(ultimo.ev.D) : '6' })}
       ${pregunta({ clave: 'meta.diasMes', q: '¿Cuántos días trabaja al mes?', suf: 'días', ph: '26', rango: false })}
       </div>
       <div id="vivo-meta">${htmlVivoMeta()}</div>
       <p class="grupo-titulo">Lo que puede poner</p><div class="grupo">
-      ${pregunta({ clave: 'meta.presupuestoTotal', q: '¿Cuánto pensaba invertir al mes en total (tu servicio + anuncios)?', ayuda: 'presupuestoTotal', pre: mon, fmt: 'dinero' })}
-      ${pregunta({ clave: 'meta.paciencia', q: '¿En cuántos meses quiere ver los primeros resultados?', suf: 'meses' })}</div>`;
+      ${esLanz() ? pregunta({ clave: 'meta.presupuestoTotal', q: '¿Cuánto pensaba invertir en esta promo (tu servicio + la publicidad)?', ayuda: 'presupuestoTotal', pre: mon, fmt: 'dinero' })
+        : pregunta({ clave: 'meta.presupuestoTotal', q: '¿Cuánto pensaba invertir al mes en total (tu servicio + anuncios)?', ayuda: 'presupuestoTotal', pre: mon, fmt: 'dinero' }) + pregunta({ clave: 'meta.paciencia', q: '¿En cuántos meses quiere ver los primeros resultados?', suf: 'meses' })}</div>`;
   } else if (paso === 3) {
     html = `<p class="nota" style="padding:0 4px">Anota cada cosa que vende por separado. Si no puede separarlo, deja una sola con lo que más vende.</p>
       ${p.lineas.map((l, i) => htmlLinea(l, i, p.lineas.length)).join('')}
@@ -165,6 +193,12 @@ function renderForm() {
       ${p.hoy.quienPauta !== 'nadie' ? pregunta({ clave: 'hoy.pautaMes', q: '¿Cuánto paga al mes en anuncios?', ayuda: 'pauta', pre: mon, fmt: 'dinero', importante: true, nota: 'Solo lo que paga a Facebook, Instagram, TikTok o Google.' }) + pregunta({ clave: 'hoy.ventasPautaMes', q: '¿Cuántas ventas al mes le traen esos anuncios?', ayuda: 'ventasPauta', importante: true }) : ''}
       ${interruptor({ clave: 'hoy.equipoContenido', q: 'Tiene su propio equipo que graba y edita videos' })}
       ${chips({ clave: 'hoy.contenidoPrueba', q: '¿Muestra casos, opiniones de clientes y precios?', opciones: [['bastante', 'Bastante'], ['poco', 'Poco'], ['nada', 'Nada']] })}</div>`;
+  } else if (paso === 5 && esLanz()) {
+    html = htmlPaso5Lanz();
+  } else if (paso === 7 && esLanz()) {
+    html = htmlPaso7Lanz();
+  } else if (paso === 8 && esLanz()) {
+    html = htmlPaso8Lanz();
   } else if (paso === 5) {
     const l = lineaFoco(), rec = l && l.tipo === 'recurrente', nom = l ? ((l.nombre || '').trim() || 'lo que vende') : 'lo que vende';
     const C = p.capacidad;
@@ -198,7 +232,7 @@ function renderForm() {
         <div class="fl-num"><span class="fl-eti">Paga</span>${selChico({ clave: `oferta.segmentos.${i}.paga`, opciones: [['atiempo', 'A tiempo'], ['tarde', 'Tarde'], ['muytarde', 'Muy tarde']], aria: 'Cómo paga' })}</div>
         <div class="fl-num"><span class="fl-eti">Da trabajo</span>${selChico({ clave: `oferta.segmentos.${i}.lio`, opciones: [['poco', 'Poco'], ['normal', 'Normal'], ['mucho', 'Mucho']], aria: 'Cuánto trabajo o problemas da' })}</div>
         <button type="button" class="btn-borde btn-chico" data-quitar-seg="${i}" aria-label="Quitar tipo de cliente ${i + 1}">Quitar</button></div>`).join('');
-    html = `<div class="explica"><b>Primero, a quién.</b> No todos los clientes valen lo mismo. Anota sus tipos de clientes y la calculadora te dice cuál es el <b>cliente ideal</b>: al que conviene hablarle en el contenido y los anuncios.</div>
+    html = `${esLanz() ? `<div class="explica"><b>La promo del lanzamiento.</b> Aquí armas lo que va en el cupón: el producto, el precio de la promo, el regalo y por qué ahora. Una oferta mejor que una rebaja.<span>Si armas la oferta del producto del lanzamiento, entra sola en la cuenta: lo que cuesta el regalo se resta de lo que le deja cada venta, y eso cambia el número de la garantía.</span></div>` : ''}<div class="explica"><b>Primero, a quién.</b> No todos los clientes valen lo mismo. Anota sus tipos de clientes y la calculadora te dice cuál es el <b>cliente ideal</b>: al que conviene hablarle en el contenido y los anuncios.</div>
       <p class="grupo-titulo">Cliente ideal</p><div class="grupo">
       <div class="fila">${htmlGuia('oferta.segmentos')}<div class="lista-filas">${segs || '<p class="nota">Todavía no hay tipos de clientes. Ejemplo: «clínicas», «oficinas», «restaurantes».</p>'}</div>
       <div><button class="btn-g btn-chico" type="button" id="btn-agregar-seg">+ Agregar tipo de cliente</button></div></div></div>
@@ -223,7 +257,7 @@ function renderForm() {
       <p class="grupo-titulo">5. Que decida ahora</p><div class="grupo">
       ${chips({ clave: 'oferta.urgencia', q: '¿Por qué comprar ahora y no después?', opciones: [['ninguna', 'Nada'], ['cupos', 'Cupos limitados'], ['fecha', 'Hasta una fecha'], ['temporada', 'Antes de la temporada']] })}
       ${chips({ clave: 'oferta.pago', q: '¿Cómo paga?', opciones: [['contado', 'Todo junto'], ['cuotas', 'En cuotas'], ['mensual', 'Cada mes']] })}
-      ${interruptor({ clave: 'oferta.usarEnCuenta', q: 'Usar esta oferta en las cuentas', nota: 'Cambia el precio y lo que le queda por venta. No cambia cuántos compran: eso se mide cuando salga.' })}</div>
+      ${esLanz() ? '' : interruptor({ clave: 'oferta.usarEnCuenta', q: 'Usar esta oferta en las cuentas', nota: 'Cambia el precio y lo que le queda por venta. No cambia cuántos compran: eso se mide cuando salga.' })}</div>
       <div id="vivo-oferta">${htmlVivoOferta()}</div>` : ''}`;
   } else if (paso === 7) {
     const ad = ultimo && ultimo.ev ? ultimo.ev.ads : null, A = p.anuncios;
@@ -263,7 +297,7 @@ function renderForm() {
     html = htmlAjustes(tipo);
   }
   html = htmlGuiaPaso(paso) + html;
-  const ant = PASOS.find(x => x.id === paso - 1), sig = PASOS.find(x => x.id === paso + 1);
+  const ant = pasosActuales().find(x => x.id === paso - 1), sig = pasosActuales().find(x => x.id === paso + 1);
   html += `<div class="siguiente">${ant ? `<button class="btn-g btn-grande" type="button" data-ir-paso="${ant.id}">‹ ${esc(ant.nombre)}</button>` : '<span></span>'}${sig ? `<button class="btn-azul btn-grande" type="button" data-ir-paso="${sig.id}">Siguiente: ${esc(sig.nombre)} ›</button>` : ''}</div>`;
   $('#form').innerHTML = html;
   renderProgreso();
@@ -284,6 +318,7 @@ function irPaso(nro, clave) {
 function htmlVivoMeta() {
   const r = ultimo, p = estado.prospecto, mon = estado.reglas.moneda;
   if (!r || !r.ev) return `<div class="vivo"><p class="texto">Cuando anotes lo que vende (paso 3), aquí ves su meta traducida a clientes y mensajes por día.</p></div>`;
+  if (r.lanz) return r.ev.metaDueno ? `<div class="vivo">${htmlMetaLanz(r).replace(/^<section class="tarjeta">|<\/section>$/g, '')}</div>` : `<div class="vivo"><p class="texto">Anota su meta y aquí ves cuánto lo acerca el lanzamiento y cuánto el plan de cada mes.</p></div>`;
   const md = r.ev.metaDueno;
   if (!md) return `<div class="vivo"><p class="texto">Anota su meta y aquí ves cuántos clientes, mensajes y anuncios necesita <b>por día</b>.</p></div>`;
   return `<div class="vivo">${htmlMetaTabla(r.ev, true)}</div>`;
@@ -311,6 +346,8 @@ function htmlVivoAds() {
   return `<div class="vivo">${htmlEmbudoAds(r, true)}</div>`;
 }
 function actualizarVivos() {
+  const lz = $('#vivo-lanz'); if (lz) lz.innerHTML = htmlVivoLanz();
+  const cj = $('#vivo-canje'); if (cj) cj.innerHTML = htmlVivoCanje();
   const ad = $('#vivo-ads'); if (ad) ad.innerHTML = htmlVivoAds();
   const m = $('#vivo-meta'); if (m) m.innerHTML = htmlVivoMeta();
   const c = $('#vivo-cap'); if (c) c.innerHTML = htmlVivoCap();
@@ -444,6 +481,12 @@ function onClic(e) {
     programarCalculo(); return;
   }
   if (t.dataset.irPaso) { irPaso(+t.dataset.irPaso); return; }
+  if (t.dataset.fecha) {
+    // Una fecha fuerte: anota el día del canje y su porqué (sin pisar un porqué que escribió el usuario)
+    const L = P.lanzamiento; L.fecha = t.dataset.fecha;
+    if (vacio(L.porque) || L._porqueAuto === L.porque) { L.porque = t.dataset.porque; L._porqueAuto = t.dataset.porque; }
+    renderForm(); programarCalculo(); aviso(`Canje el ${fmtFecha(fechaDe(L.fecha))}.`); return;
+  }
   if (t.dataset.ayudaToggle) {
     const inst = t.dataset.ayudaToggle;
     if (estado.abiertas.has(inst)) estado.abiertas.delete(inst); else estado.abiertas.add(inst);

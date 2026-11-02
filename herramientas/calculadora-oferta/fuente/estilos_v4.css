@@ -678,6 +678,26 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 .vc-caso p { font-size: 15px; }
 .vc-pie { text-align: center; color: var(--text-2); font-size: 13px; display: grid; gap: 4px; padding: 6px 10px 20px; }
 
+/* Lanzamiento o plan mensual */
+.modelo { background: var(--card); border-radius: 16px; padding: 12px 14px; box-shadow: var(--sombra); display: flex; gap: 10px 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; border: 1px solid color-mix(in srgb, var(--green) 30%, transparent); }
+.modelo-txt { display: grid; gap: 2px; flex: 1 1 220px; min-width: 0; }
+.modelo-txt b { font-size: 15px; }
+.modelo-txt span { font-size: 13px; color: var(--text-2); }
+.modelo .segmento { flex: 0 1 300px; min-width: min(100%, 240px); }
+.modelo .segmento button { min-height: 34px; font-size: 14px; }
+.modelo-chico { padding: 8px 10px 8px 12px; box-shadow: none; background: var(--card-2); border: 0; }
+.modelo-chico .modelo-txt b { font-size: 13px; color: var(--text-2); font-weight: 600; }
+@media (min-width: 981px) { .modelo-chico { display: none; } } /* en la computadora ya está arriba de las preguntas */
+/* El número de la garantía */
+.garantia-n { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; }
+.gn-cifra { display: grid; justify-items: center; min-width: 84px; padding: 8px 12px; border-radius: 16px; background: var(--tint-orange); }
+.gn-cifra b { font-family: var(--f-num); font-size: 40px; line-height: 1; letter-spacing: -.02em; color: var(--warn-ink); }
+.gn-cifra span { font-size: 11px; color: var(--text-2); text-align: center; max-width: 14ch; line-height: 1.2; }
+.garantia-n .formula { margin-top: 0; }
+@media (max-width: 460px) { .garantia-n { grid-template-columns: minmax(0, 1fr); } .gn-cifra { justify-self: start; } }
+.barras-n .pista { position: relative; overflow: visible; }
+.marca-n { position: absolute; top: -4px; bottom: -4px; width: 3px; margin-left: -1px; background: var(--text); border-radius: 2px; }
+
 /* Guardar como PDF: solo la vista del cliente */
 @media print {
   @page { margin: 12mm; }

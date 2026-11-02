@@ -83,7 +83,8 @@ function normalizarProspecto(p) {
   p = p || {};
   const base = prospectoVacio();
   const out = { ...base, ...p };
-  for (const k of ['negocio', 'meta', 'hoy', 'servicio', 'compromiso', 'capacidad', 'plan', 'anuncios']) out[k] = { ...base[k], ...(p[k] || {}) };
+  for (const k of ['negocio', 'meta', 'hoy', 'servicio', 'compromiso', 'capacidad', 'plan', 'anuncios', 'lanzamiento']) out[k] = { ...base[k], ...(p[k] || {}) };
+  out.modelo = p.modelo === 'lanzamiento' ? 'lanzamiento' : 'mensual';
   const sb = supuestosBase();
   out.supuestos = {};
   for (const k of Object.keys(sb)) out.supuestos[k] = { ...sb[k], ...(((p.supuestos || {})[k]) || {}) };

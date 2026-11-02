@@ -10,18 +10,23 @@ function ofertaVacia() {
 function anunciosVacios() {
   return { plataforma: 'tiktok', objetivo: 'auto', alcance: 'auto', tc: '', cupon: true, costoResultadoReal: '', cpmReal: '' };
 }
+function lanzamientoVacio() {
+  return { fecha: '', porque: '', publicidad: '', stock: '', topeCupones: '', diasCanje: '2', atiendeDia: '', llegadaPct: '', compraPct: '', ofrecerPlan: true, pautaPlan: '' };
+}
 function prospectoVacio() {
   return {
+    modelo: 'mensual',
     negocio: { nombre: '', rubro: '', ciudad: '', facturacion: '', gastosFijos: '', caja: '', temporadaAlta: '', cobroDias: '' },
     meta: { tipo: 'aumento', valor: '', plazo: '', diasMes: '', presupuestoTotal: '', paciencia: '' },
     lineas: [lineaBase()],
     foco: 'auto',
     hoy: { numerosDe: 'linea', interesadosMes: '', clientesMes: '', respuesta: 'nose', seguimiento: 'nose', diasPropuesta: '', quienVende: 'dueno', viejos: '', pautaMes: '', ventasPautaMes: '', quienPauta: 'nadie', equipoContenido: false, contenidoPrueba: 'poco', mide: '' },
     servicio: { modo: 'auto', contenido: 'auto', campanas: 'auto', guia: 'auto', automatizacion: 'auto', presupuesto: '' },
-    compromiso: { tiempo: true, aplicaGuia: true, aprueba: true, pagaPublicidad: true, pagoTarjeta: '' },
+    compromiso: { tiempo: true, aplicaGuia: true, aprueba: true, pagaPublicidad: true, pagoTarjeta: '', accesos: true, stockSeparado: true, validaCupon: true },
     capacidad: { actuales: '', maxHoy: '', contrataria: '', porPersona: '', mesesContratar: '', mensajesDia: '', mercado: '' },
     oferta: ofertaVacia(),
     anuncios: anunciosVacios(),
+    lanzamiento: lanzamientoVacio(),
     supuestos: supuestosBase(),
     plan: { duracionManual: '', herramientas: '', inicial: '', ahorro: '' },
     rangos: {},
@@ -132,5 +137,60 @@ function ejemploMinAnillos() {
 }
 function ejemploMinEmpresas() {
   return ejemploMinimoBase({ nombre: 'Joyería mínima 3: regalos para empresas', rubro: 'Joyas y detalles grabados para regalos de empresas', linea: 'Regalos para empresas', fact: 38000, gastos: 11400, caja: 23000, margen: 40, tipo: 'repetida', ticket: 6000, ppy: 3, anios: 3, ciclo: 30, tv: 'b2b', cobro: 30, inter: 65, cli: 2, ads: 3500, cap: [6, 13] });
+}
+// ----- Lanzamientos (Bs 2.500 en dos mitades, garantía con número). Datos inventados; la fecha es la próxima fecha fuerte -----
+function fechaEjemplo(minDias) {
+  try { const hoy = new Date(), f = proximasFechas(hoy, 10).find(x => diasEntre(hoy, x.canje) >= minDias); return f ? { fecha: f.iso, porque: f.nombre, _porqueAuto: f.nombre } : { fecha: '', porque: '' }; } catch (e) { return { fecha: '', porque: '' }; }
+}
+function ejemploLanzTenis() {
+  const p = prospectoVacio();
+  p.modelo = 'lanzamiento';
+  p.negocio = { nombre: 'Pisada Urbana', rubro: 'Tenis originales, tienda física y TikTok', ciudad: 'La Paz', facturacion: 60000, gastosFijos: 22000, caja: 6000, temporadaAlta: '12', cobroDias: 0 };
+  p.meta = { tipo: 'aumento', valor: 20000, plazo: 3, diasMes: 26, presupuestoTotal: 3500, paciencia: '' };
+  p.lineas = [lineaBase({ id: 't1', nombre: 'Tenis', facturacion: 60000, margen: 25, tipo: 'repetida', ticket: 800, comprasAnio: 1.5, aniosCliente: 2, cicloDias: 3, tipoVenta: 'b2cAlto', competencia: 'alta', capacidad: 'mucha' })];
+  p.hoy = { numerosDe: 'linea', interesadosMes: 400, clientesMes: 60, respuesta: 'hora', seguimiento: 'aveces', diasPropuesta: '', quienVende: 'equipo', viejos: 80, pautaMes: '', ventasPautaMes: '', quienPauta: 'nadie', equipoContenido: false, contenidoPrueba: 'poco', mide: 'aveces' };
+  p.compromiso.pagoTarjeta = 'si';
+  p.capacidad.mensajesDia = 60;
+  p.anuncios = { ...anunciosVacios(), alcance: 'ciudad' };
+  p.oferta = {
+    ...ofertaVacia(), activa: true, lineaId: 't1', deseo: 'estrenar tenis originales sin pagar de más', tiempo: 'se los lleva el mismo día',
+    bonos: [bonoBase({ nombre: 'Medias deportivas de regalo', costo: 15, valor: 60 }), bonoBase({ nombre: 'Limpieza de sus tenis gratis por 3 meses', costo: 10, valor: 90 })],
+    garantia: 'repetir', usoGarantia: 3, urgencia: 'fecha', pago: 'contado',
+  };
+  p.lanzamiento = { ...lanzamientoVacio(), ...fechaEjemplo(21), publicidad: 600, stock: 60, diasCanje: '2', atiendeDia: 30 };
+  return p;
+}
+function ejemploLanzBebe() {
+  const p = prospectoVacio();
+  p.modelo = 'lanzamiento';
+  p.negocio = { nombre: 'Mundo Bebé', rubro: 'Cunas, coches y sillas para bebé', ciudad: 'El Alto', facturacion: 45000, gastosFijos: 15000, caja: 4000, temporadaAlta: '', cobroDias: 0 };
+  p.meta = { tipo: 'clientes', valor: 15, plazo: 3, diasMes: 26, presupuestoTotal: '', paciencia: '' };
+  p.lineas = [
+    lineaBase({ id: 'b1', nombre: 'Cunas y coches', facturacion: 30000, margen: 30, tipo: 'unica', ticket: 1900, cicloDias: 7, tipoVenta: 'b2cAlto', competencia: 'media', capacidad: 'media', abrePuertas: true, ventaCruzadaPct: 40, ventaCruzadaGanancia: 120 }),
+    lineaBase({ id: 'b2', nombre: 'Ropa y accesorios', facturacion: 15000, margen: 45, tipo: 'repetida', ticket: 120, comprasAnio: 6, aniosCliente: 2, cicloDias: 1, tipoVenta: 'b2cBajo', competencia: 'alta', capacidad: 'mucha' }),
+  ];
+  p.foco = 'b1';
+  p.hoy = { numerosDe: 'negocio', interesadosMes: 150, clientesMes: 25, respuesta: 'dia', seguimiento: 'nunca', diasPropuesta: '', quienVende: 'dueno', viejos: 40, pautaMes: '', ventasPautaMes: '', quienPauta: 'nadie', equipoContenido: false, contenidoPrueba: 'nada', mide: 'no' };
+  p.compromiso.pagoTarjeta = 'nose';
+  p.capacidad.mensajesDia = 25;
+  p.anuncios = { ...anunciosVacios(), alcance: 'ciudad' };
+  p.lanzamiento = { ...lanzamientoVacio(), ...fechaEjemplo(21), publicidad: '', stock: 20, diasCanje: '2', atiendeDia: 12, compraPct: 60 };
+  return p;
+}
+function ejemploLanzHeladeria() {
+  const p = prospectoVacio();
+  p.modelo = 'lanzamiento';
+  p.negocio = { nombre: 'Heladería Polar', rubro: 'Helados artesanales y tortas heladas', ciudad: 'La Paz', facturacion: 25000, gastosFijos: 11000, caja: 3000, temporadaAlta: '', cobroDias: 0 };
+  p.meta = { tipo: 'aumento', valor: 8000, plazo: 3, diasMes: 30, presupuestoTotal: '', paciencia: '' };
+  p.lineas = [
+    lineaBase({ id: 'h1', nombre: 'Helados en el local', facturacion: 21000, margen: 60, tipo: 'repetida', ticket: 25, comprasAnio: 8, aniosCliente: 2, cicloDias: 0, tipoVenta: 'b2cBajo', competencia: 'alta', capacidad: 'mucha' }),
+    lineaBase({ id: 'h2', nombre: 'Tortas heladas para cumpleaños', facturacion: 4000, margen: 55, tipo: 'repetida', ticket: 250, comprasAnio: 1.5, aniosCliente: 3, cicloDias: 3, tipoVenta: 'b2cAlto', competencia: 'baja', capacidad: 'mucha' }),
+  ];
+  p.hoy = { numerosDe: 'negocio', interesadosMes: 60, clientesMes: 18, respuesta: 'hora', seguimiento: 'nunca', diasPropuesta: '', quienVende: 'dueno', viejos: '', pautaMes: '', ventasPautaMes: '', quienPauta: 'nadie', equipoContenido: false, contenidoPrueba: 'poco', mide: 'no' };
+  p.compromiso.pagoTarjeta = 'si';
+  p.capacidad.mensajesDia = 30;
+  p.anuncios = { ...anunciosVacios(), alcance: 'ciudad' };
+  p.lanzamiento = { ...lanzamientoVacio(), ...fechaEjemplo(21), stock: '', diasCanje: '2', atiendeDia: 25 };
+  return p;
 }
 /*EJEMPLOS-FIN*/

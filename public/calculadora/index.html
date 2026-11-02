@@ -688,6 +688,26 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 .vc-caso p { font-size: 15px; }
 .vc-pie { text-align: center; color: var(--text-2); font-size: 13px; display: grid; gap: 4px; padding: 6px 10px 20px; }
 
+/* Lanzamiento o plan mensual */
+.modelo { background: var(--card); border-radius: 16px; padding: 12px 14px; box-shadow: var(--sombra); display: flex; gap: 10px 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; border: 1px solid color-mix(in srgb, var(--green) 30%, transparent); }
+.modelo-txt { display: grid; gap: 2px; flex: 1 1 220px; min-width: 0; }
+.modelo-txt b { font-size: 15px; }
+.modelo-txt span { font-size: 13px; color: var(--text-2); }
+.modelo .segmento { flex: 0 1 300px; min-width: min(100%, 240px); }
+.modelo .segmento button { min-height: 34px; font-size: 14px; }
+.modelo-chico { padding: 8px 10px 8px 12px; box-shadow: none; background: var(--card-2); border: 0; }
+.modelo-chico .modelo-txt b { font-size: 13px; color: var(--text-2); font-weight: 600; }
+@media (min-width: 981px) { .modelo-chico { display: none; } } /* en la computadora ya está arriba de las preguntas */
+/* El número de la garantía */
+.garantia-n { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; }
+.gn-cifra { display: grid; justify-items: center; min-width: 84px; padding: 8px 12px; border-radius: 16px; background: var(--tint-orange); }
+.gn-cifra b { font-family: var(--f-num); font-size: 40px; line-height: 1; letter-spacing: -.02em; color: var(--warn-ink); }
+.gn-cifra span { font-size: 11px; color: var(--text-2); text-align: center; max-width: 14ch; line-height: 1.2; }
+.garantia-n .formula { margin-top: 0; }
+@media (max-width: 460px) { .garantia-n { grid-template-columns: minmax(0, 1fr); } .gn-cifra { justify-self: start; } }
+.barras-n .pista { position: relative; overflow: visible; }
+.marca-n { position: absolute; top: -4px; bottom: -4px; width: 3px; margin-left: -1px; background: var(--text); border-radius: 2px; }
+
 /* Guardar como PDF: solo la vista del cliente */
 @media print {
   @page { margin: 12mm; }
@@ -720,6 +740,10 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
           <button type="button" role="menuitem" data-ejemplo="brisa"><b>Brisa Técnica</b><span>Aire acondicionado para empresas</span></button>
           <button type="button" role="menuitem" data-ejemplo="joyeria"><b>Joyería Aurora</b><span>Ya tiene contenido; quiere mejores anuncios</span></button>
           <button type="button" role="menuitem" data-ejemplo="cafe"><b>Café La Esquina</b><span>Negocio chico de barrio</span></button>
+          <span class="pop-sep">Lanzamientos (Bs 2.500 en dos mitades)</span>
+          <button type="button" role="menuitem" data-ejemplo="lanzTenis"><b>Tienda de tenis</b><span>Black Friday, stock que se agota antes de tiempo</span></button>
+          <button type="button" role="menuitem" data-ejemplo="lanzBebe"><b>Tienda de bebé</b><span>Cunas de Bs 1.900: pocas ventas, número chico</span></button>
+          <button type="button" role="menuitem" data-ejemplo="lanzHeladeria"><b>Heladería</b><span>El helado no da; las tortas heladas sí</span></button>
           <span class="pop-sep">Lo mínimo que puedes aceptar</span>
           <button type="button" role="menuitem" data-ejemplo="minPlata"><b>Mínimo 1 · Joyas de plata</b><span>Venta rápida, Bs 220, vuelven 4 veces al año</span></button>
           <button type="button" role="menuitem" data-ejemplo="minAnillos"><b>Mínimo 2 · Anillos de compromiso</b><span>Compra pensada, Bs 4.500, una sola vez</span></button>
@@ -748,6 +772,7 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 <main class="app" id="app" data-vista="preguntas">
   <section class="col-preguntas" id="col-preguntas" aria-label="Preguntas">
     <div class="titulo-col"><h2>Llamada de diagnóstico</h2><p>Pregúntale como si conversaran. Si no sabe un número, toca <b>¿No sabe?</b> y te doy preguntas más fáciles. Si duda, escribe un rango: <b>20 a 30</b>.</p></div>
+    <div id="modelo"></div>
     <div id="ruta"></div>
     <div id="banner"></div>
     <div class="progreso" id="progreso"></div>
@@ -808,6 +833,17 @@ const REGLAS_BASE = {
   horaObjetivo: 0,
   mejora: { piso: 15, meta: 25, techo: 40 },
   horas: { estrategia: 6, contenido: 30, direccion: 8, campanas: 12, guia: 6, automatizacion: 6 },
+  // Lanzamiento (decidido por Mauricio el 24/10 y el 28/10/2026): un cobro por promo, en dos mitades
+  precioLanzamiento: 2500,
+  primeraMitadPct: 50,
+  anunciosMinimoLanz: 500,
+  topeGarantia: 25,
+  diasExtraGarantia: 7,
+  llegadaLanzPct: 50,
+  horasLanzamiento: 35,
+  planMes: 2500,
+  planMesCompromiso: 2000,
+  mesesCompromiso: 3,
 };
 
 const F_RESP = { '5min': 1, hora: 0.9, dia: 0.7, mas: 0.5, nose: 0.7 };
@@ -1044,11 +1080,11 @@ function alcanceNegocioDe(p, tipo) {
   if (a && a !== 'auto' && ADS_ALCANCE[a]) return { alcance: a, auto: false };
   return { alcance: tipo === 'b2b' ? 'empresas' : tipo === 'b2cBajo' ? 'barrio' : 'ciudad', auto: true };
 }
-function objetivoAdsDe(p, tipo, alcanceNeg) {
+function objetivoAdsDe(p, tipo, alcanceNeg, lanz) {
   const o = (p.anuncios || {}).objetivo;
   if (o && o !== 'auto' && ADS_OBJETIVOS[o]) return { objetivo: o, auto: false };
   if (alcanceNeg === 'empresas' || tipo === 'b2b') return { objetivo: 'formulario', auto: true };
-  if (alcanceNeg === 'barrio') return { objetivo: 'local', auto: true };
+  if (alcanceNeg === 'barrio' || lanz) return { objetivo: 'local', auto: true }; // un lanzamiento es con cupón y fecha
   return { objetivo: 'mensajes', auto: true };
 }
 // Un solo embudo, para una plataforma
@@ -1070,8 +1106,9 @@ function embudoPlataforma(plat, obj, bs, c) {
   if (obj === 'local') {
     const fOferta = (c.cupon ? 1.3 : 0.6) * (c.ofertaBuena ? 1.15 : 1);
     r.resultados = alcance * T.interes * fPrecio * fOferta;
-    r.llegadas = r.resultados * T.llegada;
-    r.clientes = r.llegadas * T.compraLocal * fPrecio * (0.75 + 0.25 * c.factorAtencion);
+    // En un lanzamiento el cupón tiene día y hora y se recuerda a mano: llegan más (tu supuesto: 1 de cada 2)
+    r.llegadas = r.resultados * (c.llegadaPct > 0 ? c.llegadaPct : T.llegada);
+    r.clientes = r.llegadas * (c.compraPct > 0 ? c.compraPct : T.compraLocal * fPrecio * (0.75 + 0.25 * c.factorAtencion));
     r.prospectar = r.resultados; r.mensajes = r.resultados * 0.5; r.promesa = r.llegadas;
   } else if (obj === 'mensajes') {
     r.clics = vistasPagadas * O.clic[plat];
@@ -1110,7 +1147,7 @@ function modeloAds(p, c) {
   const A = p.anuncios || {};
   const platSel = ['tiktok', 'meta', 'ambas'].includes(A.plataforma) ? A.plataforma : 'tiktok';
   const { alcance: alcanceNeg, auto: alcanceAuto } = alcanceNegocioDe(p, c.tipo);
-  const { objetivo, auto: objetivoAuto } = objetivoAdsDe(p, c.tipo, alcanceNeg);
+  const { objetivo, auto: objetivoAuto } = objetivoAdsDe(p, c.tipo, alcanceNeg, c.lanz);
   const tc = n(A.tc) > 0 ? n(A.tc) : TC_DEF;
   const reparto = platSel === 'ambas' ? [['tiktok', 0.7], ['meta', 0.3]] : [[platSel, 1]];
   const O = ADS_OBJETIVOS[objetivo];
@@ -1140,7 +1177,7 @@ function modeloAds(p, c) {
     vistasPagadas: suma('vistasPagadas'), vistas: suma('vistas'), alcance: suma('alcance'), clics: suma('clics'), resultados: suma('resultados'),
     contactados: suma('contactados'), calificados: suma('calificados'), llegadas: suma('llegadas'), clientes: suma('clientes'), prospectar: suma('prospectar'), mensajes: suma('mensajes'), promesa: suma('promesa'),
     saturado: partes.some(x => x.saturado), aprendizaje: partes.some(x => x.aprendizaje), fuente: n(A.costoResultadoReal) > 0 || n(A.cpmReal) > 0 ? 'real' : 'mercado',
-    cupon: c.cupon, avisos,
+    cupon: c.cupon, avisos, lanz: !!c.lanz,
   };
   out.frecuencia = out.alcance > 0 ? out.vistas / out.alcance : 0;
   out.cpmBs = out.vistasPagadas > 0 ? c.presupuesto / out.vistasPagadas * 1000 : 0;
@@ -1151,9 +1188,14 @@ function modeloAds(p, c) {
   const tk = partes.find(x => x.plat === 'tiktok');
   out.videosMes = tk && tk.modo !== 'continuo' ? Math.max(4, 4 * Math.ceil(tk.dias / 4)) : clamp(Math.ceil(out.usd / 50), 4, 20);
   if (tk && tk.modo !== 'continuo') out.videosMes = clamp(out.videosMes, 4, 12);
+  if (c.lanz) out.videosMes = 9; // 3 cuerpos con 3 ganchos cada uno
   // Avisos de experto
   for (const x of partes) {
     if (x.plat !== 'tiktok') continue;
+    if (c.lanz) {
+      if (x.modo !== 'continuo') avisos.push(`Con ${fmtM(x.bs)} (unos USD ${fmtN(x.usd)}) no alcanza para tener TikTok Ads prendido los 14 días (el mínimo es USD 20 por día). Se arma así: un poco con «Promocionar» desde el primer video, y la mitad de la plata en los 3 últimos días antes del canje, sobre el video que más gustó.`);
+      continue;
+    }
     if (x.modo === 'pulsos') avisos.push(`En TikTok Ads el mínimo es USD 20 por día. Con ${fmtM(x.bs)} (unos USD ${fmtN(x.usd)}) no alcanza para tenerlo prendido todo el mes: mejor en ${x.dias} días fuertes, como un lanzamiento de fin de semana o cerca de fin de mes, cuando la gente cobra.`);
     if (x.modo === 'promocionar') avisos.push(`Con ${fmtM(x.bs)} (unos USD ${fmtN(x.usd)}), TikTok Ads solo da para ${Math.max(0, Math.floor(x.usd / 20))} días. Mejor usar «Promocionar» desde la app (desde unos USD 3 por día) para empujar los videos que ya gustaron.`);
   }
@@ -1168,25 +1210,22 @@ function modeloAds(p, c) {
 }
 
 // ---------- Evaluación completa ----------
-function evaluar(p, reglas, an, focoId) {
-  const R = normalizarReglasMotor(reglas);
-  const foco = an.lista.find(x => x.id === focoId) || an.lista.find(x => x.completa) || an.lista[0];
-  const tipo = TIPOS_VENTA[foco.l.tipoVenta] ? foco.l.tipoVenta : 'b2b';
-  const T = TIPOS_VENTA[tipo];
-  const sup = { ...supuestosBase()[tipo], ...((p.supuestos || {})[tipo] || {}) };
-  const h = p.hoy;
+// Los números que no dio el dueño (se usan igual en el plan mensual y en el lanzamiento)
+function estimadosDe(p, foco, T) {
   const estimados = [];
   if (vacio(foco.l0.margen) || n(foco.l0.margen) <= 0) estimados.push('cuánto le queda de cada 100 (usé 30)');
   if (foco.l.tipo === 'recurrente' && vacio(foco.l0.vidaMeses)) estimados.push('cuántos meses se queda un cliente (usé 12)');
   if (foco.l.tipo === 'repetida' && vacio(foco.l0.comprasAnio)) estimados.push('cuántas veces al año compra (usé 2)');
   if (foco.l.tipo === 'repetida' && vacio(foco.l0.aniosCliente)) estimados.push('cuántos años sigue comprando (usé 1,5)');
   if (vacio(foco.l0.cicloDias)) estimados.push(`cuántos días tarda una venta (usé ${T.cicloDias})`);
-  const mt = foco.mt;
   const F = p.fuentes || {};
   const marcas = [[`linea:${foco.id}:ticket`, 'el precio promedio'], [`linea:${foco.id}:margen`, 'cuánto le queda de cada 100'], [`linea:${foco.id}:vidaMeses`, 'cuántos meses se queda un cliente'], [`linea:${foco.id}:comprasAnio`, 'cuántas veces al año compra'], [`linea:${foco.id}:aniosCliente`, 'cuántos años sigue comprando'], [`linea:${foco.id}:cicloDias`, 'cuántos días tarda una venta'], ['hoy.interesadosMes', 'cuántos preguntan al mes'], ['hoy.clientesMes', 'cuántos clientes nuevos consigue']];
   for (const [k, t] of marcas) if (F[k] === 'estimado' && !estimados.some(e => e.startsWith(t))) estimados.push(t + ' (valor por las dudas)');
-
-  // Cierre: hoy y con el plan
+  return estimados;
+}
+// Cuántos compran hoy, de los que sí pueden comprar (medido si dio sus números; si no, adivinado por cómo atiende)
+function cierreHoyDe(p, an, foco, T, sup, estimados) {
+  const h = p.hoy;
   const calif = clamp(n(sup.calificaPct), 1, 100) / 100;
   const bench = clamp(n(sup.cierrePct), 0.1, 100) / 100;
   const principal = [...an.lista].filter(x => x.completa).sort((a, b) => b.facturacion - a.facturacion)[0];
@@ -1200,6 +1239,20 @@ function evaluar(p, reglas, an, focoId) {
     factorHoy = (F_RESP[h.respuesta] ?? 0.7) * (F_SEG[h.seguimiento] ?? 0.8) * (T.consultivo ? (vacio(h.diasPropuesta) ? 0.9 : n(h.diasPropuesta) <= 2 ? 1 : n(h.diasPropuesta) <= 5 ? 0.9 : 0.75) : 1);
     estimados.push(focoEsPrincipal ? 'cuántos de los que preguntan terminan comprando (lo adiviné por cómo atiende)' : `cuántos compran «${foco.nombre}» (lo adiviné: sus números son de todo el negocio)`);
   }
+  return { calif, bench, focoEsPrincipal, interesados, clientes, factorHoy, medido };
+}
+function evaluar(p, reglas, an, focoId) {
+  const R = normalizarReglasMotor(reglas);
+  const foco = an.lista.find(x => x.id === focoId) || an.lista.find(x => x.completa) || an.lista[0];
+  const tipo = TIPOS_VENTA[foco.l.tipoVenta] ? foco.l.tipoVenta : 'b2b';
+  const T = TIPOS_VENTA[tipo];
+  const sup = { ...supuestosBase()[tipo], ...((p.supuestos || {})[tipo] || {}) };
+  const h = p.hoy;
+  const estimados = estimadosDe(p, foco, T);
+  const mt = foco.mt;
+
+  // Cierre: hoy y con el plan
+  const { calif, bench, focoEsPrincipal, interesados, factorHoy, medido } = cierreHoyDe(p, an, foco, T, sup, estimados);
   // Modo y alcance
   const pautaHoy = Math.max(0, n(h.pautaMes));
   const ventasPautaHoy = Math.max(0, n(h.ventasPautaMes));
@@ -1677,6 +1730,7 @@ const DIR_PRUDENTE = {
   'meta.presupuestoTotal': 'min', 'meta.paciencia': 'min', 'meta.valor': 'max', 'meta.diasMes': 'min',
   'oferta.precio': 'min', 'oferta.usoGarantia': 'max', 'servicio.presupuesto': 'min',
   'anuncios.costoResultadoReal': 'max', 'anuncios.cpmReal': 'max', 'anuncios.tc': 'max',
+  'lanzamiento.publicidad': 'min', 'lanzamiento.stock': 'min', 'lanzamiento.atiendeDia': 'min', 'lanzamiento.llegadaPct': 'min', 'lanzamiento.compraPct': 'min', 'lanzamiento.pautaPlan': 'min',
 };
 function dirDe(clave) { if (DIR_PRUDENTE[clave]) return DIR_PRUDENTE[clave]; const last = clave.split(/[.:]/).pop(); return DIR_PRUDENTE[last] || 'min'; }
 function setEn(p, clave, v) {
@@ -1838,16 +1892,337 @@ function minimoAceptable(p, reglas, focoId, base) {
   };
 }
 
+// ---------- Lanzamiento: un cobro por promo, con fecha y cupón ----------
+// El modelo de Grow Business (decidido por Mauricio el 24/10 y el 28/10/2026):
+// - Un precio por lanzamiento (Bs 2.500), en dos mitades: la mitad para empezar y la otra cuando lleguen los clientes de la garantía.
+// - Garantía: N = lo que puso (servicio + publicidad) ÷ lo que le deja una venta. Se cuentan los cupones validados en la tienda,
+//   compre o no. Si en su fecha no llegan: 7 días más con el video ganador, sin costo. Si igual no llegan, la segunda mitad no se paga.
+//   Tope de N: 25 (si sale más, se elige con el dueño otro producto antes de ofrecer la garantía).
+// - Vale si el dueño cumple sus 5 cosas: accesos, aprobar cada video en 24 h, su publicidad desde Bs 500, su stock separado y validar cada cupón.
+// - Calendario de 14 días, con la mitad de la publicidad en los 3 últimos. El tope de cupones es el stock separado.
+// - Llegan 1 de cada 2 que reservan: es su supuesto hasta tener 10 reservas contadas de lanzamientos terminados.
+// - Después, el plan de cada mes: Bs 2.500 cada 4 semanas, o Bs 2.000 con 3 meses de compromiso.
+const FACT_ESC = { piso: 2 / 3, meta: 1, techo: 4 / 3 };
+const UNIDAD_GARANTIA = {
+  local: ['llegadas', 'personas que llegan a la tienda con su cupón'],
+  mensajes: ['interesados', 'personas interesadas que sí pueden comprar'],
+  formulario: ['interesados', 'personas interesadas que sí pueden comprar'],
+  conocer: ['interesados', 'personas interesadas que sí pueden comprar'],
+  web: ['compras', 'compras en su página web'],
+};
+function fmtUno(x) { return fmtN(x, x < 10 && Math.abs(x - Math.round(x)) > 0.05 ? 1 : 0); }
+// Fechas (sin hora; el canje es un día de la tienda)
+const DIA_MS = 86400000;
+function fechaDe(s) { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || '')); if (!m) return null; const d = new Date(+m[1], +m[2] - 1, +m[3]); return isNaN(d.getTime()) ? null : d; }
+function masDias(d, k) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + k); }
+function isoDe(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+function diasEntre(a, b) { return Math.round((Date.UTC(b.getFullYear(), b.getMonth(), b.getDate()) - Date.UTC(a.getFullYear(), a.getMonth(), a.getDate())) / DIA_MS); }
+function fmtFecha(d, conDia = true) { if (!d) return '—'; return new Intl.DateTimeFormat('es-BO', conDia ? { weekday: 'long', day: 'numeric', month: 'long' } : { day: 'numeric', month: 'long' }).format(d); }
+// Fechas fuertes de Bolivia para una promo. «antes» = cuántos días antes es el canje (en fechas de regalo, la gente compra antes)
+const FECHAS_FUERTES = [
+  { md: '02-01', nombre: 'Vuelta a clases', antes: 5 },
+  { md: '02-14', nombre: 'Día del Amor y la Amistad', antes: 2 },
+  { md: '03-19', nombre: 'Día del Padre', antes: 2 },
+  { md: '04-12', nombre: 'Día del Niño', antes: 2 },
+  { md: '05-27', nombre: 'Día de la Madre', antes: 2 },
+  { md: '09-21', nombre: 'Día del Estudiante y la Primavera', antes: 1 },
+  { md: '10-11', nombre: 'Día de la Mujer Boliviana', antes: 1 },
+  { bf: true, nombre: 'Black Friday', antes: 0 },
+  { md: '12-25', nombre: 'Navidad, con el aguinaldo', antes: 5 },
+];
+function proximasFechas(hoy, cuantas = 6) {
+  const out = [];
+  for (const y of [hoy.getFullYear(), hoy.getFullYear() + 1]) {
+    for (const f of FECHAS_FUERTES) {
+      let dia;
+      if (f.bf) { const d1 = new Date(y, 10, 1); dia = new Date(y, 10, 1 + ((5 - d1.getDay() + 7) % 7) + 21); }
+      else { const [mm, dd] = f.md.split('-').map(Number); dia = new Date(y, mm - 1, dd); }
+      const canje = masDias(dia, -f.antes);
+      if (diasEntre(hoy, canje) >= 10) out.push({ nombre: f.nombre, dia, canje, iso: isoDe(canje) });
+    }
+    // Fin de mes: la gente cobra
+    for (let m = 0; m < 12; m++) { const d = new Date(y, m + 1, 0); if (diasEntre(hoy, d) >= 17 && diasEntre(hoy, d) <= 75) out.push({ nombre: 'Fin de mes, cuando la gente cobra', dia: d, canje: d, iso: isoDe(d) }); }
+  }
+  out.sort((a, b) => a.canje - b.canje);
+  const vistos = new Set(), fin = [];
+  for (const x of out) { if (vistos.has(x.iso) || (x.nombre.startsWith('Fin de mes') && fin.some(f => f.nombre.startsWith('Fin de mes')))) continue; vistos.add(x.iso); fin.push(x); if (fin.length >= cuantas) break; }
+  return fin;
+}
+// Las etapas del lanzamiento. d = días respecto del canje (0 = primer día de canje)
+function calendarioLanzamiento(fecha, diasCanje, diasExtra) {
+  const etapas = [
+    { d: -20, hasta: -15, t: 'Cerrar y arrancar', x: 'Cobras la primera mitad. Sesión de arranque: sus accesos, la promo armada, el stock separado y la grabación.' },
+    { d: -14, hasta: -10, t: 'Susurro', x: 'Sale el primer video y se abren las reservas del cupón. Un poco de publicidad con «Promocionar» sobre lo que más gusta.' },
+    { d: -9, hasta: -4, t: 'Provocación', x: 'La promo con su fecha y su porqué. Se ve qué video va ganando y se le cambian los ganchos.' },
+    { d: -3, hasta: -1, t: 'Grito', x: 'La mitad de la publicidad, sobre el video ganador. Recordatorio a mano a cada reserva el día antes.' },
+    { d: 0, hasta: diasCanje - 1, t: 'Canje en la tienda', x: 'Llegan con su cupón, con día y hora. Se valida y se cuenta cada cupón. Recordatorio a mano unas horas antes.' },
+    { d: diasCanje, hasta: diasCanje, t: 'Agotado y resultados', x: 'Se anuncia que se agotó. Si ya llegaron los de la garantía: segunda mitad, testimonio y el plan de cada mes.' },
+  ];
+  if (diasExtra > 0) etapas.push({ d: diasCanje + 1, hasta: diasCanje + diasExtra, t: `Si faltan: ${diasExtra} días más`, x: `Si no llegaron los de la garantía, ${diasExtra} días más con el video ganador, sin costo. Si igual no llegan, la segunda mitad no se paga.` });
+  return etapas.map(e => ({ ...e, desde: fecha ? masDias(fecha, e.d) : null, al: fecha ? masDias(fecha, e.hasta) : null }));
+}
+// Lo que le deja una venta de la promo: si armaste la oferta de ese producto (paso 6), con su precio y su regalo
+function ventaLanzamiento(p, foco) {
+  const mt = foco.mt;
+  let O = null;
+  try { const o = p.oferta && p.oferta.activa ? evaluarOferta(p) : null; if (o && !o.incompleta && o.lineaId === foco.id) O = o; } catch (e) { }
+  const precio = O ? O.precio : mt.ticket;
+  const costo = O ? O.costoBase : mt.ticket * (1 - mt.m);
+  const regalo = O ? O.costoBonos : 0;
+  const gan = precio - costo - regalo;
+  // Lo que deja después, cuando vuelve a comprar a precio normal (en su primer año y en total)
+  const normal = mt.ticket * mt.m;
+  const despues1 = mt.tipo === 'recurrente' ? Math.max(0, Math.min(12, mt.vida) - 1) * mt.gMes : mt.tipo === 'repetida' ? Math.max(0, Math.min(mt.totalCompras, mt.ppy) - 1) * normal : 0;
+  const despuesL = mt.tipo === 'recurrente' ? Math.max(0, mt.vida - 1) * mt.gMes : mt.tipo === 'repetida' ? Math.max(0, mt.totalCompras - 1) * normal : 0;
+  return { precio, costo, regalo, gan, g1: gan + despues1, gL: gan + despuesL, O };
+}
+function evaluarLanzamiento(p, reglas, an, focoId, op = {}) {
+  const R = normalizarReglasMotor(reglas), mon = R.moneda;
+  const foco = an.lista.find(x => x.id === focoId) || an.lista.find(x => x.completa) || an.lista[0];
+  const tipo = TIPOS_VENTA[foco.l.tipoVenta] ? foco.l.tipoVenta : 'b2b';
+  const T = TIPOS_VENTA[tipo];
+  const sup = { ...supuestosBase()[tipo], ...((p.supuestos || {})[tipo] || {}) };
+  const h = p.hoy, mt = foco.mt, L = p.lanzamiento || {}, C = p.compromiso || {}, M = p.meta || {};
+  const estimados = estimadosDe(p, foco, T);
+  const { calif, bench, factorHoy, medido } = cierreHoyDe(p, an, foco, T, sup, estimados);
+  const guiaActiva = !!C.aplicaGuia;
+  let factorPlan = factorHoy;
+  if (guiaActiva && factorPlan < 1) factorPlan = factorPlan + 0.5 * (1 - factorPlan);
+  factorPlan = Math.min(factorPlan, Math.max(1, factorHoy));
+  const cierre = { hoy: bench * factorHoy, plan: bench * factorPlan, bench, factorHoy, factorPlan, medido, calif, guiaActiva };
+
+  // Tu precio y lo que deja cada venta
+  const precio = Math.max(0, n(R.precioLanzamiento));
+  const mitad1 = Math.round(precio * clamp(n(R.primeraMitadPct), 0, 100) / 100), mitad2 = precio - mitad1;
+  const adsMin = Math.max(0, n(R.anunciosMinimoLanz));
+  const tope = Math.max(1, n(R.topeGarantia) || 25), diasExtra = Math.max(0, Math.round(n(R.diasExtraGarantia)));
+  const venta = ventaLanzamiento(p, foco), ganVenta = venta.gan;
+
+  // Lo que sabe de su tienda (si no lo sabe: tu supuesto y los promedios)
+  const llegadaPct = clamp(n(L.llegadaPct) > 0 ? n(L.llegadaPct) : n(R.llegadaLanzPct) || 50, 1, 100) / 100;
+  const compraPct = n(L.compraPct) > 0 ? clamp(n(L.compraPct), 1, 100) / 100 : 0;
+  const stock = n(L.stock) > 0 ? n(L.stock) : null;
+  const topeCup = n(L.topeCupones) > 0 ? n(L.topeCupones) : stock; // tu regla: el tope de cupones es el stock separado
+  const diasCanje = clamp(Math.round(n(L.diasCanje) || 2), 1, 7);
+  const atiendeDia = n(L.atiendeDia) > 0 ? n(L.atiendeDia) : null;
+  const capCanje = atiendeDia !== null ? atiendeDia * diasCanje : null;
+
+  // Anuncios del lanzamiento: el mismo embudo, con el cupón que tiene día y hora
+  const A = p.anuncios || {};
+  const base = { tipo, ticket: venta.precio, calif, cierrePlan: cierre.plan, factorAtencion: clamp(factorPlan, 0.4, 1), cupon: A.cupon !== false, ofertaBuena: !!(venta.O && venta.O.puntaje >= 75), factorCosto: n(A._factorCosto) || 1, lanz: true, llegadaPct, compraPct };
+  const adsCon = pres => modeloAds(p, { ...base, presupuesto: Math.max(0, pres) });
+  const Nde = pres => ganVenta > 0 ? Math.max(1, Math.ceil((precio + pres) / ganVenta - 1e-9)) : Infinity;
+  // Un escenario: las reservas, hasta el tope de cupones; los que llegan, hasta lo que puede atender en los días del canje;
+  // y nunca se vende más de lo que separó
+  function escenarioDe(a, k) {
+    const f = FACT_ESC[k];
+    const x = { reservas: a.resultados * f, llegadas: a.llegadas * f, interesados: a.calificados * f, compras: a.clientes * f, agotado: false, sinAtender: 0, sinStock: false };
+    if (a.objetivo === 'local') {
+      if (topeCup !== null && x.reservas > topeCup) { const g = topeCup / x.reservas; x.reservas = topeCup; x.llegadas *= g; x.compras *= g; x.agotado = true; }
+      if (capCanje !== null && x.llegadas > capCanje) { const g = capCanje / x.llegadas; x.sinAtender = x.llegadas - capCanje; x.llegadas = capCanje; x.compras *= g; }
+    }
+    if (stock !== null && x.compras > stock) { x.compras = stock; x.sinStock = true; }
+    x.unidades = a.objetivo === 'local' ? x.llegadas : a.objetivo === 'web' ? x.compras : x.interesados;
+    return x;
+  }
+  // Publicidad: la que dijo, o lo menos con lo que llegan los de la garantía aunque salga lo mínimo
+  const pubDada = !vacio(L.publicidad) ? Math.max(0, n(L.publicidad)) : null;
+  let pubSegura = null;
+  if (ganVenta > 0) for (let x = Math.max(100, adsMin); x <= 10000; x += x < 1000 ? 50 : x < 3000 ? 100 : 250) { if (escenarioDe(adsCon(x), 'piso').unidades >= Nde(x)) { pubSegura = x; break; } }
+  const publicidad = pubDada !== null ? pubDada : Math.max(adsMin, pubSegura ?? adsMin);
+  const ads = adsCon(publicidad);
+  const N = Nde(publicidad);
+  const unidadGar = UNIDAD_GARANTIA[ads.objetivo] || UNIDAD_GARANTIA.local;
+
+  // Tres escenarios del lanzamiento
+  const escenarios = {};
+  for (const k of ['piso', 'meta', 'techo']) {
+    const x = escenarioDe(ads, k);
+    const llega = x.unidades >= N - 1e-9;
+    const cobro = llega ? precio : mitad1; // si cumple sus 5 cosas
+    const inv = cobro + publicidad, ganLanz = x.compras * ganVenta;
+    escenarios[k] = { ...x, llega, cobro, inv, faltan: Math.max(0, N - x.unidades), ventasBs: x.compras * venta.precio, ganLanz, gan1: x.compras * venta.g1, ganL: x.compras * venta.gL, neto: ganLanz - inv, roiLanz: inv > 0 ? ganLanz / inv : Infinity, roi1: inv > 0 ? x.compras * venta.g1 / inv : Infinity };
+  }
+  const E = escenarios;
+
+  // Después: el plan de cada mes (un lanzamiento chico al mes, con su propia promo)
+  const pubPlan = n(L.pautaPlan) > 0 ? n(L.pautaPlan) : publicidad;
+  const aPlan = pubPlan > 0 ? adsCon(pubPlan) : null;
+  const plan = { ofrecer: L.ofrecerPlan !== false, precio: n(R.planMes), precioComp: n(R.planMesCompromiso), meses: Math.max(1, Math.round(n(R.mesesCompromiso) || 3)), pub: pubPlan, esc: {} };
+  for (const k of ['piso', 'meta', 'techo']) {
+    const xp = aPlan ? escenarioDe(aPlan, k) : { compras: 0, llegadas: 0 }, compras = xp.compras, lleg = xp.llegadas;
+    const gan = compras * ganVenta, inv = plan.precio + pubPlan, invC = plan.precioComp + pubPlan;
+    plan.esc[k] = { compras, llegadas: lleg, gan, inv, invC, ventasBs: compras * venta.precio, roi: inv > 0 ? gan / inv : Infinity, roiC: invC > 0 ? gan / invC : Infinity };
+  }
+
+  // La fecha
+  const hoyD = op.hoy instanceof Date ? op.hoy : new Date();
+  const fecha = fechaDe(L.fecha);
+  const diasHasta = fecha ? diasEntre(hoyD, fecha) : null;
+  const calendario = calendarioLanzamiento(fecha, diasCanje, diasExtra);
+  const cierraHasta = fecha ? masDias(fecha, -17) : null;
+  const dias = clamp(n(M.diasMes) || 26, 1, 31);
+
+  // Lo que quiere el dueño, comparado con el lanzamiento y con el plan de cada mes
+  let metaDueno = null;
+  if (!vacio(M.valor) && n(M.valor) > 0) {
+    const tipoM = M.tipo || 'aumento', em = E.meta, pm = plan.esc.meta;
+    let quiere, daLanz, daPlan;
+    if (tipoM === 'clientes') { quiere = n(M.valor); daLanz = em.compras; daPlan = pm.compras; }
+    else if (tipoM === 'ganancia') { quiere = n(M.valor); daLanz = em.ganLanz - em.inv; daPlan = pm.gan - pm.inv; }
+    else { quiere = tipoM === 'total' ? Math.max(0, n(M.valor) - an.factNegocio) : n(M.valor); daLanz = em.ventasBs; daPlan = pm.ventasBs; }
+    metaDueno = { tipo: tipoM, valor: n(M.valor), quiere, daLanz, daPlan, cobLanz: quiere > 0 ? daLanz / quiere : 99, cobPlan: quiere > 0 ? daPlan / quiere : 99, plazo: Math.round(n(M.plazo)) || null, dias };
+  }
+
+  // ---------- Chequeos: ¿se puede cumplir la promesa? ----------
+  const ch = [];
+  const add = (id, nombre, estado, critico, detalle, arreglo) => ch.push({ id, nombre, estado, critico, detalle, arreglo });
+  if (publicidad < adsMin) add('anunciosMin', 'Pone lo mínimo en publicidad', 'no', true, `Pondría ${fmtM(publicidad, mon)} en publicidad. Tu mínimo por lanzamiento es ${fmtM(adsMin, mon)}.`, `Con menos de ${fmtM(adsMin, mon)} no aceptas: es una de sus 5 cosas de la garantía.`);
+  if (!(ganVenta > 0)) add('ganVenta', 'Cada venta le deja ganancia', 'no', true, venta.O ? `Con el regalo, cada venta de la promo le deja ${fmtM(ganVenta, mon)}.` : 'Falta saber cuánto le queda de cada venta.', 'Sin ganancia por venta no hay número de garantía: revisa el precio, lo que le queda o el regalo.');
+  else {
+    const minGan = Math.ceil((precio + publicidad) / tope);
+    add('tope', 'El número de la garantía se puede prometer', N <= tope ? 'ok' : 'no', true,
+      `${fmtM(precio + publicidad, mon)} (servicio + publicidad) ÷ ${fmtM(ganVenta, mon)} que le deja cada venta = ${fmtN(N)} ${unidadGar[1]}. Tu tope es ${fmtN(tope)}.`,
+      N <= tope ? '' : `Antes de ofrecer la garantía, elige con él otro producto: cada venta tiene que dejarle al menos ${fmtM(minGan, mon)}.`);
+    const est = E.piso.llega ? 'ok' : E.meta.llega ? 'ojo' : 'no';
+    const subir = pubSegura !== null && pubSegura > publicidad ? `Con ${fmtM(pubSegura, mon)} de publicidad llegan aunque salga lo mínimo.` : '';
+    add('llega', 'Llegan los clientes de la garantía', est, true,
+      `Necesita ${fmtN(N)} ${unidadGar[1]}. Aunque salga lo mínimo llegan ${fmtUno(E.piso.unidades)}; lo esperado son ${fmtUno(E.meta.unidades)}.`,
+      est === 'ok' ? '' : est === 'ojo' ? `Lo esperado alcanza, pero lo mínimo no: te cubren los ${diasExtra} días más con el video ganador. ${subir}`.trim() : (pubSegura !== null ? `Que ponga ${fmtM(pubSegura, mon)} en publicidad, o elige un producto que deje más por venta.` : 'Ni subiendo la publicidad llega: elige un producto que deje más por venta o arma un regalo más fuerte.'));
+  }
+  {
+    const e = E.piso, est = e.roiLanz >= 1 ? 'ok' : e.roi1 >= 1.2 ? 'ojo' : 'no';
+    add('recupera', 'Aunque salga lo mínimo, recupera lo que pone', est, true,
+      `Si sale lo mínimo compran ${fmtUno(e.compras)} y le dejan ${fmtM(e.ganLanz, mon)} en el lanzamiento: ${fmtN(e.roiLanz, 1)} veces lo que pone (${fmtM(e.inv, mon)}).${venta.g1 > ganVenta + 0.5 ? ` Con los que vuelven a comprar en el año: ${fmtN(e.roi1, 1)} veces.` : ''}`,
+      est === 'ok' ? '' : est === 'ojo' ? 'En el lanzamiento no recupera todo: lo recupera con los que vuelven a comprar. Díselo claro desde el inicio.' : 'Así no le conviene: elige un producto que deje más por venta, mejora el regalo o espera a que su tienda venda más.');
+  }
+  if (ads.objetivo === 'local' && ganVenta > 0) {
+    const c = E.meta.compras, est = c >= N ? 'ok' : c >= 0.7 * N ? 'ojo' : 'no';
+    add('adentro', 'Los que llegan, compran', est, false,
+      `La garantía cuenta llegadas, compren o no. En lo esperado compran ${fmtUno(c)} de los ${fmtUno(E.meta.llegadas)} que llegan, y para recuperar lo que pone necesita ${fmtN(N)} ventas.`,
+      est === 'ok' ? '' : 'Lo que pasa adentro (precio, atención, que el producto esté a la vista) es de él: enséñale a atender a los que llegan con el cupón.');
+  }
+  if (ads.objetivo === 'local') {
+    if (stock === null) add('stock', 'Separa stock para la promo', 'ojo', false, 'Falta saber cuántas unidades separa. Es el tope de cupones.', 'Pregúntaselo en el paso 5: sin stock separado, la garantía no vale.');
+    else {
+      const maxLleg = topeCup * llegadaPct, okS = ganVenta > 0 && maxLleg >= N - 1e-9;
+      const sobra = Math.max(0, stock - E.meta.compras), topeSug = Math.floor(stock / llegadaPct);
+      const corto = okS && E.meta.agotado && topeCup < topeSug && sobra >= 0.3 * stock;
+      add('stock', 'Le alcanza el stock', okS ? (corto ? 'ojo' : 'ok') : 'no', !okS && ganVenta > 0,
+        `Separa ${fmtN(stock)} unidades${topeCup !== stock ? ` y da hasta ${fmtN(topeCup)} cupones` : ': es el tope de cupones'}. Llegando ${fmtN(llegadaPct * 100)} de cada 100 que reservan, llegan hasta ${fmtUno(maxLleg)}.${E.meta.agotado ? ` En lo esperado se acaban los cupones${sobra >= 1 ? ` y le quedan unas ${fmtN(sobra)} unidades sin vender` : ''}: anúncialo, es escasez de verdad.` : ''}`,
+        !okS ? `Para llegar a los ${fmtN(N)}, que separe al menos ${fmtN(Math.ceil(N / llegadaPct))} unidades${topeCup !== stock ? ' o dé más cupones' : ''}.`
+          : corto ? `Como no llegan todos los que reservan, puede dar hasta ${fmtN(topeSug)} cupones (el stock ÷ los que llegan): llegarían unas ${fmtN(topeSug * llegadaPct)} personas y nadie se queda sin su producto. Anótalo en «Tope de cupones» (paso 5).` : '');
+    }
+    const porDia = (E.meta.llegadas + E.meta.sinAtender) / diasCanje;
+    if (capCanje === null) add('atiende', 'Puede atender a los que llegan', porDia >= 15 ? 'ojo' : 'na', false, `El día del canje llegarían unas ${fmtUno(porDia)} personas por día. Falta saber cuántas puede atender bien.`, porDia >= 15 ? 'Pregúntale cuántas personas puede atender bien en un día.' : '');
+    else {
+      const est = E.techo.sinAtender <= 0 ? 'ok' : E.meta.sinAtender <= 0 ? 'ojo' : 'no';
+      add('atiende', 'Puede atender a los que llegan', est, false,
+        `Puede atender bien ${fmtN(atiendeDia)} personas por día (${fmtN(capCanje)} en ${diasCanje} día${diasCanje > 1 ? 's' : ''} de canje). En lo esperado llegan unas ${fmtUno(porDia)} por día.`,
+        est === 'ok' ? '' : E.meta.sinAtender > 0 ? `No le alcanza: unas ${fmtUno(E.meta.sinAtender)} personas se irían sin atender. Ya las quité de la cuenta. Que sume a alguien esos días o haga el canje en más días.` : 'Si sale muy bien, no le alcanza: que tenga a alguien de apoyo esos días.');
+    }
+    const msj = E.meta.reservas * 2 / (diasCanje + 1), capMsg = n(p.capacidad?.mensajesDia);
+    if (capMsg > 0) add('mensajes', 'Puede mandar los recordatorios', capMsg >= msj ? 'ok' : capMsg >= 0.7 * msj ? 'ojo' : 'no', false, `Son 2 recordatorios a mano por reserva: unos ${fmtUno(msj)} mensajes por día cerca del canje. Puede contestar bien ${fmtN(capMsg)} por día.`, capMsg >= msj ? '' : 'Repartan los recordatorios entre dos personas, o mándalos tú desde el link.');
+  }
+  if (!fecha) add('fecha', 'Tiene fecha y porqué', 'ojo', false, 'Falta la fecha del canje.', 'Elige con él una fecha fuerte (paso 7): sin fecha no hay urgencia de verdad.');
+  else if (diasHasta < 0) add('fecha', 'Tiene fecha y porqué', 'no', false, `La fecha del canje (${fmtFecha(fecha)}) ya pasó.`, 'Elige otra fecha.');
+  else if (diasHasta < 17) add('fecha', 'Da el tiempo hasta la fecha', diasHasta >= 10 ? 'ojo' : 'no', false, `Faltan ${diasHasta} días para el canje. El calendario pide unos 14 días de videos y 3 de preparación.`, diasHasta >= 10 ? 'Cierra hoy y graba esta semana: el primer video tiene que salir ya.' : 'No da el tiempo: mueve la fecha a la próxima fecha fuerte.');
+  else add('fecha', 'Tiene fecha y porqué', vacio(L.porque) ? 'ojo' : 'ok', false, `Canje el ${fmtFecha(fecha)}${!vacio(L.porque) ? `, por «${String(L.porque).trim()}»` : ''}. Para llegar, cierra a más tardar el ${fmtFecha(cierraHasta)}.`, vacio(L.porque) ? 'Ponle un porqué real (una fecha, un aniversario, una temporada): sin porqué, la promo suena a desesperación.' : '');
+  if (tipo === 'b2b' || ads.alcanceNegocio === 'empresas') add('encaje', 'Le sirve un lanzamiento con cupón', 'no', false, 'Le vende a empresas: a ellas no se las trae a una tienda con cupón.', 'Para este cliente conviene el plan mensual (cámbialo arriba).');
+  else if (ads.objetivo === 'web') add('encaje', 'La garantía asegura que recupere', 'ok', false, `Con «${ads.objetivoNombre}», la garantía cuenta compras en su web: ${fmtN(N)} compras son justo lo que necesita para recuperar.`, '');
+  else if (ads.objetivo !== 'local') add('encaje', 'La garantía asegura que recupere', 'ojo', false, `Con «${ads.objetivoNombre}», la garantía cuenta ${unidadGar[1]}, no llegadas a la tienda. ${fmtN(N)} interesados son unas ${fmtUno(N * cierre.plan)} ventas: no alcanza para recuperar lo que puso.`, 'El lanzamiento con garantía es para tiendas con cupón. Si no tiene tienda, considera el plan mensual.');
+  const pesoL = an.factNegocio > 0 ? (precio + publicidad) / an.factNegocio : NaN;
+  if (Number.isFinite(pesoL)) add('peso', 'No le cuesta demasiado', pesoL <= 0.15 ? 'ok' : pesoL <= 0.3 ? 'ojo' : 'no', false, `El lanzamiento (servicio + publicidad) cuesta ${fmtM(precio + publicidad, mon)}: ${fmtN(pesoL * 100)} de cada 100 bolivianos que vende en un mes.`, pesoL <= 0.15 ? '' : 'Es mucho para su tamaño: muéstrale cuánto le vuelve y que la segunda mitad sale de lo que vende.');
+  else add('peso', 'No le cuesta demasiado', 'na', false, 'Falta saber cuánto vende al mes.', '');
+  const inicio = mitad1 + publicidad, caja = n(p.negocio?.caja), presTot = n(M.presupuestoTotal);
+  if (caja > 0) add('caja', 'Tiene la plata para empezar', caja >= inicio ? 'ok' : 'no', false, `Para empezar pone ${fmtM(inicio, mon)}: la primera mitad (${fmtM(mitad1, mon)}) y la publicidad. Tiene ${fmtM(caja, mon)} para invertir.`, caja >= inicio ? '' : 'Que junte primero, o empiece con la publicidad mínima.');
+  if (presTot > 0) add('bolsillo', 'Le alcanza el bolsillo', precio + publicidad <= presTot ? 'ok' : precio + publicidad <= 1.3 * presTot ? 'ojo' : 'no', false, `Tu servicio más la publicidad son ${fmtM(precio + publicidad, mon)}. Él pensaba poner ${fmtM(presTot, mon)}.`, precio + publicidad <= presTot ? '' : 'Muéstrale que la segunda mitad la paga con lo que vende, cuando ya llegaron sus clientes.');
+  const faltanC = [];
+  if (!C.accesos) faltanC.push('dar sus accesos en la sesión de arranque');
+  if (!C.aprueba) faltanC.push('aprobar cada video en 24 horas');
+  if (!C.pagaPublicidad) faltanC.push(`poner su publicidad, desde ${fmtM(adsMin, mon)}, desde su cuenta`);
+  if (!C.stockSeparado) faltanC.push('separar el stock de la promo');
+  if (!C.validaCupon) faltanC.push('validar cada cupón en la tienda');
+  if (C.pagoTarjeta === 'no') faltanC.push('tener una tarjeta que pague en dólares');
+  if (C.pagoTarjeta === 'nose') faltanC.push('confirmar que su tarjeta paga en dólares');
+  if (!C.tiempo) add('compromiso', 'El dueño se compromete', 'no', true, 'No puede dar una hora para la sesión de arranque.', 'Sin el dueño no hay lanzamiento.');
+  else add('compromiso', 'Cumple sus 5 cosas', faltanC.length ? 'ojo' : 'ok', false, faltanC.length ? 'Falta que acepte: ' + faltanC.join('; ') + '.' : 'Acepta sus 5 cosas: accesos, aprobar en 24 horas, su publicidad, su stock separado y validar cada cupón.', faltanC.length ? 'Si no las acepta, la garantía no vale: la segunda mitad se paga en la fecha del acuerdo. Díselo antes de cobrar.' : '');
+  if (mt.tipo === 'unica' && !foco.l.abrePuertas) add('salud', 'Sus clientes vuelven', 'ojo', false, 'Cada cliente compra una sola vez: el lanzamiento vale por lo que vende esos días.', 'Por eso conviene el plan de cada mes: cada mes, una promo nueva.');
+  if (plan.ofrecer && plan.pub > 0) {
+    const est = plan.esc.piso.roiC >= 1.2 ? 'ok' : plan.esc.meta.roiC >= 1 ? 'ojo' : 'no';
+    add('plan', 'El plan de cada mes le conviene', est, false, `Cada mes, con ${fmtM(plan.pub, mon)} de publicidad, compran unos ${fmtUno(plan.esc.meta.compras)} y le dejan ${fmtM(plan.esc.meta.gan, mon)}. Paga ${fmtM(plan.precio, mon)} cada 4 semanas, o ${fmtM(plan.precioComp, mon)} con ${plan.meses} meses.`, est === 'ok' ? '' : 'Ofrécelo solo si el lanzamiento sale bien, o con más publicidad al mes.');
+  }
+  const horas = Math.max(0, n(R.horasLanzamiento));
+  if (n(R.horaObjetivo) > 0 && horas > 0 && precio / horas < n(R.horaObjetivo)) add('hora', 'Tu hora vale lo que quieres', 'ojo', false, `Tu precio entre ${fmtN(horas)} horas da ${fmtM(precio / horas, mon)} por hora.`, 'Sube tu precio de lanzamiento: +20% cada 5 lanzamientos cobrados.');
+  const nEst = estimados.length;
+  add('datos', 'Los números son reales', nEst === 0 ? 'ok' : nEst <= 2 ? 'ojo' : 'no', false,
+    nEst === 0 ? 'Todos los números los dio el dueño.' : `Hay ${nEst} número${nEst > 1 ? 's' : ''} adivinado${nEst > 1 ? 's' : ''}: ${estimados.join('; ')}.`,
+    nEst === 0 ? '' : 'Confírmalos antes de cobrar: el número de la garantía se apoya en ellos.');
+
+  const { veredicto, puntaje } = veredictoDe(ch);
+  const diag = diagnosticar(p, T, cierre);
+  return {
+    R, foco, tipo, T, sup, modo: 'lanzamiento', alc: { estrategia: true, contenido: true, campanas: true, guia: guiaActiva }, guiaActiva, cierre,
+    precio, mitad1, mitad2, adsMin, tope, diasExtra, publicidad, presupuesto: publicidad, pubDada, pubSegura, venta, ganVenta, N, unidadGar,
+    llegadaPct, compraPct, stock, topeCup, diasCanje, atiendeDia, capCanje, ads, escenarios, plan, fecha, diasHasta, calendario, cierraHasta, hoy: hoyD,
+    metaDueno, dias, horas, inicio, chequeos: ch, veredicto, puntaje, estimados, diag, g1: mt.g1, gL: mt.gL,
+    equilibrio: { ganVenta, costoMes: precio + publicidad, ventas: ganVenta > 0 ? (precio + publicidad) / ganVenta : null },
+  };
+}
+// Lo mínimo para aceptar un lanzamiento
+function minimoLanzamiento(ev) {
+  if (!ev || ev.modo !== 'lanzamiento') return null;
+  const local = ev.ads.objetivo === 'local', E = ev.escenarios;
+  return {
+    tope: ev.tope, ganMin: Math.ceil((ev.precio + ev.publicidad) / ev.tope), ganMinConMinimo: Math.ceil((ev.precio + ev.adsMin) / ev.tope),
+    pubMin: ev.pubSegura !== null ? Math.max(ev.adsMin, ev.pubSegura) : null, adsMin: ev.adsMin,
+    stockMin: local && Number.isFinite(ev.N) ? Math.ceil(ev.N / ev.llegadaPct) : null,
+    atiendeMin: local ? Math.ceil((E.meta.llegadas + E.meta.sinAtender) / ev.diasCanje) : null,
+    inicio: ev.inicio,
+  };
+}
+// Qué número mueve más el lanzamiento: cada uno sale 20% peor (o la publicidad cuesta 25% más), con la misma publicidad
+function sensibilidadLanz(p, reglas, focoId, base) {
+  const linea = (p.lineas || []).find(x => x.id === focoId);
+  if (!linea || !base) return [];
+  const met = ev => ev.escenarios.meta.ganLanz - ev.escenarios.meta.inv;
+  const metL = ev => ev.escenarios.meta.gan1 - ev.escenarios.meta.inv;
+  const b0 = met(base), bL = metL(base);
+  const L = q => q.lineas.find(x => x.id === focoId);
+  const LZ = q => { q.lanzamiento = { ...(q.lanzamiento || {}), publicidad: base.publicidad }; return q.lanzamiento; };
+  const vars = [['Lo que deja cada venta', 'precio y ganancia', q => { L(q).ticket = n(L(q).ticket) * 0.8; if (q.oferta && q.oferta.activa && q.oferta.lineaId === focoId && n(q.oferta.precio) > 0) q.oferta.precio = n(q.oferta.precio) * 0.8; }]];
+  if (base.ads.objetivo === 'local') {
+    vars.push(['Cuántos llegan de los que reservan', 'el día del canje', q => { LZ(q).llegadaPct = base.llegadaPct * 80; }]);
+    const compraBase = base.compraPct > 0 ? base.compraPct : (base.ads.llegadas > 0 ? base.ads.clientes / base.ads.llegadas : 0.5);
+    vars.push(['Cuántos compran de los que llegan', 'la atención en la tienda', q => { LZ(q).compraPct = compraBase * 80; }]);
+  } else vars.push(['Cuántos compran de los que escriben', 'cómo atienden', q => { const tv = linea.tipoVenta in TIPOS_VENTA ? linea.tipoVenta : 'b2b'; q.supuestos = q.supuestos || {}; const s = { ...supuestosBase()[tv], ...(q.supuestos[tv] || {}) }; s.cierrePct = n(s.cierrePct) * 0.8; q.supuestos[tv] = s; }]);
+  vars.push(['Cuánto cuesta la publicidad', 'anuncios', q => { q.anuncios = { ...(q.anuncios || {}), _factorCosto: 1.25 }; }]);
+  const out = [];
+  for (const [nombre, grupo, fn] of vars) {
+    try {
+      const q = JSON.parse(JSON.stringify(p));
+      LZ(q); fn(q);
+      const ev = evaluarLanzamiento(q, reglas, analizarLineas(q.lineas || [], n(q.negocio?.facturacion)), focoId);
+      out.push({ nombre, grupo, delta: met(ev) - b0, deltaLargo: metL(ev) - bL, veredicto: ev.veredicto, llega: ev.escenarios.piso.llega });
+    } catch (e) { }
+  }
+  return out.sort((a, b) => a.delta - b.delta || a.deltaLargo - b.deltaLargo);
+}
+
 const RANGO_VEREDICTO = { apto: 2, condiciones: 1, no: 0 };
 function calcular(p0, reglas) {
   const esc = p0.escenarioDatos || 'normal';
+  const lanz = p0.modelo === 'lanzamiento';
+  // En un lanzamiento la oferta del paso 6 ES la promo: entra sola en la cuenta (ventaLanzamiento), sin tocar el producto
+  const conOferta = q => lanz ? q : aplicarOferta(q);
+  const EV = lanz ? evaluarLanzamiento : evaluar;
   const pEsc = aplicarEscenario(p0, esc);
-  const p = aplicarOferta(pEsc);
+  const p = conOferta(pEsc);
   const an = analizarLineas(p.lineas || [], n(p.negocio?.facturacion));
-  if (!an.lista.length || !an.lista.some(x => x.completa)) return { incompleto: true, an, faltan: ['el precio promedio de al menos una línea'] };
+  if (!an.lista.length || !an.lista.some(x => x.completa)) return { incompleto: true, an, lanz, faltan: ['el precio promedio de al menos una línea'] };
   const porLinea = an.lista.map(x => {
     if (!x.completa) return { id: x.id, nombre: x.nombre, puntaje: x.puntaje, veredicto: 'incompleta' };
-    const e = evaluar(p, reglas, an, x.id);
+    const e = EV(p, reglas, an, x.id);
     return { id: x.id, nombre: x.nombre, puntaje: x.puntaje, veredicto: e.veredicto, encaje: e.puntaje, precio: e.precio };
   });
   let focoId = p.foco, focoAuto = false;
@@ -1855,17 +2230,17 @@ function calcular(p0, reglas) {
   if (!focoId || focoId === 'auto' || !completas.some(x => x.id === focoId)) {
     focoAuto = true;
     const modoPedido = (p.servicio || {}).modo;
-    const optPosible = n(p.hoy?.pautaMes) > 0 && n(p.hoy?.ventasPautaMes) > 0 && (modoPedido === 'optimizar' || (modoPedido !== 'crecer' && p.hoy?.equipoContenido));
+    const optPosible = !lanz && n(p.hoy?.pautaMes) > 0 && n(p.hoy?.ventasPautaMes) > 0 && (modoPedido === 'optimizar' || (modoPedido !== 'crecer' && p.hoy?.equipoContenido));
     if (optPosible) focoId = [...completas].sort((a, b) => b.facturacion - a.facturacion)[0].id;
     else focoId = porLinea.filter(x => x.veredicto !== 'incompleta').sort((a, b) => (RANGO_VEREDICTO[b.veredicto] - RANGO_VEREDICTO[a.veredicto]) || (b.puntaje - a.puntaje))[0].id;
   }
-  const ev = evaluar(p, reglas, an, focoId);
+  const ev = EV(p, reglas, an, focoId);
   // ¿Aguanta si los números salen más bajos?
   const hayRangos = Object.keys(p0.rangos || {}).length > 0;
   if (hayRangos && esc !== 'prudente') {
     try {
-      const pp = aplicarOferta(aplicarEscenario(p0, 'prudente'));
-      const evP = evaluar(pp, reglas, analizarLineas(pp.lineas || [], n(pp.negocio?.facturacion)), focoId);
+      const pp = conOferta(aplicarEscenario(p0, 'prudente'));
+      const evP = EV(pp, reglas, analizarLineas(pp.lineas || [], n(pp.negocio?.facturacion)), focoId);
       const malo = evP.veredicto === 'no';
       ev.chequeos.push({ id: 'robusto', nombre: 'Aguanta si los números salen más bajos', estado: malo ? 'ojo' : 'ok', critico: false,
         detalle: malo ? 'Si sus números salen como lo más bajo que dijo, la promesa ya no se cumple.' : 'Aunque sus números salgan como lo más bajo que dijo, se sigue cumpliendo.',
@@ -1875,7 +2250,7 @@ function calcular(p0, reglas) {
     } catch (e) { }
   }
   const oferta = evaluarOferta(pEsc);
-  if (oferta && !oferta.incompleta && p0.oferta?.usarEnCuenta && oferta.margenEfectivo < 0.15) {
+  if (oferta && !oferta.incompleta && (p0.oferta?.usarEnCuenta || (lanz && oferta.lineaId === focoId)) && oferta.margenEfectivo < 0.15) {
     ev.chequeos.push({ id: 'oferta', nombre: 'La oferta deja ganancia', estado: 'no', critico: false, detalle: `Con esos regalos y esa garantía, le quedan solo ${fmtN(oferta.margenEfectivo * 100)} de cada 100.`, arreglo: 'Quita regalos caros, sube el precio o busca regalos que cuesten poco y valgan mucho.' });
     Object.assign(ev, veredictoDe(ev.chequeos));
   }
@@ -1885,15 +2260,15 @@ function calcular(p0, reglas) {
     const R = ev.R;
     if (ev.forzado) alternativas.push(`Con lo que le puedes dar, gana unos ${fmtM(ev.valorMesPiso, R.moneda)} al mes si sale lo mínimo. Tu precio mínimo es ${fmtM(n(R.precioMinimo), R.moneda)}: casi no le quedaría nada. Ofrécele una sesión pagada de diagnóstico o un taller, y vuelve cuando crezca.`);
     const otra = porLinea.filter(x => x.id !== focoId && x.veredicto && x.veredicto !== 'no' && x.veredicto !== 'incompleta').sort((a, b) => b.puntaje - a.puntaje)[0];
-    if (otra) alternativas.push(`Si te enfocas en «${otra.nombre}», sí se puede cumplir${otra.veredicto === 'condiciones' ? ', con condiciones' : ''}.`);
+    if (otra) alternativas.push(`Si ${lanz ? 'el lanzamiento es de' : 'te enfocas en'} «${otra.nombre}», sí se puede cumplir${otra.veredicto === 'condiciones' ? ', con condiciones' : ''}.`);
     for (const c of ev.chequeos) if (c.critico && c.estado === 'no' && c.arreglo && !(c.id === 'gana' && ev.forzado)) alternativas.push(c.arreglo);
   }
   const icp = analizarSegmentos(p0.oferta?.segmentos);
   let sens = [];
-  try { sens = sensibilidad(p, reglas, focoId, ev); } catch (e) { sens = []; }
+  try { sens = lanz ? sensibilidadLanz(p, reglas, focoId, ev) : sensibilidad(p, reglas, focoId, ev); } catch (e) { sens = []; }
   let minimo = null;
-  try { minimo = minimoAceptable(p, reglas, focoId, ev); } catch (e) { minimo = null; }
-  return { an, ev, porLinea, focoId, focoAuto, hallazgos, alternativas, oferta, icp, sens, esc, hayRangos, minimo };
+  try { minimo = lanz ? minimoLanzamiento(ev) : minimoAceptable(p, reglas, focoId, ev); } catch (e) { minimo = null; }
+  return { an, ev, porLinea, focoId, focoAuto, hallazgos, alternativas, oferta, icp, sens, esc, hayRangos, minimo, lanz };
 }
 /*MOTOR-FIN*/
 
@@ -2370,6 +2745,50 @@ const GUIA_PANEL = {
   'tab-plata': { s: 'I', q: 'Usa la alcancía: «al principio pones, y en el mes X ya recuperaste todo».', para: 'Explica por qué tarda antes de que él lo pregunte.' },
   'tab-revision': { s: 'T', q: 'Lo que esté en naranja, acuérdalo antes de cerrar.', para: 'Cada punto naranja es una condición de la garantía.' },
 };
+// ----- En modo lanzamiento (2026-11-02): la llamada lleva a una fecha, un número de garantía y la primera mitad -----
+const GUIA_RUTA_LANZ = [
+  ['Apertura', '1 min', 'T', '«Gracias por tu tiempo. Hoy quiero entender tu tienda con números y, al final, mostrarte si una promo con fecha te conviene. Si no te conviene, te lo voy a decir. ¿Te parece?»'],
+  ['Situación', '4 min', 'S', 'Pasos 1 y 3: cuánto vende y qué producto le deja más por venta.'],
+  ['Su meta', '2 min', 'N', 'Paso 2: qué quiere lograr. Al final le muestras cuánto lo acerca el lanzamiento.'],
+  ['Problemas', '5 min', 'P', 'Paso 4: cómo le llegan hoy y qué hace cuando bajan las ventas (¿rebaja?).'],
+  ['El canje', '3 min', 'I', 'Paso 5: cuánto stock separa y cuántos atiende en un día. «Si te llegan 40 juntos, ¿qué pasa?»'],
+  ['La promo y la fecha', '6 min', 'N', 'Pasos 6 y 7: el regalo, la fecha fuerte y su porqué. Que él diga por qué funcionaría.'],
+  ['Los números', '5 min', 'T', 'Botón «Vista del cliente»: los tres escenarios, el embudo y el número de la garantía.'],
+  ['Cierre', '4 min', 'C', 'Paso 8: sus 5 cosas, la primera mitad hoy y la sesión de arranque con fecha.'],
+];
+const GUIA_PASOS_LANZ = {
+  5: { s: 'I', min: '3', obj: 'Que la tienda aguante el día del canje: stock separado y gente para atender. Si no, los que llegan se van molestos.', abre: '«Si el sábado te llegan 40 personas con su cupón, ¿qué pasa en tu tienda?»', pasa: '«Bien. Ahora armemos lo que va en el cupón: algo mejor que una rebaja.»' },
+  6: { s: 'N', min: '5', obj: 'Armar con él la promo: el producto, el precio, el regalo y por qué ahora. Una oferta mejor que una rebaja.', abre: '«¿Qué es lo que más te piden? ¿Qué podrías regalar que a ti te cueste poco y al cliente le valga harto?»', pasa: '«Con esa promo, elijamos la fecha.»' },
+  7: { s: 'N', min: '5', obj: 'Elegir la fecha fuerte con su porqué y la publicidad, y mostrarle el número de la garantía.', abre: '«¿Cuál es tu próxima fecha fuerte? ¿El Black Friday, Navidad, tu aniversario?»', pasa: '«Ya tengo todo. Déjame mostrarte los números.» Toca «Vista del cliente» y comparte pantalla.' },
+  8: { s: 'C', min: '4', obj: 'Acordar sus 5 cosas, cobrar la primera mitad y ponerle fecha a la sesión de arranque.', abre: '«Para que la garantía valga, necesito 5 cosas de ti…»', pasa: '«Para llegar a tu fecha empezamos a más tardar el día que te marca el calendario. ¿Hacemos la sesión de arranque el lunes o el martes?» Dale dos opciones: las dos son un sí.' },
+};
+const GUIA_CAMPOS_LANZ = {
+  'meta.presupuestoTotal': { s: 'S', q: '¿Cuánto tenías pensado invertir en una promo, sumando todo?', para: 'Ver si le alcanza para tu servicio más la publicidad.', mas: ['Si se asusta con el total, recuérdale que la segunda mitad la paga con lo que ya vendió.'] },
+  'lanzamiento.stock': { s: 'S', q: '¿Cuántas unidades separarías para la promo?', para: 'Es el tope de cupones: cuando se acaban, se anuncia que se agotó.', mas: ['Haz la cuenta en voz alta: «llega 1 de cada 2: con 20 cupones llegan unas 10 personas».'] },
+  'lanzamiento.topeCupones': { s: 'T', q: 'Tú decides: puedes dar más cupones que unidades, porque no llegan todos.', para: 'Que se vendan las unidades sin dejar a nadie sin su producto.' },
+  'lanzamiento.diasCanje': { s: 'S', q: '¿Prefieres un día de canje o dos? ¿Qué día atiendes más tranquilo?', para: 'Con más días, la gente llega más repartida.' },
+  'lanzamiento.atiendeDia': { s: 'I', q: 'Si en un día te llegan 40 personas con su cupón, ¿las puedes atender bien?', para: 'Si se hacen filas, se van molestos y hablan mal.', sigue: ['I', '¿Quién te podría ayudar ese día?'] },
+  'lanzamiento.fecha': { s: 'N', q: '¿Cuál es tu próxima fecha fuerte? ¿Cuándo te compran más?', para: 'La fecha da la urgencia de verdad. De la fecha sale hasta cuándo tienes que cerrar.', mas: ['Si dice «cualquier día», propón una fecha fuerte de la lista: sin fecha no hay urgencia.', 'El primer video sale unos 14 días antes del canje.'] },
+  'lanzamiento.porque': { s: 'N', q: '¿Por qué alguien debería venir justo ese día?', para: 'Sin un porqué real, la promo suena a desesperación.' },
+  'lanzamiento.publicidad': { s: 'N', q: '¿Cuánto pondrías en publicidad para esta promo, pagado directo desde tu cuenta?', para: 'De aquí salen el número de la garantía y cuántos llegan.', mas: ['Muéstrale el número y di: «si no te llegan, no me pagas la segunda mitad».', 'Tu mínimo por lanzamiento es Bs 500.'] },
+  'lanzamiento.compraPct': { s: 'S', q: 'De cada 10 que entran a tu tienda preguntando por esto, ¿cuántos se lo llevan?', para: 'Con su dato real, el resultado es más preciso.' },
+  'lanzamiento.llegadaPct': { s: 'T', q: 'Tu supuesto: llega 1 de cada 2 que reservan. Cámbialo cuando tengas tus datos.', para: 'Es lo que más mueve cuántos llegan.' },
+  'lanzamiento.ofrecerPlan': { s: 'T', q: 'El plan de cada mes se ofrece el día que se completa la garantía, no hoy.', para: 'Hoy solo siembras: «si sale bien, cada mes hacemos una promo chica».' },
+  'lanzamiento.pautaPlan': { s: 'T', q: 'Lo que pondría en publicidad cada mes, en el plan.' },
+  'compromiso.accesos': { s: 'C', q: 'En la sesión de arranque me das los accesos a tu TikTok y a tu cuenta de publicidad, sin contraseñas por chat. ¿Va?', para: 'Sin accesos, el primer video no sale a tiempo.' },
+  'compromiso.aprueba': { s: 'C', q: '¿Puedes aprobar cada video en 24 horas?', para: 'El calendario es de 14 días: un día de atraso se come la promo.' },
+  'compromiso.pagaPublicidad': { s: 'C', q: 'La publicidad la pagas directo desde tu cuenta, desde Bs 500. ¿Te parece?', para: 'Transparencia: él ve cada boliviano que se gasta.' },
+  'compromiso.stockSeparado': { s: 'C', q: '¿Separas las unidades de la promo para que no se vendan antes?', para: 'Sin stock separado, el que llega con su cupón se va con las manos vacías.' },
+  'compromiso.validaCupon': { s: 'C', q: '¿Validas cada cupón en la tienda? Es un toque en el celular.', para: 'Así se cuentan las llegadas de la garantía y se sabe qué video vendió.' },
+  'compromiso.tiempo': { s: 'C', q: '¿Puedes darme una hora para la sesión de arranque?', para: 'Ahí se arma la promo, se dan los accesos y se graba.' },
+  'compromiso.aplicaGuia': { s: 'C', q: 'Te enseño qué decir cuando llega alguien con el cupón. ¿Lo aplicas con tu equipo?', para: 'La garantía cuenta llegadas, pero lo que pasa adentro es de él.' },
+};
+const GUIA_PANEL_LANZ = {
+  cliente: { s: 'T', q: 'Cuando él ya dijo su problema y su fecha, toca «Vista del cliente» y comparte pantalla.', para: 'Empieza por el escenario conservador y termina en la garantía: «si no te llegan los X, no me pagas la segunda mitad».', mas: ['En la vista del cliente esta guía se oculta sola.', 'Después del escenario esperado pregunta: «¿Qué harías con esas ventas?» (Necesidad).', 'Cierra con el calendario: «para tu fecha, empezamos a más tardar el…».'] },
+  'tab-resumen': { s: 'T', q: 'Antes de ofrecer la garantía, mira «Tu segunda mitad» y «Lo mínimo para aceptarlo».', para: 'Si la segunda mitad está en riesgo, sube la publicidad o cambia el producto antes de prometer.' },
+  'tab-lanzamiento': { s: 'N', q: 'Muéstrale el calendario con fechas: «para tu fecha, empezamos a más tardar el…».', para: 'La fecha límite para cerrar es urgencia de verdad.' },
+  'tab-plata': { s: 'I', q: '«Lo más que pones de tu bolsillo antes de vender es X. La segunda mitad la pagas con lo que ya vendiste.»', para: 'Baja el miedo al precio total.' },
+};
 function claveGuia(clave) {
   if (clave.startsWith('linea:')) return 'linea.' + clave.split(':')[2];
   return clave;
@@ -2386,10 +2805,10 @@ function htmlBurbuja(g, extraClase = '') {
     ${hayMas ? `<details class="guia-mas"><summary title="Ver más" aria-label="Ver más">•••</summary><div class="guia-mas-cuerpo">${mas ? `<ul>${mas}</ul>` : ''}${sigue}<p class="guia-spin-txt"><b>${esc(sp.nombre)}:</b> ${esc(sp.txt)}</p></div></details>` : ''}
   </div></div>`;
 }
-function htmlGuia(clave) { const g = GUIA_CAMPOS[claveGuia(clave)]; return g ? htmlBurbuja(g) : ''; }
-function htmlGuiaPanel(id) { const g = GUIA_PANEL[id]; return g ? htmlBurbuja(g, 'guia-panel') : ''; }
+function htmlGuia(clave) { const k = claveGuia(clave), g = (esLanz() && GUIA_CAMPOS_LANZ[k]) || GUIA_CAMPOS[k]; return g ? htmlBurbuja(g) : ''; }
+function htmlGuiaPanel(id) { const g = (esLanz() && GUIA_PANEL_LANZ[id]) || GUIA_PANEL[id]; return g ? htmlBurbuja(g, 'guia-panel') : ''; }
 function htmlGuiaPaso(nro) {
-  const g = GUIA_PASOS[nro]; if (!g) return '';
+  const g = (esLanz() && GUIA_PASOS_LANZ[nro]) || GUIA_PASOS[nro]; if (!g) return '';
   const sp = SPIN[g.s] || SPIN.T;
   return `<div class="guia guia-paso" role="note"><div class="guia-burbuja">
     <span class="spin spin-${esc(g.s)}">Paso ${nro} · ${esc(sp.nombre)}${g.min !== '0' ? ` · ${esc(g.min)} min` : ''}</span>
@@ -2401,7 +2820,7 @@ function htmlGuiaPaso(nro) {
 function htmlRutaLlamada() {
   return `<section class="guia ruta" role="note" aria-label="Ruta de la llamada"><div class="ruta-in">
     <div class="ruta-cab"><b>Ruta de la llamada</b><span>unos 30 minutos · método SPIN</span></div>
-    <ol>${GUIA_RUTA.map(([t, min, s, x]) => `<li><span class="spin spin-${s}">${s === 'T' || s === 'C' ? esc(SPIN[s].nombre) : s}</span><div><b>${esc(t)}</b> <small>${esc(min)}</small><p>${esc(x)}</p></div></li>`).join('')}</ol>
+    <ol>${(esLanz() ? GUIA_RUTA_LANZ : GUIA_RUTA).map(([t, min, s, x]) => `<li><span class="spin spin-${s}">${s === 'T' || s === 'C' ? esc(SPIN[s].nombre) : s}</span><div><b>${esc(t)}</b> <small>${esc(min)}</small><p>${esc(x)}</p></div></li>`).join('')}</ol>
     <p class="ruta-pie"><b>Regla de oro (Rackham):</b> haz pocas preguntas de Situación y muchas de Implicación y Necesidad. No muestres la solución hasta que él diga que el problema es grande.</p>
   </div></section>`;
 }
@@ -2419,18 +2838,23 @@ function ofertaVacia() {
 function anunciosVacios() {
   return { plataforma: 'tiktok', objetivo: 'auto', alcance: 'auto', tc: '', cupon: true, costoResultadoReal: '', cpmReal: '' };
 }
+function lanzamientoVacio() {
+  return { fecha: '', porque: '', publicidad: '', stock: '', topeCupones: '', diasCanje: '2', atiendeDia: '', llegadaPct: '', compraPct: '', ofrecerPlan: true, pautaPlan: '' };
+}
 function prospectoVacio() {
   return {
+    modelo: 'mensual',
     negocio: { nombre: '', rubro: '', ciudad: '', facturacion: '', gastosFijos: '', caja: '', temporadaAlta: '', cobroDias: '' },
     meta: { tipo: 'aumento', valor: '', plazo: '', diasMes: '', presupuestoTotal: '', paciencia: '' },
     lineas: [lineaBase()],
     foco: 'auto',
     hoy: { numerosDe: 'linea', interesadosMes: '', clientesMes: '', respuesta: 'nose', seguimiento: 'nose', diasPropuesta: '', quienVende: 'dueno', viejos: '', pautaMes: '', ventasPautaMes: '', quienPauta: 'nadie', equipoContenido: false, contenidoPrueba: 'poco', mide: '' },
     servicio: { modo: 'auto', contenido: 'auto', campanas: 'auto', guia: 'auto', automatizacion: 'auto', presupuesto: '' },
-    compromiso: { tiempo: true, aplicaGuia: true, aprueba: true, pagaPublicidad: true, pagoTarjeta: '' },
+    compromiso: { tiempo: true, aplicaGuia: true, aprueba: true, pagaPublicidad: true, pagoTarjeta: '', accesos: true, stockSeparado: true, validaCupon: true },
     capacidad: { actuales: '', maxHoy: '', contrataria: '', porPersona: '', mesesContratar: '', mensajesDia: '', mercado: '' },
     oferta: ofertaVacia(),
     anuncios: anunciosVacios(),
+    lanzamiento: lanzamientoVacio(),
     supuestos: supuestosBase(),
     plan: { duracionManual: '', herramientas: '', inicial: '', ahorro: '' },
     rangos: {},
@@ -2542,6 +2966,61 @@ function ejemploMinAnillos() {
 function ejemploMinEmpresas() {
   return ejemploMinimoBase({ nombre: 'Joyería mínima 3: regalos para empresas', rubro: 'Joyas y detalles grabados para regalos de empresas', linea: 'Regalos para empresas', fact: 38000, gastos: 11400, caja: 23000, margen: 40, tipo: 'repetida', ticket: 6000, ppy: 3, anios: 3, ciclo: 30, tv: 'b2b', cobro: 30, inter: 65, cli: 2, ads: 3500, cap: [6, 13] });
 }
+// ----- Lanzamientos (Bs 2.500 en dos mitades, garantía con número). Datos inventados; la fecha es la próxima fecha fuerte -----
+function fechaEjemplo(minDias) {
+  try { const hoy = new Date(), f = proximasFechas(hoy, 10).find(x => diasEntre(hoy, x.canje) >= minDias); return f ? { fecha: f.iso, porque: f.nombre, _porqueAuto: f.nombre } : { fecha: '', porque: '' }; } catch (e) { return { fecha: '', porque: '' }; }
+}
+function ejemploLanzTenis() {
+  const p = prospectoVacio();
+  p.modelo = 'lanzamiento';
+  p.negocio = { nombre: 'Pisada Urbana', rubro: 'Tenis originales, tienda física y TikTok', ciudad: 'La Paz', facturacion: 60000, gastosFijos: 22000, caja: 6000, temporadaAlta: '12', cobroDias: 0 };
+  p.meta = { tipo: 'aumento', valor: 20000, plazo: 3, diasMes: 26, presupuestoTotal: 3500, paciencia: '' };
+  p.lineas = [lineaBase({ id: 't1', nombre: 'Tenis', facturacion: 60000, margen: 25, tipo: 'repetida', ticket: 800, comprasAnio: 1.5, aniosCliente: 2, cicloDias: 3, tipoVenta: 'b2cAlto', competencia: 'alta', capacidad: 'mucha' })];
+  p.hoy = { numerosDe: 'linea', interesadosMes: 400, clientesMes: 60, respuesta: 'hora', seguimiento: 'aveces', diasPropuesta: '', quienVende: 'equipo', viejos: 80, pautaMes: '', ventasPautaMes: '', quienPauta: 'nadie', equipoContenido: false, contenidoPrueba: 'poco', mide: 'aveces' };
+  p.compromiso.pagoTarjeta = 'si';
+  p.capacidad.mensajesDia = 60;
+  p.anuncios = { ...anunciosVacios(), alcance: 'ciudad' };
+  p.oferta = {
+    ...ofertaVacia(), activa: true, lineaId: 't1', deseo: 'estrenar tenis originales sin pagar de más', tiempo: 'se los lleva el mismo día',
+    bonos: [bonoBase({ nombre: 'Medias deportivas de regalo', costo: 15, valor: 60 }), bonoBase({ nombre: 'Limpieza de sus tenis gratis por 3 meses', costo: 10, valor: 90 })],
+    garantia: 'repetir', usoGarantia: 3, urgencia: 'fecha', pago: 'contado',
+  };
+  p.lanzamiento = { ...lanzamientoVacio(), ...fechaEjemplo(21), publicidad: 600, stock: 60, diasCanje: '2', atiendeDia: 30 };
+  return p;
+}
+function ejemploLanzBebe() {
+  const p = prospectoVacio();
+  p.modelo = 'lanzamiento';
+  p.negocio = { nombre: 'Mundo Bebé', rubro: 'Cunas, coches y sillas para bebé', ciudad: 'El Alto', facturacion: 45000, gastosFijos: 15000, caja: 4000, temporadaAlta: '', cobroDias: 0 };
+  p.meta = { tipo: 'clientes', valor: 15, plazo: 3, diasMes: 26, presupuestoTotal: '', paciencia: '' };
+  p.lineas = [
+    lineaBase({ id: 'b1', nombre: 'Cunas y coches', facturacion: 30000, margen: 30, tipo: 'unica', ticket: 1900, cicloDias: 7, tipoVenta: 'b2cAlto', competencia: 'media', capacidad: 'media', abrePuertas: true, ventaCruzadaPct: 40, ventaCruzadaGanancia: 120 }),
+    lineaBase({ id: 'b2', nombre: 'Ropa y accesorios', facturacion: 15000, margen: 45, tipo: 'repetida', ticket: 120, comprasAnio: 6, aniosCliente: 2, cicloDias: 1, tipoVenta: 'b2cBajo', competencia: 'alta', capacidad: 'mucha' }),
+  ];
+  p.foco = 'b1';
+  p.hoy = { numerosDe: 'negocio', interesadosMes: 150, clientesMes: 25, respuesta: 'dia', seguimiento: 'nunca', diasPropuesta: '', quienVende: 'dueno', viejos: 40, pautaMes: '', ventasPautaMes: '', quienPauta: 'nadie', equipoContenido: false, contenidoPrueba: 'nada', mide: 'no' };
+  p.compromiso.pagoTarjeta = 'nose';
+  p.capacidad.mensajesDia = 25;
+  p.anuncios = { ...anunciosVacios(), alcance: 'ciudad' };
+  p.lanzamiento = { ...lanzamientoVacio(), ...fechaEjemplo(21), publicidad: '', stock: 20, diasCanje: '2', atiendeDia: 12, compraPct: 60 };
+  return p;
+}
+function ejemploLanzHeladeria() {
+  const p = prospectoVacio();
+  p.modelo = 'lanzamiento';
+  p.negocio = { nombre: 'Heladería Polar', rubro: 'Helados artesanales y tortas heladas', ciudad: 'La Paz', facturacion: 25000, gastosFijos: 11000, caja: 3000, temporadaAlta: '', cobroDias: 0 };
+  p.meta = { tipo: 'aumento', valor: 8000, plazo: 3, diasMes: 30, presupuestoTotal: '', paciencia: '' };
+  p.lineas = [
+    lineaBase({ id: 'h1', nombre: 'Helados en el local', facturacion: 21000, margen: 60, tipo: 'repetida', ticket: 25, comprasAnio: 8, aniosCliente: 2, cicloDias: 0, tipoVenta: 'b2cBajo', competencia: 'alta', capacidad: 'mucha' }),
+    lineaBase({ id: 'h2', nombre: 'Tortas heladas para cumpleaños', facturacion: 4000, margen: 55, tipo: 'repetida', ticket: 250, comprasAnio: 1.5, aniosCliente: 3, cicloDias: 3, tipoVenta: 'b2cAlto', competencia: 'baja', capacidad: 'mucha' }),
+  ];
+  p.hoy = { numerosDe: 'negocio', interesadosMes: 60, clientesMes: 18, respuesta: 'hora', seguimiento: 'nunca', diasPropuesta: '', quienVende: 'dueno', viejos: '', pautaMes: '', ventasPautaMes: '', quienPauta: 'nadie', equipoContenido: false, contenidoPrueba: 'poco', mide: 'no' };
+  p.compromiso.pagoTarjeta = 'si';
+  p.capacidad.mensajesDia = 30;
+  p.anuncios = { ...anunciosVacios(), alcance: 'ciudad' };
+  p.lanzamiento = { ...lanzamientoVacio(), ...fechaEjemplo(21), stock: '', diasCanje: '2', atiendeDia: 25 };
+  return p;
+}
 /*EJEMPLOS-FIN*/
 
 
@@ -2629,7 +3108,8 @@ function normalizarProspecto(p) {
   p = p || {};
   const base = prospectoVacio();
   const out = { ...base, ...p };
-  for (const k of ['negocio', 'meta', 'hoy', 'servicio', 'compromiso', 'capacidad', 'plan', 'anuncios']) out[k] = { ...base[k], ...(p[k] || {}) };
+  for (const k of ['negocio', 'meta', 'hoy', 'servicio', 'compromiso', 'capacidad', 'plan', 'anuncios', 'lanzamiento']) out[k] = { ...base[k], ...(p[k] || {}) };
+  out.modelo = p.modelo === 'lanzamiento' ? 'lanzamiento' : 'mensual';
   const sb = supuestosBase();
   out.supuestos = {};
   for (const k of Object.keys(sb)) out.supuestos[k] = { ...sb[k], ...(((p.supuestos || {})[k]) || {}) };
@@ -2845,6 +3325,9 @@ const PASOS = [
   { id: 1, nombre: 'El negocio' }, { id: 2, nombre: 'Lo que quiere' }, { id: 3, nombre: 'Lo que vende' }, { id: 4, nombre: 'Sus clientes' },
   { id: 5, nombre: '¿Le alcanza?' }, { id: 6, nombre: 'Su oferta' }, { id: 7, nombre: 'Anuncios' }, { id: 8, nombre: 'Tu servicio' }, { id: 9, nombre: 'Ajustes' },
 ];
+// En un lanzamiento cambian tres pasos: el día del canje, la fecha con su publicidad y las 5 cosas del dueño
+const PASOS_LANZ = PASOS.map(x => x.id === 5 ? { id: 5, nombre: 'El canje' } : x.id === 6 ? { id: 6, nombre: 'Su promo' } : x.id === 7 ? { id: 7, nombre: 'La fecha' } : x.id === 8 ? { id: 8, nombre: 'Sus 5 cosas' } : x);
+const pasosActuales = () => esLanz() ? PASOS_LANZ : PASOS;
 function lineaFoco() {
   const p = estado.prospecto;
   if (ultimo && ultimo.ev) return p.lineas.find(x => x.id === ultimo.ev.foco.id) || p.lineas[0];
@@ -2865,6 +3348,14 @@ function clavesImportantes() {
   }
   out.push({ clave: 'hoy.interesadosMes', paso: 4, txt: '¿Cuántas personas le escriben al mes?' });
   out.push({ clave: 'hoy.clientesMes', paso: 4, txt: '¿Cuántos clientes nuevos consigue al mes?' });
+  if (esLanz()) {
+    out.push({ clave: 'lanzamiento.stock', paso: 5, txt: '¿Cuántas unidades separa para la promo?' });
+    out.push({ clave: 'lanzamiento.atiendeDia', paso: 5, txt: '¿Cuántas personas atiende bien en un día de canje?' });
+    out.push({ clave: 'capacidad.mensajesDia', paso: 5, txt: '¿Cuántos mensajes pueden mandar bien por día?' });
+    out.push({ clave: 'lanzamiento.fecha', paso: 7, txt: '¿Qué día es el canje?' });
+    out.push({ clave: 'lanzamiento.porque', paso: 7, txt: '¿Por qué ese día?' });
+    return out.map(x => ({ ...x, estado: vacio(getValor(x.clave)) ? 'falta' : estado.prospecto.fuentes[x.clave] === 'estimado' ? 'estimado' : 'ok' }));
+  }
   if (p.hoy.quienPauta !== 'nadie') { out.push({ clave: 'hoy.pautaMes', paso: 4, txt: '¿Cuánto paga en anuncios al mes?' }); out.push({ clave: 'hoy.ventasPautaMes', paso: 4, txt: '¿Cuántas ventas le traen los anuncios?' }); }
   out.push({ clave: 'capacidad.actuales', paso: 5, txt: '¿Cuánto atiende hoy?' });
   out.push({ clave: 'capacidad.maxHoy', paso: 5, txt: '¿Cuánto podría atender como máximo?' });
@@ -2874,7 +3365,7 @@ function clavesImportantes() {
 function renderProgreso() {
   const items = clavesImportantes(), ok = items.filter(x => x.estado === 'ok').length;
   $('#progreso').innerHTML = `<div class="progreso-fila"><span>Respuestas importantes</span><b>${ok} de ${items.length}</b></div><div class="barrita"><i style="width:${items.length ? ok / items.length * 100 : 0}%"></i></div>`;
-  $('#pasos').innerHTML = PASOS.map(ps => {
+  $('#pasos').innerHTML = pasosActuales().map(ps => {
     const its = items.filter(x => x.paso === ps.id), listo = its.length > 0 && its.every(x => x.estado === 'ok');
     return `<button type="button" role="tab" class="paso-btn${listo ? ' listo' : ''}" aria-selected="${estado.paso === ps.id}" data-paso="${ps.id}"><span class="nro">${listo ? '✓' : ps.id}</span>${esc(ps.nombre)}</button>`;
   }).join('');
@@ -2903,7 +3394,23 @@ function htmlLinea(l, i, total) {
 function htmlAjustes(tipo) {
   const t = TIPOS_VENTA[tipo], b = `supuestos.${tipo}`, mon = estado.reglas.moneda;
   const reg = (c, q, extra = {}) => { const v = getPath(estado.reglas, c), id = 'r-' + idSeguro(c); return `<div class="fila"><div class="fila-cab"><label for="${id}">${esc(q)}</label></div><div class="campo-in">${extra.pre ? `<span class="pre">${esc(extra.pre)}</span>` : ''}<input id="${id}" class="num" inputmode="decimal" data-regla="${esc(c)}" value="${esc(vacio(v) ? '' : extra.pre ? fmtN(v) : String(v))}">${extra.suf ? `<span class="suf">${esc(extra.suf)}</span>` : ''}</div>${extra.nota ? `<p class="nota">${esc(extra.nota)}</p>` : ''}</div>`; };
-  return `<p class="grupo-titulo">Tu precio</p>
+  const lanz = `<p class="grupo-titulo">Tu lanzamiento</p>
+    <div class="grupo">
+      ${reg('precioLanzamiento', 'Precio de un lanzamiento', { pre: mon, nota: 'Se cobra en dos mitades.' })}
+      ${reg('primeraMitadPct', 'Lo que se paga para empezar', { suf: 'de 100', nota: '50 = la mitad al empezar y la otra cuando lleguen los clientes de la garantía.' })}
+      ${reg('anunciosMinimoLanz', 'Lo mínimo en publicidad por lanzamiento', { pre: mon, nota: 'Es una de sus 5 cosas: con menos, no aceptas.' })}
+      ${reg('topeGarantia', 'Tope del número de la garantía', { suf: 'clientes', nota: 'Si sale más, eliges con él otro producto antes de ofrecer la garantía.' })}
+      ${reg('diasExtraGarantia', 'Días más con el video ganador si no llegan', { suf: 'días' })}
+      ${reg('llegadaLanzPct', 'De cada 100 que reservan, llegan', { suf: 'de 100', nota: 'Tu supuesto hasta tener 10 reservas contadas de lanzamientos terminados. Cámbialo con tus datos.' })}
+      ${reg('horasLanzamiento', 'Tus horas por lanzamiento', { suf: 'horas' })}
+    </div>
+    <p class="grupo-titulo">El plan de cada mes (después del lanzamiento)</p>
+    <div class="grupo">
+      ${reg('planMes', 'Precio cada 4 semanas', { pre: mon })}
+      ${reg('planMesCompromiso', 'Precio con compromiso', { pre: mon })}
+      ${reg('mesesCompromiso', 'Meses de compromiso', { suf: 'meses' })}
+    </div>`;
+  return `${esLanz() ? lanz : ''}<p class="grupo-titulo">Tu precio (plan mensual)</p>
     <div class="grupo">
       ${reg('precioMinimo', 'Tu precio mínimo al mes', { pre: mon, nota: 'Nunca cobras menos que esto.' })}
       ${reg('anunciosMinimo', 'Lo mínimo en anuncios al mes', { pre: mon, nota: 'Si el cliente no puede poner esto, no lo aceptas.' })}
@@ -2947,7 +3454,7 @@ function htmlAjustes(tipo) {
       ${SERVICIOS.map(s => reg('horas.' + s.id, s.nombre, { suf: 'horas' })).join('')}
       ${reg('horaObjetivo', 'Lo mínimo que quieres ganar por hora (0 = no revisar)', { pre: mon })}
       <div class="fila"><button class="btn-g btn-chico" type="button" id="btn-reglas-reset">Volver a mis valores de inicio</button></div>
-    </div>`;
+    </div>${esLanz() ? '' : lanz}`;
 }
 const TXT_META = {
   aumento: { q: '¿Cuánto más quiere vender al mes?', pre: true, corto: 'vender más' },
@@ -2959,7 +3466,8 @@ const IDEAS_BONOS = ['Diagnóstico o revisión gratis', 'Instalación o entrega 
 function renderForm() {
   const p = estado.prospecto, mon = estado.reglas.moneda, paso = estado.paso;
   const ej = p._ejemplo;
-  const nomEj = { brisa: ' (Brisa Técnica)', joyeria: ' (una joyería)', cafe: ' (un café de barrio)' }[ej];
+  const nomEj = { brisa: ' (Brisa Técnica)', joyeria: ' (una joyería)', cafe: ' (un café de barrio)', lanzTenis: ' de lanzamiento (una tienda de tenis)', lanzBebe: ' de lanzamiento (una tienda de bebé)', lanzHeladeria: ' de lanzamiento (una heladería)' }[ej];
+  renderModelo();
   $('#banner').innerHTML = !ej ? '' : String(ej).startsWith('min')
     ? `<div class="aviso-ejemplo"><b>Ejemplo en el mínimo que puedes aceptar.</b> Datos inventados, puestos justo en el límite: si cualquiera de sus números baja, ya no conviene. Mira la tarjeta «Lo mínimo para aceptarlo» en el panel.</div>`
     : `<div class="aviso-ejemplo"><b>Es un ejemplo${nomEj || ''}.</b> Los datos son inventados. Toca «Nuevo» para un cliente real.</div>`;
@@ -2978,13 +3486,13 @@ function renderForm() {
       <p class="grupo-titulo">Su meta</p><div class="grupo">
       ${chips({ clave: 'meta.tipo', q: '¿Qué quiere?', opciones: [['aumento', 'Vender más'], ['ganancia', 'Ganar más'], ['total', 'Llegar a vender X'], ['clientes', 'Más clientes']], estructura: true })}
       ${pregunta({ clave: 'meta.valor', q: tm.q, ayuda: 'metaValor', pre: tm.pre ? mon : '', fmt: tm.pre ? 'dinero' : '', suf: tm.pre ? 'al mes' : 'al mes', importante: true })}
-      ${pregunta({ clave: 'meta.plazo', q: '¿En cuántos meses quiere lograrlo?', suf: 'meses', ph: ultimo && ultimo.ev ? String(ultimo.ev.D) : '6' })}
+      ${pregunta({ clave: 'meta.plazo', q: '¿En cuántos meses quiere lograrlo?', suf: 'meses', ph: ultimo && ultimo.ev && ultimo.ev.D ? String(ultimo.ev.D) : '6' })}
       ${pregunta({ clave: 'meta.diasMes', q: '¿Cuántos días trabaja al mes?', suf: 'días', ph: '26', rango: false })}
       </div>
       <div id="vivo-meta">${htmlVivoMeta()}</div>
       <p class="grupo-titulo">Lo que puede poner</p><div class="grupo">
-      ${pregunta({ clave: 'meta.presupuestoTotal', q: '¿Cuánto pensaba invertir al mes en total (tu servicio + anuncios)?', ayuda: 'presupuestoTotal', pre: mon, fmt: 'dinero' })}
-      ${pregunta({ clave: 'meta.paciencia', q: '¿En cuántos meses quiere ver los primeros resultados?', suf: 'meses' })}</div>`;
+      ${esLanz() ? pregunta({ clave: 'meta.presupuestoTotal', q: '¿Cuánto pensaba invertir en esta promo (tu servicio + la publicidad)?', ayuda: 'presupuestoTotal', pre: mon, fmt: 'dinero' })
+        : pregunta({ clave: 'meta.presupuestoTotal', q: '¿Cuánto pensaba invertir al mes en total (tu servicio + anuncios)?', ayuda: 'presupuestoTotal', pre: mon, fmt: 'dinero' }) + pregunta({ clave: 'meta.paciencia', q: '¿En cuántos meses quiere ver los primeros resultados?', suf: 'meses' })}</div>`;
   } else if (paso === 3) {
     html = `<p class="nota" style="padding:0 4px">Anota cada cosa que vende por separado. Si no puede separarlo, deja una sola con lo que más vende.</p>
       ${p.lineas.map((l, i) => htmlLinea(l, i, p.lineas.length)).join('')}
@@ -3006,6 +3514,12 @@ function renderForm() {
       ${p.hoy.quienPauta !== 'nadie' ? pregunta({ clave: 'hoy.pautaMes', q: '¿Cuánto paga al mes en anuncios?', ayuda: 'pauta', pre: mon, fmt: 'dinero', importante: true, nota: 'Solo lo que paga a Facebook, Instagram, TikTok o Google.' }) + pregunta({ clave: 'hoy.ventasPautaMes', q: '¿Cuántas ventas al mes le traen esos anuncios?', ayuda: 'ventasPauta', importante: true }) : ''}
       ${interruptor({ clave: 'hoy.equipoContenido', q: 'Tiene su propio equipo que graba y edita videos' })}
       ${chips({ clave: 'hoy.contenidoPrueba', q: '¿Muestra casos, opiniones de clientes y precios?', opciones: [['bastante', 'Bastante'], ['poco', 'Poco'], ['nada', 'Nada']] })}</div>`;
+  } else if (paso === 5 && esLanz()) {
+    html = htmlPaso5Lanz();
+  } else if (paso === 7 && esLanz()) {
+    html = htmlPaso7Lanz();
+  } else if (paso === 8 && esLanz()) {
+    html = htmlPaso8Lanz();
   } else if (paso === 5) {
     const l = lineaFoco(), rec = l && l.tipo === 'recurrente', nom = l ? ((l.nombre || '').trim() || 'lo que vende') : 'lo que vende';
     const C = p.capacidad;
@@ -3039,7 +3553,7 @@ function renderForm() {
         <div class="fl-num"><span class="fl-eti">Paga</span>${selChico({ clave: `oferta.segmentos.${i}.paga`, opciones: [['atiempo', 'A tiempo'], ['tarde', 'Tarde'], ['muytarde', 'Muy tarde']], aria: 'Cómo paga' })}</div>
         <div class="fl-num"><span class="fl-eti">Da trabajo</span>${selChico({ clave: `oferta.segmentos.${i}.lio`, opciones: [['poco', 'Poco'], ['normal', 'Normal'], ['mucho', 'Mucho']], aria: 'Cuánto trabajo o problemas da' })}</div>
         <button type="button" class="btn-borde btn-chico" data-quitar-seg="${i}" aria-label="Quitar tipo de cliente ${i + 1}">Quitar</button></div>`).join('');
-    html = `<div class="explica"><b>Primero, a quién.</b> No todos los clientes valen lo mismo. Anota sus tipos de clientes y la calculadora te dice cuál es el <b>cliente ideal</b>: al que conviene hablarle en el contenido y los anuncios.</div>
+    html = `${esLanz() ? `<div class="explica"><b>La promo del lanzamiento.</b> Aquí armas lo que va en el cupón: el producto, el precio de la promo, el regalo y por qué ahora. Una oferta mejor que una rebaja.<span>Si armas la oferta del producto del lanzamiento, entra sola en la cuenta: lo que cuesta el regalo se resta de lo que le deja cada venta, y eso cambia el número de la garantía.</span></div>` : ''}<div class="explica"><b>Primero, a quién.</b> No todos los clientes valen lo mismo. Anota sus tipos de clientes y la calculadora te dice cuál es el <b>cliente ideal</b>: al que conviene hablarle en el contenido y los anuncios.</div>
       <p class="grupo-titulo">Cliente ideal</p><div class="grupo">
       <div class="fila">${htmlGuia('oferta.segmentos')}<div class="lista-filas">${segs || '<p class="nota">Todavía no hay tipos de clientes. Ejemplo: «clínicas», «oficinas», «restaurantes».</p>'}</div>
       <div><button class="btn-g btn-chico" type="button" id="btn-agregar-seg">+ Agregar tipo de cliente</button></div></div></div>
@@ -3064,7 +3578,7 @@ function renderForm() {
       <p class="grupo-titulo">5. Que decida ahora</p><div class="grupo">
       ${chips({ clave: 'oferta.urgencia', q: '¿Por qué comprar ahora y no después?', opciones: [['ninguna', 'Nada'], ['cupos', 'Cupos limitados'], ['fecha', 'Hasta una fecha'], ['temporada', 'Antes de la temporada']] })}
       ${chips({ clave: 'oferta.pago', q: '¿Cómo paga?', opciones: [['contado', 'Todo junto'], ['cuotas', 'En cuotas'], ['mensual', 'Cada mes']] })}
-      ${interruptor({ clave: 'oferta.usarEnCuenta', q: 'Usar esta oferta en las cuentas', nota: 'Cambia el precio y lo que le queda por venta. No cambia cuántos compran: eso se mide cuando salga.' })}</div>
+      ${esLanz() ? '' : interruptor({ clave: 'oferta.usarEnCuenta', q: 'Usar esta oferta en las cuentas', nota: 'Cambia el precio y lo que le queda por venta. No cambia cuántos compran: eso se mide cuando salga.' })}</div>
       <div id="vivo-oferta">${htmlVivoOferta()}</div>` : ''}`;
   } else if (paso === 7) {
     const ad = ultimo && ultimo.ev ? ultimo.ev.ads : null, A = p.anuncios;
@@ -3104,7 +3618,7 @@ function renderForm() {
     html = htmlAjustes(tipo);
   }
   html = htmlGuiaPaso(paso) + html;
-  const ant = PASOS.find(x => x.id === paso - 1), sig = PASOS.find(x => x.id === paso + 1);
+  const ant = pasosActuales().find(x => x.id === paso - 1), sig = pasosActuales().find(x => x.id === paso + 1);
   html += `<div class="siguiente">${ant ? `<button class="btn-g btn-grande" type="button" data-ir-paso="${ant.id}">‹ ${esc(ant.nombre)}</button>` : '<span></span>'}${sig ? `<button class="btn-azul btn-grande" type="button" data-ir-paso="${sig.id}">Siguiente: ${esc(sig.nombre)} ›</button>` : ''}</div>`;
   $('#form').innerHTML = html;
   renderProgreso();
@@ -3125,6 +3639,7 @@ function irPaso(nro, clave) {
 function htmlVivoMeta() {
   const r = ultimo, p = estado.prospecto, mon = estado.reglas.moneda;
   if (!r || !r.ev) return `<div class="vivo"><p class="texto">Cuando anotes lo que vende (paso 3), aquí ves su meta traducida a clientes y mensajes por día.</p></div>`;
+  if (r.lanz) return r.ev.metaDueno ? `<div class="vivo">${htmlMetaLanz(r).replace(/^<section class="tarjeta">|<\/section>$/g, '')}</div>` : `<div class="vivo"><p class="texto">Anota su meta y aquí ves cuánto lo acerca el lanzamiento y cuánto el plan de cada mes.</p></div>`;
   const md = r.ev.metaDueno;
   if (!md) return `<div class="vivo"><p class="texto">Anota su meta y aquí ves cuántos clientes, mensajes y anuncios necesita <b>por día</b>.</p></div>`;
   return `<div class="vivo">${htmlMetaTabla(r.ev, true)}</div>`;
@@ -3152,6 +3667,8 @@ function htmlVivoAds() {
   return `<div class="vivo">${htmlEmbudoAds(r, true)}</div>`;
 }
 function actualizarVivos() {
+  const lz = $('#vivo-lanz'); if (lz) lz.innerHTML = htmlVivoLanz();
+  const cj = $('#vivo-canje'); if (cj) cj.innerHTML = htmlVivoCanje();
   const ad = $('#vivo-ads'); if (ad) ad.innerHTML = htmlVivoAds();
   const m = $('#vivo-meta'); if (m) m.innerHTML = htmlVivoMeta();
   const c = $('#vivo-cap'); if (c) c.innerHTML = htmlVivoCap();
@@ -3285,6 +3802,12 @@ function onClic(e) {
     programarCalculo(); return;
   }
   if (t.dataset.irPaso) { irPaso(+t.dataset.irPaso); return; }
+  if (t.dataset.fecha) {
+    // Una fecha fuerte: anota el día del canje y su porqué (sin pisar un porqué que escribió el usuario)
+    const L = P.lanzamiento; L.fecha = t.dataset.fecha;
+    if (vacio(L.porque) || L._porqueAuto === L.porque) { L.porque = t.dataset.porque; L._porqueAuto = t.dataset.porque; }
+    renderForm(); programarCalculo(); aviso(`Canje el ${fmtFecha(fechaDe(L.fecha))}.`); return;
+  }
   if (t.dataset.ayudaToggle) {
     const inst = t.dataset.ayudaToggle;
     if (estado.abiertas.has(inst)) estado.abiertas.delete(inst); else estado.abiertas.add(inst);
@@ -3397,38 +3920,44 @@ function recalcular() {
   renderProgreso();
   if (estado.paso === 9 && r.ev && estado.tipoAjustes !== r.ev.tipo && !$('#form').contains(document.activeElement)) renderForm();
   const pres = document.querySelector('[data-clave="servicio.presupuesto"]'); if (pres && r.ev) pres.placeholder = `Sugerido: ${fmtN(r.ev.presupuesto)}`;
-  const dur = document.querySelector('[data-clave="plan.duracionManual"]'); if (dur && r.ev) dur.placeholder = `Yo calculo: ${r.ev.Dauto}`;
-  const plz = document.querySelector('[data-clave="meta.plazo"]'); if (plz && r.ev) plz.placeholder = String(r.ev.D);
+  const dur = document.querySelector('[data-clave="plan.duracionManual"]'); if (dur && r.ev && r.ev.Dauto) dur.placeholder = `Yo calculo: ${r.ev.Dauto}`;
+  const plz = document.querySelector('[data-clave="meta.plazo"]'); if (plz && r.ev && r.ev.D) plz.placeholder = String(r.ev.D);
+  const pubL = document.querySelector('[data-clave="lanzamiento.publicidad"]'); if (pubL && r.ev && r.lanz) pubL.placeholder = `Sugerido: ${fmtN(r.ev.pubSegura !== null ? Math.max(r.ev.adsMin, r.ev.pubSegura) : r.ev.adsMin)}`;
+  const topeC = document.querySelector('[data-clave="lanzamiento.topeCupones"]'); if (topeC && r.ev && r.lanz) topeC.placeholder = r.ev.stock !== null ? `Igual al stock: ${fmtN(r.ev.stock)}` : '';
   actualizarVivos();
   renderPanel(r);
 }
 const TABS = [['resumen', 'Resumen'], ['meta', 'Meta'], ['estrategia', 'Estrategia'], ['plata', 'Plata'], ['revision', 'Revisión']];
-function htmlTabs() { return `<div class="tabs-panel"><div class="segmento" role="tablist" aria-label="Partes del panel">${TABS.map(([v, t]) => `<button type="button" role="tab" aria-selected="${estado.tab === v}" data-tab="${v}">${t}</button>`).join('')}</div></div>`; }
+function htmlTabs(lanz) { return `<div class="tabs-panel"><div class="segmento" role="tablist" aria-label="Partes del panel">${(lanz ? TABS_LANZ : TABS).map(([v, t]) => `<button type="button" role="tab" aria-selected="${estado.tab === v}" data-tab="${v}">${t}</button>`).join('')}</div></div>`; }
 function renderPanel(r) {
   const p = estado.prospecto;
   $('#sub-negocio').textContent = [p.negocio.nombre || 'Prospecto sin nombre', p.negocio.ciudad].filter(Boolean).join(' · ');
   const cont = $('#panel');
   if (!r) return;
-  if (estado.cliente) { cont.innerHTML = htmlVistaCliente(r); return; }
+  if (estado.cliente) { cont.innerHTML = r.lanz ? htmlVistaClienteLanz(r) : htmlVistaCliente(r); return; }
   if (r.incompleto) {
     cont.innerHTML = `${htmlCabPanel(r)}<section class="tarjeta hero v-nada"><div class="hero-top"><div class="anillo">${anillo(0, 'var(--gray)')}</div>
       <div class="hero-txt"><p class="kicker">¿Le podemos cumplir?</p><h2 class="respuesta">Faltan respuestas</h2><p class="frase">Para empezar, pregúntale cuánto paga en promedio un cliente (paso 3, «Lo que vende»).</p></div></div></section>${htmlFaltan()}`;
     $('#mini-panel').innerHTML = `<span class="mini-anillo">${anillo(0, 'var(--gray)', 40, 6, false)}</span><span class="t"><b>Faltan respuestas</b>Sigue preguntando</span><span class="ir">Ver panel ›</span>`;
     ultimoVer = null; return;
   }
-  const ev = r.ev, tab = estado.tab;
+  const ev = r.ev, lanz = !!r.lanz;
+  if (lanz && estado.tab === 'meta') estado.tab = 'lanzamiento';
+  if (!lanz && estado.tab === 'lanzamiento') estado.tab = 'meta';
+  const tab = estado.tab;
   let cuerpo;
-  if (tab === 'meta') cuerpo = [htmlMeta(r), htmlCapacidad(r), htmlDia(r)];
+  if (lanz) cuerpo = cuerpoLanz(r, tab);
+  else if (tab === 'meta') cuerpo = [htmlMeta(r), htmlCapacidad(r), htmlDia(r)];
   else if (tab === 'estrategia') cuerpo = [htmlEstrategia(r), htmlAnuncios(r), htmlOferta(r), htmlICP(r), htmlMesa(r)];
   else if (tab === 'plata') cuerpo = [htmlDeDonde(r), htmlPlata(r), htmlSens(r), htmlPrecio(r)];
   else if (tab === 'revision') cuerpo = [htmlRevision(r), htmlFaltan(), htmlMas(r)];
   else cuerpo = [htmlMosaico(r), htmlMinimo(r), htmlMetaMini(r), htmlClientes(r), htmlSalud(r), htmlTesoro(r), htmlFaltan()];
   const scrollPanel = $('#col-panel') ? $('#col-panel').scrollTop : 0;
-  cont.innerHTML = htmlCabPanel(r) + htmlEscenario(r) + htmlGuiaPanel('hero') + htmlHero(r) + htmlGuiaPanel('cliente') + htmlTabs() + `<div class="tab-cuerpo" role="tabpanel">${htmlGuiaPanel('tab-' + tab)}${cuerpo.join('')}</div>`;
+  cont.innerHTML = htmlCabPanel(r) + htmlEscenario(r) + htmlGuiaPanel('hero') + htmlHero(r) + htmlGuiaPanel('cliente') + htmlTabs(lanz) + `<div class="tab-cuerpo" role="tabpanel">${htmlGuiaPanel('tab-' + tab)}${cuerpo.join('')}</div>`;
   if ($('#col-panel')) $('#col-panel').scrollTop = scrollPanel;
-  if (tab === 'plata') dibujarGrafico();
+  if (tab === 'plata' && !lanz) dibujarGrafico();
   if (tab === 'revision') conectarIA();
-  $('#mini-panel').innerHTML = `<span class="mini-anillo">${anillo(ev.puntaje, COLOR_VER[ev.veredicto], 40, 6, false)}</span><span class="t"><b>${esc(TXT_VER_CORTO[ev.veredicto])} · ${ev.puntaje}/100</b>${esc(fmtM(ev.precio, ev.R.moneda))} cada mes</span><span class="ir">Ver panel ›</span>`;
+  $('#mini-panel').innerHTML = `<span class="mini-anillo">${anillo(ev.puntaje, COLOR_VER[ev.veredicto], 40, 6, false)}</span><span class="t"><b>${esc(TXT_VER_CORTO[ev.veredicto])} · ${ev.puntaje}/100</b>${esc(fmtM(ev.precio, ev.R.moneda))} ${lanz ? 'por lanzamiento' : 'cada mes'}</span><span class="ir">Ver panel ›</span>`;
   ultimoVer = ev.veredicto;
   if (estado.detalle && $('#detalle') && $('#detalle').open) abrirDetalle(estado.detalle);
 }
@@ -3436,8 +3965,9 @@ function htmlCabPanel(r) {
   const p = estado.prospecto;
   const ops = r.an ? [['auto', 'La que elija la calculadora'], ...r.an.lista.filter(x => x.completa).map(x => [x.id, x.nombre])] : [];
   const sel = p.foco || 'auto';
+  const verbo = esLanz() ? 'Lanzamiento de' : 'Potenciar';
   return `<div class="panel-cab"><div><h2>Panel del negocio</h2><p>${esc(p.negocio.nombre || 'Prospecto sin nombre')}${p.negocio.rubro ? ' · ' + esc(p.negocio.rubro) : ''}</p></div>
-    ${ops.length > 1 ? `<div class="campo-in"><select id="sel-foco" aria-label="Qué potenciar">${ops.map(([v, t]) => `<option value="${esc(v)}"${v === sel ? ' selected' : ''}>Potenciar: ${esc(t)}</option>`).join('')}</select></div>` : ''}</div>`;
+    ${ops.length > 1 ? `<div class="campo-in"><select id="sel-foco" aria-label="${esLanz() ? 'Producto del lanzamiento' : 'Qué potenciar'}">${ops.map(([v, t]) => `<option value="${esc(v)}"${v === sel ? ' selected' : ''}>${verbo}: ${esc(t)}</option>`).join('')}</select></div>` : ''}</div>${htmlModelo(true)}`;
 }
 function htmlEscenario(r) {
   const hay = r.hayRangos, actual = hay ? (estado.prospecto.escenarioDatos || 'normal') : 'normal';
@@ -3460,7 +3990,7 @@ function htmlHero(r) {
   return `<section class="tarjeta hero v-${ev.veredicto}" id="r-veredicto">
     <div class="hero-top"><div class="anillo" role="img" aria-label="${ev.puntaje} de 100">${anillo(ev.puntaje, COLOR_VER[ev.veredicto])}</div>
       <div class="hero-txt"><p class="kicker">¿Le podemos cumplir?</p><h2 class="respuesta">${esc(TXT_VER[ev.veredicto])}</h2><p class="frase">${esc(frase)}</p>
-      <div class="etiquetas"><span class="etq azul">Potenciar: ${esc(ev.foco.nombre)}</span><span class="etq">${ev.modo === 'optimizar' ? 'Mejorar sus anuncios' : 'Traer clientes nuevos'}</span>${nEst ? `<span class="etq ojo">${nEst} número${nEst > 1 ? 's' : ''} adivinado${nEst > 1 ? 's' : ''}</span>` : '<span class="etq ok">Números del dueño</span>'}</div></div></div>
+      <div class="etiquetas"><span class="etq azul">${ev.modo === 'lanzamiento' ? 'Lanzamiento de' : 'Potenciar'}: ${esc(ev.foco.nombre)}</span><span class="etq">${ev.modo === 'lanzamiento' ? (ev.fecha ? `Canje el ${esc(fmtFecha(ev.fecha, false))}` : 'Lanzamiento sin fecha') : ev.modo === 'optimizar' ? 'Mejorar sus anuncios' : 'Traer clientes nuevos'}</span>${nEst ? `<span class="etq ojo">${nEst} número${nEst > 1 ? 's' : ''} adivinado${nEst > 1 ? 's' : ''}</span>` : '<span class="etq ok">Números del dueño</span>'}</div></div></div>
     ${ev.avisoModo ? `<p class="texto">${esc(ev.avisoModo)}</p>` : ''}
     ${lista ? `<ul class="filas-lista">${lista}</ul>` : ''}
   </section>`;
@@ -3812,7 +4342,8 @@ function htmlSens(r) {
   const max = Math.max(1, ...items.map(s => -s.delta));
   const filas = items.map(s => {
     const anio = -s.delta > 1, cambia = ev.veredicto !== 'no' && s.veredicto === 'no';
-    return `<div class="sens-fila"><div class="eti">${esc(s.nombre)}${cambia ? ' <span class="etq no">ya no se cumple</span>' : ''}<small>${anio ? `gana ${esc(fmtM(-s.delta, mon))} menos el primer año` : `el primer año no cambia; en total, ${esc(fmtM(-s.deltaLargo, mon))} menos`}</small></div><div class="pista"><i style="width:${anio ? clamp(-s.delta / max * 100, 3, 100) : 3}%"></i></div></div>`;
+    const cuando = r.lanz ? 'en el lanzamiento' : 'el primer año';
+    return `<div class="sens-fila"><div class="eti">${esc(s.nombre)}${cambia ? ' <span class="etq no">ya no se cumple</span>' : ''}${r.lanz && s.llega === false ? ' <span class="etq ojo">ya no llegan los de la garantía</span>' : ''}<small>${anio ? `gana ${esc(fmtM(-s.delta, mon))} menos ${cuando}` : r.lanz ? 'no cambia: manda otro tope (stock o atención)' : `el primer año no cambia; en total, ${esc(fmtM(-s.deltaLargo, mon))} menos`}</small></div><div class="pista"><i style="width:${anio ? clamp(-s.delta / max * 100, 3, 100) : 3}%"></i></div></div>`;
   }).join('');
   const top = items.find(s => -s.delta > 1) || items[0];
   return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('balanza', 'orange')}Los números que más pesan</h3><p>si cada uno sale 20% peor</p></div>
@@ -4016,9 +4547,12 @@ function textoGarantia(ev) {
 function abrirDetalle(tipo) {
   const dlg = $('#detalle'); if (!dlg || !ultimo || !ultimo.ev) return;
   estado.detalle = tipo;
-  $('#detalle-tit').textContent = TIT_DETALLE[tipo] || 'Detalle';
-  const f = { gana: detalleGana, recupera: detalleRecupera, cobras: detalleCobras, prometes: detallePrometes }[tipo];
-  $('#detalle-cuerpo').innerHTML = f ? f(ultimo) : '';
+  if (ultimo.lanz) { const [tit, cuerpo] = abrirDetalleLanz(tipo); $('#detalle-tit').textContent = tit; $('#detalle-cuerpo').innerHTML = cuerpo; }
+  else {
+    $('#detalle-tit').textContent = TIT_DETALLE[tipo] || 'Detalle';
+    const f = { gana: detalleGana, recupera: detalleRecupera, cobras: detalleCobras, prometes: detallePrometes }[tipo];
+    $('#detalle-cuerpo').innerHTML = f ? f(ultimo) : '';
+  }
   if (!dlg.open) { try { dlg.showModal(); } catch { dlg.setAttribute('open', ''); } }
 }
 function cerrarDetalle() { const dlg = $('#detalle'); estado.detalle = null; if (dlg && dlg.open) { try { dlg.close(); } catch { dlg.removeAttribute('open'); } } }
@@ -4030,7 +4564,7 @@ function pasosEmbudo(a) {
   if (a.objetivo === 'local' || a.objetivo === 'conocer') add('Personas distintas que lo ven', a.alcance, `cada una lo ve unas ${fmtN(a.frecuencia, 1)} veces`, false);
   if (a.objetivo === 'mensajes' || a.objetivo === 'formulario') add('Tocan el anuncio', a.clics, '', false);
   if (a.objetivo === 'web') add('Entran a la web', a.clics, '', false);
-  if (a.objetivo === 'local') { add('Piden el cupón o escriben', a.resultados); add('Llegan a la tienda', a.llegadas); }
+  if (a.objetivo === 'local') { add(a.lanz ? 'Reservan su cupón' : 'Piden el cupón o escriben', a.resultados); add(a.lanz ? 'Llegan con su cupón' : 'Llegan a la tienda', a.llegadas); }
   if (a.objetivo === 'mensajes') { add('Le escriben por WhatsApp', a.resultados); add('Sí pueden comprar', a.calificados); }
   if (a.objetivo === 'formulario') { add('Dejan sus datos', a.resultados); add('Contestan cuando les escribes', a.contactados); add('Sí pueden comprar', a.calificados); }
   if (a.objetivo === 'conocer') { add('Le escriben solas', a.resultados); add('Sí pueden comprar', a.calificados); }
@@ -4235,6 +4769,538 @@ function garantiaCliente(ev) {
   return `Si al mes ${ev.D} no llegamos a ${fr}, sigo trabajando sin cobrarte hasta llegar, siempre que cumplas tu parte.`;
 }
 
+
+// =================== Lanzamiento ===================
+// Pedido de Mauricio (2026-11-02): «Si tengo una reunión de venta que va a ser para un lanzamiento, tengo que estar en esa configuración.»
+// Las cuentas están en motor4.js (evaluarLanzamiento). Aquí: el selector de modo, las preguntas propias, el panel y la vista del cliente.
+const esLanz = () => estado.prospecto.modelo === 'lanzamiento';
+const TABS_LANZ = [['resumen', 'Resumen'], ['lanzamiento', 'Lanzamiento'], ['estrategia', 'Estrategia'], ['plata', 'Plata'], ['revision', 'Revisión']];
+// Lo que incluye un lanzamiento (su método, ficha 14 y decisión del 24/10)
+const LANZ_INCLUYE = [
+  ['Tu promo armada', 'Una oferta mejor que una rebaja: el producto, el regalo y el porqué de la fecha.'],
+  ['9 videos', '3 cuerpos con 3 ganchos cada uno, con una sesión de grabación.'],
+  ['El cupón con día y hora', 'En el link de tu perfil: la gente lo reserva sin salir de TikTok.'],
+  ['Los recordatorios', 'A cada reserva, un día antes y unas horas antes.'],
+  ['La publicidad armada', 'Sobre el video que gana, con la mitad en los 3 últimos días.'],
+  ['Cada llegada contada', 'Se valida cada cupón en tu tienda: sabes qué video vendió.'],
+  ['La reunión de resultados', 'Qué funcionó, cuánto vendiste y qué sigue.'],
+];
+function fmtDiaCorto(d) { return d ? new Intl.DateTimeFormat('es-BO', { weekday: 'short', day: 'numeric', month: 'short' }).format(d) : ''; }
+function rangoFechas(a, b) {
+  if (!a) return '';
+  if (!b || diasEntre(a, b) === 0) return fmtDiaCorto(a);
+  const f = new Intl.DateTimeFormat('es-BO', { day: 'numeric', month: 'short' });
+  return `${f.format(a)} – ${f.format(b)}`;
+}
+function cincoCosas() {
+  const C = estado.prospecto.compromiso, mon = estado.reglas.moneda;
+  return [
+    [!!C.accesos, 'Sus accesos en la sesión de arranque (sin contraseñas por chat)'],
+    [!!C.aprueba, 'Aprobar cada video en 24 horas'],
+    [!!C.pagaPublicidad, `Su publicidad, desde ${fmtM(n(estado.reglas.anunciosMinimoLanz), mon)}, directo desde su cuenta`],
+    [!!C.stockSeparado, 'Su stock separado para la promo'],
+    [!!C.validaCupon, 'Validar cada cupón en la tienda'],
+  ];
+}
+
+// ---------- Selector: lanzamiento o plan mensual ----------
+function htmlModelo(compacto) {
+  const m = estado.prospecto.modelo, R = estado.reglas, mon = R.moneda;
+  const sub = m === 'lanzamiento'
+    ? `Una promo con fecha y cupón: ${fmtM(n(R.precioLanzamiento), mon)} en dos mitades, con la garantía de tu número.`
+    : `Un servicio cada mes: desde ${fmtM(n(R.precioMinimo), mon)} al mes, según lo que le haces ganar.`;
+  return `<div class="modelo${compacto ? ' modelo-chico' : ''}"><div class="modelo-txt"><b>¿Qué le vas a vender?</b>${compacto ? '' : `<span>${esc(sub)}</span>`}</div>
+    <div class="segmento" role="radiogroup" aria-label="Qué le vas a vender">${[['lanzamiento', 'Un lanzamiento'], ['mensual', 'Plan mensual']].map(([v, t]) => `<button type="button" role="radio" aria-checked="${m === v}" data-modelo="${v}">${t}</button>`).join('')}</div></div>`;
+}
+function renderModelo() { const c = $('#modelo'); if (c) c.innerHTML = htmlModelo(false); }
+function cambiarModelo(v) {
+  if (!['lanzamiento', 'mensual'].includes(v) || estado.prospecto.modelo === v) return;
+  estado.prospecto.modelo = v; guardarLocal('co4.modelo', v);
+  if (v === 'lanzamiento' && estado.tab === 'meta') estado.tab = 'lanzamiento';
+  if (v === 'mensual' && estado.tab === 'lanzamiento') estado.tab = 'meta';
+  guardarLocal('co4.tab', estado.tab);
+  cerrarDetalle();
+  $('#ruta').innerHTML = htmlRutaLlamada();
+  renderForm(); recalcular(); programarBorrador();
+  aviso(v === 'lanzamiento' ? 'Modo lanzamiento: un cobro por promo, en dos mitades.' : 'Modo plan mensual: cobras cada mes.');
+}
+
+// ---------- Preguntas propias del lanzamiento ----------
+function campoFecha({ clave, q, importante = false, nota = '' }) {
+  const id = 'f-' + idSeguro(clave), v = getValor(clave) || '';
+  return `<div class="fila" data-pregunta="${esc(clave)}">${htmlGuia(clave)}<div class="fila-cab"><label for="${id}">${esc(q)}</label>${htmlBadge(clave, importante)}</div>
+    <div class="campo-in"><input type="date" id="${id}" data-clave="${esc(clave)}" data-tipo="txt" value="${esc(v)}"></div>${nota ? `<p class="nota">${esc(nota)}</p>` : ''}</div>`;
+}
+function htmlPaso5Lanz() {
+  return `<div class="explica"><b>El día del canje.</b> En un lanzamiento la gente llega junta, en 1 o 2 días. Si no hay stock o no da abasto, los que llegan se van molestos y la garantía no se cumple.<span>Piensa solo en el producto de la promo.</span></div>
+    <p class="grupo-titulo">1. El stock</p><div class="grupo">
+    ${pregunta({ clave: 'lanzamiento.stock', q: '¿Cuántas unidades separa para la promo?', suf: 'unidades', importante: true, nota: 'Es el tope de cupones. Cuando se acaban, se anuncia que se agotó: escasez de verdad.' })}
+    ${pregunta({ clave: 'lanzamiento.topeCupones', q: '¿Cuántos cupones como máximo? (vacío = igual al stock)', suf: 'cupones', rango: false, nota: 'Como no llegan todos los que reservan, se pueden dar más cupones que unidades sin dejar a nadie sin su producto. En el panel te digo cuántos.' })}</div>
+    <p class="grupo-titulo">2. Atender</p><div class="grupo">
+    ${chips({ clave: 'lanzamiento.diasCanje', q: '¿Cuántos días dura el canje en la tienda?', opciones: [['1', '1 día'], ['2', '2 días'], ['3', '3 días']] })}
+    ${pregunta({ clave: 'lanzamiento.atiendeDia', q: '¿Cuántas personas puede atender bien en un día de canje?', suf: 'por día', importante: true, nota: 'Atender bien = sin filas largas, con el producto a la vista y alguien que cierre la venta.' })}
+    ${pregunta({ clave: 'capacidad.mensajesDia', q: '¿Cuántos mensajes pueden mandar o contestar bien por día?', ayuda: 'mensajesDia', suf: 'por día', importante: true, nota: 'Cada reserva lleva 2 recordatorios a mano: un día antes y unas horas antes.' })}</div>
+    <div id="vivo-canje">${htmlVivoCanje()}</div>`;
+}
+function htmlPaso7Lanz() {
+  const p = estado.prospecto, A = p.anuncios, mon = estado.reglas.moneda;
+  const ev = ultimo && ultimo.lanz && ultimo.ev ? ultimo.ev : null;
+  const objEf = A.objetivo && A.objetivo !== 'auto' ? A.objetivo : (ev ? ev.ads.objetivo : 'local');
+  const fechas = proximasFechas(new Date(), 6);
+  return `<div class="explica"><b>La promo, con fecha.</b> El primer video sale unos 14 días antes del canje y la mitad de la publicidad va en los 3 últimos días. Con la fecha te digo hasta cuándo tienes que cerrar.<span>El número de la garantía sale de aquí: lo que pone (tu servicio + la publicidad) ÷ lo que le deja cada venta.</span></div>
+    <p class="grupo-titulo">La fecha</p><div class="grupo">
+    ${campoFecha({ clave: 'lanzamiento.fecha', q: '¿Qué día es el canje en la tienda?', importante: true })}
+    <div class="fila"><p class="nota">Fechas fuertes que vienen (toca una):</p><div class="chips chips-chicos">${fechas.map(f => `<button type="button" data-fecha="${esc(f.iso)}" data-porque="${esc(f.nombre)}">${esc(f.nombre)} · <b>${esc(fmtFecha(f.canje, false))}</b></button>`).join('')}</div></div>
+    ${texto({ clave: 'lanzamiento.porque', q: '¿Por qué ese día? (el porqué de la promo)', ph: 'Ej. Black Friday, aniversario de la tienda, Día de la Madre', nota: 'Sin un porqué real, la promo suena a desesperación.' })}</div>
+    <p class="grupo-titulo">La campaña</p><div class="grupo">
+    ${chips({ clave: 'anuncios.plataforma', q: '¿Dónde se pauta?', opciones: [['tiktok', 'TikTok'], ['meta', 'Facebook e Instagram'], ['ambas', 'Las dos']] })}
+    ${chips({ clave: 'anuncios.alcance', q: '¿De dónde vienen sus clientes?', opciones: [['auto', 'Que lo decida la calculadora'], ['barrio', 'De su zona'], ['ciudad', 'De toda la ciudad'], ['pais', 'De todo el país'], ['empresas', 'Son empresas']], nota: ev && ev.ads.alcanceAuto ? `Ahora uso: ${ev.ads.alcanceNombre.toLowerCase()}.` : '' })}
+    ${chips({ clave: 'anuncios.objetivo', q: 'Cuando alguien ve el video, ¿qué queremos que haga?', opciones: [['auto', 'Que lo decida la calculadora'], ['local', 'Que reserve su cupón y venga'], ['mensajes', 'Que escriba por WhatsApp'], ['formulario', 'Que deje sus datos'], ['web', 'Que compre en la web']], estructura: true, nota: ev && ev.ads.objetivoAuto ? `Ahora uso: «${ev.ads.objetivoNombre}».` : '' })}
+    ${objEf === 'local' ? interruptor({ clave: 'anuncios.cupon', q: 'El cupón lleva un regalo (la promo)', nota: 'Con un regalo que a él le cueste poco y al cliente le valga harto, reserva mucha más gente. Ármalo en el paso 6.' }) : ''}</div>
+    <p class="grupo-titulo">La plata</p><div class="grupo">
+    ${pregunta({ clave: 'lanzamiento.publicidad', q: '¿Cuánto pone en publicidad para este lanzamiento? (lo paga directo, desde su cuenta)', pre: mon, fmt: 'dinero', rango: false, nota: `Tu mínimo: ${fmtM(n(estado.reglas.anunciosMinimoLanz), mon)}. Si lo dejas vacío, uso lo menos con lo que llegan los de la garantía aunque salga lo mínimo.` })}
+    ${pregunta({ clave: 'anuncios.tc', q: '¿A cuánto le cobra el banco cada dólar?', suf: 'Bs por dólar', ph: fmtN(TC_DEF, 2), nota: 'Desde abril de 2026 las tarjetas pagan al tipo de cambio del Banco Central (en noviembre de 2026, Bs 12,09). Confírmalo el día de la llamada en bcb.gob.bo.' })}
+    ${chips({ clave: 'compromiso.pagoTarjeta', q: '¿Tiene tarjeta que acepte pagos en dólares?', opciones: [['si', 'Sí'], ['no', 'No'], ['nose', 'No sabe']], nota: 'Sin una tarjeta que funcione, la publicidad no sale.' })}</div>
+    <div id="vivo-lanz">${htmlVivoLanz()}</div>
+    <p class="grupo-titulo">Lo que sabe de su tienda (opcional)</p><div class="grupo">
+    ${pregunta({ clave: 'lanzamiento.compraPct', q: 'De cada 100 que entran a su tienda preguntando por esto, ¿cuántos compran?', suf: 'de 100', nota: 'Si lo sabe, uso su dato. Si no, un promedio prudente.' })}
+    ${pregunta({ clave: 'lanzamiento.llegadaPct', q: 'De cada 100 que reservan el cupón, ¿cuántos llegan?', suf: 'de 100', ph: fmtN(n(estado.reglas.llegadaLanzPct)), nota: 'Tu supuesto: 1 de cada 2, hasta tener 10 reservas contadas de lanzamientos terminados. Cámbialo cuando tengas tus datos.' })}</div>
+    <p class="grupo-titulo">Si ya pautó antes (opcional)</p><div class="grupo">
+    ${pregunta({ clave: 'anuncios.costoResultadoReal', q: `¿Cuánto le costaba cada ${objEf === 'local' ? 'persona que pedía el cupón o escribía' : objEf === 'formulario' ? 'formulario' : objEf === 'web' ? 'visita a la web' : 'conversación (mensaje)'}?`, pre: mon, nota: 'Si lo sabe, uso su dato real en vez del promedio.' })}
+    ${pregunta({ clave: 'anuncios.cpmReal', q: '¿Cuánto le costaban mil vistas?', pre: mon, nota: 'Está en el administrador de anuncios como «CPM».' })}</div>`;
+}
+function htmlPaso8Lanz() {
+  const mon = estado.reglas.moneda;
+  return `<div class="explica"><b>Sus 5 cosas.</b> La garantía vale si él las cumple. Si no cumple una, la segunda mitad se paga en la fecha del acuerdo. Díselo antes de cobrar la primera mitad.</div>
+    <p class="grupo-titulo">Sus 5 cosas</p><div class="grupo">
+    ${interruptor({ clave: 'compromiso.accesos', q: 'Dar sus accesos en la sesión de arranque (sin contraseñas por chat)' })}
+    ${interruptor({ clave: 'compromiso.aprueba', q: 'Aprobar cada video en 24 horas' })}
+    ${interruptor({ clave: 'compromiso.pagaPublicidad', q: `Poner su publicidad, desde ${fmtM(n(estado.reglas.anunciosMinimoLanz), mon)}, directo desde su cuenta` })}
+    ${interruptor({ clave: 'compromiso.stockSeparado', q: 'Separar el stock de la promo' })}
+    ${interruptor({ clave: 'compromiso.validaCupon', q: 'Validar cada cupón en la tienda' })}</div>
+    <p class="grupo-titulo">Además</p><div class="grupo">
+    ${interruptor({ clave: 'compromiso.tiempo', q: 'Una hora para la sesión de arranque' })}
+    ${interruptor({ clave: 'compromiso.aplicaGuia', q: 'Atender con tu guía a los que llegan con el cupón' })}</div>
+    <p class="grupo-titulo">Después del lanzamiento</p><div class="grupo">
+    ${interruptor({ clave: 'lanzamiento.ofrecerPlan', q: 'Ofrecerle el plan de cada mes el día que se completa la garantía' })}
+    ${pregunta({ clave: 'lanzamiento.pautaPlan', q: 'Publicidad al mes en el plan (vacío = la misma del lanzamiento)', pre: mon, fmt: 'dinero', rango: false })}</div>`;
+}
+function htmlVivoLanz() {
+  const r = ultimo;
+  if (!r || !r.lanz || !r.ev) return `<div class="vivo"><p class="texto">Cuando anotes lo que vende (paso 3), aquí ves el número de la garantía y cuántos llegan.</p></div>`;
+  return `<div class="vivo">${htmlNumeroGarantia(r.ev, true)}${htmlEmbudoLanz(r, true)}</div>`;
+}
+function htmlVivoCanje() {
+  const r = ultimo;
+  if (!r || !r.lanz || !r.ev) return '';
+  return `<div class="vivo">${htmlMedidoresCanje(r.ev)}</div>`;
+}
+
+// ---------- Panel ----------
+function cuerpoLanz(r, tab) {
+  if (tab === 'lanzamiento') return [htmlCalendarioLanz(r), htmlCanjeLanz(r), htmlMetaLanz(r)];
+  if (tab === 'estrategia') return [htmlAnunciosLanz(r), htmlOferta(r), htmlICP(r), htmlQuedaLanz(r)];
+  if (tab === 'plata') return [htmlPlataLanz(r), htmlPlanMesLanz(r), htmlSens(r), htmlPrecioLanz(r)];
+  if (tab === 'revision') return [htmlRevision(r), htmlFaltan(), htmlMasLanz(r)];
+  return [htmlMosaicoLanz(r), htmlGarantiaLanz(r), htmlMinimoLanz(r), htmlSalud(r), htmlTesoro(r), htmlFaltan()];
+}
+function estadoGarantia(ev) {
+  const E = ev.escenarios;
+  if (!Number.isFinite(ev.N)) return ['no', 'Sin número', 'Falta saber cuánto le deja cada venta.'];
+  if (E.piso.llega) return ['ok', 'Segura', `Aunque salga lo mínimo llegan ${f1(E.piso.unidades)} de ${fmtN(ev.N)}.`];
+  if (E.meta.llega) return ['ojo', 'Ajustada', `Lo esperado da ${f1(E.meta.unidades)} de ${fmtN(ev.N)}; lo mínimo, ${f1(E.piso.unidades)}.`];
+  return ['no', 'En riesgo', `Lo esperado da solo ${f1(E.meta.unidades)} de ${fmtN(ev.N)}.`];
+}
+function htmlMosaicoLanz(r) {
+  const ev = r.ev, E = ev.escenarios, mon = ev.R.moneda, g = estadoGarantia(ev);
+  const w = (id, ic, col, tit, grande, chico, txt) => `<button type="button" class="widget tocable" data-detalle="${id}"><div class="widget-cab">${icoSq(ic, col)}${esc(tit)}<span class="ver-mas">Ver más ›</span></div><div class="grande">${esc(grande)}${chico ? ` <small>${esc(chico)}</small>` : ''}</div><p>${esc(txt)}</p></button>`;
+  return `<div class="mosaico">
+    ${w('prometes', 'objetivo', 'blue', 'Le prometes', Number.isFinite(ev.N) ? fmtN(ev.N) : '—', ev.unidadGar[0], `${ev.unidadGar[1]}: lo que necesita para recuperar lo que pone.`)}
+    ${w('cobras', 'moneda', 'green', 'Le cobras', fmtM(ev.precio, mon), 'por lanzamiento', `${fmtM(ev.mitad1, mon)} para empezar y ${fmtM(ev.mitad2, mon)} cuando lleguen los ${Number.isFinite(ev.N) ? fmtN(ev.N) : '—'}.`)}
+    ${w('gana', 'sube', 'indigo', 'Él gana', fmtN(E.piso.roiLanz, 1) + '×', 'lo que pone', `En el lanzamiento, aunque salga lo mínimo.${ev.venta.g1 > ev.ganVenta + 0.5 ? ` Con los que vuelven en el año: ${fmtN(E.piso.roi1, 1)}×.` : ''}`)}
+    ${w('garantia', 'escudo', g[0] === 'ok' ? 'green' : g[0] === 'ojo' ? 'orange' : 'red', 'Tu segunda mitad', g[1], '', g[2])}
+  </div>`;
+}
+// El número de la garantía, con la cuenta y las barras de cada escenario
+function htmlNumeroGarantia(ev, compacto) {
+  const mon = ev.R.moneda, E = ev.escenarios;
+  if (!Number.isFinite(ev.N)) return `<p class="texto">${ICO.no} Falta saber cuánto le deja cada venta (paso 3): sin eso no hay número de garantía.</p>`;
+  const max = Math.max(ev.N, E.techo.unidades, 1) * 1.1, w = x => clamp(x / max * 100, 0, 100);
+  const fila = (k, t, col) => { const e = E[k]; return `<div class="barra-fila"><div class="eti">${t}<small>${e.llega ? 'llega' : `faltan ${f1(e.faltan)}`}</small></div><div class="pista"><i style="width:${w(e.unidades)}%;background:${e.llega ? col : 'var(--red)'}"></i><b class="marca-n" style="left:${w(ev.N)}%"></b></div><div class="val">${f1(e.unidades)}</div></div>`; };
+  return `<div class="garantia-n"><div class="gn-cifra"><b>${fmtN(ev.N)}</b><span>${esc(ev.unidadGar[1])}</span></div>
+      <div class="formula">${esc(`Lo que pone: ${fmtM(ev.precio, mon)} (tu servicio) + ${fmtM(ev.publicidad, mon)} (publicidad) = ${fmtM(ev.precio + ev.publicidad, mon)}\n÷ ${fmtM(ev.ganVenta, mon)} que le deja cada venta${ev.venta.regalo > 0 ? ` (ya resté el regalo de ${fmtM(ev.venta.regalo, mon)})` : ''}\n= ${fmtN(ev.N)}${ev.N > ev.tope ? ` · pasa tu tope de ${fmtN(ev.tope)}` : ''}`)}</div></div>
+    <div class="barras barras-n">${fila('piso', 'Lo mínimo', 'var(--s2)')}${fila('meta', 'Lo esperado', 'var(--s1)')}${fila('techo', 'Si sale muy bien', 'var(--s3)')}</div>
+    ${compacto ? '' : `<p class="nota-eje">La rayita negra es el número de la garantía. Las barras: cuántas llegan en cada escenario.</p>`}`;
+}
+function htmlGarantiaLanz(r) {
+  const ev = r.ev, mon = ev.R.moneda, E = ev.escenarios, g = estadoGarantia(ev);
+  const cosas = cincoCosas();
+  const sube = ev.pubSegura !== null && ev.pubSegura > ev.publicidad ? `<p class="texto">${ICO.ojo} Con <b>${esc(fmtM(ev.pubSegura, mon))}</b> de publicidad llegan los ${fmtN(ev.N)} aunque salga lo mínimo.</p>` : '';
+  const adentro = ev.ads.objetivo === 'local' && Number.isFinite(ev.N) ? `<p class="texto"><b>Lo que pasa adentro:</b> la garantía cuenta llegadas, compren o no. En lo esperado compran ${f1(E.meta.compras)} de los ${f1(E.meta.llegadas)} que llegan${E.meta.compras >= ev.N ? `: más de las ${fmtN(ev.N)} ventas que necesita para recuperar.` : `, y para recuperar lo que pone necesita ${fmtN(ev.N)} ventas. Enséñale a atender a los que llegan.`}</p>` : '';
+  return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('escudo', 'orange')}Tu garantía y su número</h3>${etqEst(g[0], g[1])}</div>
+    ${htmlNumeroGarantia(ev, false)}
+    <p class="texto"><b>Lo que le dices:</b> «${esc(fraseGarantiaLanz(ev))}»</p>
+    ${sube}${adentro}
+    <h4 class="sub-titulo">${icoSq('lista', 'green')}Vale si cumple sus 5 cosas</h4>
+    <ul class="filas-lista">${cosas.map(([ok, t]) => `<li>${ok ? ICO.ok : ICO.ojo}<span>${esc(t)}${ok ? '' : ' <b>(falta que lo acepte)</b>'}</span></li>`).join('')}</ul>
+    <p class="texto">Si no cumple una, la segunda mitad se paga en la fecha del acuerdo. Si cumple y en su fecha no llegan, ${ev.diasExtra} días más con el video ganador, sin costo; si igual no llegan, no te paga la segunda mitad.</p></section>`;
+}
+function fraseGarantiaLanz(ev) {
+  const t = String(ev.R.garantiaTexto || '').trim(), mon = ev.R.moneda;
+  const cuantos = Number.isFinite(ev.N) ? `los ${fmtN(ev.N)} clientes que necesitas para recuperar lo que pusiste` : 'los clientes que necesitas para recuperar lo que pusiste';
+  if (t) { const x = t.replace(/\{meses\}/g, 'tu fecha').replace(/\{promesa\}/g, cuantos); return x[0].toUpperCase() + x.slice(1); }
+  return `Me pagas la mitad para empezar (${fmtM(ev.mitad1, mon)}), y la otra mitad (${fmtM(ev.mitad2, mon)}) cuando te lleguen ${cuantos}. Si no llegan, no me la pagas.`;
+}
+function htmlMinimoLanz(r) {
+  const ev = r.ev, m = r.minimo, mon = ev.R.moneda, p = estado.prospecto;
+  const cab = `<div class="tarjeta-cab"><h3>${icoSq('balanza', 'indigo')}Lo mínimo para aceptarlo</h3><p>tu tope ${fmtN(ev.tope)} · publicidad desde ${esc(fmtM(ev.adsMin, mon))}</p></div>`;
+  if (!m) return '';
+  const caja = n(p.negocio.caja);
+  const fila = (t, min, hoy, ok, nota) => `<tr><td>${esc(t)}${nota ? `<small>${esc(nota)}</small>` : ''}</td><td class="n">${esc(min)}</td><td class="n">${esc(hoy)}</td><td>${ok === null ? ICO.na : ok ? ICO.ok : ICO.no}</td></tr>`;
+  const filas = [
+    fila('Lo que le deja cada venta', fmtM(m.ganMin, mon), fmtM(ev.ganVenta, mon), ev.ganVenta >= m.ganMin, `para que el número no pase de ${fmtN(ev.tope)}`),
+    fila('Publicidad del lanzamiento', m.pubMin !== null ? fmtM(m.pubMin, mon) : 'no alcanza', fmtM(ev.publicidad, mon), m.pubMin !== null ? ev.publicidad >= m.pubMin : false, 'para que lleguen aunque salga lo mínimo'),
+  ];
+  if (m.stockMin !== null) filas.push(fila('Unidades separadas (tope de cupones)', fmtN(m.stockMin), ev.stock !== null ? fmtN(ev.topeCup) : '—', ev.stock !== null ? ev.topeCup >= m.stockMin : null, `llegan ${fmtN(ev.llegadaPct * 100)} de cada 100 que reservan`));
+  if (m.atiendeMin !== null) filas.push(fila('Personas que atiende por día de canje', fmtN(m.atiendeMin), ev.atiendeDia !== null ? fmtN(ev.atiendeDia) : '—', ev.atiendeDia !== null ? ev.atiendeDia >= m.atiendeMin : null, `en lo esperado, con ${ev.diasCanje} día${ev.diasCanje > 1 ? 's' : ''} de canje`));
+  filas.push(fila('Plata para empezar', fmtM(m.inicio, mon), caja > 0 ? fmtM(caja, mon) : '—', caja > 0 ? caja >= m.inicio : null, 'la primera mitad más la publicidad'));
+  return `<section class="tarjeta">${cab}
+    <div class="tabla-envoltura"><table class="tabla-minimo"><thead><tr><th>Para aceptarlo necesita</th><th class="n">Lo mínimo</th><th class="n">Este cliente</th><th></th></tr></thead><tbody>${filas.join('')}</tbody></table></div>
+    <p class="texto">«Lo mínimo» es el punto donde el número de tu garantía no pasa de ${fmtN(ev.tope)}, los clientes llegan aunque salga lo mínimo y la tienda puede atender a todos. Si con la publicidad mínima cada venta le deja menos de ${esc(fmtM(m.ganMinConMinimo, mon))}, elige con él otro producto.</p></section>`;
+}
+// Medidores del día del canje
+function medidorLanz(ic, col, tit, val, tope, uni, txt, excederEsBueno) {
+  if (!(tope > 0)) return `<div class="medidor"><div class="med-cab"><b>${icoSq(ic, col)}${esc(tit)}</b>${etqEst('ojo', 'Falta saber')}</div><p class="texto">${txt}</p></div>`;
+  const pasa = val > tope + 1e-9, est = !pasa ? 'ok' : excederEsBueno ? 'ok' : val <= tope * 1.15 ? 'ojo' : 'no';
+  const etq = !pasa ? 'Le alcanza' : excederEsBueno ? 'Se agota' : 'No le alcanza';
+  const tot = Math.max(val, tope, 1) * 1.08, w = x => clamp(x / tot * 100, 0, 100);
+  return `<div class="medidor"><div class="med-cab"><b>${icoSq(ic, col)}${esc(tit)}</b>${etqEst(est, etq)}</div>
+    <div class="med-barra" role="img" aria-label="${esc(`Lo esperado ${f1(val)} ${uni}; el tope es ${fmtN(tope)}`)}"><i class="m-plan m-${est}" style="left:0;width:${w(val)}%;border-radius:999px 0 0 999px"></i><i class="m-tope" style="left:${w(tope)}%"></i></div>
+    <div class="med-ley"><span><i class="l-plan m-${est}"></i>Lo esperado: ${esc(f1(val))} ${esc(uni)}</span><span><i class="l-tope"></i>El tope: ${esc(fmtN(tope))}</span></div>
+    <p class="texto">${txt}</p></div>`;
+}
+function htmlMedidoresCanje(ev) {
+  const E = ev.escenarios, m = E.meta, local = ev.ads.objetivo === 'local', out = [];
+  const reservasSin = ev.ads.resultados, llegDia = (m.llegadas + m.sinAtender) / ev.diasCanje;
+  if (local) {
+    out.push(medidorLanz('regalo', 'pink', 'Cupones', reservasSin, ev.topeCup, 'reservas', ev.topeCup ? (reservasSin > ev.topeCup ? `Pedirían unos ${esc(f1(reservasSin))} cupones y el tope es ${esc(fmtN(ev.topeCup))}: se acaban. Anúncialo, es escasez de verdad.` : `Se pedirían unos ${esc(f1(reservasSin))} de ${esc(fmtN(ev.topeCup))} cupones.`) : 'Falta saber cuántas unidades separa: es el tope de cupones.', true));
+    out.push(medidorLanz('casa', 'teal', 'Atender en el canje', llegDia, ev.atiendeDia, 'por día', ev.atiendeDia ? `Llegarían unas ${esc(f1(llegDia))} personas por día, en ${ev.diasCanje} día${ev.diasCanje > 1 ? 's' : ''} de canje. Puede atender bien ${esc(fmtN(ev.atiendeDia))}.${m.sinAtender > 0 ? ` <b>Unas ${esc(f1(m.sinAtender))} se irían sin atender:</b> ya las quité de la cuenta.` : ''}` : `Llegarían unas ${esc(f1(llegDia))} personas por día. Pregúntale cuántas puede atender bien.`, false));
+  }
+  if (ev.stock !== null) out.push(medidorLanz('bolsa', 'green', 'Stock', m.compras, ev.stock, 'compras', `Comprarían unas ${esc(f1(m.compras))} de las ${esc(fmtN(ev.stock))} unidades separadas${m.compras < ev.stock - 0.5 ? `: le quedan ${esc(fmtN(ev.stock - m.compras))} para vender después` : ''}.`, false));
+  const msj = m.reservas * 2 / (ev.diasCanje + 1), capMsg = n(estado.prospecto.capacidad.mensajesDia);
+  if (local) out.push(medidorLanz('chat', 'blue', 'Recordatorios', msj, capMsg, 'por día', capMsg > 0 ? `2 recordatorios a mano por reserva: unos ${esc(f1(msj))} mensajes por día cerca del canje. Pueden mandar bien ${esc(fmtN(capMsg))}.` : `Serían unos ${esc(f1(msj))} mensajes por día cerca del canje. Pregúntale cuántos pueden mandar bien.`, false));
+  return `<div class="medidores">${out.join('')}</div>`;
+}
+function htmlCanjeLanz(r) {
+  return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('casa', 'teal')}¿Le alcanza el día del canje?</h3><p>en lo esperado</p></div>
+    ${htmlMedidoresCanje(r.ev)}
+    <p class="texto">En un lanzamiento la gente llega junta. Si se acaba el stock o hay filas, se van molestos: por eso lo reviso antes de prometer.</p></section>`;
+}
+function htmlCalendarioLanz(r) {
+  const ev = r.ev, L = estado.prospecto.lanzamiento, mon = ev.R.moneda, f = ev.fecha;
+  const usd = ev.publicidad / (ev.ads.tc || TC_DEF), grito = ev.publicidad / 2;
+  let cab;
+  if (!f) cab = `<p class="texto">${ICO.ojo} Todavía no hay fecha. Elige con él una fecha fuerte: sin fecha no hay urgencia de verdad.</p><div><button class="btn-g btn-chico" type="button" data-ir-clave="lanzamiento.fecha" data-ir-paso2="7">Elegir la fecha ›</button></div>`;
+  else {
+    const d = ev.diasHasta, limite = ev.cierraHasta, dl = diasEntre(ev.hoy, limite);
+    cab = `<div class="mesa">
+      <div class="mesa-item"><span class="kicker">Canje en la tienda</span><span class="grande">${esc(fmtDiaCorto(f))}</span><p>${!vacio(L.porque) ? `Por «${esc(String(L.porque).trim())}». ` : ''}Faltan ${fmtN(Math.max(0, d))} días.</p></div>
+      <div class="mesa-item"><span class="kicker">Cierra a más tardar</span><span class="grande">${esc(fmtDiaCorto(limite))}</span><p>${dl > 0 ? `Te quedan ${fmtN(dl)} días para cobrar la primera mitad.` : dl === 0 ? 'Es hoy: cierra en esta llamada.' : 'Ya pasó: hay que mover la fecha o apretar el calendario.'}</p></div>
+      <div class="mesa-item"><span class="kicker">El grito</span><span class="grande">${esc(fmtM(grito, mon))}</span><p>la mitad de la publicidad, en los 3 días antes del canje (unos USD ${fmtN(usd / 2 / 3, 1)} por día).</p></div></div>`;
+  }
+  const etapas = `<ol class="calendario">${ev.calendario.map(e => `<li><span class="cal-mes">${esc(e.desde ? rangoFechas(e.desde, e.al) : e.d === e.hasta ? `Día ${e.d}` : `Días ${e.d} a ${e.hasta}`)}</span><b>${esc(e.t)}</b><p>${esc(e.x)}</p></li>`).join('')}</ol>`;
+  return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('calendario', 'red')}El calendario</h3><p>14 días de videos y el canje</p></div>${cab}${etapas}
+    ${!f ? '<p class="nota-eje">Los días se cuentan desde el canje (día 0).</p>' : ''}</section>`;
+}
+function htmlMetaLanz(r) {
+  const ev = r.ev, md = ev.metaDueno, mon = ev.R.moneda;
+  const cab = `<div class="tarjeta-cab"><h3>${icoSq('objetivo', 'blue')}Su meta y el lanzamiento</h3></div>`;
+  if (!md) return `<section class="tarjeta">${cab}<p class="texto">Pregúntale qué quiere lograr: así le muestras cuánto lo acerca un lanzamiento y cuánto el plan de cada mes.</p><div><button class="btn-g btn-chico" type="button" data-ir-clave="meta.valor" data-ir-paso2="2">Preguntarle ›</button></div></section>`;
+  const v = x => md.tipo === 'clientes' ? `${f1(x)} clientes` : fmtM(x, mon);
+  const quiere = md.tipo === 'clientes' ? `${f1(md.quiere)} clientes nuevos al mes` : md.tipo === 'ganancia' ? `ganar ${fmtM(md.quiere, mon)} más al mes` : `vender ${fmtM(md.quiere, mon)} más al mes`;
+  const barra = (t, x, c) => { const est = estCob(c); return `<div class="barra-fila"><div class="eti">${t}<small>${c >= 9.99 ? 'mucho más' : `${fmtN(c * 100)} de cada 100`}</small></div><div class="pista"><i style="width:${clamp(c, 0, 1) * 100}%;background:var(--${est === 'ok' ? 'green' : est === 'ojo' ? 'orange' : 'red'})"></i></div><div class="val" style="font-size:14px">${esc(v(x))}</div></div>`; };
+  return `<section class="tarjeta">${cab}<p class="meta-titulo">Quiere ${esc(quiere)}</p>
+    <div class="barras ancho">${barra('El lanzamiento', md.daLanz, md.cobLanz)}${ev.plan.ofrecer ? barra('El plan de cada mes', md.daPlan, md.cobPlan) : ''}</div>
+    <p class="texto">El lanzamiento da ${esc(v(md.daLanz))} en unas 2 semanas, en lo esperado.${ev.plan.ofrecer ? ` Con el plan de cada mes, un lanzamiento chico al mes, serían unos ${esc(v(md.daPlan))} al mes.` : ''} ${md.cobPlan >= 0.8 || md.cobLanz >= 0.8 ? 'Le alcanza para su meta.' : 'Para su meta haría falta más publicidad o un producto que deje más: díselo antes de cobrar.'}</p></section>`;
+}
+// Lo que se ve del embudo: con los topes del escenario esperado
+function adsMostrado(ev) { const m = ev.escenarios.meta; return { ...ev.ads, resultados: m.reservas, llegadas: m.llegadas, clientes: m.compras, calificados: m.interesados }; }
+function htmlEmbudoLanz(r, compacto) {
+  const ev = r.ev, a = adsMostrado(ev), mon = ev.R.moneda, E = ev.escenarios, m = E.meta;
+  const tile = (k, v, s) => `<div class="mesa-item"><span class="kicker">${esc(k)}</span><span class="grande">${esc(v)}</span><p>${esc(s)}</p></div>`;
+  const local = a.objetivo === 'local';
+  const tiles = [];
+  if (local) tiles.push(tile('Cada persona que llega', m.llegadas > 0 ? fmtM(ev.publicidad / m.llegadas, mon) : '—', m.reservas > 0 ? `Y cada reserva: ${fmtM(ev.publicidad / m.reservas, mon)}.` : ''));
+  tiles.push(tile('Cada cliente', m.compras > 0 ? fmtM(ev.publicidad / m.compras, mon) : '—', 'Lo que cuesta en publicidad que alguien compre.'));
+  if (ev.ganVenta > 0) tiles.push(tile('La publicidad se paga con', `${f1(ev.publicidad / ev.ganVenta)} ventas`, `Cada venta de la promo le deja ${fmtM(ev.ganVenta, mon)}.`));
+  const cab = `<div class="ads-cab"><span class="etq azul">${esc(a.nombrePlataforma)}</span><span class="etq">${esc(a.objetivoNombre)}</span>${a.fuente === 'real' ? '<span class="etq ok">con sus datos reales</span>' : '<span class="etq">promedios de mercado</span>'}</div>
+    <p class="texto">Con <b>${esc(fmtM(ev.publicidad, mon))}</b> (unos USD ${fmtN(a.usd)}, al cambio de Bs ${fmtN(a.tc, 2)}), en todo el lanzamiento, en lo esperado:</p>`;
+  const rango = `<p class="texto">Compran: lo mínimo <b>${f1(E.piso.compras)}</b> · lo esperado <b>${f1(m.compras)}</b> · si sale muy bien <b>${f1(E.techo.compras)}</b>.${m.agotado ? ` Se acaban los cupones (el tope es ${fmtN(ev.topeCup)}).` : ''}</p>`;
+  if (compacto) return cab + htmlFunnel(a) + rango + `<div class="mesa">${tiles.join('')}</div>`;
+  return cab + htmlFunnel(a) + rango + `<div class="mesa">${tiles.join('')}</div>`
+    + (local ? `<p class="texto"><b>Trabajo que esto le da:</b> confirmar cada reserva y mandar 2 recordatorios a mano (unos ${fmtN(m.reservas * 2)} mensajes), y atender a unas ${f1(m.llegadas)} personas en ${ev.diasCanje} día${ev.diasCanje > 1 ? 's' : ''}.</p>` : `<p class="texto"><b>Trabajo que esto le da:</b> ${esc(textoTrabajoAds(a))}</p>`);
+}
+function htmlArmadoLanz(r) {
+  const ev = r.ev, a = ev.ads, mon = ev.R.moneda, p = estado.prospecto, ciudad = p.negocio.ciudad || 'su ciudad';
+  const usd = ev.publicidad / (a.tc || TC_DEF), usdDiaGrito = usd / 2 / 3;
+  const filas = [];
+  for (const x of a.partes) filas.push([`${x.nombre}${a.partes.length > 1 ? ` (${fmtN(x.sh * 100)} de cada 100 Bs)` : ''}`, `Campaña: «${x.campana}».`]);
+  filas.push(['Cómo gastar la plata', `La mitad (${fmtM(ev.publicidad / 2, mon)}) en los 3 días del grito: unos USD ${fmtN(usdDiaGrito, 1)} por día${usdDiaGrito >= 20 ? ' con TikTok Ads' : ', con «Promocionar» desde la app (el mínimo de TikTok Ads es USD 20 por día)'}. La otra mitad, de a poco desde el primer video, sobre lo que más gusta.`]);
+  filas.push(['A quién mostrarlo', a.alcanceNegocio === 'barrio' ? 'Solo a gente que vive o trabaja a 3–5 km de la tienda, en la edad de su cliente.' : a.alcanceNegocio === 'ciudad' ? `A toda ${ciudad}, a mano por ubicación, sin intereses.` : a.alcanceNegocio === 'pais' ? 'A todo Bolivia, solo donde llegan sus envíos.' : 'A dueños y encargados de negocios, con un formulario que filtre.']);
+  filas.push(['Videos', '9 piezas: 3 cuerpos con 3 ganchos cada uno. El gancho que gane en los primeros días se queda con la plata del grito.']);
+  filas.push(['Cómo medir', 'El gancho, con unas 3.000 vistas por pieza (cuántos siguen a los 3 segundos). El costo por cupón, con unos 10 cupones. Cada video se juzga por lo que vendió, no por los «me gusta». El ganador no se toca en el grito.']);
+  if (ev.fecha) filas.push(['Cuándo', `Primer video el ${fmtFecha(masDias(ev.fecha, -14))}; el grito del ${fmtFecha(masDias(ev.fecha, -3), false)} al ${fmtFecha(masDias(ev.fecha, -1), false)}; canje el ${fmtFecha(ev.fecha)}.`]);
+  const sup = [
+    ['Dólar', `Bs ${fmtN(a.tc, 2)} por dólar`, n(p.anuncios.tc) > 0 ? 'dato del cliente' : 'Banco Central, nov. 2026'],
+    ['Mil vistas pagadas cuestan', fmtM(a.cpmBs, mon), n(p.anuncios.cpmReal) > 0 ? 'dato del cliente' : 'promedio aproximado'],
+  ];
+  if (a.objetivo === 'local') {
+    sup.push(['De cada 100 personas que lo ven, reservan', fmtN(a.alcance > 0 ? a.resultados / a.alcance * 100 : 0, 2), n(p.anuncios.costoResultadoReal) > 0 ? 'calculado con su costo real' : 'promedio aproximado']);
+    sup.push(['De cada 100 que reservan, llegan', fmtN(ev.llegadaPct * 100), n(p.lanzamiento.llegadaPct) > 0 ? 'dato del cliente' : 'tu supuesto (sin medir)']);
+    sup.push(['De cada 100 que llegan, compran', fmtN(a.llegadas > 0 ? a.clientes / a.llegadas * 100 : 0), ev.compraPct > 0 ? 'dato del cliente' : 'promedio aproximado']);
+  }
+  return `<div class="tabla-envoltura"><table class="tabla-armado"><tbody>${filas.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</tbody></table></div>
+    ${a.avisos.length ? `<ul class="avisos">${a.avisos.map(x => `<li>${ICO.ojo}<span>${esc(x)}</span></li>`).join('')}</ul>` : ''}
+    <details><summary class="btn-borde" style="display:inline-flex;cursor:pointer">De dónde salen estos números</summary>
+      <div class="tabla-envoltura"><table><thead><tr><th>Supuesto</th><th class="n">Valor</th><th>Fuente</th></tr></thead><tbody>${sup.map(([k, v, f]) => `<tr><td>${esc(k)}</td><td class="n">${esc(v)}</td><td><span class="etq ${f.startsWith('dato') || f.startsWith('calculado') ? 'ok' : f.startsWith('tu') ? 'ojo' : ''}">${esc(f)}</span></td></tr>`).join('')}</tbody></table></div>
+      <p class="texto">Son promedios aproximados y prudentes para Bolivia. «Llegan 1 de cada 2» es tu supuesto hasta tener 10 reservas contadas: cuando tengas tus números, cámbialo en Ajustes.</p></details>`;
+}
+function htmlAnunciosLanz(r) {
+  return `<section class="tarjeta" id="sec-anuncios"><div class="tarjeta-cab"><h3>${icoSq('megafono', 'orange')}La publicidad del lanzamiento</h3><p>de las vistas a la compra</p></div>${htmlEmbudoLanz(r, false)}<h4 class="sub-titulo">${icoSq('herramienta', 'gray')}Cómo armarla</h4>${htmlArmadoLanz(r)}</section>`;
+}
+function htmlQuedaLanz(r) {
+  const ev = r.ev, m = ev.escenarios.meta, lista = Math.round(m.reservas), noCompraron = Math.max(0, Math.round(m.reservas - m.compras));
+  return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('gema', 'oro')}Lo que le queda después</h3><p>aunque no lo cobres aparte</p></div>
+    <div class="mesa">
+      <div class="mesa-item"><span class="kicker">Los videos que venden</span><span class="grande">9</span><p>El que ganó se vuelve a usar en la próxima promo.</p></div>
+      <div class="mesa-item"><span class="kicker">Su lista</span><span class="grande">${fmtN(lista)}</span><p>personas con su celular que reservaron. ${fmtN(noCompraron)} todavía no compraron: la próxima promo arranca con ellas.</p></div>
+      <div class="mesa-item"><span class="kicker">Su perfil armado</span><span class="grande">✓</span><p>Con el link del cupón y los videos fijados.</p></div>
+    </div>
+    <p class="texto">Úsalo en la llamada: «aunque no vendieras nada, te quedas con los videos, el perfil y la lista».</p></section>`;
+}
+function htmlPlataLanz(r) {
+  const ev = r.ev, E = ev.escenarios, mon = ev.R.moneda, ks = ['piso', 'meta', 'techo'];
+  const fila = (t, fn) => `<tr><td>${esc(t)}</td>${ks.map(k => `<td class="n">${fn(E[k])}</td>`).join('')}</tr>`;
+  const tabla = `<div class="tabla-envoltura"><table><thead><tr><th></th><th class="n">Lo mínimo</th><th class="n">Lo esperado</th><th class="n">Muy bien</th></tr></thead><tbody>
+    ${fila('Reservan el cupón', e => f1(e.reservas))}
+    ${ev.ads.objetivo === 'local' ? fila('Llegan con su cupón', e => f1(e.llegadas)) : fila(ev.unidadGar[1][0].toUpperCase() + ev.unidadGar[1].slice(1), e => f1(e.unidades))}
+    ${fila('Compran', e => f1(e.compras))}
+    ${fila('Vende', e => esc(fmtM(e.ventasBs, mon)))}
+    ${fila('Le deja', e => esc(fmtM(e.ganLanz, mon)))}
+    ${fila('Pone (servicio + publicidad)', e => esc(fmtM(e.inv, mon)))}
+    ${fila('Por cada Bs 1 que pone, le vuelven', e => `Bs ${fmtN(e.roiLanz, 1)}`)}
+    ${fila('¿Llegan los de la garantía?', e => e.llega ? 'Sí' : 'No')}
+    ${fila('Te paga', e => esc(fmtM(e.cobro, mon)))}
+  </tbody></table></div>`;
+  const m = E.meta, despues = Math.max(0, m.gan1 - m.ganLanz);
+  const pasos = [
+    ['Al cerrar', `Te paga la primera mitad: ${fmtM(ev.mitad1, mon)}.`],
+    ['Del primer video al grito', `Paga la publicidad, ${fmtM(ev.publicidad, mon)}, directo desde su cuenta.`],
+    ['En el canje', `Vende unos ${fmtM(m.ventasBs, mon)}; le deja ${fmtM(m.ganLanz, mon)}.`],
+    ['Cuando llegan los ' + (Number.isFinite(ev.N) ? fmtN(ev.N) : '—'), `Te paga la segunda mitad (${fmtM(ev.mitad2, mon)}) con lo que ya vendió.`],
+  ];
+  if (despues > 0.5) pasos.push(['Después', `Los que vuelven a comprar en el año le dejan ${fmtM(despues, mon)} más.`]);
+  return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('monedas', 'green')}Su plata, en el lanzamiento</h3><p>tres escenarios</p></div>${tabla}
+    <h4 class="sub-titulo">${icoSq('reloj', 'orange')}Cómo se mueve su plata</h4>
+    <ol class="estrategia">${pasos.map(([t, x], i) => `<li><span class="nro-paso">${i + 1}</span><div><h4>${esc(t)}</h4><p>${esc(x)}</p></div></li>`).join('')}</ol>
+    <p class="texto">Lo más que pone de su bolsillo antes de vender: <b>${esc(fmtM(ev.inicio, mon))}</b> (la primera mitad y la publicidad). La segunda mitad la paga cuando ya llegaron sus clientes.</p></section>`;
+}
+function htmlPlanMesLanz(r) {
+  const ev = r.ev, P = ev.plan, mon = ev.R.moneda;
+  const cab = `<div class="tarjeta-cab"><h3>${icoSq('repetir', 'purple')}Después: el plan de cada mes</h3><p>un lanzamiento chico al mes</p></div>`;
+  if (!P.ofrecer) return `<section class="tarjeta">${cab}<p class="texto">No lo vas a ofrecer (paso 8). Lo recurrente es lo que te da tranquilidad: piénsalo antes de la reunión de resultados.</p></section>`;
+  const pi = P.esc.piso, me = P.esc.meta;
+  return `<section class="tarjeta">${cab}
+    <div class="mesa">
+      <div class="mesa-item"><span class="kicker">Cada 4 semanas</span><span class="grande">${esc(fmtM(P.precio, mon))}</span><p>o ${esc(fmtM(P.precioComp, mon))} con ${P.meses} meses de compromiso. Más su publicidad: ${esc(fmtM(P.pub, mon))}.</p></div>
+      <div class="mesa-item"><span class="kicker">Compran al mes</span><span class="grande">${f1(me.compras)}</span><p>en lo esperado (lo mínimo: ${f1(pi.compras)}).</p></div>
+      <div class="mesa-item"><span class="kicker">Le deja al mes</span><span class="grande">${esc(fmtM(me.gan, mon))}</span><p>${fmtN(me.roiC, 1)} veces lo que pone con compromiso (lo mínimo: ${fmtN(pi.roiC, 1)}).</p></div>
+    </div>
+    <p class="texto">Incluye 9 piezas (3 cuerpos con 3 ganchos), una sesión de grabación, la pauta chica a cada versión desde su publicidad y la reunión de resultados. Se ofrece el día que llega el cliente que completa la garantía, en la misma reunión del cobro y el testimonio.</p>
+    <p class="texto"><b>Para ti:</b> 13 cobros al año (cada 4 semanas): ${esc(fmtM(P.precio * 13, mon))}, o ${esc(fmtM(P.precioComp * 13, mon))} al precio con compromiso.</p></section>`;
+}
+function htmlPrecioLanz(r) {
+  const ev = r.ev, mon = ev.R.moneda, E = ev.escenarios;
+  const hora = ev.horas > 0 ? ev.precio / ev.horas : NaN;
+  const parte = E.meta.ganLanz > 0 ? ev.precio / E.meta.ganLanz : NaN;
+  return `<section class="tarjeta"><div class="tarjeta-cab"><h3>${icoSq('herramienta', 'gray')}El servicio y el precio</h3><p>${esc(fmtM(ev.precio, mon))} por lanzamiento</p></div>
+    <div>${LANZ_INCLUYE.map(([t, x]) => `<div class="servicio-fila">${ICO.ok}<h4>${esc(t)}</h4><p>${esc(x)}</p></div>`).join('')}</div>
+    <p class="texto"><b>Cómo se cobra:</b> ${esc(fmtM(ev.mitad1, mon))} para empezar y ${esc(fmtM(ev.mitad2, mon))} cuando lleguen los ${Number.isFinite(ev.N) ? fmtN(ev.N) : '—'} de la garantía. Son unas ${fmtN(ev.horas)} horas tuyas${Number.isFinite(hora) ? ` (${esc(fmtM(hora, mon))} por hora)` : ''}.</p>
+    ${Number.isFinite(parte) ? `<p class="texto"><b>Lo que vale para él:</b> en lo esperado el lanzamiento le deja ${esc(fmtM(E.meta.ganLanz, mon))}; tu precio es ${fmtN(parte * 100)} de cada 100 de eso.${parte < 0.2 ? ' Si cierras casi siempre, es señal de que estás barato: sube 20% cada 5 lanzamientos cobrados.' : ''}</p>` : ''}</section>`;
+}
+function htmlMasLanz(r) {
+  const ev = r.ev, mon = ev.R.moneda, E = ev.escenarios, a = ev.ads, mt = ev.foco.mt, v = ev.venta;
+  const tabla = [...r.an.lista].sort((x, y) => y.puntaje - x.puntaje).map(x => { const pl = r.porLinea.find(y => y.id === x.id); return `<tr class="${x.id === r.focoId ? 'destacada' : ''}"><td><b>${esc(x.nombre)}</b><br><span style="color:var(--text-2);font-size:13px">${esc(razonesLinea(x).join(' · '))}</span></td><td class="n">${x.completa ? esc(fmtM(x.mt.ticket * x.mt.m, mon)) : '—'}</td><td>${etqVer(pl ? pl.veredicto : 'incompleta')}</td></tr>`; }).join('');
+  const pasos = [
+    ['Lo que le deja cada venta', 'El precio de la promo, menos lo que le cuesta el producto y el regalo.', `${fmtM(v.precio, mon)} − ${fmtM(v.costo, mon)} (producto)${v.regalo > 0 ? ` − ${fmtM(v.regalo, mon)} (regalo)` : ''} = ${fmtM(v.gan, mon)}`],
+    ['El número de la garantía', 'Lo que pone (tu servicio + la publicidad) entre lo que le deja cada venta, hacia arriba.', `(${fmtM(ev.precio, mon)} + ${fmtM(ev.publicidad, mon)}) ÷ ${fmtM(v.gan, mon)} = ${Number.isFinite(ev.N) ? fmtN(ev.N) : '—'} · tope ${fmtN(ev.tope)}`],
+    ['Cuántos reservan', `La publicidad en ${a.nombrePlataforma}, con el objetivo «${a.objetivoNombre}».`, `${fmtM(ev.publicidad, mon)} = USD ${fmtN(a.usd)} → ${fmtN(a.vistas)} vistas → ${fmtN(a.alcance)} personas → ${f1(a.resultados)} ${a.resultadoNombre}`],
+    ['Cuántos llegan y compran', 'El cupón tiene día y hora y se recuerda a mano.', `Llegan ${fmtN(ev.llegadaPct * 100)} de cada 100 que reservan → ${f1(a.llegadas)}\nCompran ${fmtN(a.llegadas > 0 ? a.clientes / a.llegadas * 100 : 0)} de cada 100 que llegan → ${f1(a.clientes)}`],
+    ['Los topes', 'Las reservas, hasta el tope de cupones; los que llegan, hasta lo que puede atender; las compras, hasta su stock.', `Tope de cupones: ${ev.topeCup !== null ? fmtN(ev.topeCup) : 'sin dato'} · atiende ${ev.capCanje !== null ? fmtN(ev.capCanje) + ' en el canje' : 'sin dato'} · stock ${ev.stock !== null ? fmtN(ev.stock) : 'sin dato'}\nLo esperado queda en: ${f1(E.meta.reservas)} reservan → ${f1(E.meta.llegadas)} llegan → ${f1(E.meta.compras)} compran`],
+    ['Los tres escenarios', 'Lo mínimo es 2/3 de lo esperado y lo mejor, 4/3, antes de los topes.', `Llegan: ${f1(E.piso.unidades)} · ${f1(E.meta.unidades)} · ${f1(E.techo.unidades)}`],
+    ['Cuánto gana él', `Lo que le dejan las compras del lanzamiento contra lo que pone. Si no llegan los de la garantía, pone solo la primera mitad.${v.g1 > v.gan + 0.5 ? ' Aparte, lo que dejan los que vuelven a comprar.' : ''}`, `Lo mínimo: ${fmtM(E.piso.ganLanz, mon)} ÷ ${fmtM(E.piso.inv, mon)} = ${fmtN(E.piso.roiLanz, 1)}× · lo esperado: ${fmtN(E.meta.roiLanz, 1)}×`],
+  ];
+  return `<div class="mas">
+    <details><summary>${icoSq('gema', 'oro')}Todo lo que vende</summary><div class="cuerpo"><div class="tabla-envoltura"><table><thead><tr><th>Producto</th><th class="n">Le deja por venta</th><th>Si el lanzamiento es de esto</th></tr></thead><tbody>${tabla}</tbody></table></div></div></details>
+    <details><summary>${icoSq('lista', 'indigo')}Cómo saqué estos números</summary><div class="cuerpo"><ol class="pasos-calc">${pasos.map(([t, x, f]) => `<li><div><h4>${esc(t)}</h4><p>${esc(x)}</p>${f ? `<div class="formula">${esc(f)}</div>` : ''}</div></li>`).join('')}</ol></div></details>
+    <details id="det-ia"><summary>${icoSq('chispa', 'purple')}Segunda opinión de Claude</summary><div class="cuerpo" id="r-ia">${htmlIA(r)}</div></details>
+  </div>`;
+}
+
+// ---------- Hojas de detalle ----------
+const TIT_DETALLE_LANZ = { prometes: 'El número de la garantía', cobras: 'Lo que cobras por el lanzamiento', gana: '¿Cuánto gana él?', garantia: 'Tu segunda mitad' };
+function detallePrometesLanz(r) {
+  const ev = r.ev, mon = ev.R.moneda;
+  return `<div class="grande-frase"><span>Le prometes</span><b class="enorme">${Number.isFinite(ev.N) ? fmtN(ev.N) : '—'}</b><span>${esc(ev.unidadGar[1])}</span></div>
+    ${htmlNumeroGarantia(ev, false)}
+    <p class="texto">Es lo que necesita para recuperar lo que pone. ${ev.ads.objetivo === 'local' ? '<b>Se cuenta cada cupón validado en su tienda, compre o no:</b> traerlos depende de ti (videos, publicidad y cupón); lo que pasa adentro (precio, atención, stock) depende de él.' : `Con «${esc(ev.ads.objetivoNombre)}» se cuentan ${esc(ev.unidadGar[1])}.`}</p>
+    <p class="texto"><b>La garantía:</b> «${esc(fraseGarantiaLanz(ev))}» Si en su fecha no llegan, ${ev.diasExtra} días más con el video ganador, sin costo.</p>
+    <p class="texto">Tu tope es ${fmtN(ev.tope)}: si sale más, elige con él otro producto antes de ofrecer la garantía. Cada venta tiene que dejarle al menos ${esc(fmtM(Math.ceil((ev.precio + ev.publicidad) / ev.tope), mon))}.</p>`;
+}
+function detalleCobrasLanz(r) {
+  const ev = r.ev, mon = ev.R.moneda;
+  return `<div class="grande-frase"><span>Le cobras</span><b class="enorme">${esc(fmtM(ev.precio, mon))}</b><span>por lanzamiento, en dos mitades</span></div>
+    <div class="mesa"><div class="mesa-item"><span class="kicker">Para empezar</span><span class="grande">${esc(fmtM(ev.mitad1, mon))}</span><p>al cerrar, antes de la sesión de arranque.</p></div>
+      <div class="mesa-item"><span class="kicker">Cuando lleguen los ${Number.isFinite(ev.N) ? fmtN(ev.N) : '—'}</span><span class="grande">${esc(fmtM(ev.mitad2, mon))}</span><p>la paga con lo que ya vendió. Si no llegan (y cumplió sus 5 cosas), no la paga.</p></div></div>
+    <h3 class="h-det">Lo que incluye</h3><ul class="lista-simple">${LANZ_INCLUYE.map(([t, x]) => `<li><b>${esc(t)}.</b> ${esc(x)}</li>`).join('')}</ul>
+    <p class="texto">La publicidad no va en tu precio: la paga él directo, desde su cuenta (${esc(fmtM(ev.publicidad, mon))} en este lanzamiento).</p>
+    ${ev.plan.ofrecer ? `<h3 class="h-det">Y después</h3><p class="texto">El día que se completa la garantía le ofreces el plan de cada mes: ${esc(fmtM(ev.plan.precio, mon))} cada 4 semanas, o ${esc(fmtM(ev.plan.precioComp, mon))} con ${ev.plan.meses} meses de compromiso.</p>` : ''}`;
+}
+function detalleGanaLanz(r) {
+  const ev = r.ev, E = ev.escenarios, mon = ev.R.moneda;
+  const esc3 = [['piso', 'Lo mínimo', 'var(--s2)'], ['meta', 'Lo esperado', 'var(--s1)'], ['techo', 'Si sale muy bien', 'var(--s3)']];
+  const max = Math.max(...esc3.map(([k]) => Math.max(E[k].ganLanz, E[k].inv)), 1);
+  const grupos = esc3.map(([k, t, col]) => `<div class="grupo-barras"><h4>${t} <span class="etq ${E[k].roiLanz >= 1.2 ? 'ok' : E[k].roiLanz >= 1 ? 'ojo' : 'no'}">${fmtN(E[k].roiLanz, 1)}×</span></h4>${barraH('Pone', E[k].inv, max, 'var(--gray)', fmtM(E[k].inv, mon))}${barraH('Le deja', E[k].ganLanz, max, col, fmtM(E[k].ganLanz, mon))}</div>`).join('');
+  const vuelve = ev.venta.g1 > ev.ganVenta + 0.5;
+  return `<div class="grande-frase"><span>Por cada <b>Bs 1</b> que pone, le vuelven</span><b class="enorme">Bs ${fmtN(E.piso.roiLanz, 1)}</b><span>en el lanzamiento, si sale lo mínimo · Bs ${fmtN(E.meta.roiLanz, 1)} en lo esperado</span></div>
+    <h3 class="h-det">Lo que pone y lo que le deja</h3><div class="grupos-barras">${grupos}</div>
+    <p class="texto"><b>«Le deja»</b> es su ganancia: lo que le queda de cada venta después de pagar el producto y el regalo. Si no llegan los de la garantía, pone solo la primera mitad.${vuelve ? ` Aparte, los que vuelven a comprar en el año le dejan más: en lo esperado, ${esc(fmtM(E.meta.gan1, mon))} en total (${fmtN(E.meta.roi1, 1)}×).` : ''}</p>`;
+}
+function detalleGarantiaLanz(r) {
+  const ev = r.ev, E = ev.escenarios, mon = ev.R.moneda, g = estadoGarantia(ev);
+  const qhacer = g[0] === 'ok' ? 'Puedes ofrecer la garantía tranquilo.' : g[0] === 'ojo' ? `Lo esperado alcanza, pero lo mínimo no. Te cubren los ${ev.diasExtra} días más con el video ganador.${ev.pubSegura !== null && ev.pubSegura > ev.publicidad ? ` Con ${fmtM(ev.pubSegura, mon)} de publicidad, llega aunque salga lo mínimo.` : ''}` : (ev.pubSegura !== null ? `Pídele ${fmtM(ev.pubSegura, mon)} de publicidad, o elige un producto que deje más por venta.` : 'Ni subiendo la publicidad llega: elige otro producto o arma un regalo más fuerte.');
+  return `<div class="grande-frase"><span>Tu segunda mitad está</span><b class="enorme">${esc(g[1])}</b><span>${esc(g[2])}</span></div>
+    ${htmlNumeroGarantia(ev, false)}
+    <p class="texto"><b>Qué hacer:</b> ${esc(qhacer)}</p>
+    <p class="texto">Lo que arriesgas: la segunda mitad, ${esc(fmtM(ev.mitad2, mon))}. La primera (${esc(fmtM(ev.mitad1, mon))}) la cobras igual.</p>`;
+}
+function abrirDetalleLanz(tipo) {
+  const f = { prometes: detallePrometesLanz, cobras: detalleCobrasLanz, gana: detalleGanaLanz, garantia: detalleGarantiaLanz }[tipo];
+  return [TIT_DETALLE_LANZ[tipo] || 'Detalle', f ? f(ultimo) : ''];
+}
+
+// ---------- Vista del cliente (le habla de tú) ----------
+function htmlVistaClienteLanz(r) {
+  const p = estado.prospecto, R = estado.reglas, mon = R.moneda, L = p.lanzamiento;
+  const fecha = new Date().toLocaleDateString('es-BO', { day: 'numeric', month: 'long', year: 'numeric' });
+  const nom = p.negocio.nombre || 'tu negocio';
+  const portada = `<header class="vc-portada"><p class="vc-marca">${esc(R.marca || '')}</p><h1>Tu lanzamiento</h1><p class="vc-para">para <b>${esc(nom)}</b> · ${esc(fecha)}</p>
+    <p class="vc-sub">Una promo con fecha, calculada con los números de tu tienda y con promedios prudentes. Te muestro tres escenarios: el conservador, el esperado y el optimista.</p></header>`;
+  if (!r || r.incompleto || !r.ev) return `<div class="vc">${portada}<section class="vc-sec"><p class="texto">Todavía faltan datos para armar la proyección: anota al menos cuánto paga un cliente (paso 3).</p></section></div>`;
+  const ev = r.ev, E = ev.escenarios, a = adsMostrado(ev), md = ev.metaDueno, local = ev.ads.objetivo === 'local';
+  // Hoy
+  const hoyT = [];
+  if (n(p.negocio.facturacion) > 0) hoyT.push(['Vendes al mes', fmtM(n(p.negocio.facturacion), mon)]);
+  if (n(p.hoy.clientesMes) > 0) hoyT.push(['Clientes nuevos al mes', f1(n(p.hoy.clientesMes))]);
+  if (n(p.hoy.interesadosMes) > 0) hoyT.push(['Te escriben o preguntan', fmtPorDia(n(p.hoy.interesadosMes) / ev.dias)]);
+  const hoy = hoyT.length ? `<section class="vc-sec"><h2>Dónde estás hoy</h2><div class="vc-tiles">${hoyT.map(([k, v]) => `<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}</div></section>` : '';
+  // La promo
+  const O = ev.venta.O, promoT = [['Producto', ev.foco.nombre], ['Precio de la promo', fmtM(ev.venta.precio, mon)]];
+  if (O && O.bonos.length) promoT.push(['De regalo', O.bonos.map(b => b.nombre).filter(Boolean).join(' · ')]);
+  if (ev.fecha) promoT.push(['Canje en tu tienda', `${fmtFecha(ev.fecha)}${ev.diasCanje > 1 ? ` y ${ev.diasCanje - 1 === 1 ? 'el día siguiente' : `${ev.diasCanje - 1} días más`}` : ''}`]);
+  if (!vacio(L.porque)) promoT.push(['Por qué ese día', String(L.porque).trim()]);
+  if (local && ev.topeCup !== null) promoT.push(['Cupones', `solo ${fmtN(ev.topeCup)}`]);
+  const promo = `<section class="vc-sec"><h2>Tu promo</h2><div class="oferta-frase">${promoT.map(([k, v]) => `<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}</div>
+    ${O && O.deseo ? `<p class="texto">Lo que tu cliente se lleva: ${esc(O.deseo)}${O.tiempo ? `, ${esc(O.tiempo)}` : ''}.</p>` : ''}</section>`;
+  // Meta
+  const meta = md ? `<section class="vc-sec"><h2>Lo que quieres lograr</h2><p class="vc-grande-txt">${esc(md.tipo === 'clientes' ? `${f1(md.quiere)} clientes nuevos al mes` : md.tipo === 'ganancia' ? `Ganar ${fmtM(md.quiere, mon)} más al mes` : `Vender ${fmtM(md.quiere, mon)} más al mes`)}.</p>
+    <p class="texto">Este lanzamiento te da ${esc(md.tipo === 'clientes' ? `${f1(md.daLanz)} clientes` : fmtM(md.daLanz, mon))} en unas 2 semanas, en lo esperado.${ev.plan.ofrecer ? ` Con un lanzamiento chico cada mes, serían unos ${esc(md.tipo === 'clientes' ? `${f1(md.daPlan)} clientes` : fmtM(md.daPlan, mon))} al mes.` : ''}</p></section>` : '';
+  // Tres escenarios
+  const tarjeta = k => {
+    const e = E[k];
+    return `<article class="vc-esc vc-${k}"><p class="vc-esc-tit">${NOMBRE_ESC[k][0]}</p><p class="vc-esc-sub">${NOMBRE_ESC[k][1]}</p>
+      <div class="vc-roi"><b>${fmtN(e.roiLanz, 1)}×</b><span>por cada Bs 1 que inviertes, te vuelven Bs ${fmtN(e.roiLanz, 1)}</span></div>
+      <dl>
+        <div><dt>${local ? 'Llegan con su cupón' : 'Personas interesadas'}</dt><dd>${f1(e.unidades)}</dd></div>
+        <div><dt>Compran</dt><dd>${f1(e.compras)}</dd></div>
+        <div><dt>Ventas del lanzamiento</dt><dd>${esc(fmtM(e.ventasBs, mon))}</dd></div>
+        <div><dt>Ganancia del lanzamiento</dt><dd>${esc(fmtM(e.ganLanz, mon))}</dd></div>
+        <div><dt>Inversión (servicio + publicidad)</dt><dd>${esc(fmtM(e.inv, mon))}</dd></div>
+        ${ev.venta.g1 > ev.ganVenta + 0.5 ? `<div><dt>Ganancia en el año, con los que vuelven</dt><dd>${esc(fmtM(e.gan1, mon))}</dd></div>` : ''}
+      </dl></article>`;
+  };
+  const escenarios = `<section class="vc-sec"><h2>Tres escenarios</h2><p class="texto">«Ganancia» es lo que te queda después de pagar tu producto${ev.venta.regalo > 0 ? ' y el regalo' : ''}, no lo que te pagan.${ev.escenarios.meta.agotado ? ' Se acaban los cupones: por eso los escenarios se parecen. Es escasez de verdad.' : ''}</p>
+    <div class="vc-escenarios">${tarjeta('piso')}${tarjeta('meta')}${tarjeta('techo')}</div></section>`;
+  // Embudo
+  const embudo = `<section class="vc-sec"><h2>Cómo llegamos a esos números</h2>
+    <p class="texto">Con <b>${esc(fmtM(ev.publicidad, mon))}</b> en ${esc(a.nombrePlataforma)} (los pagas directo, desde tu cuenta), en todo el lanzamiento, en el escenario esperado:</p>
+    ${htmlFunnel(a)}
+    <p class="texto">${local && E.meta.llegadas > 0 ? `Cada persona que llega a tu tienda te cuesta unos <b>${esc(fmtM(ev.publicidad / E.meta.llegadas, mon))}</b> en publicidad` : ''}${E.meta.compras > 0 ? `${local && E.meta.llegadas > 0 ? ', y cada cliente, unos ' : 'Cada cliente te cuesta unos '}<b>${esc(fmtM(ev.publicidad / E.meta.compras, mon))}</b>.` : ''}</p></section>`;
+  // Garantía
+  const garantia = `<section class="vc-sec vc-destacado"><h2>Mi garantía</h2><p class="vc-grande-txt">${esc(fraseGarantiaLanz(ev))}</p>
+    ${Number.isFinite(ev.N) ? `<div class="formula">${esc(`Lo que pones: ${fmtM(ev.precio, mon)} + ${fmtM(ev.publicidad, mon)} de publicidad = ${fmtM(ev.precio + ev.publicidad, mon)}\nCada venta de la promo te deja ${fmtM(ev.ganVenta, mon)}\n${fmtM(ev.precio + ev.publicidad, mon)} ÷ ${fmtM(ev.ganVenta, mon)} = ${fmtN(ev.N)} clientes`)}</div>` : ''}
+    <p class="texto">${local ? 'Cuenta cada cupón validado en tu tienda, compres o no. ' : ''}Si en tu fecha no llegan, seguimos ${ev.diasExtra} días más con tu video ganador, sin costo. Vale si cumples tus 5 cosas.</p></section>`;
+  // Calendario
+  const cal = `<section class="vc-sec"><h2>El calendario</h2><ol class="calendario">${ev.calendario.filter(e => e.d >= -20).map(e => `<li><span class="cal-mes">${esc(e.desde ? rangoFechas(e.desde, e.al) : e.d === e.hasta ? `Día ${e.d}` : `Días ${e.d} a ${e.hasta}`)}</span><b>${esc(e.t)}</b><p>${esc(e.x.replace('Cobras la primera mitad.', 'Pagas la primera mitad.').replace('Sesión de arranque: sus accesos', 'Sesión de arranque: tus accesos'))}</p></li>`).join('')}</ol>
+    ${ev.fecha && ev.cierraHasta ? `<p class="texto">Para llegar a tu fecha, empezamos a más tardar el <b>${esc(fmtFecha(ev.cierraHasta))}</b>.</p>` : ''}</section>`;
+  // Incluye y necesito
+  const incluye = `<section class="vc-sec"><h2>Lo que incluye</h2><ul class="vc-lista">${LANZ_INCLUYE.map(([t, x]) => `<li>${ICO.ok}<span><b>${esc(t)}.</b> ${esc(x)}</span></li>`).join('')}</ul>
+    <div class="vc-tiles"><div><span>Mi servicio</span><b>${esc(fmtM(ev.precio, mon))}</b></div><div><span>Para empezar</span><b>${esc(fmtM(ev.mitad1, mon))}</b></div><div><span>Cuando lleguen tus clientes</span><b>${esc(fmtM(ev.mitad2, mon))}</b></div><div><span>Publicidad (la pagas tú, directo)</span><b>${esc(fmtM(ev.publicidad, mon))}</b></div></div></section>`;
+  const nec = cincoCosas().map(([, t]) => t.replace('Sus accesos', 'Tus accesos').replace('Su publicidad', 'Tu publicidad').replace('desde su cuenta', 'desde tu cuenta').replace('Su stock', 'Tu stock'));
+  const necesito = `<section class="vc-sec"><h2>Tus 5 cosas</h2><ul class="vc-lista">${nec.map(x => `<li>${ICO.ok}<span>${esc(x)}</span></li>`).join('')}</ul><p class="texto">Si cumples tus 5 cosas, la garantía vale.</p></section>`;
+  // Lo que te queda y lo que sigue
+  const m = E.meta;
+  const queda = `<section class="vc-sec"><h2>Lo que te queda</h2><ul class="vc-lista">
+    <li>${ICO.ok}<span><b>Los videos que venden.</b> El que gane lo vuelves a usar.</span></li>
+    <li>${ICO.ok}<span><b>Tu lista.</b> Unas ${fmtN(Math.round(m.reservas))} personas con su celular que reservaron tu cupón: tu próxima promo arranca con ellas.</span></li>
+    <li>${ICO.ok}<span><b>Tu perfil armado.</b> Con el link del cupón y tus mejores videos fijados.</span></li></ul></section>`;
+  const sigue = ev.plan.ofrecer ? `<section class="vc-sec"><h2>Después: un lanzamiento chico cada mes</h2>
+    <div class="vc-tiles"><div><span>Cada 4 semanas</span><b>${esc(fmtM(ev.plan.precio, mon))}</b></div><div><span>Con ${ev.plan.meses} meses de compromiso</span><b>${esc(fmtM(ev.plan.precioComp, mon))}</b></div><div><span>Te dejaría al mes (esperado)</span><b>${esc(fmtM(ev.plan.esc.meta.gan, mon))}</b></div></div>
+    <p class="texto">9 videos nuevos, una sesión de grabación, la publicidad a cada versión y una reunión de resultados cada mes. Lo vemos el día que llegan tus clientes.</p></section>` : '';
+  // Cómo lo calculamos
+  const k = c => `linea:${ev.foco.id}:${c}`, mt = ev.foco.mt;
+  const filas = [['Precio de la promo', fmtM(ev.venta.precio, mon), O && n(p.oferta.precio) > 0 ? ['Dato tuyo', 'ok'] : fuenteDato(k('ticket'))], ['De cada 100 Bs que cobras, te quedan', fmtN(mt.m * 100), fuenteDato(k('margen'), true)]];
+  if (ev.venta.regalo > 0) filas.push(['Lo que te cuesta el regalo', fmtM(ev.venta.regalo, mon), ['Dato tuyo', 'ok']]);
+  if (local) {
+    filas.push(['De cada 100 que reservan, llegan', fmtN(ev.llegadaPct * 100), n(L.llegadaPct) > 0 ? ['Dato tuyo', 'ok'] : ['Supuesto prudente', '']]);
+    filas.push(['De cada 100 que llegan, compran', fmtN(ev.ads.llegadas > 0 ? ev.ads.clientes / ev.ads.llegadas * 100 : 0), ev.compraPct > 0 ? ['Dato tuyo', 'ok'] : ['Promedio prudente', '']]);
+    if (ev.stock !== null) filas.push(['Unidades separadas', fmtN(ev.stock), ['Dato tuyo', 'ok']]);
+  }
+  filas.push(['Dólar para pagar la publicidad', `Bs ${fmtN(ev.ads.tc, 2)}`, n(p.anuncios.tc) > 0 ? ['Dato tuyo', 'ok'] : ['Banco Central (nov. 2026)', '']]);
+  filas.push(['Mil vistas pagadas cuestan', fmtM(ev.ads.cpmBs, mon), n(p.anuncios.cpmReal) > 0 ? ['Dato tuyo', 'ok'] : ['Promedio de mercado', '']]);
+  const calculo = `<section class="vc-sec"><h2>Cómo lo calculamos</h2><p class="texto">Cada número tiene su origen. Donde no hay un dato tuyo, uso un promedio prudente: prefiero quedarme corto que prometerte de más.</p>
+    <div class="tabla-envoltura"><table class="vc-tabla"><thead><tr><th>Dato</th><th class="n">Valor</th><th>De dónde sale</th></tr></thead><tbody>${filas.map(([t, v, [f, c]]) => `<tr><td>${esc(t)}</td><td class="n">${esc(v)}</td><td><span class="etq ${c}">${esc(f)}</span></td></tr>`).join('')}</tbody></table></div></section>`;
+  const caso = R.casoReal !== false ? `<section class="vc-sec"><h2>Un caso real</h2><div class="vc-caso"><b>Sneaker Fashion</b><span>Tienda de tenis · La Paz</span><p>Invirtió <b>1.512 Bs</b> (servicio + publicidad) y vendió <b>21.100 Bs</b>: casi 14 Bs en ventas por cada 1 invertido. Más de 236 mil vistas en 5 videos.</p></div></section>` : '';
+  const pie = `<footer class="vc-pie"><p>Estas son proyecciones hechas con tus números y promedios prudentes, no una promesa de ventas. Lo que te garantizo: ${Number.isFinite(ev.N) ? `que lleguen los ${fmtN(ev.N)} clientes que necesitas para recuperar lo que pusiste, o no me pagas la segunda mitad` : 'que lleguen los clientes que necesitas para recuperar lo que pusiste'}.</p><p>${esc(R.marca || '')} · ${esc(fecha)}</p></footer>`;
+  return `<div class="vc">${portada}${hoy}${promo}${meta}${escenarios}${embudo}${garantia}${cal}${incluye}${necesito}${queda}${sigue}${calculo}${caso}${pie}</div>`;
+}
+
+// ---------- Resumen para copiar ----------
+function textoResumenLanz() {
+  const r = ultimo; if (!r || !r.ev) return 'Faltan datos para armar el resumen.';
+  const ev = r.ev, mon = ev.R.moneda, E = ev.escenarios, p = estado.prospecto, L = p.lanzamiento, l = [];
+  l.push(`${p.negocio.nombre || 'Prospecto'}${p.negocio.rubro ? ' (' + p.negocio.rubro + ')' : ''} · LANZAMIENTO`);
+  l.push(`¿Le podemos cumplir? ${TXT_VER_CORTO[ev.veredicto]} (${ev.puntaje}/100)${r.hayRangos ? ` · números: ${({ prudente: 'lo peor', normal: 'lo normal', optimista: 'lo mejor' })[r.esc]} de cada rango` : ''}`);
+  if (ev.prudente) l.push(`En el peor caso: ${TXT_VER_CORTO[ev.prudente.veredicto]}`);
+  l.push(`Producto de la promo: ${ev.foco.nombre} a ${fmtM(ev.venta.precio, mon)}${ev.venta.regalo > 0 ? ` con regalo (le cuesta ${fmtM(ev.venta.regalo, mon)})` : ''}. Le deja ${fmtM(ev.ganVenta, mon)} por venta.`);
+  if (ev.fecha) l.push(`Canje: ${fmtFecha(ev.fecha)}${!vacio(L.porque) ? ` (${String(L.porque).trim()})` : ''}. Cerrar a más tardar: ${fmtFecha(ev.cierraHasta)}.`);
+  l.push('');
+  l.push(`Precio: ${fmtM(ev.precio, mon)} (${fmtM(ev.mitad1, mon)} para empezar + ${fmtM(ev.mitad2, mon)} cuando lleguen los de la garantía). Publicidad: ${fmtM(ev.publicidad, mon)}, directo desde su cuenta.`);
+  l.push(`Número de la garantía: ${Number.isFinite(ev.N) ? fmtN(ev.N) : '—'} ${ev.unidadGar[1]} (${fmtM(ev.precio + ev.publicidad, mon)} ÷ ${fmtM(ev.ganVenta, mon)}). Tope ${fmtN(ev.tope)}.`);
+  l.push(`Llegan: lo mínimo ${f1(E.piso.unidades)} · lo esperado ${f1(E.meta.unidades)} · si sale muy bien ${f1(E.techo.unidades)}. Tu segunda mitad: ${estadoGarantia(ev)[1].toLowerCase()}.`);
+  l.push(`Compran: ${f1(E.piso.compras)} · ${f1(E.meta.compras)} · ${f1(E.techo.compras)}. Él gana en el lanzamiento: ${fmtN(E.piso.roiLanz, 1)}× · ${fmtN(E.meta.roiLanz, 1)}× · ${fmtN(E.techo.roiLanz, 1)}×.`);
+  const a = ev.ads; l.push(`Anuncios: ${a.nombrePlataforma}, «${a.objetivoNombre}». Unas ${fmtN(a.vistas)} vistas → ${f1(E.meta.reservas)} reservas → ${f1(E.meta.llegadas)} llegan → ${f1(E.meta.compras)} compran (lo esperado).`);
+  if (ev.stock !== null || ev.atiendeDia !== null) l.push(`Canje: ${ev.diasCanje} día(s)${ev.stock !== null ? `, ${fmtN(ev.stock)} unidades separadas (tope de cupones ${fmtN(ev.topeCup)})` : ''}${ev.atiendeDia !== null ? `, atiende ${fmtN(ev.atiendeDia)} por día` : ''}.`);
+  if (ev.plan.ofrecer) l.push(`Después: plan de cada mes a ${fmtM(ev.plan.precio, mon)} cada 4 semanas (o ${fmtM(ev.plan.precioComp, mon)} con ${ev.plan.meses} meses). Le dejaría ${fmtM(ev.plan.esc.meta.gan, mon)} al mes.`);
+  const faltan = cincoCosas().filter(([ok]) => !ok).map(([, t]) => t);
+  l.push(`Sus 5 cosas: ${faltan.length ? 'falta que acepte: ' + faltan.join('; ') : 'aceptadas'}.`);
+  const conds = ev.chequeos.filter(c => (c.estado === 'ojo' || c.estado === 'no') && c.arreglo);
+  if (conds.length) { l.push(''); l.push('A cuidar:'); for (const c of conds) l.push(`- ${c.nombre}: ${c.arreglo}`); }
+  if (ev.veredicto === 'no' && r.alternativas.length) { l.push(''); l.push('Mejor ofrecerle:'); for (const x of r.alternativas) l.push(`- ${x}`); }
+  if (ev.estimados.length) { l.push(''); l.push('Números a confirmar: ' + ev.estimados.join('; ')); }
+  return l.join('\n');
+}
+
 // ---------- Gráfico ----------
 function ticksLindos(min, max, cuantos = 5) { if (min === max) max = min + 1; const p0 = (max - min) / cuantos, mag = Math.pow(10, Math.floor(Math.log10(p0))), nn = p0 / mag, paso = (nn < 1.5 ? 1 : nn < 3 ? 2 : nn < 7 ? 5 : 10) * mag; const t = []; for (let v = Math.floor(min / paso) * paso; v <= Math.ceil(max / paso) * paso + paso / 2; v += paso) t.push(Math.round(v)); return t; }
 function fmtCompacto(v) { if (v === 0) return '0'; const a = Math.abs(v), sg = v < 0 ? '−' : ''; if (a >= 1e6) return sg + fmtN(a / 1e6, a % 1e6 === 0 ? 0 : 1) + ' M'; if (a >= 1000) return sg + fmtN(a / 1000, a % 1000 === 0 ? 0 : 1) + ' mil'; return sg + fmtN(a); }
@@ -4283,13 +5349,17 @@ function datosIA(r) {
   return { moneda: ev.R.moneda, negocio: { nombre: p.negocio.nombre, rubro: p.negocio.rubro, ciudad: p.negocio.ciudad, ventasMes: n(p.negocio.facturacion) },
     productos: r.an.lista.map(x => ({ nombre: x.nombre, ventasMes: x.facturacion, deCada100LeQueda: Math.round(x.mt.m * 100), comoPaga: x.l.tipo, precio: x.mt.ticket, aQuien: TIPOS_VENTA[x.l.tipoVenta]?.nombre, competencia: x.l.competencia, puntos: x.puntaje })),
     potenciar: ev.foco.nombre, trabajo: ev.modo, servicios: Object.entries(ev.alc).filter(([, v]) => v).map(([k]) => k), respuesta: TXT_VER_CORTO[ev.veredicto],
-    metaDelDueno: md ? { quiere: tituloMeta(md, ev.R.moneda), clientesPorDia: +md.clientesDia.toFixed(2), coberturaDelPlan: Math.round(md.cobertura * 100) + '%' } : null,
-    capacidad: { leAlcanzaAtender: (ev.chequeos.find(c => c.id === 'capacidad') || {}).detalle, mensajesPorDiaConElPlan: +ev.mensajesDiaNec.toFixed(1), puedeContestar: n(p.capacidad.mensajesDia) || null },
+    metaDelDueno: !md ? null : r.lanz ? { tipo: md.tipo, quiere: Math.round(md.quiere), daElLanzamiento: Math.round(md.daLanz), daElPlanDeCadaMes: Math.round(md.daPlan) }
+      : { quiere: tituloMeta(md, ev.R.moneda), clientesPorDia: +md.clientesDia.toFixed(2), coberturaDelPlan: Math.round(md.cobertura * 100) + '%' },
+    capacidad: r.lanz ? { diaDelCanje: (ev.chequeos.find(c => c.id === 'atiende') || {}).detalle || null, stock: (ev.chequeos.find(c => c.id === 'stock') || {}).detalle || null, puedeContestar: n(p.capacidad.mensajesDia) || null }
+      : { leAlcanzaAtender: (ev.chequeos.find(c => c.id === 'capacidad') || {}).detalle, mensajesPorDiaConElPlan: +ev.mensajesDiaNec.toFixed(1), puedeContestar: n(p.capacidad.mensajesDia) || null },
     clienteIdeal: r.icp ? r.icp.lista.map(s => ({ tipo: s.nombre, gananciaAlAnio: Math.round(s.gananciaCliente), puntos: s.puntaje })) : null,
     anuncios: ev.ads ? { plataforma: ev.ads.nombrePlataforma, objetivo: ev.ads.objetivoNombre, presupuestoBs: ev.presupuesto, usd: Math.round(ev.ads.usd), vistasMes: Math.round(ev.ads.vistas), resultadosMes: Math.round(ev.ads.resultados), queSonResultados: ev.ads.resultadoNombre, llegadasMes: +ev.ads.llegadas.toFixed(1), comprasMes: +ev.ads.clientes.toFixed(1), avisos: ev.ads.avisos } : null,
     oferta: O ? { producto: O.nombre, loQueLogra: O.deseo, rapidez: O.tiempo, precio: O.precio, regalos: O.bonos.map(b => b.nombre), garantia: O.garantia, urgencia: O.urgencia, puntos: O.puntaje, valeVecesElPrecio: +O.ratio.toFixed(1) } : null,
     hallazgos: r.hallazgos.map(h => h.titulo + ': ' + h.texto), comoEstaHoy: ev.diag.etapas.map(e => ({ parte: e.nombre, problemas: e.notas })), numerosAdivinados: ev.estimados,
-    plan: { meses: ev.D, precioMes: ev.precio, promesa: promesaDe(ev).frase }, revision: ev.chequeos.map(c => ({ punto: c.nombre, estado: c.estado, detalle: c.detalle })), alternativas: r.alternativas };
+    plan: r.lanz ? { tipo: 'lanzamiento con fecha y cupón', precio: ev.precio, dosMitades: [ev.mitad1, ev.mitad2], numeroDeLaGarantia: ev.N, cuentaLaGarantia: ev.unidadGar[1], fechaDelCanje: p.lanzamiento.fecha || null, porque: p.lanzamiento.porque || null, publicidad: ev.publicidad, llegan: { minimo: +ev.escenarios.piso.unidades.toFixed(1), esperado: +ev.escenarios.meta.unidades.toFixed(1) }, compran: +ev.escenarios.meta.compras.toFixed(1), planDeCadaMes: ev.plan.ofrecer ? { precio: ev.plan.precio, conCompromiso: ev.plan.precioComp } : null }
+      : { meses: ev.D, precioMes: ev.precio, promesa: promesaDe(ev).frase },
+    revision: ev.chequeos.map(c => ({ punto: c.nombre, estado: c.estado, detalle: c.detalle })), alternativas: r.alternativas };
 }
 function claveIA(r) { try { return JSON.stringify(datosIA(r)); } catch { return ''; } }
 function promptIA(r) {
@@ -4347,6 +5417,7 @@ function conectarIA() { const b = $('#btn-ia'); if (b) b.addEventListener('click
 // ---------- Resumen ----------
 function textoResumen() {
   const r = ultimo; if (!r || !r.ev) return 'Faltan datos para armar el resumen.';
+  if (r.lanz) return textoResumenLanz();
   const ev = r.ev, mon = ev.R.moneda, E = ev.escenarios, p = estado.prospecto, pr = promesaDe(ev), l = [], md = ev.metaDueno;
   l.push(`${p.negocio.nombre || 'Prospecto'}${p.negocio.rubro ? ' (' + p.negocio.rubro + ')' : ''}`);
   l.push(`¿Le podemos cumplir? ${TXT_VER_CORTO[ev.veredicto]} (${ev.puntaje}/100)${r.hayRangos ? ` · números: ${({ prudente: 'lo peor', normal: 'lo normal', optimista: 'lo mejor' })[r.esc]} de cada rango` : ''}`);
@@ -4390,7 +5461,7 @@ function aviso(t) { const a = $('#aviso'); a.textContent = t; a.classList.add('v
 // ---------- Guardar ----------
 let DB = null, USER = null, esDueno = null, listaItems = [], listaCargada = false, listaNota = '', confirmarBorrar = null, unsubLista = null;
 function slug(s) { return (String(s || 'prospecto').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'prospecto') + '-' + Math.random().toString(36).slice(2, 7); }
-function resumenDoc() { const ev = ultimo && ultimo.ev; return { nombre: estado.prospecto.negocio.nombre || 'Sin nombre', rubro: estado.prospecto.negocio.rubro || '', fecha: new Date().toISOString(), veredicto: ev ? ev.veredicto : 'incompleta', puntaje: ev ? ev.puntaje : null, foco: ev ? ev.foco.nombre : '', precio: ev ? ev.precio : null, meses: ev ? ev.D : null, datos: clonar(estado.prospecto) }; }
+function resumenDoc() { const ev = ultimo && ultimo.ev; return { nombre: estado.prospecto.negocio.nombre || 'Sin nombre', rubro: estado.prospecto.negocio.rubro || '', fecha: new Date().toISOString(), veredicto: ev ? ev.veredicto : 'incompleta', puntaje: ev ? ev.puntaje : null, foco: ev ? ev.foco.nombre : '', precio: ev ? ev.precio : null, meses: ev && ev.D ? ev.D : null, modelo: estado.prospecto.modelo, datos: clonar(estado.prospecto) }; }
 function mensajeDb(e) { const c = e && e.code; if (c === 'invalid_argument') return 'Solo la dueña o el dueño de la calculadora puede guardar aquí.'; if (c === 'quota_exceeded') return 'Se llenó el espacio. Borra prospectos viejos.'; if (c === 'resource_exhausted') return 'Muchos guardados seguidos. Espera unos segundos.'; if (c === 'revoked') return 'Ya no tienes acceso para guardar.'; return 'No se pudo guardar. Revisa tu conexión.'; }
 async function guardarProspecto() {
   const doc = resumenDoc(), btn = $('#btn-guardar'); btn.disabled = true;
@@ -4414,7 +5485,7 @@ function renderLista() {
   const mon = estado.reglas.moneda;
   cont.innerHTML = listaItems.map(it => {
     const fecha = it.fecha ? new Date(it.fecha).toLocaleDateString('es-BO', { day: 'numeric', month: 'short', year: 'numeric' }) : '', conf = confirmarBorrar === it.id;
-    return `<div class="prospecto"><div><h4>${esc(it.nombre)} ${etqVer(it.veredicto)}</h4><p>${esc(fecha)}${it.foco ? ' · ' + esc(it.foco) : ''}${it.precio != null ? ' · ' + esc(fmtM(it.precio, mon)) + '/mes' : ''}</p></div>
+    return `<div class="prospecto"><div><h4>${esc(it.nombre)} ${etqVer(it.veredicto)}</h4><p>${esc(fecha)}${it.foco ? ' · ' + esc(it.foco) : ''}${it.precio != null ? ' · ' + esc(fmtM(it.precio, mon)) + (it.modelo === 'lanzamiento' ? ' por lanzamiento' : '/mes') : ''}</p></div>
       <div class="btns">${conf ? `<span class="texto">¿Borrar para siempre?</span><button class="btn-g btn-chico" type="button" data-borrar-si="${esc(it.id)}">Sí, borrar</button><button class="btn-g btn-chico" type="button" data-borrar-no="1">No</button>` : `<button class="btn-g btn-chico" type="button" data-abrir="${esc(it.id)}">Abrir</button><button class="btn-borde btn-chico" type="button" data-borrar="${esc(it.id)}">Borrar</button>`}</div></div>`;
   }).join('');
 }
@@ -4433,6 +5504,7 @@ function cargarProspecto(datos, id) {
   estado.prospecto = normalizarProspecto(clonar(datos)); estado.actualId = id || null; estado.abiertas = new Set(); estado.paso = 1;
   guardarLocal('co4.actual', estado.actualId); guardarLocal('co4.borrador', estado.prospecto); guardarLocal('co4.paso', 1);
   iaEstado = { resp: null, clave: '', error: '', cargando: false };
+  $('#ruta').innerHTML = htmlRutaLlamada();
   recalcular(); renderForm();
 }
 function suscribirLista() {
@@ -4488,11 +5560,14 @@ function iniciar() {
     const es = e.target.closest('[data-esc]'); if (es && !es.disabled) { estado.prospecto.escenarioDatos = es.dataset.esc; recalcular(); programarBorrador(); const nb = document.querySelector(`[data-esc="${CSS.escape(es.dataset.esc)}"]`); if (nb) nb.focus(); }
   });
   $$('[data-ejemplo]').forEach(b => b.addEventListener('click', () => {
-    const k = b.dataset.ejemplo, f = { brisa: ejemploBrisa, joyeria: ejemploJoyeria, cafe: ejemploCafe, minPlata: ejemploMinPlata, minAnillos: ejemploMinAnillos, minEmpresas: ejemploMinEmpresas }[k];
+    const k = b.dataset.ejemplo, f = { brisa: ejemploBrisa, joyeria: ejemploJoyeria, cafe: ejemploCafe, minPlata: ejemploMinPlata, minAnillos: ejemploMinAnillos, minEmpresas: ejemploMinEmpresas, lanzTenis: ejemploLanzTenis, lanzBebe: ejemploLanzBebe, lanzHeladeria: ejemploLanzHeladeria }[k];
     cargarProspecto({ ...f(), _ejemplo: k }, null); $('#menu-ejemplos').open = false; aviso('Ejemplo cargado.');
   }));
   document.addEventListener('click', e => { const m = $('#menu-ejemplos'); if (m.open && !m.contains(e.target)) m.open = false; });
-  $('#btn-nuevo').addEventListener('click', () => { cargarProspecto(prospectoVacio(), null); aviso('Prospecto nuevo.'); const el = document.querySelector('[data-clave="negocio.nombre"]'); if (el) el.focus(); });
+  // Lanzamiento o plan mensual: el selector está arriba de las preguntas y en el panel
+  document.addEventListener('click', e => { const b = e.target.closest('[data-modelo]'); if (b) { cambiarModelo(b.dataset.modelo); const nb = document.querySelector(`#modelo [data-modelo="${CSS.escape(b.dataset.modelo)}"]`); if (nb && b.closest('#modelo')) nb.focus(); } });
+  // «Nuevo» sigue en el modo en que estabas
+  $('#btn-nuevo').addEventListener('click', () => { cargarProspecto({ ...prospectoVacio(), modelo: estado.prospecto.modelo || leerLocal('co4.modelo') || 'mensual' }, null); aviso('Prospecto nuevo.'); const el = document.querySelector('[data-clave="negocio.nombre"]'); if (el) el.focus(); });
   $('#btn-guardar').addEventListener('click', guardarProspecto);
   $('#btn-copiar').addEventListener('click', copiarResumen);
   $('#btn-lista').addEventListener('click', () => {

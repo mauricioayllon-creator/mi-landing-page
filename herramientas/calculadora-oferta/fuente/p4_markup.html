@@ -1,0 +1,60 @@
+<title>Calculadora de Oferta</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/*@@CSS4@@*/
+</style>
+
+<header class="top" id="top">
+  <div class="top-in">
+    <div class="marca">
+      <div class="app-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></div>
+      <div><h1>Calculadora de Oferta</h1><p id="sub-negocio">Diagnóstico en la llamada</p></div>
+    </div>
+    <div class="acciones">
+      <details class="pop" id="menu-ejemplos">
+        <summary class="btn-g">Ejemplos</summary>
+        <div class="pop-menu" role="menu">
+          <button type="button" role="menuitem" data-ejemplo="brisa"><b>Brisa Técnica</b><span>Aire acondicionado para empresas</span></button>
+          <button type="button" role="menuitem" data-ejemplo="joyeria"><b>Joyería Aurora</b><span>Ya tiene contenido; quiere mejores anuncios</span></button>
+          <button type="button" role="menuitem" data-ejemplo="cafe"><b>Café La Esquina</b><span>Negocio chico de barrio</span></button>
+          <span class="pop-sep">Lo mínimo que puedes aceptar</span>
+          <button type="button" role="menuitem" data-ejemplo="minPlata"><b>Mínimo 1 · Joyas de plata</b><span>Venta rápida, Bs 220, vuelven 4 veces al año</span></button>
+          <button type="button" role="menuitem" data-ejemplo="minAnillos"><b>Mínimo 2 · Anillos de compromiso</b><span>Compra pensada, Bs 4.500, una sola vez</span></button>
+          <button type="button" role="menuitem" data-ejemplo="minEmpresas"><b>Mínimo 3 · Regalos para empresas</b><span>Bs 6.000, 3 veces al año, pagan a 30 días</span></button>
+        </div>
+      </details>
+      <button class="btn-g" id="btn-nuevo" type="button">Nuevo</button>
+      <button class="btn-g" id="btn-lista" type="button" aria-expanded="false" aria-controls="panel-lista">Mis prospectos</button>
+      <button class="btn-g" id="btn-copiar" type="button">Copiar resumen</button>
+      <button class="btn-azul" id="btn-guardar" type="button">Guardar</button>
+    </div>
+  </div>
+  <div class="vista-switch"><div class="segmento" role="tablist" aria-label="Vista">
+    <button type="button" role="tab" id="tab-preguntas" aria-selected="true" data-vista="preguntas">Preguntas</button>
+    <button type="button" role="tab" id="tab-panel" aria-selected="false" data-vista="panel">Panel</button>
+  </div></div>
+</header>
+
+<section class="lista oculto" id="panel-lista" aria-label="Prospectos guardados">
+  <div class="tarjeta">
+    <div class="tarjeta-cab"><h3>Mis prospectos</h3><p id="lista-nota">Los prospectos que guardes aparecen aquí.</p></div>
+    <div id="lista-prospectos"></div>
+  </div>
+</section>
+
+<main class="app" id="app" data-vista="preguntas">
+  <section class="col-preguntas" id="col-preguntas" aria-label="Preguntas">
+    <div class="titulo-col"><h2>Llamada de diagnóstico</h2><p>Pregúntale como si conversaran. Si no sabe un número, toca <b>¿No sabe?</b> y te doy preguntas más fáciles. Si duda, escribe un rango: <b>20 a 30</b>.</p></div>
+    <div id="banner"></div>
+    <div class="progreso" id="progreso"></div>
+    <div class="pasos" role="tablist" aria-label="Pasos" id="pasos"></div>
+    <div id="form" style="display:grid;gap:14px"></div>
+  </section>
+  <aside class="col-panel" id="col-panel" aria-label="Panel del negocio">
+    <div id="panel"></div>
+  </aside>
+</main>
+<button class="mini-panel" id="mini-panel" type="button"></button>
+<dialog class="hoja" id="detalle" aria-labelledby="detalle-tit"><div class="hoja-cab"><h2 id="detalle-tit"></h2><button class="btn-g btn-chico" type="button" id="detalle-cerrar">Cerrar</button></div><div class="hoja-cuerpo" id="detalle-cuerpo"></div></dialog>
+<div class="toast" id="aviso" role="status" aria-live="polite"></div>
+

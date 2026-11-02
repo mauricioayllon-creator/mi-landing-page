@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     return [
       { source: "/panel", destination: "/panel/index.html" },
       { source: "/panel/", destination: "/panel/index.html" },
+      // Calculadora de Oferta (herramientas/calculadora-oferta → public/calculadora)
+      { source: "/calculadora", destination: "/calculadora/index.html" },
+      { source: "/calculadora/", destination: "/calculadora/index.html" },
     ];
   },
 };

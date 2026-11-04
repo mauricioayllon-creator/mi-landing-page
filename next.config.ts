@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
       // Calculadora de Oferta (herramientas/calculadora-oferta → public/calculadora)
       { source: "/calculadora", destination: "/calculadora/index.html" },
       { source: "/calculadora/", destination: "/calculadora/index.html" },
+      // Paneles por cliente (public/clientes/<cliente>/index.html), p. ej. /clientes/domix
+      { source: "/clientes/:cliente", destination: "/clientes/:cliente/index.html" },
+      { source: "/clientes/:cliente/", destination: "/clientes/:cliente/index.html" },
     ];
   },
 };

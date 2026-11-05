@@ -13,147 +13,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#f2f5fb;--surface:#fff;--surface-2:#f7f9fd;--ink:#0b1530;--ink-2:#56627d;--ink-3:#98a3ba;
-  --line:#e3e9f2;--line-2:#edf1f8;--blue:#1a6fe0;--blue-2:#0b4bb0;--navy:#082e6e;--blue-soft:#e9f1fe;
-  --display:"Bricolage Grotesque","Plus Jakarta Sans",system-ui,sans-serif;
-  --r-lg:22px;--r:16px;--r-sm:12px;
-  --sh-1:0 1px 2px rgba(11,21,48,.04),0 2px 10px -3px rgba(11,21,48,.07);
-  --sh-2:0 2px 4px rgba(11,21,48,.04),0 16px 36px -10px rgba(11,21,48,.16);
-  --ease:cubic-bezier(.2,.9,.25,1);
-  /* un color por etapa */
-  --f1:#1a6fe0;--f1s:#e9f1fe;
-  --f2:#7c3aed;--f2s:#f1eafe;
-  --f3:#e38a06;--f3s:#fff4dc;
-  --f4:#12a150;--f4s:#e3f8eb;
-  --f5:#e5484d;--f5s:#fdecee;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
-h1,h2,h3,p{margin:0}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px}
-
-/* ---------- portada ---------- */
-.hero{position:relative;overflow:hidden;color:#fff;padding:18px 0 96px;
-  background:radial-gradient(900px 420px at 110% -20%,rgba(92,165,255,.55),transparent 60%),
-  radial-gradient(520px 360px at -20% 115%,rgba(49,217,109,.22),transparent 62%),
-  linear-gradient(160deg,#1a6fe0 0%,#0b4bb0 42%,#082e6e 78%,#051d47 100%)}
-.hero::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
-  background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:22px 22px;
-  mask-image:linear-gradient(180deg,#000,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%)}
-.hero .wrap{position:relative;z-index:1}
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;font-weight:800;font-size:13px}
-.marca{display:inline-flex;align-items:center;gap:8px}
-.marca i{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:#fff;color:var(--blue-2);font-style:normal;font-family:var(--display);font-size:14px}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);font-size:12px;font-weight:700}
-.pill .dot{width:7px;height:7px;border-radius:50%;background:#31d96d;box-shadow:0 0 0 4px rgba(49,217,109,.25)}
-.cliente{display:flex;align-items:center;gap:14px;margin-bottom:22px}
-.avatar{width:60px;height:60px;border-radius:18px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:24px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);flex:none}
-.cliente small{display:block;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.72);letter-spacing:.02em}
-.cliente h1{font-family:var(--display);font-size:30px;line-height:1.05;letter-spacing:-.025em}
-.hero-lead{font-size:16px;color:rgba(255,255,255,.88);max-width:560px}
-.hero-lead b{color:#fff}
-
-/* ---------- tarjeta "dónde estamos" ---------- */
-.ahora{margin-top:-70px;position:relative;z-index:2}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1)}
-.ahora .card{padding:20px 18px;box-shadow:var(--sh-2)}
-.etiq{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-.ahora-fila{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:6px 0 14px;flex-wrap:wrap}
-.ahora h2{font-family:var(--display);font-size:24px;line-height:1.1;letter-spacing:-.02em}
-.ahora .dia{font-family:var(--display);font-weight:800;font-size:15px;color:var(--ink-2);white-space:nowrap}
-.ahora .dia b{font-size:28px;color:var(--ink)}
-.barra{position:relative;height:14px;border-radius:999px;background:var(--line-2);overflow:hidden;display:flex}
-.barra span{height:100%}
-.barra .marca-hoy{position:absolute;top:-3px;bottom:-3px;width:4px;border-radius:4px;background:var(--ink);box-shadow:0 0 0 3px #fff}
-.barra-ejes{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-3);margin-top:8px}
-.ahora-txt{margin-top:14px;padding:14px;border-radius:var(--r);background:var(--surface-2);border:1px solid var(--line-2);font-size:14.5px}
-.ahora-txt b{color:var(--ink)}
-.cuenta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.cuenta div{padding:12px;border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--line-2);text-align:center}
-.cuenta b{display:block;font-family:var(--display);font-size:24px;line-height:1}
-.cuenta small{font-size:12px;font-weight:700;color:var(--ink-2)}
-
-/* ---------- secciones ---------- */
-section{margin-top:22px}
-.sec{padding:22px 18px}
-.sec-cab{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.burbuja{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;flex:none;background:var(--blue-soft);color:var(--blue);font-size:19px}
-.sec-cab h2{font-family:var(--display);font-size:21px;line-height:1.15;letter-spacing:-.02em}
-.sec-cab p{font-size:13px;font-weight:600;color:var(--ink-2)}
-.mudo{color:var(--ink-2)}
-
-/* ---------- calendario ---------- */
-.leyenda{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.leyenda span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:5px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line-2)}
-.leyenda i{width:10px;height:10px;border-radius:3px}
-.meses{display:grid;grid-template-columns:1fr;gap:18px}
-@media(min-width:720px){.meses{grid-template-columns:1fr 1fr}}
-.mes h3{font-family:var(--display);font-size:17px;margin-bottom:10px;text-transform:capitalize}
-.grilla{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.grilla .ds{font-size:11px;font-weight:800;color:var(--ink-3);text-align:center;padding-bottom:4px;text-transform:uppercase}
-.d{position:relative;aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:14px;border:1px solid transparent;background:transparent;color:var(--ink-3);cursor:default;padding:0;font-family:inherit}
-.d.en{cursor:pointer;color:var(--ink);transition:transform .12s var(--ease),box-shadow .2s}
-.d.en:hover{transform:translateY(-1px);box-shadow:var(--sh-1)}
-.d.vacio{visibility:hidden}
-.d .ic{font-size:10px;line-height:1;margin-top:2px}
-.d.pasado{opacity:.55}
-.d.hoy{outline:2.5px solid var(--ink);outline-offset:1px}
-.d.sel{box-shadow:0 0 0 3px rgba(26,111,224,.45)}
-.d.hito{color:#fff!important;font-weight:800}
-.d.lanz{background:linear-gradient(135deg,#e5484d,#7c3aed)!important;color:#fff!important}
-.detalle{margin-top:16px;padding:16px;border-radius:var(--r);background:var(--surface-2);border:1px solid var(--line-2);min-height:84px}
-.detalle .t{display:flex;align-items:center;gap:8px;font-weight:800;margin-bottom:4px}
-.detalle .t i{width:10px;height:10px;border-radius:3px}
-.detalle p{font-size:14.5px;color:var(--ink-2)}
-
-/* ---------- línea de etapas ---------- */
-.etapas{display:flex;flex-direction:column;gap:12px}
-.etapa{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
-.etapa-cab{display:flex;gap:12px;align-items:flex-start;padding:16px;cursor:pointer;background:none;border:0;width:100%;text-align:left;font-family:inherit;color:inherit}
-.num{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:17px;color:#fff;flex:none}
-.etapa-cab h3{font-family:var(--display);font-size:17.5px;line-height:1.2;letter-spacing:-.01em}
-.etapa-cab .fechas{font-size:13px;font-weight:700;color:var(--ink-2);margin-top:2px}
-.estado{margin-left:auto;flex:none;font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;white-space:nowrap}
-.estado.listo{background:#e3f8eb;color:#12a150}
-.estado.curso{background:#0b1530;color:#fff}
-.estado.prox{background:var(--line-2);color:var(--ink-2)}
-.etapa-cuerpo{padding:0 16px 16px 66px;display:none}
-.etapa.abierta .etapa-cuerpo{display:block}
-.etapa.actual{border-color:var(--ink);box-shadow:var(--sh-2)}
-@media(max-width:520px){.etapa-cuerpo{padding-left:16px}}
-.bloque{margin-top:10px}
-.bloque h4{margin:0 0 4px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
-.bloque ul{margin:0;padding-left:18px}
-.bloque li{margin:3px 0}
-.bloque p{color:var(--ink)}
-
-/* ---------- dos públicos ---------- */
-.dos{display:grid;grid-template-columns:1fr;gap:12px}
-@media(min-width:620px){.dos{grid-template-columns:1fr 1fr}}
-.publico{padding:16px;border-radius:var(--r);border:1px solid var(--line-2);background:var(--surface-2)}
-.publico .em{font-size:26px}
-.publico h3{font-family:var(--display);font-size:17px;margin:6px 0 4px}
-.publico p{font-size:14.5px;color:var(--ink-2)}
-
-/* ---------- checklist / avances ---------- */
-.lista{display:flex;flex-direction:column;gap:8px}
-.item{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:var(--surface-2)}
-.item .ck{width:22px;height:22px;border-radius:7px;border:2px solid var(--ink-3);flex:none;margin-top:1px;display:grid;place-items:center;font-size:13px;color:#fff;font-weight:800}
-.item.ok .ck{background:#12a150;border-color:#12a150}
-.item b{display:block;font-size:14.5px}
-.item small{display:block;font-size:13px;color:var(--ink-2)}
-.item .est{margin-left:auto;flex:none}
-.sesiones .item .ck{border-radius:50%}
-.nota{margin-top:14px;font-size:13.5px;color:var(--ink-2);padding:12px 14px;border-radius:var(--r-sm);background:var(--blue-soft);border:1px solid #d6e5fd}
-footer{text-align:center;color:var(--ink-3);font-size:12.5px;font-weight:600;padding:30px 16px 40px}
-</style>
+<link rel="stylesheet" href="/clientes/motor/panel.css">
 </head>
 <body>
-
 <header class="hero">
   <div class="wrap">
     <div class="top">
@@ -161,295 +23,76 @@ footer{text-align:center;color:var(--ink-3);font-size:12.5px;font-weight:600;pad
       <span class="pill"><span class="dot"></span> Panel del cliente</span>
     </div>
     <div class="cliente">
-      <div class="avatar">D</div>
-      <div>
-        <small>PLAN DE TRABAJO · 30 DÍAS</small>
-        <h1>Domix</h1>
-      </div>
+      <div class="avatar" id="cliInicial"></div>
+      <div><small id="cliEtiqueta"></small><h1 id="cliNombre"></h1></div>
     </div>
-    <p class="hero-lead">Aquí vas a ver <b>qué estamos haciendo, en qué día vamos y qué viene después</b>, desde la primera sesión (3 de noviembre) hasta el <b>lanzamiento del 3 de diciembre</b>. Este panel se va llenando a medida que avanzamos.</p>
+    <p class="hero-lead" id="cliLead"></p>
   </div>
 </header>
 
 <main class="wrap">
-
-  <!-- DÓNDE ESTAMOS -->
   <div class="ahora">
     <div class="card">
       <span class="etiq">Dónde estamos hoy</span>
-      <div class="ahora-fila">
-        <h2 id="ahoraTitulo">…</h2>
-        <span class="dia" id="ahoraDia"></span>
-      </div>
+      <div class="ahora-fila"><h2 id="ahoraTitulo">Cargando…</h2><span class="dia" id="ahoraDia"></span></div>
       <div class="barra" id="barra"></div>
-      <div class="barra-ejes"><span>3 nov · Inicio</span><span>3 dic · Lanzamiento</span></div>
+      <div class="barra-ejes"><span id="ejeIni"></span><span id="ejeFin"></span></div>
       <div class="ahora-txt" id="ahoraTxt"></div>
       <div class="cuenta">
-        <div><b id="cDias">–</b><small>días para lanzar</small></div>
-        <div><b id="cEtapa">–</b><small>etapa de 5</small></div>
-        <div><b id="cSesion">2</b><small>sesiones agendadas</small></div>
+        <div><b id="cDias">–</b><small id="cDiasTxt"></small></div>
+        <div><b id="cEtapa">–</b><small id="cEtapaTxt"></small></div>
+        <div><b id="cSes">–</b><small id="cSesTxt"></small></div>
       </div>
     </div>
   </div>
 
-  <!-- CALENDARIO -->
-  <section class="card sec" id="calendario">
-    <div class="sec-cab">
-      <div class="burbuja">📅</div>
-      <div><h2>Calendario</h2><p>Toca un día para ver qué pasa ese día.</p></div>
-    </div>
+  <section class="card sec">
+    <div class="sec-cab"><div class="burbuja">📅</div><div><h2>Calendario</h2><p>Toca un día para ver qué pasa ese día.</p></div></div>
+    <div class="aviso" id="avisoCal"></div>
     <div class="leyenda" id="leyenda"></div>
+    <h3 class="subt" id="tiraTitulo"></h3>
+    <div class="tira" id="tira"></div>
+    <h3 class="subt">Calendario del mes</h3>
     <div class="meses" id="meses"></div>
     <div class="detalle" id="detalle"></div>
   </section>
 
-  <!-- CÓMO VAMOS A TRABAJAR -->
-  <section class="card sec" id="etapas">
-    <div class="sec-cab">
-      <div class="burbuja">🧭</div>
-      <div><h2>Cómo vamos a trabajar</h2><p>Las 5 etapas, explicadas paso a paso. Toca una para abrirla.</p></div>
-    </div>
+  <section class="card sec">
+    <div class="sec-cab"><div class="burbuja">🧭</div><div><h2>Cómo vamos a trabajar</h2><p>Las etapas, explicadas paso a paso. Toca una para abrirla.</p></div></div>
     <div class="etapas" id="listaEtapas"></div>
   </section>
 
-  <!-- DOS PÚBLICOS -->
   <section class="card sec">
-    <div class="sec-cab">
-      <div class="burbuja">👥</div>
-      <div><h2>A quién le hablamos</h2><p>Domix tiene dos tipos de usuario, y cada uno necesita su propio mensaje y su propia oferta.</p></div>
-    </div>
-    <div class="dos">
-      <div class="publico">
-        <div class="em">🏠</div>
-        <h3>El anfitrión / propietario</h3>
-        <p>La persona o empresa que tiene una propiedad y quiere alquilarla. A él le hablamos de ganar más, llenar sus fechas y manejar todo más fácil.</p>
-      </div>
-      <div class="publico">
-        <div class="em">🧳</div>
-        <h3>El huésped</h3>
-        <p>La persona que busca dónde quedarse y descarga la app. A él le hablamos de encontrar rápido, con confianza y al mejor precio.</p>
-      </div>
-    </div>
-    <p class="nota"><b>Sobre las ofertas:</b> en la Sesión 1 las <b>planeamos</b> (qué le ofrecemos a cada uno y cómo gana dinero Domix). En la Sesión 2 las <b>confirmamos</b>, junto con los ángulos, viendo cuál tiene más posibilidades de aceptación. Y el testeo nos dirá cuál funciona de verdad.</p>
+    <div class="sec-cab"><div class="burbuja">👥</div><div><h2>A quién le hablamos</h2><p>Domix tiene dos tipos de usuario, y cada uno necesita su propio mensaje y su propia oferta.</p></div></div>
+    <div class="dos" id="listaPublicos"></div>
+    <p class="nota" id="notaPublicos"></p>
   </section>
 
-  <!-- LO QUE NECESITAMOS -->
   <section class="card sec">
-    <div class="sec-cab">
-      <div class="burbuja">📋</div>
-      <div><h2>Lo que necesitamos de ustedes</h2><p>Para armar el brief del negocio. Lo que no tengan hoy, lo traen a la Sesión 2.</p></div>
-    </div>
-    <div class="lista" id="listaBrief"></div>
+    <div class="sec-cab"><div class="burbuja">📋</div><div><h2>Lo que necesitamos de ustedes</h2><p>Para armar el brief del negocio. Lo que no tengan, lo traen a la Sesión 2.</p></div></div>
+    <div class="lista" id="listaPedidos"></div>
   </section>
 
-  <!-- AVANCES -->
   <section class="card sec">
-    <div class="sec-cab">
-      <div class="burbuja">✅</div>
-      <div><h2>Entregables y avances</h2><p>Lo que vamos produciendo. Se actualiza a medida que avanzamos.</p></div>
-    </div>
+    <div class="sec-cab"><div class="burbuja">✅</div><div><h2>Entregables y avances</h2><p>Lo que vamos produciendo. Se actualiza después de cada sesión.</p></div></div>
     <div class="lista" id="listaAvances"></div>
   </section>
 
-  <!-- SESIONES -->
   <section class="card sec sesiones">
-    <div class="sec-cab">
-      <div class="burbuja">🎙️</div>
-      <div><h2>Sesiones de consultoría</h2><p>Cada próxima sesión se agenda dentro de la sesión anterior, según lo que vayamos necesitando.</p></div>
-    </div>
+    <div class="sec-cab"><div class="burbuja">🎙️</div><div><h2>Sesiones</h2><p>Cada próxima sesión se agenda dentro de la sesión anterior.</p></div></div>
     <div class="lista" id="listaSesiones"></div>
   </section>
 
+  <section class="card sec">
+    <div class="sec-cab"><div class="burbuja">📰</div><div><h2>Novedades</h2><p>Lo que va pasando, de lo más nuevo a lo más viejo.</p></div></div>
+    <div class="novedades" id="listaNovedades"></div>
+    <div class="contacto" id="contacto" style="margin-top:8px"></div>
+  </section>
 </main>
 
-<footer>Grow Business · Mauricio Ayllón · Panel privado de Domix</footer>
-
-<script>
-/* =====================================================================
-   DATOS DEL PLAN — para actualizar el panel, cambia solo esta parte.
-   estado: "listo" | "curso" | "prox"   (o déjalo vacío y se calcula por fecha)
-   ===================================================================== */
-var INICIO = "2026-11-03", LANZAMIENTO = "2026-12-03";
-
-var ETAPAS = [
-  { n:1, color:"f1", nombre:"Conocer el negocio", desde:"2026-11-03", hasta:"2026-11-04",
-    corto:"Sesión 1 y armado del brief",
-    que:"Hoy en la primera sesión recogemos toda la información de Domix: cómo funciona la app, a quién sirve, cómo gana dinero y qué ya se probó. Con eso armamos el brief: un documento que es la base para encontrar los ángulos y escribir los guiones.",
-    hacemos:["Sesión 1 de consultoría: preguntas sobre el negocio","Primer borrador de las ofertas para anfitriones y huéspedes","Agendamos la Sesión 2","Armamos el brief, los ángulos y los guiones"],
-    ustedes:["Responder las preguntas de la sesión","Enviar la información que falte (ver lista más abajo)"],
-    sale:"El brief de Domix y una primera idea de las ofertas." },
-  { n:2, color:"f2", nombre:"Ángulos, guiones y oferta", desde:"2026-11-05", hasta:"2026-11-05",
-    corto:"Sesión 2 (fecha a confirmar)",
-    que:"Un ángulo es la idea o el motivo por el que alguien se detiene a ver un video (por ejemplo: “gana más con tu depa vacío” o “encuentra dónde quedarte en 2 minutos”). En esta sesión les presentamos los ángulos que vamos a probar y los guiones listos, y confirmamos las ofertas.",
-    hacemos:["Presentar los ángulos para cada público","Presentar los guiones","Confirmar las ofertas para anfitrión y huésped"],
-    ustedes:["Traer la información pendiente","Darnos su visto bueno para empezar a grabar y publicar"],
-    sale:"Ángulos, guiones y ofertas aprobados para empezar a probar." },
-  { n:3, color:"f3", nombre:"Testeo de ángulos", desde:"2026-11-06", hasta:"2026-11-12",
-    corto:"7 días probando",
-    que:"Durante 7 días publicamos videos con distintos ángulos y formatos, de forma orgánica (sin pagar) y con un poco de pauta (publicidad pagada), para ver cuáles le interesan más a la gente. No adivinamos: dejamos que los números nos digan qué funciona.",
-    hacemos:["Grabar y publicar los primeros videos","Pautar un poco para acelerar los datos","Medir qué ángulos generan más interés, descargas y contactos"],
-    ustedes:["Aprobar los videos a tiempo","Contarnos qué ven del lado de la app (descargas, registros, mensajes)"],
-    sale:"Los primeros ángulos ganadores." },
-  { n:4, color:"f4", nombre:"Potenciar ganadores", desde:"2026-11-13", hasta:"2026-11-26",
-    corto:"14 días multiplicando lo que funciona",
-    que:"Con los ángulos que ganaron, creamos más contenido en distintos formatos (por ejemplo: testimonio, tutorial, antes y después, cara a cámara). Al mismo tiempo seguimos probando otros formatos y ángulos para no depender de uno solo.",
-    hacemos:["Más videos de los ángulos ganadores, en otros formatos","Seguir probando ángulos y formatos nuevos","Afinar la oferta según lo que responda la gente"],
-    ustedes:["Aprobar contenido","Darnos casos reales, testimonios o datos nuevos que aparezcan"],
-    sale:"Combinaciones ganadoras de ángulo + formato." },
-  { n:5, color:"f5", nombre:"Explotar para el lanzamiento", desde:"2026-11-27", hasta:"2026-12-03",
-    corto:"Última semana, todo hacia el 3 de diciembre",
-    que:"La última semana ya no probamos: publicamos lo que sabemos que funciona, con los formatos ganadores, y empujamos todo hacia el día del lanzamiento.",
-    hacemos:["Subir el contenido ganador con más fuerza","Concentrar la pauta en lo que mejor rinde","Preparar el día del lanzamiento"],
-    ustedes:["Tener la app y la oferta listas para recibir a la gente","Estar atentos a responder rápido"],
-    sale:"🚀 Lanzamiento el jueves 3 de diciembre." }
-];
-
-var HITOS = {
-  "2026-11-03": { icono:"🎙️", titulo:"Sesión 1 de consultoría", texto:"Recogemos toda la información del negocio, planeamos las ofertas y agendamos la Sesión 2." },
-  "2026-11-05": { icono:"🎙️", titulo:"Sesión 2 de consultoría (fecha a confirmar)", texto:"Presentamos ángulos, guiones y confirmamos las ofertas. Se coordina el horario en la Sesión 1." },
-  "2026-11-06": { icono:"▶️", titulo:"Arranca el testeo", texto:"Primer día publicando videos con los ángulos a probar." },
-  "2026-11-13": { icono:"🏆", titulo:"Tenemos ganadores", texto:"Empezamos a potenciar los ángulos que mejor funcionaron." },
-  "2026-11-27": { icono:"🔥", titulo:"Semana de lanzamiento", texto:"Empezamos a explotar el contenido ganador." },
-  "2026-12-03": { icono:"🚀", titulo:"Día del lanzamiento", texto:"Todo el trabajo de los 30 días apunta a este día." }
-};
-
-var BRIEF = [
-  { t:"Qué es Domix y cómo funciona", d:"Explicado como se lo contarían a un amigo. Links de la app (App Store / Play Store / web).", ok:false },
-  { t:"Cómo gana dinero Domix", d:"Comisión, suscripción, precio por publicar, etc. ¿Quién paga: el anfitrión, el huésped o los dos?", ok:false },
-  { t:"Números de hoy", d:"Cuántas propiedades, cuántos usuarios, descargas, reservas, en qué ciudades.", ok:false },
-  { t:"El cliente ideal de cada lado", d:"Quién es el anfitrión perfecto y quién el huésped perfecto. Qué les duele y qué quieren.", ok:false },
-  { t:"Por qué elegirían Domix", d:"Qué tiene Domix que no tienen las otras opciones. Quiénes son la competencia.", ok:false },
-  { t:"Lo que ya se probó", d:"Publicidad, contenido o promociones anteriores: qué funcionó y qué no.", ok:false },
-  { t:"Pruebas y casos reales", d:"Testimonios, capturas, reseñas, historias de anfitriones o huéspedes.", ok:false },
-  { t:"Marca y accesos", d:"Logo, colores, cuentas de redes y acceso a la cuenta de publicidad. Presupuesto para pauta.", ok:false }
-];
-
-var AVANCES = [
-  { t:"Brief del negocio", d:"El documento base con toda la información de Domix.", estado:"curso" },
-  { t:"Ofertas para anfitrión y huésped", d:"Planeadas en la Sesión 1, confirmadas en la Sesión 2.", estado:"curso" },
-  { t:"Ángulos a probar", d:"Se presentan en la Sesión 2.", estado:"prox" },
-  { t:"Guiones", d:"Se presentan en la Sesión 2.", estado:"prox" },
-  { t:"Videos del testeo", d:"Del 6 al 12 de noviembre.", estado:"prox" },
-  { t:"Ángulos ganadores", d:"Se anuncian aquí al terminar el testeo.", estado:"prox" },
-  { t:"Contenido ganador en nuevos formatos", d:"Del 13 al 26 de noviembre.", estado:"prox" },
-  { t:"Lanzamiento", d:"Jueves 3 de diciembre.", estado:"prox" }
-];
-
-var SESIONES = [
-  { t:"Sesión 1 · Conocer el negocio", d:"Martes 3 de noviembre", estado:"listo" },
-  { t:"Sesión 2 · Ángulos, guiones y oferta", d:"Jueves 5 de noviembre (horario a coordinar)", estado:"prox" },
-  { t:"Próximas sesiones", d:"Se agendan en cada sesión, según lo que vayamos necesitando.", estado:"prox" }
-];
-
-/* =====================================================================
-   A partir de aquí, la lógica del panel (no hace falta tocarla).
-   ===================================================================== */
-var DIAS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
-var MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-function fd(s){var p=s.split("-").map(Number);return new Date(p[0],p[1]-1,p[2]);}
-function iso(f){return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");}
-function entre(a,b){return Math.round((fd(b)-fd(a))/864e5);}
-function largo(s){var f=fd(s);return DIAS[f.getDay()]+" "+f.getDate()+" de "+MESES[f.getMonth()];}
-function corto(s){var f=fd(s);return f.getDate()+" "+MESES[f.getMonth()].slice(0,3);}
-function cv(c){return getComputedStyle(document.documentElement).getPropertyValue("--"+c).trim();}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-
-// "hoy" en hora de Bolivia
-var HOY=(function(){try{return new Intl.DateTimeFormat("en-CA",{timeZone:"America/La_Paz",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());}catch(e){return iso(new Date());}})();
-var forzar=new URLSearchParams(location.search).get("hoy"); if(forzar&&/^\d{4}-\d{2}-\d{2}$/.test(forzar))HOY=forzar;
-
-function etapaDe(d){for(var i=0;i<ETAPAS.length;i++)if(d>=ETAPAS[i].desde&&d<=ETAPAS[i].hasta)return ETAPAS[i];return null;}
-function estadoEtapa(e){return HOY>e.hasta?"listo":HOY>=e.desde?"curso":"prox";}
-var TXT_EST={listo:"Listo",curso:"En curso",prox:"Próximo"};
-
-/* --- dónde estamos --- */
-(function(){
-  var total=entre(INICIO,LANZAMIENTO)+1, dia=entre(INICIO,HOY)+1, falta=entre(HOY,LANZAMIENTO);
-  var e=etapaDe(HOY);
-  var t=document.getElementById("ahoraTitulo"), dd=document.getElementById("ahoraDia"), tx=document.getElementById("ahoraTxt");
-  if(HOY<INICIO){t.textContent="Por empezar";dd.innerHTML="Arrancamos el <b>3 nov</b>";tx.innerHTML="El plan empieza con la Sesión 1 el martes 3 de noviembre.";}
-  else if(HOY>LANZAMIENTO){t.textContent="¡Lanzamos! 🚀";dd.innerHTML="Misión cumplida";tx.innerHTML="El lanzamiento fue el 3 de diciembre. Aquí quedan todos los resultados.";}
-  else{
-    t.textContent="Etapa "+e.n+" · "+e.nombre;
-    dd.innerHTML="Día <b>"+dia+"</b>";
-    var h=HITOS[HOY];
-    tx.innerHTML="<b>Hoy, "+largo(HOY)+":</b> "+(h?esc(h.titulo)+". "+esc(h.texto):esc(e.que.split(". ")[0])+".")+
-      (HOY<LANZAMIENTO?" <span class='mudo'>Faltan "+falta+" días para el lanzamiento.</span>":"");
-  }
-  document.getElementById("cDias").textContent=Math.max(0,Math.min(falta,total));
-  document.getElementById("cEtapa").textContent=e?e.n:(HOY<INICIO?"0":"5");
-  // barra por etapas
-  var b=document.getElementById("barra");
-  ETAPAS.forEach(function(x){var s=document.createElement("span");s.style.width=((entre(x.desde,x.hasta)+1)/total*100)+"%";s.style.background=cv(x.color);s.style.opacity=HOY>x.hasta?".9":HOY>=x.desde?"1":".28";s.title=x.nombre;b.appendChild(s);});
-  if(HOY>=INICIO&&HOY<=LANZAMIENTO){var m=document.createElement("i");m.className="marca-hoy";m.style.left="calc("+((dia-.5)/total*100)+"% - 2px)";b.appendChild(m);}
-})();
-
-/* --- leyenda y calendario --- */
-(function(){
-  var ley=document.getElementById("leyenda");
-  ETAPAS.forEach(function(e){ley.insertAdjacentHTML("beforeend","<span><i style='background:"+cv(e.color)+"'></i>"+e.n+". "+esc(e.nombre)+"</span>");});
-  ley.insertAdjacentHTML("beforeend","<span><i style='background:linear-gradient(135deg,#e5484d,#7c3aed)'></i>Lanzamiento</span>");
-  var cont=document.getElementById("meses");
-  [[2026,10],[2026,11]].forEach(function(ym){
-    var y=ym[0],mo=ym[1],primero=new Date(y,mo,1),dias=new Date(y,mo+1,0).getDate();
-    var off=(primero.getDay()+6)%7, html="<div class='mes'><h3>"+MESES[mo]+" "+y+"</h3><div class='grilla'>";
-    ["lu","ma","mi","ju","vi","sá","do"].forEach(function(d){html+="<div class='ds'>"+d+"</div>";});
-    for(var i=0;i<off;i++)html+="<div class='d vacio'></div>";
-    for(var d=1;d<=dias;d++){
-      var s=iso(new Date(y,mo,d)), e=etapaDe(s), h=HITOS[s], cls="d", st="";
-      if(e){cls+=" en";st="background:"+cv(e.color+"s")+";color:"+cv(e.color)+";";
-        if(h){cls+=" hito";st="background:"+cv(e.color)+";";}}
-      if(s===LANZAMIENTO)cls+=" lanz";
-      if(s<HOY&&e)cls+=" pasado";
-      if(s===HOY)cls+=" hoy";
-      html+="<button class='"+cls+"' style='"+st+"' data-d='"+s+"'"+(e?"":" disabled")+">"+d+(h?"<span class='ic'>"+h.icono+"</span>":"")+"</button>";
-    }
-    cont.insertAdjacentHTML("beforeend",html+"</div></div>");
-  });
-  function mostrar(s){
-    document.querySelectorAll(".d.sel").forEach(function(x){x.classList.remove("sel");});
-    var btn=document.querySelector(".d[data-d='"+s+"']"); if(btn)btn.classList.add("sel");
-    var e=etapaDe(s), h=HITOS[s], det=document.getElementById("detalle");
-    if(!e){det.innerHTML="<p>Toca un día de color para ver qué pasa.</p>";return;}
-    var n=entre(INICIO,s)+1;
-    det.innerHTML="<div class='t'><i style='background:"+cv(e.color)+"'></i>"+(s===HOY?"Hoy · ":"")+largo(s).replace(/^./,function(c){return c.toUpperCase();})+" · día "+n+"</div>"+
-      (h?"<p><b style='color:var(--ink)'>"+h.icono+" "+esc(h.titulo)+".</b> "+esc(h.texto)+"</p>":"")+
-      "<p>Etapa "+e.n+": <b style='color:var(--ink)'>"+esc(e.nombre)+"</b> — "+esc(e.corto)+".</p>";
-  }
-  cont.addEventListener("click",function(ev){var b=ev.target.closest(".d.en");if(b)mostrar(b.dataset.d);});
-  mostrar(HOY>=INICIO&&HOY<=LANZAMIENTO?HOY:INICIO);
-})();
-
-/* --- etapas explicadas --- */
-(function(){
-  var l=document.getElementById("listaEtapas");
-  ETAPAS.forEach(function(e){
-    var est=estadoEtapa(e), c=cv(e.color);
-    var rango=e.desde===e.hasta?largo(e.desde):corto(e.desde)+" → "+corto(e.hasta)+" · "+(entre(e.desde,e.hasta)+1)+" días";
-    var li=function(a){return "<ul>"+a.map(function(x){return "<li>"+esc(x)+"</li>";}).join("")+"</ul>";};
-    l.insertAdjacentHTML("beforeend",
-      "<div class='etapa"+(est==="curso"?" actual abierta":"")+"'>"+
-      "<button class='etapa-cab'><span class='num' style='background:"+c+"'>"+e.n+"</span>"+
-      "<span><h3>"+esc(e.nombre)+"</h3><div class='fechas'>"+rango+" · "+esc(e.corto)+"</div></span>"+
-      "<span class='estado "+est+"'>"+TXT_EST[est]+"</span></button>"+
-      "<div class='etapa-cuerpo'><div class='bloque'><h4>De qué se trata</h4><p>"+esc(e.que)+"</p></div>"+
-      "<div class='bloque'><h4>Lo que hacemos nosotros</h4>"+li(e.hacemos)+"</div>"+
-      "<div class='bloque'><h4>Lo que necesitamos de ustedes</h4>"+li(e.ustedes)+"</div>"+
-      "<div class='bloque'><h4>Lo que sale de esta etapa</h4><p>"+esc(e.sale)+"</p></div></div></div>");
-  });
-  l.addEventListener("click",function(ev){var b=ev.target.closest(".etapa-cab");if(b)b.parentNode.classList.toggle("abierta");});
-})();
-
-/* --- listas --- */
-function pintar(id,arr){
-  var l=document.getElementById(id);
-  arr.forEach(function(x){
-    var ok=x.ok||x.estado==="listo";
-    l.insertAdjacentHTML("beforeend","<div class='item"+(ok?" ok":"")+"'><span class='ck'>"+(ok?"✓":"")+"</span><span><b>"+esc(x.t)+"</b><small>"+esc(x.d)+"</small></span>"+
-      (x.estado?"<span class='est estado "+x.estado+"'>"+TXT_EST[x.estado]+"</span>":"")+"</div>");
-  });
-}
-pintar("listaBrief",BRIEF); pintar("listaAvances",AVANCES); pintar("listaSesiones",SESIONES);
-</script>
+<footer>Grow Business · Mauricio Ayllón · <span id="actualizado"></span></footer>
+<script src="/clientes/motor/config.js"></script>
+<script src="/clientes/motor/agenda.js"></script>
+<script src="/clientes/motor/panel.js"></script>
 </body>
 </html>

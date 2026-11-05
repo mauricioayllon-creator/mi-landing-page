@@ -159,3 +159,43 @@ footer{text-align:center;color:var(--ink-3);font-size:12.5px;font-weight:600;pad
 .nov p{font-size:14.5px}
 .contacto{display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--r);background:var(--surface-2);border:1px solid var(--line-2)}
 .contacto .avatar{width:44px;height:44px;border-radius:14px;font-size:18px;background:var(--blue-soft);color:var(--blue);border:0}
+
+/* ---------- botones ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 18px;border-radius:14px;border:1px solid var(--line);background:var(--surface);font:inherit;font-weight:800;font-size:14.5px;color:var(--ink);cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform .12s var(--ease),box-shadow .2s,filter .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--sh-1)}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
+.btn.azul{background:linear-gradient(180deg,#1a6fe0,#0b4bb0);border-color:#0b4bb0;color:#fff;box-shadow:0 12px 30px -12px rgba(26,111,224,.7)}
+.btn.verde{background:#e3f8eb;border-color:#bfeccf;color:#0d7a3c}
+.btn.mini{min-height:36px;padding:6px 12px;font-size:13px;border-radius:11px}
+.btn.ancho{display:flex;width:100%;margin-top:12px;white-space:normal}
+.item .txt{flex:1;min-width:0}
+.acciones{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+/* ---------- ventana de agendar ---------- */
+body.con-modal{overflow:hidden}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(5,29,71,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;padding:16px}
+@media(min-width:620px){.modal{align-items:center}}
+.modal-caja{width:100%;max-width:480px;max-height:calc(100vh - 32px);overflow:auto;padding:22px 18px;box-shadow:var(--sh-2)}
+.modal-caja h2{font-family:var(--display);font-size:21px;line-height:1.2;letter-spacing:-.02em;margin-bottom:4px}
+.modal-caja>p{font-size:14px;margin-bottom:14px}
+.modal label{display:block;font-size:13px;font-weight:800;color:var(--ink-2);margin-bottom:12px}
+.modal input:not([type=checkbox]),.modal select,.candado input{display:block;width:100%;margin-top:6px;min-height:46px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);font:inherit;font-size:16px;color:var(--ink)}
+.modal input:focus,.modal select:focus,.candado input:focus{outline:3px solid rgba(26,111,224,.3);border-color:var(--blue)}
+.modal label small{display:block;font-weight:600;color:var(--ink-3);margin-top:4px}
+.modal .check{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink)}
+.modal .check input{width:20px;height:20px;accent-color:var(--blue)}
+.fila2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.err{color:#b3222a;font-size:13.5px;font-weight:700;min-height:1px;margin:4px 0}
+.botones{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.botones .btn{flex:1}
+.hecho{text-align:center}
+.hecho .burbuja{margin:0 auto 10px;width:52px;height:52px;border-radius:16px;font-size:24px;background:#e3f8eb}
+.hecho p{margin:10px 0}
+
+/* ---------- clave ---------- */
+body.bloqueado .hero,body.bloqueado main,body.bloqueado footer{display:none}
+.candado{min-height:100vh;display:grid;place-items:center;padding:16px;background:linear-gradient(160deg,#1a6fe0 0%,#0b4bb0 42%,#082e6e 78%,#051d47 100%)}
+.candado .card{width:100%;max-width:400px;padding:26px 20px;text-align:center}
+.candado .burbuja{margin:0 auto 12px}
+.candado h2{font-family:var(--display);font-size:22px;margin-bottom:4px}
+.candado form{display:flex;flex-direction:column;gap:10px;margin-top:16px}

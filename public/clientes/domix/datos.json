@@ -1,0 +1,267 @@
+{
+  "actualizado": "2026-11-05",
+  "cliente": {
+    "nombre": "Domix",
+    "inicial": "D",
+    "lead": "Aquí vas a ver <b>qué estamos haciendo, en qué día vamos y qué viene después</b>, desde la primera sesión (3 de noviembre) hasta el <b>lanzamiento del 3 de diciembre</b>. Este panel se va llenando a medida que avanzamos."
+  },
+  "plan": {
+    "duracionDias": 30,
+    "dia1": "2026-11-04",
+    "anclaNombre": "Sesión 1",
+    "etiqueta": "PLAN DE TRABAJO · 30 DÍAS"
+  },
+  "etapas": [
+    {
+      "n": 1,
+      "color": "f1",
+      "nombre": "Conocer el negocio",
+      "desde": "2026-11-03",
+      "desdeDia": 1,
+      "hastaDia": 1,
+      "corto": "Sesión 1 y armado del brief",
+      "que": "En la primera sesión recogemos toda la información de Domix: cómo funciona la app, a quién sirve, cómo gana dinero y qué ya se probó. Con eso armamos el brief: un documento que es la base para encontrar los ángulos y escribir los guiones.",
+      "hacemos": [
+        "Sesión 1 de consultoría: preguntas sobre el negocio",
+        "Primer borrador de las ofertas para anfitriones y huéspedes",
+        "Agendamos la Sesión 2",
+        "Armamos el brief, los ángulos y los guiones"
+      ],
+      "ustedes": [
+        "Responder las preguntas de la sesión",
+        "Enviar la información que falte (ver lista más abajo)"
+      ],
+      "sale": "El brief de Domix y una primera idea de las ofertas."
+    },
+    {
+      "n": 2,
+      "color": "f2",
+      "nombre": "Ángulos, guiones y oferta",
+      "desdeDia": 2,
+      "hastaDia": 2,
+      "corto": "Sesión 2",
+      "que": "Un ángulo es la idea o el motivo por el que alguien se detiene a ver un video (por ejemplo: “gana más con tu depa vacío” o “encuentra dónde quedarte en 2 minutos”). En esta sesión les presentamos los ángulos que vamos a probar y los guiones listos, y confirmamos las ofertas.",
+      "hacemos": [
+        "Presentar los ángulos para cada público",
+        "Presentar los guiones",
+        "Confirmar las ofertas para anfitrión y huésped"
+      ],
+      "ustedes": [
+        "Traer la información pendiente",
+        "Darnos su visto bueno para empezar a grabar y publicar"
+      ],
+      "sale": "Ángulos, guiones y ofertas aprobados para empezar a probar."
+    },
+    {
+      "n": 3,
+      "color": "f3",
+      "nombre": "Testeo de ángulos",
+      "desdeDia": 3,
+      "hastaDia": 9,
+      "corto": "7 días probando",
+      "que": "Durante 7 días publicamos videos con distintos ángulos y formatos, de forma orgánica (sin pagar) y con un poco de pauta (publicidad pagada), para ver cuáles le interesan más a la gente. No adivinamos: dejamos que los números nos digan qué funciona.",
+      "hacemos": [
+        "Grabar y publicar los primeros videos",
+        "Pautar un poco para acelerar los datos",
+        "Medir qué ángulos generan más interés, descargas y contactos"
+      ],
+      "ustedes": [
+        "Aprobar los videos a tiempo",
+        "Contarnos qué ven del lado de la app (descargas, registros, mensajes)"
+      ],
+      "sale": "Los primeros ángulos ganadores."
+    },
+    {
+      "n": 4,
+      "color": "f4",
+      "nombre": "Potenciar ganadores",
+      "desdeDia": 10,
+      "hastaDia": 23,
+      "corto": "14 días multiplicando lo que funciona",
+      "que": "Con los ángulos que ganaron, creamos más contenido en distintos formatos (por ejemplo: testimonio, tutorial, antes y después, cara a cámara). Al mismo tiempo seguimos probando otros formatos y ángulos para no depender de uno solo.",
+      "hacemos": [
+        "Más videos de los ángulos ganadores, en otros formatos",
+        "Seguir probando ángulos y formatos nuevos",
+        "Afinar la oferta según lo que responda la gente"
+      ],
+      "ustedes": [
+        "Aprobar contenido",
+        "Darnos casos reales, testimonios o datos nuevos que aparezcan"
+      ],
+      "sale": "Combinaciones ganadoras de ángulo + formato."
+    },
+    {
+      "n": 5,
+      "color": "f5",
+      "nombre": "Explotar para el lanzamiento",
+      "desdeDia": 24,
+      "hastaDia": 30,
+      "corto": "Última semana, todo hacia el 3 de diciembre",
+      "que": "La última semana ya no probamos: publicamos lo que sabemos que funciona, con los formatos ganadores, y empujamos todo hacia el día del lanzamiento.",
+      "hacemos": [
+        "Subir el contenido ganador con más fuerza",
+        "Concentrar la pauta en lo que mejor rinde",
+        "Preparar el día del lanzamiento"
+      ],
+      "ustedes": [
+        "Tener la app y la oferta listas para recibir a la gente",
+        "Estar atentos a responder rápido"
+      ],
+      "sale": "🚀 Lanzamiento el jueves 3 de diciembre."
+    }
+  ],
+  "hitos": [
+    {
+      "fecha": "2026-11-03",
+      "icono": "🎙️",
+      "titulo": "Sesión 1 de consultoría",
+      "texto": "Recogemos toda la información del negocio, planeamos las ofertas y agendamos la Sesión 2."
+    },
+    {
+      "sesion": "sesion-2",
+      "fecha": "2026-11-05",
+      "icono": "🎙️",
+      "titulo": "Sesión 2 de consultoría",
+      "texto": "Fecha a confirmar. Presentamos ángulos, guiones y confirmamos las ofertas.",
+      "textoAgendada": "Presentamos ángulos, guiones y confirmamos las ofertas."
+    },
+    {
+      "dia": 3,
+      "icono": "▶️",
+      "titulo": "Arranca el testeo",
+      "texto": "Primer día publicando videos con los ángulos a probar."
+    },
+    {
+      "dia": 10,
+      "icono": "🏆",
+      "titulo": "Tenemos ganadores",
+      "texto": "Empezamos a potenciar los ángulos que mejor funcionaron."
+    },
+    {
+      "dia": 24,
+      "icono": "🔥",
+      "titulo": "Semana de lanzamiento",
+      "texto": "Empezamos a explotar el contenido ganador."
+    },
+    {
+      "dia": 30,
+      "icono": "🚀",
+      "titulo": "Día del lanzamiento",
+      "texto": "Todo el trabajo de los 30 días apunta a este día."
+    }
+  ],
+  "publicos": [
+    {
+      "icono": "🏠",
+      "t": "El anfitrión / propietario",
+      "d": "La persona o empresa que tiene una propiedad y quiere alquilarla. A él le hablamos de ganar más, llenar sus fechas y manejar todo más fácil."
+    },
+    {
+      "icono": "🧳",
+      "t": "El huésped",
+      "d": "La persona que busca dónde quedarse y descarga la app. A él le hablamos de encontrar rápido, con confianza y al mejor precio."
+    }
+  ],
+  "publicosNota": "<b>Sobre las ofertas:</b> en la Sesión 1 las <b>planeamos</b> (qué le ofrecemos a cada uno y cómo gana dinero Domix). En la Sesión 2 las <b>confirmamos</b>, junto con los ángulos, viendo cuál tiene más posibilidades de aceptación. Y el testeo nos dirá cuál funciona de verdad.",
+  "pedidos": [
+    {
+      "t": "Qué es Domix y cómo funciona",
+      "d": "Explicado como se lo contarían a un amigo. Links de la app (App Store / Play Store / web)."
+    },
+    {
+      "t": "Cómo gana dinero Domix",
+      "d": "Comisión, suscripción, precio por publicar, etc. ¿Quién paga: el anfitrión, el huésped o los dos?"
+    },
+    {
+      "t": "Números de hoy",
+      "d": "Cuántas propiedades, cuántos usuarios, descargas, reservas, en qué ciudades."
+    },
+    {
+      "t": "El cliente ideal de cada lado",
+      "d": "Quién es el anfitrión perfecto y quién el huésped perfecto. Qué les duele y qué quieren."
+    },
+    {
+      "t": "Por qué elegirían Domix",
+      "d": "Qué tiene Domix que no tienen las otras opciones. Quiénes son la competencia."
+    },
+    {
+      "t": "Lo que ya se probó",
+      "d": "Publicidad, contenido o promociones anteriores: qué funcionó y qué no."
+    },
+    {
+      "t": "Pruebas y casos reales",
+      "d": "Testimonios, capturas, reseñas, historias de anfitriones o huéspedes."
+    },
+    {
+      "t": "Marca y accesos",
+      "d": "Logo, colores, cuentas de redes y acceso a la cuenta de publicidad. Presupuesto para pauta."
+    }
+  ],
+  "avances": [
+    {
+      "t": "Brief del negocio",
+      "d": "El documento base con toda la información de Domix.",
+      "estado": "curso"
+    },
+    {
+      "t": "Ofertas para anfitrión y huésped",
+      "d": "Planeadas en la Sesión 1, confirmadas en la Sesión 2.",
+      "estado": "curso"
+    },
+    {
+      "t": "Ángulos a probar",
+      "d": "Se presentan en la Sesión 2.",
+      "estado": "prox"
+    },
+    {
+      "t": "Guiones",
+      "d": "Se presentan en la Sesión 2.",
+      "estado": "prox"
+    },
+    {
+      "t": "Videos del testeo",
+      "d": "Del 6 al 12 de noviembre.",
+      "estado": "prox"
+    },
+    {
+      "t": "Ángulos ganadores",
+      "d": "Se anuncian aquí al terminar el testeo.",
+      "estado": "prox"
+    },
+    {
+      "t": "Contenido ganador en nuevos formatos",
+      "d": "Del 13 al 26 de noviembre.",
+      "estado": "prox"
+    },
+    {
+      "t": "Lanzamiento",
+      "d": "Jueves 3 de diciembre.",
+      "estado": "prox"
+    }
+  ],
+  "sesiones": [
+    {
+      "id": "sesion-1",
+      "t": "Sesión 1 · Conocer el negocio",
+      "fecha": "2026-11-03"
+    },
+    {
+      "id": "sesion-2",
+      "t": "Sesión 2 · Ángulos, guiones y oferta",
+      "fecha": "2026-11-05",
+      "tentativa": true,
+      "agendable": true,
+      "d": "Fecha tentativa, a confirmar."
+    },
+    {
+      "t": "Próximas sesiones",
+      "d": "Se agendan en cada sesión, según lo que vayamos necesitando."
+    }
+  ],
+  "novedades": [
+    {
+      "fecha": "2026-11-03",
+      "texto": "Sesión 1 de consultoría: arrancamos el plan de 30 días hacia el lanzamiento del 3 de diciembre."
+    }
+  ]
+}

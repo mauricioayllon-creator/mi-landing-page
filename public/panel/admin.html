@@ -1454,6 +1454,21 @@
   .dk-hero-txt h1 { font-family: var(--display); font-size: 30px; letter-spacing: -.03em; line-height: 1.05; }
   .dk-hero-txt p { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   .dk-hero-acc { display: flex; flex-wrap: wrap; gap: 8px; }
+  .dk-panel { padding: 16px 18px; margin-bottom: 18px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--sh-1); }
+  .dk-panel.sin { display: flex; gap: 12px; align-items: center; color: var(--ink-3); border-style: dashed; box-shadow: none; }
+  .dk-panel.sin b { display: block; color: var(--ink-2); font-size: 14.5px; }
+  .dk-panel.sin small { display: block; font-size: 13px; font-weight: 600; }
+  .dk-panel-cab { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--blue-2); }
+  .dk-panel-cab b { color: var(--ink); font-size: 15.5px; }
+  .dk-panel-cab small { color: var(--ink-3); font-weight: 700; font-size: 12.5px; }
+  .dk-panel-cab .btn { margin-left: auto; }
+  .dk-panel-datos { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin-top: 12px; }
+  .dk-panel-datos > div { padding: 11px 13px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-2); }
+  .dk-panel-datos small { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); }
+  .dk-panel-datos b { display: block; font-size: 15px; margin-top: 3px; }
+  .dk-panel-datos span { display: block; font-size: 12.5px; color: var(--ink-2); font-weight: 600; margin-top: 2px; }
+  .dk-panel-nov { margin-top: 12px; font-size: 13.5px; color: var(--ink-2); }
+  .dk-c-panel { display: inline-flex; align-items: center; gap: 5px; align-self: flex-start; padding: 2px 9px; border-radius: 99px; background: rgba(255, 255, 255, .2); font-size: 11.5px; font-weight: 800; }
   .dk-unir { padding: 14px 16px; margin-bottom: 16px; border-radius: 16px; background: var(--amber-soft); }
   .dk-unir .fila { grid-template-columns: 1fr auto; align-items: center; }
 
@@ -2030,7 +2045,7 @@
     var c = f.cliente;
     return '<a class="dk-carpeta" href="#/carpeta/' + encodeURIComponent(f.clave) + '" style="--h:' + tonoDe(f.clave) + '"><span class="dk-lengua"></span><span class="dk-c-cuerpo">' +
       '<span class="dk-c-top">' + avatar(c && c.logo, f.nombre) + "<span><b>" + e(f.nombre) + "</b><small>" + (c ? e(GB.cap(c.estado)) : "Sin cliente en tu panel") + "</small></span></span>" +
-      '<span class="dk-c-base" title="Sus 6 documentos de estrategia">' + puntos + "<em>" + a.llenos + "/" + a.total + "</em></span>" +
+      (PANELES[f.clave] ? '<span class="dk-c-panel">' + ICO('ojo', 13) + 'Con su panel</span>' : '') + '<span class="dk-c-base" title="Sus 6 documentos de estrategia">' + puntos + "<em>" + a.llenos + "/" + a.total + "</em></span>" +
       '<span class="dk-c-pie">' + ICO("archivo", 13) + f.total + (f.total === 1 ? " documento" : " documentos") + (ses ? " · " + ICO("telefono", 13) + ses + (ses === 1 ? " llamada" : " llamadas") : "") + (f.actualizado ? " · " + e(GB.hace(f.actualizado, ahora())) : "") + "</span></span></a>";
   }
 
@@ -2045,6 +2060,7 @@
       a.nosotros.subs.map(function (s) {
         return '<div class="sec-tit">' + ICO(s.ico, 15) + e(s.nombre) + (s.docs.length ? " (" + s.docs.length + ")" : "") + "</div>" + subHTML(a.nosotros, s);
       }).join("");
+    buscarPaneles(a);
     var clientes = a.clientes.length ? '<div class="dk-carpetas">' + a.clientes.map(carpetaCard).join("") + "</div>" : '<div class="card vacio">' + ICO("gente", 28) + "<br>Cuando cargues un cliente en tu panel, aparece aquí su carpeta.</div>";
     pintar('<div class="cab' + (anim ? " aparece" : "") + '"><div><h1>Tus documentos</h1><p>' + mas("Lo nuestro y lo de cada cliente, en una carpeta cada uno.", "Cada documento es un .md: lo lees y lo editas aquí, y Claude lo lee en tu compu (node docs.js los junta en los dos sentidos). La regla: solo lo confirmado, con fecha; lo que no sabemos dice «Falta».") + "</p></div>" +
       '<div class="acc"><button class="btn" type="button" data-accion="doc-llamada" data-carpeta="">' + ICO("subir", 17) + 'Pegar una llamada</button><button class="btn primario" type="button" data-accion="doc-nuevo" data-carpeta="">' + ICO("mas", 17) + "Nuevo documento</button></div></div>" +
@@ -2054,6 +2070,11 @@
         { clave: "clientes", nombre: "Clientes", ico: "carpeta", cuenta: a.clientes.length || "", html: clientes }
       ], tabDe("documentos", ["nosotros", "clientes"], "nosotros")));
   }
+  function buscarPaneles(a) {
+    var faltan = a.clientes.filter(function (f) { return PANELES[f.clave] === undefined; });
+    if (!faltan.length) return;
+    Promise.all(faltan.map(function (f) { return panelDe(f.clave); })).then(function (l) { if (l.some(Boolean) && S.ruta === "documentos") { S.sinAnim = true; pintarDocumentos(); S.sinAnim = false; } });
+  }
   function resultadosDocs(q) {
     if (!q || !S.docs) return "";
     var l = DOCS.buscar(S.docs.lista, q);
@@ -2061,6 +2082,40 @@
       (l.length ? '<div class="dk-docs">' + l.slice(0, 30).map(function (d) { return docCard(d, nombreCarpeta(DOCS.partes(d.ruta).carpeta)); }).join("") + "</div>" : '<div class="card vacio">No encontré nada con eso.</div>') + "</div>";
   }
 
+  // ---------- el panel que ve el cliente (mauricio-ayllon.com/clientes/<carpeta>): su datos.json, lo escribe Claude ----------
+  var PANELES = {};
+  function panelDe(k) {
+    if (PANELES[k] !== undefined) return Promise.resolve(PANELES[k]);
+    return fetch("/clientes/" + encodeURIComponent(k) + "/datos.json", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+      .then(function (d) { PANELES[k] = d && d.plan ? d : null; return PANELES[k]; });
+  }
+  /** Lo que el cliente ve hoy en su panel, en corto. */
+  function resumenPanel(D) {
+    var h = hoy(), d1 = D.plan && D.plan.dia1, n = D.plan && D.plan.duracionDias;
+    var fechaDe = function (x) { return x.fecha || (x.dia != null && d1 ? GB.sumarDias(d1, x.dia - 1) : null); };
+    var dia = d1 ? Math.round((new Date(h + "T12:00") - new Date(d1 + "T12:00")) / 864e5) + 1 : null;
+    var etapa = (D.etapas || []).find(function (e) { return dia != null && e.desdeDia != null && dia >= e.desdeDia && dia <= e.hastaDia; });
+    var prox = (D.sesiones || []).concat(D.hitos || []).map(function (x) { return { x: x, f: fechaDe(x) }; }).filter(function (o) { return o.f && o.f >= h; }).sort(function (a, b) { return a.f < b.f ? -1 : 1; })[0];
+    var pedidos = (D.pedidos || []).filter(function (p) { return p.estado !== "listo" && !p.ok; });
+    var av = D.avances || [], listos = av.filter(function (a) { return a.estado === "listo" || a.ok; }).length;
+    var nov = (D.novedades || []).slice().sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; })[0];
+    return { dia: dia, n: n, etapa: etapa, prox: prox, pedidos: pedidos, listos: listos, avances: av.length, nov: nov, actualizado: D.actualizado, ancla: D.plan && D.plan.anclaNombre };
+  }
+  function panelHTML(k, D) {
+    if (!D) return '<div class="dk-panel sin">' + ICO("ojo", 18) + "<span><b>Todavía no tiene su panel</b><small>El panel que ve el cliente se arma con Claude: «armale su panel a " + e(nombreCarpeta(k)) + "».</small></span></div>";
+    var r = resumenPanel(D), h = hoy();
+    var cuando = r.dia == null ? "Arranca cuando se agende " + (r.ancla || "la primera sesión") : r.dia < 1 ? "Arranca en " + (1 - r.dia) + (1 - r.dia === 1 ? " día" : " días") : r.dia > r.n ? "Plan terminado" : "Día " + r.dia + " de " + r.n;
+    var prox = r.prox ? (r.prox.x.titulo || r.prox.x.t) + " · " + (r.prox.f === h ? "hoy" : GB.diaCorto(r.prox.f)) + (r.prox.x.hora ? " " + r.prox.x.hora : "") : "Nada con fecha";
+    return '<div class="dk-panel"><div class="dk-panel-cab">' + ICO("ojo", 18) + "<b>Lo que ve " + e(D.cliente && D.cliente.nombre || nombreCarpeta(k)) + " en su panel</b><small>actualizado " + e(DOCS.fechaCorta(r.actualizado)) + '</small><a class="btn chico" href="/clientes/' + encodeURIComponent(k) + '/" target="_blank" rel="noopener">' + ICO("afuera", 15) + "Abrir su panel</a></div>" +
+      '<div class="dk-panel-datos">' +
+        '<div><small>Dónde van</small><b>' + e(cuando) + "</b>" + (r.etapa ? "<span>" + e(r.etapa.nombre) + "</span>" : "") + "</div>" +
+        '<div><small>Lo próximo</small><b>' + e(prox) + "</b></div>" +
+        '<div><small>Les falta mandar</small><b>' + r.pedidos.length + (r.pedidos.length === 1 ? " cosa" : " cosas") + "</b>" + (r.pedidos[0] ? "<span>" + e(r.pedidos[0].t) + (r.pedidos.length > 1 ? " y más" : "") + "</span>" : "") + "</div>" +
+        '<div><small>Avances</small><b>' + r.listos + " de " + r.avances + " listos</b></div>" +
+      "</div>" + (r.nov ? '<p class="dk-panel-nov"><b>Última novedad (' + e(DOCS.fechaCorta(r.nov.fecha)) + "):</b> " + e(r.nov.texto) + "</p>" : "") +
+      '<p class="ayuda">Se pone al día con cada sesión: le pasas la transcripción a Claude y él actualiza esta carpeta y su panel.</p></div>';
+  }
   function vistaCarpeta(k) {
     S.sinAnim = false;
     S.dk = k;
@@ -2079,7 +2134,7 @@
     if (!f) f = Object.assign(DOCS.arbol([], [{ id: k, negocio: k }]).clientes[0], { cliente: null, nombre: k });
     var c = f.cliente, av = DOCS.avanceBase(f), anim = !S.sinAnim;
     var sinCliente = clientesDocs().filter(function (x) { return !(S.docs.carpetas || {})[x.id] && !a.clientes.some(function (y) { return y.cliente && y.cliente.id === x.id && y.total; }); });
-    var unir = !c && sinCliente.length ? '<div class="dk-unir"><label class="etq" for="doc-unir">¿De qué cliente es esta carpeta?</label><div class="fila"><select class="inp" id="doc-unir">' +
+    var unir = !c && sinCliente.length && !PANELES[k] ? '<div class="dk-unir" id="dk-unir"><label class="etq" for="doc-unir">¿De qué cliente es esta carpeta?</label><div class="fila"><select class="inp" id="doc-unir">' +
       sinCliente.map(function (x) { return '<option value="' + e(x.id) + '">' + e(x.negocio) + "</option>"; }).join("") + '</select><button class="btn chico" type="button" data-accion="doc-unir" data-carpeta="' + e(k) + '">' + ICO("enlace", 15) + "Unirla</button></div></div>" : "";
     pintar('<div class="dk-migas"><a href="#/documentos/clientes">' + ICO("carpeta", 15) + "Documentos</a>" + ICO("derecha", 14) + "<span>Clientes</span></div>" +
       '<div class="dk-hero' + (anim ? " aparece" : "") + '" style="--h:' + tonoDe(k) + '">' + avatar(c && c.logo, f.nombre) + '<div class="dk-hero-txt"><h1>' + e(f.nombre) + "</h1><p>" +
@@ -2089,7 +2144,9 @@
         (av.faltan ? '<button class="btn blanco chico" type="button" data-accion="doc-crear-base" data-carpeta="' + e(k) + '">' + ICO("brillo", 15) + (av.faltan === DOCS.BASE.length ? "Crear sus 6 documentos" : "Crear los " + av.faltan + " que faltan") + "</button>" : "") +
         '<button class="btn vidrio chico" type="button" data-accion="doc-llamada" data-carpeta="clientes/' + e(k) + '/sesiones">' + ICO("subir", 15) + "Pegar una llamada</button>" +
         '<button class="btn vidrio chico" type="button" data-accion="doc-nuevo" data-carpeta="clientes/' + e(k) + '">' + ICO("mas", 15) + "Nuevo</button></div></div>" + unir +
+      '<div id="dk-panel-caja">' + (PANELES[k] !== undefined ? panelHTML(k, PANELES[k]) : '<div class="esq" style="height:120px;margin-bottom:16px"></div>') + '</div>' +
       pestanas("carpeta", subsPestanas(f), tabDe("carpeta", f.subs.map(function (s) { return s.clave || "estrategia"; }), "estrategia"), { base: "#/carpeta/" + encodeURIComponent(k) }));
+    panelDe(k).then(function (D) { var caja = $('dk-panel-caja'); if (caja && S.dk === k) caja.innerHTML = panelHTML(k, D); var u = $('dk-unir'); if (D && u) u.remove(); });
   }
 
   // ---------- un documento: se lee lindo, se edita en el mismo lugar ----------

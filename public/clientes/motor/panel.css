@@ -199,3 +199,17 @@ body.bloqueado .hero,body.bloqueado main,body.bloqueado footer{display:none}
 .candado .burbuja{margin:0 auto 12px}
 .candado h2{font-family:var(--display);font-size:22px;margin-bottom:4px}
 .candado form{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+/* Lo que acordamos en cada sesión (sale de la transcripción) */
+.acuerdos{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.acuerdos summary{cursor:pointer;font-size:13px;font-weight:800;color:var(--blue-2,#0b4bb0);list-style:none}
+.acuerdos summary::-webkit-details-marker{display:none}
+.acuerdos summary::before{content:"▸ ";}
+.acuerdos[open] summary::before{content:"▾ ";}
+.acuerdos ul{margin:8px 0 4px 18px;font-size:13.5px;color:var(--ink-2)}
+.acuerdos li{margin:3px 0}
+.tareas{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.tarea{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;color:var(--ink)}
+.tarea .quien{flex:none;font-size:11px;font-weight:800;padding:2px 8px;border-radius:99px;margin-top:1px}
+.tarea .quien.nos{background:#e9f1fe;color:#0b4bb0}
+.tarea .quien.ust{background:#fff4dc;color:#8a4706}
+.tarea .ok{margin-left:auto;color:#12a150;font-weight:800}

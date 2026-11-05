@@ -279,13 +279,23 @@
 
     // sesiones: estado por fecha, botón de Meet y botones de agenda
     var ls = $("listaSesiones");
+    // La última sesión que ya pasó y tiene acuerdos se muestra abierta
+    var ultimaHecha = D.sesiones.filter(function (x) { var f = fechaDe(x); return f && f < HOY && !x.tentativa && ((x.acuerdos && x.acuerdos.length) || (x.tareas && x.tareas.length)); }).pop();
     D.sesiones.forEach(function (x) {
       var f = fechaDe(x), est = !f ? (x.id ? "agendar" : "") : x.tentativa ? "confirmar" : f < HOY ? "listo" : f === HOY ? "hoy" : "prox";
       var sub = f ? cap(largo(f)) + (x.hora ? " · " + x.hora + " (hora de Bolivia)" : "") + (x.d && (x.tentativa || !x.agendable) ? " — " + x.d : "") : x.d;
       var botones = "";
       if (x.meet && f && f >= HOY) botones += "<a class='btn mini verde' href='" + esc(x.meet) + "' target='_blank' rel='noopener'>🎥 Entrar al Meet</a>";
       if (AG && x.agendable && (!f || f >= HOY || x.tentativa)) botones += "<button class='btn mini' data-agendar='" + esc(x.id) + "'>" + (f && !x.tentativa ? "Cambiar fecha" : "📅 Agendar") + "</button>";
-      ls.insertAdjacentHTML("beforeend", item(x, est, sub, botones ? "<span class='acciones'>" + botones + "</span>" : ""));
+      // Lo que salió de la sesión (lo escribe Claude desde la transcripción): lo que acordamos, lo que hace cada uno
+      var acuerdos = "";
+      if ((x.acuerdos && x.acuerdos.length) || (x.tareas && x.tareas.length)) {
+        acuerdos = "<details class='acuerdos'" + (est === "listo" && x === ultimaHecha ? " open" : "") + "><summary>Lo que acordamos</summary>" + (x.acuerdos && x.acuerdos.length ? ul(x.acuerdos) : "") +
+          (x.tareas && x.tareas.length ? "<div class='tareas'>" + x.tareas.map(function (t) {
+            return "<div class='tarea'><span class='quien " + (t.quien === "nosotros" ? "nos" : "ust") + "'>" + (t.quien === "nosotros" ? "Grow Business" : "Ustedes") + "</span><span>" + esc(t.que) + (t.cuando ? " <b>· " + esc(/^\d{4}-\d{2}-\d{2}$/.test(t.cuando) ? corto(t.cuando) : t.cuando) + "</b>" : "") + "</span>" + (t.hecho ? "<span class='ok'>✓</span>" : "") + "</div>";
+          }).join("") + "</div>" : "") + "</details>";
+      }
+      ls.insertAdjacentHTML("beforeend", item(x, est, sub, (botones ? "<span class='acciones'>" + botones + "</span>" : "") + acuerdos));
     });
     if (AG) ls.insertAdjacentHTML("afterend", "<button class='btn ancho' data-agendar='nueva'>＋ Agendar una nueva sesión</button>");
 

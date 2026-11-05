@@ -1387,6 +1387,147 @@
     .con-reloj .pt-barra { top: 120px; }
     .pt-barra #estado-g { display: none; }
   }
+
+  /* ---------- tus documentos: carpetas, hojas y el lector ---------- */
+  .dk-buscar { display: flex; align-items: center; gap: 10px; padding: 0 14px; margin-bottom: 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--sh-1); color: var(--ink-3); }
+  .dk-buscar .inp { border: 0; box-shadow: none; background: transparent; padding-left: 0; min-height: 50px; }
+  .dk-buscar .inp:focus { outline: none; }
+  .dk-res { margin-bottom: 18px; }
+  .dk-ayuda { margin: 0 0 14px; }
+  .dk-hero-n { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: var(--r-lg); color: #fff; margin-bottom: 6px;
+    background: radial-gradient(240px 180px at 100% 0%, hsla(var(--h), 90%, 70%, .45), transparent 70%), linear-gradient(135deg, hsl(var(--h), 80%, 42%), hsl(calc(var(--h) + 15), 85%, 22%)); box-shadow: var(--sh-2); }
+  .dk-hero-n b { display: block; font-family: var(--display); font-size: 21px; letter-spacing: -.02em; }
+  .dk-hero-n small { display: block; color: rgba(255, 255, 255, .78); font-weight: 600; font-size: 13.5px; margin-top: 2px; }
+  .dk-sub-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .dk-sub-cab .ayuda { margin: 0; flex: 1; min-width: 220px; }
+  .dk-vacio { border-style: dashed; }
+
+  /* las hojas (un documento) */
+  .dk-docs { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .dk-doc { position: relative; display: flex; gap: 13px; align-items: flex-start; padding: 15px 16px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--sh-1);
+    color: var(--ink); text-decoration: none; text-align: left; font: inherit; cursor: pointer; transition: transform .18s var(--ease), box-shadow .2s, border-color .2s; min-width: 0; }
+  .dk-doc:hover { transform: translateY(-2px); border-color: #c9d8f3; box-shadow: 0 14px 30px -18px rgba(11, 75, 176, .45); }
+  .dk-doc.hueco { background: repeating-linear-gradient(135deg, var(--surface-2) 0 10px, #fff 10px 20px); border: 1.5px dashed #c6d2e6; box-shadow: none; }
+  .dk-doc.hueco:hover { border-color: var(--blue); }
+  .dk-doc.hueco .dk-hoja { opacity: .55; }
+  .dk-doc.hueco .dk-doc-meta { color: var(--blue-2); font-weight: 800; }
+  .dk-hoja { position: relative; flex: none; width: 42px; height: 50px; border-radius: 8px 15px 8px 8px; display: grid; place-items: center; color: var(--blue-2);
+    background: linear-gradient(160deg, #f5f9ff, #e4eefd); border: 1px solid #cfdcf3; box-shadow: inset 0 -3px 0 rgba(11, 75, 176, .06); }
+  .dk-hoja::after { content: ""; position: absolute; top: -1px; right: -1px; width: 14px; height: 14px; border-radius: 0 14px 0 6px; background: linear-gradient(225deg, var(--bg) 50%, #c3d4f0 50%); }
+  .dk-hoja i { position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); padding: 1px 6px; border-radius: 6px; background: var(--navy); color: #fff; font-style: normal; font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .dk-hoja.grande { width: 48px; height: 58px; }
+  .dk-doc-txt { min-width: 0; flex: 1; }
+  .dk-doc-txt b { display: block; font-size: 15px; line-height: 1.3; }
+  .dk-doc-txt small { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--ink-2); font-size: 13px; font-weight: 500; line-height: 1.4; margin-top: 3px; }
+  .dk-doc-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; margin-top: 7px; font-size: 12px; color: var(--ink-3); font-weight: 700; }
+  .dk-falta { display: inline-flex; padding: 1px 8px; border-radius: 99px; background: var(--amber-soft); color: var(--amber-ink); font-size: 11.5px; font-weight: 800; }
+
+  /* las carpetas de tus clientes */
+  .dk-carpetas { display: grid; gap: 18px 16px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); padding-top: 12px; }
+  .dk-carpeta { position: relative; display: block; text-decoration: none; color: #fff; transition: transform .2s var(--ease), filter .2s; }
+  .dk-carpeta:hover { transform: translateY(-3px); filter: saturate(1.08); }
+  .dk-lengua { position: absolute; top: -11px; left: 0; width: 44%; height: 26px; border-radius: 14px 18px 0 0; background: hsl(var(--h), 72%, 38%); }
+  .dk-c-cuerpo { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 18px; border-radius: 4px 20px 20px 20px; min-height: 160px;
+    background: radial-gradient(220px 160px at 100% 0%, hsla(var(--h), 95%, 72%, .5), transparent 70%), linear-gradient(150deg, hsl(var(--h), 78%, 48%), hsl(calc(var(--h) + 18), 80%, 28%));
+    box-shadow: 0 18px 36px -22px hsla(var(--h), 80%, 25%, .9), inset 0 1px 0 rgba(255, 255, 255, .25); }
+  .dk-c-top { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .dk-c-top .avatar { width: 44px; height: 44px; border-radius: 13px; background: rgba(255, 255, 255, .2); color: #fff; border: 1px solid rgba(255, 255, 255, .25); }
+  .dk-c-top > span { min-width: 0; }
+  .dk-c-top b { display: block; font-family: var(--display); font-size: 18px; letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dk-c-top small { display: block; color: rgba(255, 255, 255, .75); font-size: 12.5px; font-weight: 700; }
+  .dk-c-base { display: flex; align-items: center; gap: 5px; }
+  .dk-c-base i { width: 22px; height: 7px; border-radius: 99px; background: rgba(255, 255, 255, .22); }
+  .dk-c-base i.medio { background: #ffd27a; }
+  .dk-c-base i.lleno { background: var(--lima); box-shadow: 0 0 10px rgba(49, 217, 109, .55); }
+  .dk-c-base em { margin-left: 6px; font-style: normal; font-size: 12px; font-weight: 800; color: rgba(255, 255, 255, .85); }
+  .dk-c-pie { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; margin-top: auto; font-size: 12.5px; font-weight: 700; color: rgba(255, 255, 255, .82); }
+
+  /* la carpeta abierta */
+  .dk-migas { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; font-size: 13.5px; font-weight: 700; color: var(--ink-3); }
+  .dk-migas a { display: inline-flex; align-items: center; gap: 6px; color: var(--blue-2); text-decoration: none; }
+  .dk-migas a:hover { text-decoration: underline; }
+  .dk-migas span { color: var(--ink-2); }
+  .dk-hero { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 22px; margin-bottom: 18px; border-radius: var(--r-xl); color: #fff;
+    background: radial-gradient(360px 240px at 100% 0%, hsla(var(--h), 95%, 72%, .5), transparent 70%), linear-gradient(140deg, hsl(var(--h), 78%, 46%), hsl(calc(var(--h) + 18), 80%, 24%)); box-shadow: var(--sh-2); }
+  .dk-hero .avatar { width: 62px; height: 62px; border-radius: 18px; font-size: 22px; background: rgba(255, 255, 255, .18); color: #fff; border: 1px solid rgba(255, 255, 255, .25); }
+  .dk-hero-txt { flex: 1; min-width: 200px; }
+  .dk-hero-txt h1 { font-family: var(--display); font-size: 30px; letter-spacing: -.03em; line-height: 1.05; }
+  .dk-hero-txt p { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .dk-hero-acc { display: flex; flex-wrap: wrap; gap: 8px; }
+  .dk-unir { padding: 14px 16px; margin-bottom: 16px; border-radius: 16px; background: var(--amber-soft); }
+  .dk-unir .fila { grid-template-columns: 1fr auto; align-items: center; }
+
+  /* el documento */
+  .dk-barra { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 12px 14px; margin: 0 -14px 18px; border-radius: 18px;
+    background: rgba(242, 245, 251, .88); backdrop-filter: blur(10px); }
+  .dk-barra-txt { flex: 1; min-width: 200px; }
+  .dk-barra-txt b { display: block; font-family: var(--display); font-size: 20px; letter-spacing: -.02em; line-height: 1.15; }
+  .dk-barra-txt small { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; margin-top: 3px; font-size: 12.5px; color: var(--ink-3); font-weight: 700; }
+  .dk-barra-acc { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .dk-lector { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .dk-lector.con-indice { grid-template-columns: minmax(0, 1fr) 220px; }
+  .dk-indice { position: sticky; top: 92px; display: flex; flex-direction: column; gap: 2px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+  .dk-indice b { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: var(--ink-3); margin-bottom: 6px; }
+  .dk-indice button { text-align: left; border: 0; background: none; padding: 6px 8px; border-radius: 9px; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; line-height: 1.35; }
+  .dk-indice button:hover { background: var(--blue-soft); color: var(--blue-2); }
+  .dk-papel { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 40px 48px 46px; box-shadow: 0 1px 0 rgba(11, 21, 48, .03), 0 24px 50px -36px rgba(11, 21, 48, .35); min-width: 0; }
+  .dk-aviso { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 14px; margin-bottom: 14px; border-radius: 14px; background: var(--amber-soft); color: var(--amber-ink); font-weight: 700; font-size: 14px; }
+  .dk-aviso span { flex: 1; min-width: 200px; }
+  .dk-editor { border-radius: 24px; background: #fff; border: 1px solid var(--line); box-shadow: var(--sh-1); overflow: hidden; }
+  .dk-ed-tabs { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; padding: 8px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+  .dk-ed-tabs button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; padding: 8px 12px; border-radius: 10px; font: inherit; font-size: 13.5px; font-weight: 800; color: var(--ink-2); cursor: pointer; }
+  .dk-ed-tabs button.activa { background: #fff; color: var(--blue-2); box-shadow: 0 1px 4px rgba(11, 21, 48, .1); }
+  .dk-ed-ayuda { margin-left: auto; font-size: 12px; color: var(--ink-3); font-weight: 600; padding: 0 8px; }
+  .dk-ed { display: block; width: 100%; min-height: 68vh; border: 0; resize: vertical; padding: 26px 30px; font: 14.5px/1.7 ui-monospace, "SFMono-Regular", Consolas, monospace; color: var(--ink); background: #fff; }
+  .dk-ed:focus { outline: none; }
+  .dk-editor .dk-papel { border: 0; border-radius: 0; box-shadow: none; min-height: 68vh; }
+  .dk-archivo { margin-top: 8px; }
+  .dk-trans { font-size: 13.5px; }
+
+  /* lo que se lee: Markdown con buena letra */
+  .md { font-size: 16px; line-height: 1.72; color: #1d2742; overflow-wrap: anywhere; }
+  .md > :first-child { margin-top: 0; }
+  .md h1 { font-family: var(--display); font-size: 32px; line-height: 1.12; letter-spacing: -.03em; color: var(--ink); margin: 0 0 18px; }
+  .md h2 { font-family: var(--display); font-size: 22px; line-height: 1.2; letter-spacing: -.02em; color: var(--ink); margin: 34px 0 12px; padding-top: 22px; border-top: 1px solid var(--line-2); scroll-margin-top: 100px; }
+  .md h3 { font-size: 17px; color: var(--ink); margin: 24px 0 8px; scroll-margin-top: 100px; }
+  .md h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); margin: 20px 0 6px; }
+  .md p { margin: 0 0 14px; }
+  .md ul, .md ol { margin: 0 0 14px; padding-left: 24px; }
+  .md li { margin: 4px 0; }
+  .md li::marker { color: var(--blue); font-weight: 800; }
+  .md li > ul, .md li > ol { margin: 4px 0 2px; }
+  .md strong { color: var(--ink); font-weight: 800; }
+  .md em { color: #33405f; }
+  .md a { color: var(--blue-2); font-weight: 700; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .md code { padding: 2px 7px; border-radius: 7px; background: #eef3fb; color: #0b3d8f; font: 600 .86em ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
+  .md-pre { margin: 0 0 16px; padding: 16px 18px; border-radius: 14px; background: #0b1530; color: #dfe8ff; overflow: auto; font: 13.5px/1.6 ui-monospace, Consolas, monospace; }
+  .md-pre code { background: none; color: inherit; padding: 0; font: inherit; }
+  .md hr { border: 0; height: 1px; background: var(--line); margin: 28px 0; }
+  .md-cita { margin: 0 0 18px; padding: 12px 18px; border-left: 4px solid var(--blue); border-radius: 0 14px 14px 0; background: var(--blue-soft); color: #2a3a63; font-size: 14.5px; }
+  .md-cita p:last-child, .md-cita ul:last-child { margin-bottom: 0; }
+  .md-tabla { margin: 0 0 18px; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+  .md table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
+  .md th { text-align: left; padding: 10px 12px; background: var(--surface-2); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+  .md td { padding: 10px 12px; border-bottom: 1px solid var(--line-2); vertical-align: top; }
+  .md tr:last-child td { border-bottom: 0; }
+  .md-cod { display: inline-block; padding: 0 6px; border-radius: 6px; background: #f1ecff; color: #5a3fc0; font-size: .74em; font-weight: 800; letter-spacing: .02em; vertical-align: .12em; }
+  .md-q { quotes: none; font-style: italic; color: #24315a; }
+  .md-caja { list-style: none; margin-left: -22px; display: flex; gap: 10px; align-items: flex-start; }
+  .md-check { flex: none; width: 18px; height: 18px; margin-top: 4px; border-radius: 6px; border: 2px solid #b6c4dc; }
+  .md-caja.hecha { color: var(--ink-3); text-decoration: line-through; }
+  .md-caja.hecha .md-check { border-color: var(--lima-2); background: var(--lima-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 12px no-repeat; }
+  @media (max-width: 900px) {
+    .dk-lector.con-indice { grid-template-columns: minmax(0, 1fr); }
+    .dk-indice { display: none; }
+    .dk-papel { padding: 24px 18px 28px; border-radius: 20px; }
+    .dk-barra { position: static; margin: 0 0 14px; padding: 0; background: none; backdrop-filter: none; gap: 12px; }
+    .dk-barra-txt b { font-size: 18px; }
+    .dk-ed { padding: 18px 16px; font-size: 14px; }
+    .dk-ed-ayuda { display: none; }
+    .md { font-size: 15.5px; }
+    .md h1 { font-size: 26px; }
+    .dk-hero-txt h1 { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
@@ -1401,6 +1542,7 @@
 <script src="trabajo.js"></script>
 <script src="areas.js"></script>
 <script src="contenido.js"></script>
+<script src="documentos.js"></script>
 <script src="iconos.js"></script>
 <script>
 (function () {
@@ -1409,7 +1551,7 @@
   var CUPON = String(window.CUPON_ENDPOINT || "").trim();
   var SIS = window.SISTEMA;
   var BASE_URL = location.href.split("#")[0].split("?")[0].replace(/admin\.html$/, "");
-  var S = { clave: leerLocal("gb_clave") || "", datos: null, det: null, archivoPara: null, plantilla: "lanzamiento", ajustesEd: null, ruta: "", guia: null, desdeProspecto: null, capas: [], capasFecha: "", guiaDesde: "", guiaI: -1 };
+  var S = { clave: leerLocal("gb_clave") || "", datos: null, det: null, archivoPara: null, plantilla: "lanzamiento", ajustesEd: null, ruta: "", guia: null, desdeProspecto: null, capas: [], capasFecha: "", guiaDesde: "", guiaI: -1, docs: null, docTxt: {}, docQ: "", docSucio: false };
 
   // ---------- utilidades ----------
   function $(id) { return document.getElementById(id); }
@@ -1764,6 +1906,7 @@
       nav("marketing", "#/marketing", "megafono", "Marketing") +
       nav(["contenido", "video"], "#/contenido", "camara", "Contenido", cuenta(vc.filter(function (x) { return x.nivel >= 2; }))) +
       nav(["clientes", "nuevo"], "#/clientes", "gente", "Clientes") +
+      nav(["documentos", "carpeta", "doc"], "#/documentos", "carpeta", "Documentos") +
       '<div class="lado-tit area">Tu orden</div>' +
       nav("objetivos", "#/objetivos", "diana", "Objetivos", cuenta(GB.itemsObjetivos(ag(), hoy()).filter(function (x) { return x.nivel >= 2; }))) +
       nav("agencia", "#/agencia", "calendario", "Mi semana") +
@@ -1779,10 +1922,10 @@
       '<a class="nav-i' + (r === "nuevo" ? " activo" : "") + '" href="#/nuevo" style="margin-top:6px">' + ICO("mas", 18) + "Nuevo cliente</a>" +
       '<div class="esp"></div>' + nav("guia", "#/guia", "libro", "Cómo funciona") + nav("ajustes", "#/ajustes", "ajustes", "Ajustes") +
       '<button class="nav-i" type="button" data-accion="salir">' + ICO("salir", 18) + "Salir</button>";
-    var titulos = { inicio: "Tu día", ventas: "Ventas", prospecto: "Prospecto", marketing: "Marketing", contenido: "Contenido", clientes: "Tus clientes", cliente: "Cliente", nuevo: "Nuevo cliente", agencia: "Mi semana", objetivos: "Tus objetivos", libreta: "Tus ideas", sistema: "Mi sistema", guia: "Cómo funciona", ajustes: "Ajustes", constancia: "Tu constancia", video: "Tu video" };
+    var titulos = { inicio: "Tu día", ventas: "Ventas", prospecto: "Prospecto", marketing: "Marketing", contenido: "Contenido", clientes: "Tus clientes", cliente: "Cliente", nuevo: "Nuevo cliente", agencia: "Mi semana", objetivos: "Tus objetivos", libreta: "Tus ideas", sistema: "Mi sistema", guia: "Cómo funciona", ajustes: "Ajustes", constancia: "Tu constancia", video: "Tu video", documentos: "Tus documentos", carpeta: "Documentos", doc: "Documento" };
     if ($("movil-tit")) $("movil-tit").textContent = titulos[r] || "Tu panel";
     var mn = function (rutas, hash, ico, txt) { return '<a class="' + (rutas.indexOf(r) >= 0 ? "activo" : "") + '" href="' + hash + '">' + ICO(ico, 22) + txt + "</a>"; };
-    var otras = ["marketing", "clientes", "cliente", "nuevo", "agencia", "objetivos", "libreta", "constancia", "sistema", "guia", "ajustes"];
+    var otras = ["documentos", "carpeta", "doc", "marketing", "clientes", "cliente", "nuevo", "agencia", "objetivos", "libreta", "constancia", "sistema", "guia", "ajustes"];
     $("movil-nav").innerHTML = mn(["inicio"], "#/inicio", "brujula", "Hoy") + mn(["ventas", "prospecto"], "#/ventas", "apreton", "Ventas") +
       '<a class="nuevo" href="#/nuevo" data-accion="mas-rapido">' + ICO("mas", 22) + "Anotar</a>" +
       mn(["contenido", "video"], "#/contenido", "camara", "Contenido") +
@@ -1811,6 +1954,395 @@
       (su.mas.length ? '<div class="sec-tit">' + ICO("grafica", 15) + 'Lo que más usas</div><div class="card bloque"><ul class="lose">' + su.mas.map(function (x) { return li(x, true); }).join("") + "</ul></div>" : "") +
       '<p class="ayuda">' + mas("Se cuenta en este aparato: el celular y la compu llevan su propia cuenta.", "Para decidir qué quitar, mira las dos. Nada de esto sale de tu aparato ni llega a tu hoja.") + "</p></section>";
   }
+
+  // ---------- tus documentos: Nosotros y una carpeta por cliente, en .md (documentos.js arma; aquí se dibuja) ----------
+  // Se guardan en tu hoja (pestaña Documentos) y tu compu los junta con «node docs.js» (_cerebro/nosotros y _cerebro/clientes).
+  var DOC_BORRADOR = "gb-doc-borrador:";
+  function cargarDocs(forzar) {
+    if (S.docs && !forzar && Date.now() - S.docs.cuando < 90000) return Promise.resolve(S.docs);
+    return pedir("docs").then(function (res) {
+      if (!res.ok) throw new Error(res.error === "accion" ? "docs-sin-script" : res.error || "docs");
+      S.docs = { lista: res.docs || [], carpetas: res.carpetas || {}, cuando: Date.now() };
+      return S.docs;
+    });
+  }
+  function falloDocs(x) {
+    if (x && x.message === "docs-sin-script") return pintar('<div class="card vacio">' + ICO("alerta", 28) + "<br>Tu hoja todavía no tiene la pestaña Documentos.<br>Falta subir el script nuevo (<code>node subir.js</code>).</div>");
+    falloRed(x);
+  }
+  function clientesDocs() {
+    var m = (S.docs && S.docs.carpetas) || {};
+    return clientesVivos().map(function (c) { return { id: c.id, negocio: c.proyecto.negocio, estado: c.estado, logo: c.logo, contacto: c.proyecto.contacto, tipo: c.proyecto.tipo, carpeta: m[c.id] || c.id }; });
+  }
+  function arbolDocs() { return DOCS.arbol(S.docs.lista, clientesDocs()); }
+  function carpetaDeCliente(id) { return ((S.docs && S.docs.carpetas) || {})[id] || id; }
+  function hrefDoc(ruta, modo) { return "#/doc/" + encodeURIComponent(ruta) + (modo ? "/" + modo : ""); }
+  function tonoDe(k) { var h = 0; String(k).split("").forEach(function (c) { h = (h * 31 + c.charCodeAt(0)) % 360; }); return (h + 200) % 360; }
+  function icoDoc(d) {
+    var p = DOCS.partes(d.ruta), b = DOCS.BASE.find(function (x) { return x.archivo === p.archivo; });
+    if (!p.sub && b && p.raiz === "clientes") return b.ico;
+    return { sesiones: "telefono", llamadas: "telefono", guiones: "lapiz" }[p.sub] || "archivo";
+  }
+  function nombreCarpeta(k) {
+    if (k === "nosotros") return "Nosotros";
+    var f = S.docs ? arbolDocs().clientes.find(function (x) { return x.clave === k; }) : null;
+    return f ? f.nombre : k;
+  }
+  function metaDoc(d) {
+    return e(GB.hace(d.actualizado, ahora())) + (d.desde === "compu" ? " · desde tu compu" : "") + (d.faltas ? ' <span class="dk-falta">' + d.faltas + " por saber</span>" : "");
+  }
+  function docCard(d, donde) {
+    // Dentro de su carpeta, «Peque's · Ficha del negocio» se lee «Ficha del negocio»
+    var tit = !donde && DOCS.partes(d.ruta).raiz === "clientes" && d.titulo.indexOf(" · ") > 0 ? d.titulo.slice(d.titulo.indexOf(" · ") + 3) : d.titulo;
+    return '<a class="dk-doc" href="' + hrefDoc(d.ruta) + '"><span class="dk-hoja">' + ICO(icoDoc(d), 19) + "<i>md</i></span>" +
+      '<span class="dk-doc-txt"><b>' + e(tit) + "</b>" + (d.vista ? "<small>" + e(d.vista) + "</small>" : "") + '<span class="dk-doc-meta">' + (donde ? e(donde) + " · " : "") + metaDoc(d) + "</span></span></a>";
+  }
+  /** Los 6 documentos base de un cliente: el que está, o el hueco para crearlo. */
+  function baseHTML(f) {
+    var base = f.subs.find(function (s) { return s.clave === ""; }) || { docs: [] };
+    var html = DOCS.BASE.map(function (b, i) {
+      var d = base.docs.find(function (x) { return x.archivo === b.archivo; });
+      if (d) return docCard(d);
+      return '<button class="dk-doc hueco" type="button" data-accion="doc-crear-base" data-carpeta="' + e(f.clave) + '" data-archivo="' + e(b.archivo) + '"><span class="dk-hoja">' + ICO(b.ico, 19) + "<i>" + i + '</i></span><span class="dk-doc-txt"><b>' + e(b.nombre) + "</b><small>" + e(b.pregunta) + '</small><span class="dk-doc-meta">' + ICO("mas", 13) + "Crearlo</span></span></button>";
+    }).join("");
+    var otros = base.docs.filter(function (x) { return !DOCS.BASE.some(function (b) { return b.archivo === x.archivo; }); });
+    return '<div class="dk-docs">' + html + otros.map(function (d) { return docCard(d); }).join("") + "</div>";
+  }
+  function subHTML(f, s) {
+    if (s.clave === "" && f.lado === "clientes") return '<p class="ayuda dk-ayuda">' + e(s.ayuda) + "</p>" + baseHTML(f);
+    var pegar = s.clave === "sesiones" || s.clave === "llamadas";
+    var boton = pegar ? '<button class="btn chico" type="button" data-accion="doc-llamada" data-carpeta="' + e(f.lado === "nosotros" ? "nosotros/llamadas" : "clientes/" + f.clave + "/sesiones") + '">' + ICO("subir", 15) + "Pegar una llamada</button>"
+      : '<button class="btn chico" type="button" data-accion="doc-nuevo" data-carpeta="' + e((f.lado === "nosotros" ? "nosotros" : "clientes/" + f.clave) + (s.clave ? "/" + s.clave : "")) + '">' + ICO("mas", 15) + "Nuevo documento</button>";
+    return '<div class="dk-sub-cab"><p class="ayuda">' + e(s.ayuda || "") + "</p>" + boton + "</div>" +
+      (s.docs.length ? '<div class="dk-docs">' + s.docs.map(function (d) { return docCard(d); }).join("") + "</div>"
+        : '<div class="card vacio dk-vacio">' + ICO(pegar ? "telefono" : "archivo", 28) + "<br>" + (pegar ? "Todavía no hay llamadas. Pega la transcripción de la próxima: Claude escribe el resumen arriba." : "Nada aquí todavía.") + "</div>");
+  }
+  function subsPestanas(f) {
+    return f.subs.map(function (s) { return { clave: s.clave || "estrategia", nombre: s.nombre, ico: s.ico, cuenta: s.docs.length || "", html: subHTML(f, s) }; });
+  }
+  function carpetaCard(f) {
+    var a = DOCS.avanceBase(f), base = (f.subs.find(function (s) { return s.clave === ""; }) || { docs: [] }).docs;
+    var puntos = DOCS.BASE.map(function (b) {
+      var d = base.find(function (x) { return x.archivo === b.archivo; });
+      return '<i class="' + (!d ? "" : d.faltas ? "medio" : "lleno") + '" title="' + e(b.nombre + (!d ? ": no está" : d.faltas ? ": le falta algo" : ": completo")) + '"></i>';
+    }).join("");
+    var ses = (f.subs.find(function (s) { return s.clave === "sesiones"; }) || { docs: [] }).docs.length;
+    var c = f.cliente;
+    return '<a class="dk-carpeta" href="#/carpeta/' + encodeURIComponent(f.clave) + '" style="--h:' + tonoDe(f.clave) + '"><span class="dk-lengua"></span><span class="dk-c-cuerpo">' +
+      '<span class="dk-c-top">' + avatar(c && c.logo, f.nombre) + "<span><b>" + e(f.nombre) + "</b><small>" + (c ? e(GB.cap(c.estado)) : "Sin cliente en tu panel") + "</small></span></span>" +
+      '<span class="dk-c-base" title="Sus 6 documentos de estrategia">' + puntos + "<em>" + a.llenos + "/" + a.total + "</em></span>" +
+      '<span class="dk-c-pie">' + ICO("archivo", 13) + f.total + (f.total === 1 ? " documento" : " documentos") + (ses ? " · " + ICO("telefono", 13) + ses + (ses === 1 ? " llamada" : " llamadas") : "") + (f.actualizado ? " · " + e(GB.hace(f.actualizado, ahora())) : "") + "</span></span></a>";
+  }
+
+  function vistaDocumentos() {
+    S.sinAnim = false;
+    if (S.docs) pintarDocumentos(); else pintar('<div class="esq" style="height:90px;margin-bottom:16px"></div><div class="esq" style="height:260px"></div>');
+    cargarDocs(!!S.docs).then(function () { if (S.ruta === "documentos") { S.sinAnim = true; pintarDocumentos(); S.sinAnim = false; } }).catch(falloDocs);
+  }
+  function pintarDocumentos() {
+    var a = arbolDocs(), anim = !S.sinAnim, q = S.docQ || "";
+    var nosotros = '<div class="dk-hero-n" style="--h:215"><span class="logo-gb">G</span><div><b>Grow Business</b><small>Lo nuestro: lo que hay que saber antes de subir un video, y tus llamadas de venta.</small></div></div>' +
+      a.nosotros.subs.map(function (s) {
+        return '<div class="sec-tit">' + ICO(s.ico, 15) + e(s.nombre) + (s.docs.length ? " (" + s.docs.length + ")" : "") + "</div>" + subHTML(a.nosotros, s);
+      }).join("");
+    var clientes = a.clientes.length ? '<div class="dk-carpetas">' + a.clientes.map(carpetaCard).join("") + "</div>" : '<div class="card vacio">' + ICO("gente", 28) + "<br>Cuando cargues un cliente en tu panel, aparece aquí su carpeta.</div>";
+    pintar('<div class="cab' + (anim ? " aparece" : "") + '"><div><h1>Tus documentos</h1><p>' + mas("Lo nuestro y lo de cada cliente, en una carpeta cada uno.", "Cada documento es un .md: lo lees y lo editas aquí, y Claude lo lee en tu compu (node docs.js los junta en los dos sentidos). La regla: solo lo confirmado, con fecha; lo que no sabemos dice «Falta».") + "</p></div>" +
+      '<div class="acc"><button class="btn" type="button" data-accion="doc-llamada" data-carpeta="">' + ICO("subir", 17) + 'Pegar una llamada</button><button class="btn primario" type="button" data-accion="doc-nuevo" data-carpeta="">' + ICO("mas", 17) + "Nuevo documento</button></div></div>" +
+      '<label class="dk-buscar">' + ICO("buscar", 17) + '<input class="inp" id="doc-q" type="search" placeholder="Busca un documento (título o primera línea)" value="' + e(q) + '" autocomplete="off"></label><div id="doc-res">' + resultadosDocs(q) + "</div>" +
+      pestanas("documentos", [
+        { clave: "nosotros", nombre: "Nosotros", ico: "estrella", cuenta: a.nosotros.total || "", html: nosotros },
+        { clave: "clientes", nombre: "Clientes", ico: "carpeta", cuenta: a.clientes.length || "", html: clientes }
+      ], tabDe("documentos", ["nosotros", "clientes"], "nosotros")));
+  }
+  function resultadosDocs(q) {
+    if (!q || !S.docs) return "";
+    var l = DOCS.buscar(S.docs.lista, q);
+    return '<div class="dk-res"><div class="sec-tit">' + ICO("buscar", 15) + l.length + (l.length === 1 ? " documento" : " documentos") + "</div>" +
+      (l.length ? '<div class="dk-docs">' + l.slice(0, 30).map(function (d) { return docCard(d, nombreCarpeta(DOCS.partes(d.ruta).carpeta)); }).join("") + "</div>" : '<div class="card vacio">No encontré nada con eso.</div>') + "</div>";
+  }
+
+  function vistaCarpeta(k) {
+    S.sinAnim = false;
+    S.dk = k;
+    var dibujar = function () {
+      // Un cliente cuya carpeta se llama distinto (por ejemplo «peques»): a su carpeta
+      var m = S.docs.carpetas || {};
+      if (m[k] && m[k] !== k) { history.replaceState(null, "", "#/carpeta/" + encodeURIComponent(m[k])); S.dk = k = m[k]; }
+      if (k === "nosotros") { history.replaceState(null, "", "#/documentos/nosotros"); return ir("#/documentos/nosotros"); }
+      pintarCarpeta();
+    };
+    if (S.docs) dibujar(); else pintar('<div class="esq" style="height:140px;margin-bottom:16px"></div><div class="esq" style="height:260px"></div>');
+    cargarDocs(!!S.docs).then(function () { if (S.ruta === "carpeta" && S.dk === k) { S.sinAnim = true; dibujar(); S.sinAnim = false; } }).catch(falloDocs);
+  }
+  function pintarCarpeta() {
+    var k = S.dk, a = arbolDocs(), f = a.clientes.find(function (x) { return x.clave === k; });
+    if (!f) f = Object.assign(DOCS.arbol([], [{ id: k, negocio: k }]).clientes[0], { cliente: null, nombre: k });
+    var c = f.cliente, av = DOCS.avanceBase(f), anim = !S.sinAnim;
+    var sinCliente = clientesDocs().filter(function (x) { return !(S.docs.carpetas || {})[x.id] && !a.clientes.some(function (y) { return y.cliente && y.cliente.id === x.id && y.total; }); });
+    var unir = !c && sinCliente.length ? '<div class="dk-unir"><label class="etq" for="doc-unir">¿De qué cliente es esta carpeta?</label><div class="fila"><select class="inp" id="doc-unir">' +
+      sinCliente.map(function (x) { return '<option value="' + e(x.id) + '">' + e(x.negocio) + "</option>"; }).join("") + '</select><button class="btn chico" type="button" data-accion="doc-unir" data-carpeta="' + e(k) + '">' + ICO("enlace", 15) + "Unirla</button></div></div>" : "";
+    pintar('<div class="dk-migas"><a href="#/documentos/clientes">' + ICO("carpeta", 15) + "Documentos</a>" + ICO("derecha", 14) + "<span>Clientes</span></div>" +
+      '<div class="dk-hero' + (anim ? " aparece" : "") + '" style="--h:' + tonoDe(k) + '">' + avatar(c && c.logo, f.nombre) + '<div class="dk-hero-txt"><h1>' + e(f.nombre) + "</h1><p>" +
+        (c ? '<span class="chip vidrio punto">' + e(GB.cap(c.estado)) + "</span>" : '<span class="chip vidrio">Sin cliente en tu panel</span>') +
+        '<span class="chip vidrio">' + ICO("archivo", 13) + f.total + (f.total === 1 ? " documento" : " documentos") + '</span><span class="chip vidrio">Estrategia ' + av.llenos + "/" + av.total + "</span></p></div>" +
+        '<div class="dk-hero-acc">' + (c ? '<a class="btn vidrio chico" href="#/c/' + encodeURIComponent(c.id) + '/proceso">' + ICO("engranaje", 15) + "Su panel</a>" : "") +
+        (av.faltan ? '<button class="btn blanco chico" type="button" data-accion="doc-crear-base" data-carpeta="' + e(k) + '">' + ICO("brillo", 15) + (av.faltan === DOCS.BASE.length ? "Crear sus 6 documentos" : "Crear los " + av.faltan + " que faltan") + "</button>" : "") +
+        '<button class="btn vidrio chico" type="button" data-accion="doc-llamada" data-carpeta="clientes/' + e(k) + '/sesiones">' + ICO("subir", 15) + "Pegar una llamada</button>" +
+        '<button class="btn vidrio chico" type="button" data-accion="doc-nuevo" data-carpeta="clientes/' + e(k) + '">' + ICO("mas", 15) + "Nuevo</button></div></div>" + unir +
+      pestanas("carpeta", subsPestanas(f), tabDe("carpeta", f.subs.map(function (s) { return s.clave || "estrategia"; }), "estrategia"), { base: "#/carpeta/" + encodeURIComponent(k) }));
+  }
+
+  // ---------- un documento: se lee lindo, se edita en el mismo lugar ----------
+  function traerDoc(ruta, forzar) {
+    var t = S.docTxt[ruta];
+    if (t && !forzar) return Promise.resolve(t);
+    return pedir("doc", { ruta: ruta }).then(function (res) {
+      if (!res.ok) throw new Error(res.error === "no-existe" ? "doc-no-existe" : res.error || "doc");
+      S.docTxt[ruta] = res.doc; meterMeta(res.doc);
+      return res.doc;
+    });
+  }
+  function meterMeta(d) {
+    if (!S.docs) return;
+    var m = { ruta: d.ruta, titulo: d.titulo, vista: d.vista, actualizado: d.actualizado, rev: d.rev, desde: d.desde, largo: d.largo, faltas: d.faltas };
+    var i = S.docs.lista.findIndex(function (x) { return x.ruta === d.ruta; });
+    if (i >= 0) S.docs.lista[i] = m; else S.docs.lista.push(m);
+  }
+  function vistaDoc(ruta, modo) {
+    S.sinAnim = false;
+    if (!DOCS.rutaValida(ruta)) { toast("Ese documento no existe", true); return ir("#/documentos"); }
+    S.dr = ruta; S.drModo = modo === "editar" ? "editar" : "leer";
+    var t = S.docTxt[ruta];
+    if (t) pintarDoc(); else pintar('<div class="esq" style="height:40px;margin-bottom:16px"></div><div class="esq" style="height:520px"></div>');
+    Promise.all([cargarDocs(), traerDoc(ruta, !!t && S.drModo === "leer")]).then(function () { if (S.ruta === "doc" && S.dr === ruta && !(S.drModo === "editar" && $("doc-ed"))) { S.sinAnim = true; pintarDoc(); S.sinAnim = false; } })
+      .catch(function (x) { if (x && x.message === "doc-no-existe") { toast("Ese documento ya no está (lo borraste o lo moviste)", true); return ir("#/documentos"); } falloDocs(x); });
+  }
+  function migasDoc(ruta) {
+    var p = DOCS.partes(ruta), sub = p.sub ? (DOCS.SUBS[p.raiz].find(function (s) { return s.clave === p.sub; }) || { nombre: p.sub }).nombre : "";
+    var carpeta = p.raiz === "nosotros" ? '<a href="#/documentos/nosotros">Nosotros</a>' : '<a href="#/documentos/clientes">Clientes</a>' + ICO("derecha", 14) + '<a href="#/carpeta/' + encodeURIComponent(p.carpeta) + (p.sub ? "/" + p.sub : "") + '">' + e(nombreCarpeta(p.carpeta)) + "</a>";
+    return '<div class="dk-migas"><a href="#/documentos">' + ICO("carpeta", 15) + "Documentos</a>" + ICO("derecha", 14) + carpeta + (sub ? ICO("derecha", 14) + "<span>" + e(sub) + "</span>" : "") + "</div>";
+  }
+  function pintarDoc() {
+    var ruta = S.dr, d = S.docTxt[ruta];
+    if (!d) return;
+    var p = DOCS.partes(ruta), ind = DOCS.indice(d.texto), anim = !S.sinAnim;
+    var cab = migasDoc(ruta) + '<div class="dk-barra' + (anim ? " aparece" : "") + '"><span class="dk-hoja grande">' + ICO(icoDoc(d), 20) + "<i>md</i></span>" +
+      '<div class="dk-barra-txt"><b>' + e(d.titulo) + "</b><small>" + e(p.archivo) + " · " + metaDoc(d) + " · versión " + d.rev + "</small></div>";
+    if (S.drModo === "editar") {
+      var bor = leerJSONLocal(DOC_BORRADOR + ruta, null), usar = bor && bor.texto !== d.texto ? bor : null;
+      pintar(cab + '<div class="dk-barra-acc"><button class="btn chico" type="button" data-accion="doc-cancelar">Cancelar</button><button class="btn primario chico" type="button" data-accion="doc-guardar">' + ICO("check", 15) + "Guardar</button></div></div>" +
+        (usar ? '<div class="dk-aviso">' + ICO("reloj", 17) + "<span>Tienes un borrador sin guardar de " + e(GB.hace(bor.el, ahora())) + ". Está cargado abajo.</span>" + '<button class="btn chico" type="button" data-accion="doc-sin-borrador">Volver a lo guardado</button></div>' : "") +
+        '<div class="dk-editor"><div class="dk-ed-tabs" role="tablist"><button type="button" class="activa" data-accion="doc-modo" data-valor="escribir">' + ICO("lapiz", 15) + 'Escribir</button><button type="button" data-accion="doc-modo" data-valor="ver">' + ICO("ojo", 15) + "Vista previa</button>" +
+        '<span class="dk-ed-ayuda"># título · ## sección · - lista · **negrita** · | tabla | · Ctrl+S guarda</span></div>' +
+        '<textarea class="dk-ed" id="doc-ed" spellcheck="true">' + e(usar ? usar.texto : d.texto) + '</textarea><article class="dk-papel md" id="doc-prev" hidden></article></div>');
+      var ta = $("doc-ed"); if (ta) { ta.focus(); ta.setSelectionRange(0, 0); ta.scrollTop = 0; }
+      return;
+    }
+    pintar(cab + '<div class="dk-barra-acc"><button class="btn primario chico" type="button" data-accion="doc-editar">' + ICO("lapiz", 15) + 'Editar</button><button class="btn chico" type="button" data-accion="doc-claude" title="Lo copia entero, listo para pegarlo en tu conversación">' + ICO("copiar", 15) + "Copiar para Claude</button>" +
+      '<button class="btn-ico chico" type="button" data-accion="doc-bajar" title="Descargar el .md" aria-label="Descargar">' + ICO("bajar", 16) + '</button><button class="btn-ico chico" type="button" data-accion="doc-mover" title="Cambiar nombre o carpeta" aria-label="Mover">' + ICO("afuera", 16) + "</button>" +
+      '<button class="btn-ico chico" type="button" data-accion="doc-borrar" title="Borrar" aria-label="Borrar">' + ICO("basura", 16) + "</button></div></div>" +
+      '<div class="dk-lector' + (ind.length >= 3 ? " con-indice" : "") + '"><article class="dk-papel md">' + DOCS.html(d.texto) + "</article>" +
+      (ind.length >= 3 ? '<aside class="dk-indice"><b>En este documento</b>' + ind.map(function (x) { return '<button type="button" data-accion="doc-ir" data-valor="' + e(x.id) + '">' + e(x.texto) + "</button>"; }).join("") + "</aside>" : "") + "</div>");
+  }
+  function textoEditor() { var t = $("doc-ed"); return t ? t.value : ""; }
+  function guardarDoc(forzarRev) {
+    var ruta = S.dr, d = S.docTxt[ruta], texto = DOCS.normalizar(textoEditor());
+    if (!d) return;
+    if (!texto.trim()) return toast("Un documento vacío no se guarda: si no sirve, bórralo", true);
+    if (texto.length > DOCS.MAX_TEXTO) return toast("Es muy largo (más de " + Math.round(DOCS.MAX_TEXTO / 1000) + " mil letras). Pártelo en dos.", true);
+    var b = document.querySelector('[data-accion="doc-guardar"]'); if (b) { b.disabled = true; b.textContent = "Guardando…"; }
+    pedir("doc-guardar", { ruta: ruta, texto: texto, rev: forzarRev != null ? forzarRev : d.rev, desde: "panel" }).then(function (res) {
+      if (res.ok) {
+        S.docTxt[ruta] = Object.assign({}, res.doc, { texto: texto }); meterMeta(res.doc);
+        guardarLocal(DOC_BORRADOR + ruta, null); S.docSucio = false;
+        toast("Guardado"); return ir(hrefDoc(ruta));
+      }
+      if (b) { b.disabled = false; b.innerHTML = ICO("check", 15) + "Guardar"; }
+      if (res.error === "conflicto") {
+        guardarLocal(DOC_BORRADOR + ruta, JSON.stringify({ texto: texto, el: ahora() }));
+        return hoja("<h3>Este documento cambió en otro lado</h3><p class=\"sub\">Alguien lo guardó después de que lo abriste (tu compu con Claude, o el panel en otro aparato), " + e(GB.hace(res.doc.actualizado, ahora())) + ". Lo tuyo quedó como borrador: no se perdió.</p><div class=\"salidas\">" +
+          '<button class="btn primario" type="button" data-accion="doc-ver-nueva">' + ICO("ojo", 17) + "Ver la nueva (tu borrador te espera)</button>" +
+          '<button class="btn" type="button" data-accion="doc-pisar" data-rev="' + res.doc.rev + '">' + ICO("check", 17) + "Guardar la mía encima</button></div>");
+      }
+      toast(res.error === "vacio" ? "Está vacío" : res.error === "grande" ? "Es muy largo: pártelo en dos" : "No se pudo guardar (" + res.error + ")", true);
+    }, function (x) { if (b) { b.disabled = false; b.innerHTML = ICO("check", 15) + "Guardar"; } guardarLocal(DOC_BORRADOR + ruta, JSON.stringify({ texto: texto, el: ahora() })); falloRed(x); toast("Sin señal: tu texto quedó como borrador en este aparato", true); });
+  }
+  function destinosDocs(soloLlamadas) {
+    var a = arbolDocs(), out = [];
+    if (soloLlamadas) {
+      out.push({ v: "nosotros/llamadas", t: "Nosotros · Llamadas de venta (un prospecto)" });
+      a.clientes.forEach(function (f) { out.push({ v: "clientes/" + f.clave + "/sesiones", t: f.nombre + " · Sesiones" }); });
+      return out;
+    }
+    a.nosotros.subs.forEach(function (s) { out.push({ v: "nosotros" + (s.clave ? "/" + s.clave : ""), t: "Nosotros · " + s.nombre }); });
+    a.clientes.forEach(function (f) { f.subs.forEach(function (s) { out.push({ v: "clientes/" + f.clave + (s.clave ? "/" + s.clave : ""), t: f.nombre + " · " + s.nombre }); }); });
+    return out;
+  }
+  function selectDestino(id, lista, elegido) {
+    return '<select class="inp" id="' + id + '">' + lista.map(function (x) { return '<option value="' + e(x.v) + '"' + (x.v === elegido ? " selected" : "") + ">" + e(x.t) + "</option>"; }).join("") + "</select>";
+  }
+  /** Lo que te ofrece la carpeta donde estás: Nosotros, el cliente abierto o la carpeta del documento abierto. */
+  function carpetaDeAhora() {
+    if (S.ruta === "carpeta" && S.dk) return "clientes/" + S.dk;
+    if (S.ruta === "doc" && S.dr) return DOCS.dondeVive(S.dr);
+    return "nosotros";
+  }
+  function abrirNuevoDoc(carpeta) {
+    var lista = destinosDocs(false), elegido = carpeta || carpetaDeAhora();
+    hoja("<h3>Nuevo documento</h3><p class=\"sub\">Un .md que se lee aquí y que Claude lee en tu compu.</p><form id=\"f-doc-nuevo\">" +
+      '<div class="campo"><label class="etq" for="dn-nombre">Nombre</label><input class="inp" id="dn-nombre" maxlength="80" required placeholder="Ej.: Brief de marca, Promo de diciembre"></div>' +
+      '<div class="campo"><label class="etq" for="dn-donde">Dónde va</label>' + selectDestino("dn-donde", lista, elegido) + "</div>" +
+      '<div class="campo"><label class="etq" for="dn-texto">Lo que va adentro <small>(opcional: también puedes subir un .md o .txt)</small></label><textarea class="inp" id="dn-texto" rows="6" placeholder="Escribe o pega. Si lo dejas vacío, se abre para escribirlo."></textarea>' +
+      '<label class="btn chico dk-archivo">' + ICO("subir", 15) + 'Subir un archivo<input type="file" accept=".md,.txt,.markdown,text/plain,text/markdown" data-doc-archivo="dn-texto" hidden></label></div>' +
+      '<button class="btn primario" type="submit" style="width:100%">' + ICO("mas", 17) + "Crearlo</button></form>", function () { $("dn-nombre").focus(); });
+  }
+  function abrirLlamada(carpeta) {
+    var lista = destinosDocs(true), def = carpeta && /\/(sesiones|llamadas)$/.test(carpeta) ? carpeta : S.ruta === "carpeta" && S.dk ? "clientes/" + S.dk + "/sesiones" : "nosotros/llamadas";
+    hoja("<h3>Pegar una llamada</h3><p class=\"sub\">Pega la transcripción entera. Arriba queda el resumen para que Claude lo llene: lo que quiere, sus números, lo que decidieron y lo que quedó.</p><form id=\"f-doc-llamada\">" +
+      '<div class="campo"><label class="etq" for="dl-donde">De quién</label>' + selectDestino("dl-donde", lista, def) + "</div>" +
+      '<div class="fila"><div class="campo"><label class="etq" for="dl-tipo">Qué fue</label><select class="inp" id="dl-tipo">' + DOCS.TIPOS_SESION.map(function (t) { return '<option value="' + t.clave + '"' + (def.indexOf("/sesiones") > 0 && t.clave === "consultoria" ? " selected" : "") + ">" + e(t.nombre) + "</option>"; }).join("") + "</select></div>" +
+      '<div class="campo"><label class="etq" for="dl-fecha">Fecha</label><input class="inp" id="dl-fecha" type="date" value="' + hoy() + '" required></div></div>' +
+      '<div class="campo"><label class="etq" for="dl-con">Con quién</label><input class="inp" id="dl-con" maxlength="60" required placeholder="Ej.: Joyería Oro Fino, Carla"></div>' +
+      '<div class="campo"><label class="etq" for="dl-texto">La transcripción</label><textarea class="inp dk-trans" id="dl-texto" rows="9" placeholder="Pégala aquí, o sube el archivo (.txt, .srt, .vtt): las horas y los números de los subtítulos se quitan solos."></textarea>' +
+      '<label class="btn chico dk-archivo">' + ICO("subir", 15) + 'Subir el archivo<input type="file" accept=".txt,.md,.srt,.vtt,text/plain" data-doc-archivo="dl-texto" hidden></label> <small class="ayuda" id="dl-cuenta"></small></div>' +
+      '<div class="campo"><label class="etq" for="dl-notas">Tus notas <small>(opcional: lo que viste y no se oye)</small></label><textarea class="inp" id="dl-notas" rows="2"></textarea></div>' +
+      '<button class="btn primario" type="submit" style="width:100%">' + ICO("check", 17) + "Guardar la llamada</button></form>", function () { $("dl-con").focus(); });
+  }
+  /** Guarda un documento nuevo (rev 0) y lo abre. */
+  function crearDoc(ruta, texto, modo) {
+    return pedir("doc-guardar", { ruta: ruta, texto: texto, rev: 0, desde: "panel" }).then(function (res) {
+      if (!res.ok) { toast(res.error === "conflicto" ? "Ya hay un documento con ese nombre ahí" : res.error === "lleno" ? "Tu hoja llegó al tope de documentos" : res.error === "grande" ? "Es muy largo: pártelo en dos" : "No se pudo crear (" + res.error + ")", true); return false; }
+      S.docTxt[ruta] = Object.assign({}, res.doc, { texto: DOCS.normalizar(texto) }); meterMeta(res.doc);
+      cerrarHoja(); ir(hrefDoc(ruta, modo)); return true;
+    }, falloRed);
+  }
+  function enviarNuevoDoc(form) {
+    var nombre = $("dn-nombre").value.trim(), donde = $("dn-donde").value, cuerpo = $("dn-texto").value;
+    if (!nombre) return;
+    var ruta = DOCS.rutaLibre(donde, nombre, S.docs.lista.map(function (x) { return x.ruta; }));
+    if (!DOCS.rutaValida(ruta)) return toast("Ese nombre no sirve: usa letras y números", true);
+    var texto = /^#\s/.test(cuerpo.trim()) ? cuerpo : "# " + nombre + "\n\n> Actualizado: " + DOCS.fechaCorta(hoy()) + "\n\n" + (cuerpo.trim() || "Escribe aquí.");
+    form.querySelector("button[type=submit]").disabled = true;
+    crearDoc(ruta, texto, cuerpo.trim() ? "" : "editar").then(function (ok) { if (!ok && document.body.contains(form)) form.querySelector("button[type=submit]").disabled = false; });
+  }
+  function enviarLlamada(form) {
+    var o = { tipo: $("dl-tipo").value, fecha: $("dl-fecha").value, con: $("dl-con").value.trim(), transcripcion: DOCS.limpiarTranscripcion($("dl-texto").value), notas: $("dl-notas").value };
+    var donde = $("dl-donde").value, ruta = DOCS.rutaSesion(donde, o, S.docs.lista.map(function (x) { return x.ruta; }));
+    var texto = DOCS.plantillaSesion(o);
+    if (texto.length > DOCS.MAX_TEXTO) return toast("La transcripción es muy larga para un documento: pártela en dos llamadas", true);
+    form.querySelector("button[type=submit]").disabled = true;
+    crearDoc(ruta, texto, "").then(function (ok) { if (ok) celebrar("Llamada guardada"); else if (document.body.contains(form)) form.querySelector("button[type=submit]").disabled = false; });
+  }
+  function crearBase(k, archivo) {
+    var f = arbolDocs().clientes.find(function (x) { return x.clave === k; }), c = f && f.cliente;
+    var faltan = DOCS.plantillaCliente(k, { negocio: f ? f.nombre : k, contacto: c && c.contacto, contrato: c ? "Plantilla en tu panel: " + ((GB.PLANTILLAS[c.tipo] || {}).nombre || c.tipo) + ". Falta: el precio, la garantía y su número." : "" }, hoy())
+      .filter(function (x) { return !S.docs.lista.some(function (d) { return d.ruta === x.ruta; }) && (!archivo || x.ruta.endsWith("/" + archivo)); });
+    if (!faltan.length) return;
+    toast("Creando " + (faltan.length === 1 ? "el documento" : "sus " + faltan.length + " documentos") + "…");
+    var cadena = Promise.resolve(), malos = 0;
+    faltan.forEach(function (x) { cadena = cadena.then(function () { return pedir("doc-guardar", { ruta: x.ruta, texto: x.texto, rev: 0, desde: "panel" }).then(function (res) { if (res.ok) { meterMeta(res.doc); S.docTxt[x.ruta] = Object.assign({}, res.doc, { texto: x.texto }); } else malos++; }); }); });
+    cadena.then(function () {
+      if (malos) toast(malos + " no se pudieron crear", true); else if (!archivo) celebrar("Su carpeta, lista");
+      if (archivo && faltan[0]) return ir(hrefDoc(faltan[0].ruta, "editar"));
+      repintar();
+    }, falloRed);
+  }
+  function abrirMover() {
+    var ruta = S.dr, p = DOCS.partes(ruta);
+    hoja("<h3>Cambiar nombre o carpeta</h3><p class=\"sub\">Si una llamada de venta cerró, muévela a la carpeta de su cliente.</p><form id=\"f-doc-mover\">" +
+      '<div class="campo"><label class="etq" for="dm-nombre">Nombre del archivo</label><input class="inp" id="dm-nombre" maxlength="80" required value="' + e(p.archivo.replace(/\.md$/, "")) + '"><p class="ayuda">Minúsculas, números y guiones. Los números de adelante ordenan.</p></div>' +
+      '<div class="campo"><label class="etq" for="dm-donde">Dónde va</label>' + selectDestino("dm-donde", destinosDocs(false), DOCS.dondeVive(ruta)) + "</div>" +
+      '<button class="btn primario" type="submit" style="width:100%">' + ICO("check", 17) + "Moverlo</button></form>");
+  }
+  function enviarMover(form) {
+    var ruta = S.dr, d = S.docTxt[ruta], nueva = $("dm-donde").value + "/" + DOCS.slug($("dm-nombre").value, 80) + ".md";
+    if (nueva === ruta) return cerrarHoja();
+    if (!DOCS.rutaValida(nueva)) return toast("Ese nombre no sirve: usa letras y números", true);
+    form.querySelector("button[type=submit]").disabled = true;
+    pedir("doc-mover", { ruta: ruta, nueva: nueva, rev: d ? d.rev : null }).then(function (res) {
+      if (!res.ok) { form.querySelector("button[type=submit]").disabled = false; return toast(res.error === "existe" ? "Ya hay uno con ese nombre ahí" : res.error === "conflicto" ? "Cambió en otro lado: ábrelo de nuevo" : "No se pudo (" + res.error + ")", true); }
+      S.docs.lista = S.docs.lista.filter(function (x) { return x.ruta !== ruta; }); meterMeta(res.doc);
+      S.docTxt[nueva] = Object.assign({}, res.doc, { texto: d ? d.texto : "" }); delete S.docTxt[ruta];
+      cerrarHoja(); toast("Movido"); ir(hrefDoc(nueva));
+    }, falloRed);
+  }
+  function borrarDoc() {
+    var ruta = S.dr, d = S.docTxt[ruta];
+    pedir("doc-borrar", { ruta: ruta, rev: d ? d.rev : null }).then(function (res) {
+      if (!res.ok) return toast(res.error === "conflicto" ? "Cambió en otro lado: ábrelo de nuevo antes de borrarlo" : "No se pudo borrar (" + res.error + ")", true);
+      S.docs.lista = S.docs.lista.filter(function (x) { return x.ruta !== ruta; }); delete S.docTxt[ruta]; guardarLocal(DOC_BORRADOR + ruta, null);
+      cerrarHoja(); toast("Borrado. Si lo tenías en tu compu, node docs.js lo manda a la papelera.");
+      var p = DOCS.partes(ruta); ir(p.raiz === "nosotros" ? "#/documentos/nosotros" : "#/carpeta/" + encodeURIComponent(p.carpeta) + (p.sub ? "/" + p.sub : ""));
+    }, falloRed);
+  }
+  function accionDocs(a, b, ev) {
+    switch (a) {
+      case "doc-nuevo": ev.preventDefault(); if (!S.docs) return cargarDocs().then(function () { abrirNuevoDoc(b.dataset.carpeta); }, falloDocs), true; abrirNuevoDoc(b.dataset.carpeta); return true;
+      case "doc-llamada": ev.preventDefault(); if (!S.docs) return cargarDocs().then(function () { abrirLlamada(b.dataset.carpeta); }, falloDocs), true; abrirLlamada(b.dataset.carpeta); return true;
+      case "doc-crear-base": crearBase(b.dataset.carpeta, b.dataset.archivo || ""); return true;
+      case "doc-editar": ir(hrefDoc(S.dr, "editar")); return true;
+      case "doc-cancelar": S.docSucio = false; ir(hrefDoc(S.dr)); return true;
+      case "doc-guardar": guardarDoc(); return true;
+      case "doc-pisar": cerrarHoja(); guardarDoc(+b.dataset.rev); return true;
+      case "doc-ver-nueva": cerrarHoja(); S.docSucio = false; traerDoc(S.dr, true).then(function () { ir(hrefDoc(S.dr, "editar")); }, falloDocs); return true;
+      case "doc-sin-borrador": guardarLocal(DOC_BORRADOR + S.dr, null); S.docSucio = false; pintarDoc(); return true;
+      case "doc-modo": {
+        var ver = b.dataset.valor === "ver", ta = $("doc-ed"), pv = $("doc-prev");
+        if (!ta || !pv) return true;
+        if (ver) pv.innerHTML = DOCS.html(ta.value);
+        ta.hidden = ver; pv.hidden = !ver;
+        Array.prototype.forEach.call(b.parentNode.querySelectorAll("[data-accion=doc-modo]"), function (x) { x.classList.toggle("activa", x === b); });
+        return true;
+      }
+      case "doc-claude": { var d = S.docTxt[S.dr]; if (d) copiar(DOCS.paraClaude(S.dr, d.texto), "Copiado: pégalo en tu conversación con Claude"); return true; }
+      case "doc-bajar": {
+        var db = S.docTxt[S.dr]; if (!db) return true;
+        var url = URL.createObjectURL(new Blob([db.texto], { type: "text/markdown;charset=utf-8" })), l = document.createElement("a");
+        l.href = url; l.download = DOCS.partes(S.dr).archivo; document.body.appendChild(l); l.click(); l.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+        return true;
+      }
+      case "doc-mover": abrirMover(); return true;
+      case "doc-borrar":
+        hoja("<h3>¿Borrar «" + e((S.docTxt[S.dr] || {}).titulo || "") + "»?</h3><p class=\"sub\">Se borra de tu panel. En tu compu, la próxima vez que corras node docs.js, va a la papelera (_cerebro/.papelera-docs).</p><div class=\"salidas\">" +
+          '<button class="btn peligro" type="button" data-accion="doc-borrar-si">' + ICO("basura", 17) + 'Sí, borrarlo</button><button class="btn" type="button" data-cerrar>No</button></div>');
+        return true;
+      case "doc-borrar-si": borrarDoc(); return true;
+      case "doc-ir": { var h = document.getElementById(b.dataset.valor); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); return true; }
+      case "doc-unir": {
+        var sel = $("doc-unir"); if (!sel) return true;
+        pedir("doc-carpeta", { c: sel.value, carpeta: b.dataset.carpeta }).then(function (res) {
+          if (!res.ok) return toast("No se pudo unir (" + res.error + ")", true);
+          S.docs.carpetas = res.carpetas; toast("Unida"); repintar();
+        }, falloRed);
+        return true;
+      }
+    }
+    return false;
+  }
+  // El texto que escribes se guarda solo como borrador en este aparato (por si se va la señal o cierras sin querer)
+  var tBorrador = null;
+  document.addEventListener("input", function (ev) {
+    var t = ev.target;
+    if (t.id === "doc-q") { S.docQ = t.value; var r = $("doc-res"); if (r) r.innerHTML = resultadosDocs(t.value); return; }
+    if (t.id === "doc-ed") { S.docSucio = true; clearTimeout(tBorrador); var ruta = S.dr; tBorrador = setTimeout(function () { guardarLocal(DOC_BORRADOR + ruta, JSON.stringify({ texto: t.value, el: ahora() })); }, 600); return; }
+    if (t.id === "dl-texto") { var c = $("dl-cuenta"); if (c) c.textContent = t.value ? Math.round(t.value.length / 1000) + " mil letras" : ""; }
+  });
+  document.addEventListener("change", function (ev) {
+    var t = ev.target; if (!t.dataset || !t.dataset.docArchivo || !t.files || !t.files[0]) return;
+    var f = t.files[0], destino = $(t.dataset.docArchivo);
+    if (f.size > 1500000) return toast("Ese archivo es muy grande", true);
+    f.text().then(function (txt) {
+      if (!destino) return;
+      destino.value = /\.(srt|vtt)$/i.test(f.name) ? DOCS.limpiarTranscripcion(txt) : txt;
+      destino.dispatchEvent(new Event("input", { bubbles: true }));
+      var n = $("dn-nombre"); if (n && !n.value) n.value = f.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
+      toast("Listo: " + f.name);
+    });
+  });
+  document.addEventListener("keydown", function (ev) {
+    if ((ev.ctrlKey || ev.metaKey) && (ev.key === "s" || ev.key === "S") && $("doc-ed")) { ev.preventDefault(); guardarDoc(); }
+  });
+  window.addEventListener("beforeunload", function (ev) { if (S.docSucio && $("doc-ed")) { ev.preventDefault(); ev.returnValue = ""; } });
 
   // ---------- pestañas tipo Chrome: cada pantalla ordenada en pestañas, no en una hoja larga ----------
   // Para una pantalla nueva: arma cada parte por separado y usa pestanas("ruta", [{ clave, nombre, ico, cuenta, html }], tabDe("ruta", claves, "la de siempre")).
@@ -1910,7 +2442,7 @@
     if (alias) { try { history.replaceState(null, "", "#/" + alias.join("/")); } catch (x) { /* sin historial */ } h = alias; }
     if (h[0] !== "c") S.det = null;
     // La pestaña de la pantalla: #/agencia/cuenta, #/p/<id>/promo (en un cliente y en un video la llevan ellos)
-    S.sub = decodeURIComponent((h[0] === "p" ? h[2] : h[0] === "c" || h[0] === "v" ? "" : h[1]) || "");
+    S.sub = decodeURIComponent((h[0] === "p" || h[0] === "carpeta" ? h[2] : h[0] === "c" || h[0] === "v" || h[0] === "doc" ? "" : h[1]) || "");
     if (h[0] !== "nuevo") S.desdeProspecto = null;
     // Las capas que elegiste ayer no se quedan puestas: cada día arranca viéndolo todo
     if (S.capasFecha && S.capasFecha !== hoy()) { S.capas = []; S.capasFecha = ""; }
@@ -1918,7 +2450,7 @@
       $("app").innerHTML = '<div style="padding:40px 18px;max-width:900px;margin:0 auto"><div class="esq" style="height:90px;margin-bottom:16px"></div><div class="esq" style="height:140px;margin-bottom:16px"></div><div class="esq" style="height:300px"></div></div>';
       return cargarLista().then(ruta).catch(falloRed);
     }
-    var rutas = { c: "cliente", p: "prospecto", nuevo: "nuevo", ajustes: "ajustes", guia: "guia", ventas: "ventas", marketing: "marketing", contenido: "contenido", clientes: "clientes", agencia: "agencia", libreta: "libreta", sistema: "sistema", constancia: "constancia", objetivos: "objetivos", v: "video", idea: "idea" };
+    var rutas = { c: "cliente", p: "prospecto", nuevo: "nuevo", ajustes: "ajustes", guia: "guia", ventas: "ventas", marketing: "marketing", contenido: "contenido", clientes: "clientes", agencia: "agencia", libreta: "libreta", sistema: "sistema", constancia: "constancia", objetivos: "objetivos", v: "video", idea: "idea", documentos: "documentos", carpeta: "carpeta", doc: "doc" };
     var rutaAntes = S.ruta, hashAntes = S.hashAhora || "";
     S.ruta = rutas[h[0]] || "inicio";
     // Un video abierto desde Contenido vuelve a Contenido (a la misma pestaña)
@@ -1946,6 +2478,9 @@
       case "constancia": return vistaConstancia();
       case "objetivos": return vistaObjetivos();
       case "video": return vistaVideo(decodeURIComponent(h[1]), decodeURIComponent(h[2]), h[3]);
+      case "documentos": return vistaDocumentos();
+      case "carpeta": return h[1] ? vistaCarpeta(decodeURIComponent(h[1])) : ir("#/documentos/clientes");
+      case "doc": return vistaDoc(decodeURIComponent(h[1] || ""), h[2]);
       default: return vistaInicio();
     }
   }
@@ -1953,7 +2488,7 @@
   function repintar() {
     var y = window.scrollY;
     S.sinAnim = true;
-    var f = { inicio: pintarInicio, ventas: pintarVentas, marketing: pintarMarketing, contenido: pintarContenido, prospecto: pintarProspecto, clientes: pintarClientes, agencia: pintarAgencia, libreta: pintarLibreta, constancia: pintarConstancia, video: pintarVideo }[S.ruta];
+    var f = { inicio: pintarInicio, ventas: pintarVentas, marketing: pintarMarketing, contenido: pintarContenido, prospecto: pintarProspecto, clientes: pintarClientes, agencia: pintarAgencia, libreta: pintarLibreta, constancia: pintarConstancia, video: pintarVideo, documentos: pintarDocumentos, carpeta: pintarCarpeta, doc: pintarDoc }[S.ruta];
     if (f) f(); else if (S.ruta === "cliente" && S.det) pintarCliente();
     shell();
     S.sinAnim = false;
@@ -2334,6 +2869,7 @@
       '<div class="acciones"><button class="btn wa chico" type="button" data-accion="mensaje" data-c="' + e(c.id) + '" data-tipo="bienvenida">' + ICO("whatsapp", 16) + "Mandarle su link</button>" +
         '<button class="btn chico" type="button" data-accion="copiar" data-texto="' + e(linkCliente(c)) + '" data-aviso="Link del cliente copiado">' + ICO("copiar", 15) + "Copiar su link</button>" +
         '<a class="btn chico" href="' + e(linkCliente(c)) + '&yo=1" target="_blank" rel="noopener">' + ICO("ojo", 15) + "Ver como el cliente</a>" +
+        '<a class="btn chico" href="#/carpeta/' + encodeURIComponent(carpetaDeCliente(c.id)) + '">' + ICO("carpeta", 15) + "Sus documentos</a>" +
         '<button class="btn chico" type="button" data-accion="actualizar">' + ICO("recargar", 15) + "Actualizar</button></div>";
     if (p.tipo !== "blanco" && (p.metodo || 0) < SIS.version) html += '<div class="banner-metodo" data-fuera-de-capa><span class="s-ico">' + ICO("capas", 21) + '</span><div class="txt"><b>Se armó con tu método de antes' + (p.metodo ? " (versión " + p.metodo + ")" : "") + "</b><span>" + mas("Tu sistema va en la versión " + SIS.version + ".", "Míralo antes de ponerlo al día: no toca sus fechas, sus estados ni sus pagos. Solo suma lo nuevo de tu método (pasos, guías y mensajes).") + "</span></div>" +
       '<button class="btn primario chico" type="button" data-accion="metodo-ver">' + ICO("ojo", 15) + "Ver qué cambia</button></div>";
@@ -4576,7 +5112,7 @@
   /** El menú del celular: lo que no entra abajo. */
   function abrirMenuMovil() {
     var it = function (hash, ico, txt) { return '<a class="btn" href="' + hash + '" data-cerrar>' + ICO(ico, 17) + e(txt) + "</a>"; };
-    hoja("<h3>Tu panel</h3><p class=\"sub\">Tu negocio y tu orden.</p><div class=\"salidas\">" + it("#/marketing", "megafono", "Marketing") + it("#/clientes", "gente", "Clientes") + it("#/agencia", "calendario", "Mi semana") +
+    hoja("<h3>Tu panel</h3><p class=\"sub\">Tu negocio y tu orden.</p><div class=\"salidas\">" + it("#/marketing", "megafono", "Marketing") + it("#/clientes", "gente", "Clientes") + it("#/documentos", "carpeta", "Documentos") + it("#/agencia", "calendario", "Mi semana") +
       it("#/objetivos", "diana", "Objetivos") + it("#/constancia", "grafica", "Constancia") + it("#/libreta", "cuaderno", "Ideas") + it("#/sistema", "capas", "Mi sistema") + it("#/guia", "libro", "Cómo funciona") + it("#/ajustes", "ajustes", "Ajustes") +
       '<button class="btn suave" type="button" data-accion="salir">' + ICO("salir", 17) + "Salir</button></div>");
   }
@@ -6299,6 +6835,7 @@
     var f = foco(); if (f.tipo === "pasada" && f.c === r.c && f.v === r.v && f.n === r.n) { f.marcadas = marcadasPasada(r, r.n); ponerFoco(f); }
   }
   function accionGeneral(a, b, ev) {
+    if (/^doc-/.test(a) && accionDocs(a, b, ev)) return true;
     switch (a) {
       case "gps": abrirGuia((S.gps || [])[+b.dataset.i], "gps", +b.dataset.i); return true;
       case "gps-p": abrirGuia((S.gpsP || [])[+b.dataset.i], "p", +b.dataset.i); return true;
@@ -6973,6 +7510,9 @@
   document.addEventListener("submit", function (ev) {
     ev.preventDefault();
     if (ev.target.id === "f-entrar") entrar(ev.target);
+    if (ev.target.id === "f-doc-nuevo") enviarNuevoDoc(ev.target);
+    if (ev.target.id === "f-doc-llamada") enviarLlamada(ev.target);
+    if (ev.target.id === "f-doc-mover") enviarMover(ev.target);
     if (ev.target.id === "f-nuevo") crearCliente(ev.target);
     if (ev.target.id === "f-ajustes") guardarAjustes(ev.target);
     if (ev.target.id === "f-anotar") guardarAnotar(ev.target);

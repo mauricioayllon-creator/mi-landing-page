@@ -25,11 +25,20 @@
   var PAGINA = "https://mauricio-ayllon.com";
 
   return {
-    version: 12,
-    fecha: "2026-10-29",
+    version: 13,
+    fecha: "2026-10-30",
 
     // ---------- lo que cambió (lo más nuevo arriba) ----------
     cambios: [
+      {
+        version: 13, fecha: "2026-10-30", titulo: "Un ángulo nuevo: «Aquí solo compran por precio»",
+        que: [
+          "Es el pilar 2 de tus pilares de contenido (ficha 25): el comprador no busca lo más barato, busca no equivocarse (que no sea réplica, que le cambien la talla, que haya a quién reclamar), y la feria no le da eso.",
+          "Es el único pilar que no tenía un dolor entre tus 8. Ataca la creencia de fondo del dueño, la que está debajo de las demás.",
+          "Su regalo todavía no está decidido, así que el llamado lo eliges tú en cada guion (la recomendación es REVISA).",
+          "Tu objetivo de este domingo no cambia: sigue siendo de tus 8 ángulos. El nuevo entra en tu calendario como un ángulo sin probar."
+        ]
+      },
       {
         version: 12, fecha: "2026-10-29", titulo: "Tu tablero, una sola ida y vuelta con Claude, el teleprompter y tu ritmo hasta el domingo",
         que: [
@@ -1153,6 +1162,8 @@
         { clave: "d6", nombre: "«En diciembre se vende solo»", para: "cuenta", regalo: "FECHA" },
         { clave: "d7", nombre: "«Cada promo empiezo de cero»", para: "cuenta", regalo: "MARKETING" },
         { clave: "d8", nombre: "«¿Y este chico quién es?»", para: "cuenta", regalo: "MARKETING" },
+        // El pilar 2 de la ficha 25 (30/10): la creencia de fondo. Su regalo está sin decidir; el llamado se elige en cada guion.
+        { clave: "d9", nombre: "«Aquí solo compran por precio»", para: "cuenta", regalo: "" },
         { clave: "suelta", nombre: "Fuera de tus ángulos (una prueba o un tip)", para: "cuenta", regalo: "" },
         { clave: "c-miedo", nombre: "El miedo del comprador", para: "cliente", regalo: "cupon" },
         { clave: "c-sueno", nombre: "La característica con su sueño", para: "cliente", regalo: "cupon" },

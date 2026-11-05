@@ -272,6 +272,33 @@ Fuentes consultadas para calibrar:
 
 **Que no se rompa nada:** los 6 ejemplos mensuales dan exactamente los mismos números que en la v7 (probado comparando el motor viejo con el nuevo en Node).
 
+### Versión 9: dos pestañas, «Llamada de venta» y «Clientes»
+**Pedido:** «La sesión de diagnóstico está durando mucho si completamos todo lo que me pide la calculadora.» Una pestaña corta para las llamadas de venta, y todo lo de antes en otra pestaña, «Clientes», sin perder esa configuración. (5 de noviembre de 2026)
+
+**Qué se hizo:**
+
+1. **Dos pestañas arriba**, tipo Chrome:
+   - **Llamada de venta**: la nueva, corta. Se abre por defecto.
+   - **Clientes**: todo lo que había hasta la v8, con sus dos modos (lanzamiento y plan mensual), sin cambios.
+   - Las dos usan la **misma ficha del prospecto**: lo que se anota en la llamada (cuánto vende, su objetivo, sus productos) ya aparece en Clientes.
+2. **La llamada en 4 partes** (unos 15 minutos):
+   1. Su situación: cuánto vende, cuánto se le va al mes en total y cuánto le queda; qué quiere lograr.
+   2. Hasta 3 productos estrella: a cuánto lo vende, cuánto le cuesta y cuántos vende al mes. El costo se convierte en «de cada 100 le quedan» y las unidades en «cuánto vende de esto», que es lo que usa Clientes.
+   3. Qué lo frena: qué cree que lo limita, qué intentó y qué quiere lograr su cliente (para la oferta).
+   4. Tu propuesta: cuánto le cobras en total, cuánto de eso va a la pauta de TikTok, la campaña («Visitas al perfil», con el cupón en el link, o «Que le escriban») y qué producto explotar.
+3. **Piso, meta y techo con la regla de Mauricio** (`ventaPisoX` 1, `ventaMetaX` 2 y `ventaTechoX` 3):
+   - El piso es que recupere lo que invierte: su ganancia extra = lo que pone. La meta es que lo duplique y el techo, que lo triplique.
+   - Se muestran en facturación extra y en ventas del producto. Ejemplo: cobras Bs 2.700 y cada venta le deja Bs 270 → piso Bs 10.000 (10 ventas), meta Bs 20.000 y techo Bs 30.000.
+   - Todo es facturación extra, medida con los cupones.
+4. **¿Lo da la pauta?** Usa el mismo embudo de TikTok de Clientes, con la pauta que pusiste:
+   - Dice si llega al piso aunque salga lo mínimo (seguro), solo en lo esperado (ajustado) o no (en riesgo).
+   - Calcula la pauta con la que llega al piso aunque salga lo mínimo.
+   - Elige el producto que más se acerca al piso con la misma pauta.
+5. **La garantía** (`ventaDevolverPct` 50): si no llega al piso, le devuelves la mitad de **tu servicio**. La pauta no se divide ni se devuelve. Una tabla muestra cómo queda él si llega a nada, a la mitad o al 90% del piso, y cuánto te queda a ti si devuelves.
+6. **Qué decirle**: 5 frases en orden, con sus números. También una vista del cliente propia (lo que inviertes, piso, meta y techo, la garantía y cómo llegamos) y «Copiar resumen» de la llamada.
+
+**Para tener en cuenta:** con «Que le escriban», los promedios de mercado de los mensajes son muy prudentes. Dan unas 60 conversaciones por Bs 700, cuando en Sneaker Fashion le escribieron a Mauricio más de 1.000 por Bs 512. Si el cliente ya pautó, conviene anotar su costo real por mensaje.
+
 ---
 
 ## 4. Cómo calcula (lo esencial)
@@ -328,6 +355,7 @@ herramientas/calculadora-oferta/
   p4_form.js        ← los 9 pasos, vistas en vivo, eventos y llenado automático
   p4_panel.js       ← el panel: veredicto, pestañas, meta, capacidad, estrategia, anuncios, oferta, plata, revisión, hojas de detalle y la vista del cliente
   p4_lanz.js        ← el modo lanzamiento: selector, preguntas de los pasos 5, 7 y 8, panel, hojas de detalle, vista del cliente y resumen
+  p4_venta.js       ← la pestaña «Llamada de venta»: preguntas cortas, piso, meta y techo, la garantía, vista del cliente y resumen
   p4_resto.js       ← gráfico, segunda opinión de Claude, resumen para copiar, guardar y arranque
   p4_markup.html    ← la estructura de la página
   estilos_v4.css    ← el diseño (claro y oscuro)
@@ -335,7 +363,7 @@ herramientas/calculadora-oferta/
   construir.js      ← lo mismo, con Node, para cuando no hay Python  →  node construir.js
 ```
 
-**Para cambiar algo:** edita la pieza en `herramientas/calculadora-oferta/fuente/`, corre `python3 construir.py` (o `node construir.js`) y sube el cambio. No edites `public/calculadora/index.html` a mano, porque se pisa al construir. El orden de las piezas importa: `p4_lanz.js` va antes de `p4_resto.js`, que es el que arranca la página.
+**Para cambiar algo:** edita la pieza en `herramientas/calculadora-oferta/fuente/`, corre `python3 construir.py` (o `node construir.js`) y sube el cambio. No edites `public/calculadora/index.html` a mano, porque se pisa al construir. El orden de las piezas importa: `p4_lanz.js` y `p4_venta.js` van antes de `p4_resto.js`, que es el que arranca la página.
 
 **Fuera de Claude:**
 - «Guardar» guarda en el navegador (localStorage), no en la nube.

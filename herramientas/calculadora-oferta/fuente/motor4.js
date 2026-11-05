@@ -54,6 +54,15 @@ const REGLAS_BASE = {
   planMes: 2500,
   planMesCompromiso: 2000,
   mesesCompromiso: 3,
+  // Llamada de venta (pedido de Mauricio, 2026-11-05): lo que cobra en total, cuánto va a la pauta,
+  // piso = recupera lo que invierte (1×), meta = lo duplica (2×), techo = lo triplica (3×),
+  // y si no llega al piso le devuelve la mitad de su servicio (la pauta no se devuelve)
+  ventaCobro: 2700,
+  ventaPauta: 700,
+  ventaPisoX: 1,
+  ventaMetaX: 2,
+  ventaTechoX: 3,
+  ventaDevolverPct: 50,
 };
 
 const F_RESP = { '5min': 1, hora: 0.9, dia: 0.7, mas: 0.5, nose: 0.7 };
@@ -1417,6 +1426,69 @@ function sensibilidadLanz(p, reglas, focoId, base) {
     } catch (e) { }
   }
   return out.sort((a, b) => a.delta - b.delta || a.deltaLargo - b.deltaLargo);
+}
+
+// ---------- Llamada de venta: una propuesta corta con piso, meta y techo ----------
+// Pedido de Mauricio (2026-11-05): «la sesión de diagnóstico está durando mucho si completamos todo».
+// En la llamada solo: su situación, sus 3 productos estrella, qué lo frena y tu propuesta (lo que cobras y cuánto va a TikTok).
+// Piso = que recupere lo que invierte; meta = que lo duplique; techo = que lo triplique. Todo en facturación extra, medida con los cupones.
+// Garantía: si no llega al piso, le devuelves la mitad de tu servicio. La pauta no se devuelve: ya se gastó en TikTok.
+const VENTA_OBJETIVOS = {
+  perfil: { nombre: 'Visitas al perfil (el link de su cupón)', campana: 'Interacción con la comunidad → Visitas al perfil, con el link del cupón en el perfil', motor: 'local' },
+  mensajes: { nombre: 'Que le escriban', campana: 'Clientes potenciales → Mensajes (o Tráfico a su WhatsApp)', motor: 'mensajes' },
+};
+function evaluarVenta(p, reglas) {
+  const R = normalizarReglasMotor(reglas), V = p.venta || {};
+  const fact = Math.max(0, n(p.negocio?.facturacion)), costos = Math.max(0, n(V.costosMes));
+  const queda = fact > 0 && !vacio(V.costosMes) ? fact - costos : null;
+  const cobro = n(V.cobro) > 0 ? n(V.cobro) : n(R.ventaCobro);
+  const pauta = clamp(!vacio(V.pauta) ? n(V.pauta) : n(R.ventaPauta), 0, cobro);
+  const servicio = cobro - pauta;
+  const devolver = Math.round(servicio * clamp(n(R.ventaDevolverPct), 0, 100) / 100);
+  const mult = { piso: n(R.ventaPisoX) || 1, meta: n(R.ventaMetaX) || 2, techo: n(R.ventaTechoX) || 3 };
+  const obj = VENTA_OBJETIVOS[V.objetivo] ? V.objetivo : 'perfil';
+  const an = analizarLineas(p.lineas || [], fact);
+  const prods = an.lista.slice(0, 3).filter(x => x.completa);
+  const q = { ...p, anuncios: { ...(p.anuncios || {}), objetivo: VENTA_OBJETIVOS[obj].motor } };
+  const llegadaPct = clamp(n(R.llegadaLanzPct) || 50, 1, 100) / 100;
+  const compraPct = n(p.lanzamiento?.compraPct) > 0 ? clamp(n(p.lanzamiento.compraPct), 1, 100) / 100 : 0;
+  // El mismo embudo de TikTok de la pestaña Clientes, con el cupón de día y hora (llega 1 de cada 2) y cómo atiende hoy
+  function proyectar(x, pres) {
+    const tipo = TIPOS_VENTA[x.l.tipoVenta] ? x.l.tipoVenta : 'b2cAlto', T = TIPOS_VENTA[tipo];
+    const sup = { ...supuestosBase()[tipo], ...((p.supuestos || {})[tipo] || {}) };
+    const c = cierreHoyDe(p, an, x, T, sup, []);
+    return modeloAds(q, { presupuesto: Math.max(0, pres), tipo, ticket: x.mt.ticket, calif: c.calif, cierrePlan: c.bench * c.factorHoy, factorAtencion: clamp(c.factorHoy, 0.4, 1), cupon: true, ofertaBuena: false, factorCosto: 1, lanz: true, llegadaPct, compraPct });
+  }
+  const inv = cobro;
+  const lista = prods.map(x => {
+    const m = x.mt.m, ticket = x.mt.ticket, gan = ticket * m, a = proyectar(x, pauta);
+    const metas = {}, proy = {};
+    for (const k of ['piso', 'meta', 'techo']) {
+      const g = mult[k] * inv;
+      metas[k] = { ganancia: g, facturacion: m > 0 ? g / m : Infinity, unidades: gan > 0 ? Math.ceil(g / gan - 1e-9) : Infinity };
+      const c = a.clientes * FACT_ESC[k];
+      proy[k] = { compras: c, facturacion: c * ticket, ganancia: c * gan };
+    }
+    const estado = proy.piso.ganancia >= metas.piso.ganancia ? 'seguro' : proy.meta.ganancia >= metas.piso.ganancia ? 'ajustado' : 'riesgo';
+    const alcanza = ['techo', 'meta', 'piso'].find(k => proy.meta.ganancia >= metas[k].ganancia) || null;
+    return { x, id: x.id, nombre: x.nombre, ticket, costo: ticket * (1 - m), m, gan, a, metas, proy, estado, alcanza, ratio: metas.piso.ganancia > 0 ? proy.meta.ganancia / metas.piso.ganancia : 0, margenAdivinado: vacio(x.l0.margen) || n(x.l0.margen) <= 0 };
+  });
+  const el = lista.find(y => y.id === V.producto) || [...lista].sort((a, b) => b.ratio - a.ratio)[0] || null;
+  // La pauta con la que llega al piso aunque salga lo mínimo (tu servicio queda igual)
+  let pautaMin = null;
+  if (el && el.gan > 0) for (let x = 200; x <= 10000; x += x < 1000 ? 50 : x < 3000 ? 100 : 250) { if (proyectar(el.x, x).clientes * FACT_ESC.piso * el.gan >= mult.piso * (servicio + x)) { pautaMin = x; break; } }
+  // Lo peor para él, según cuánto del piso logra (con tu devolución)
+  const peor = [0, 0.5, 0.9].map(f => { const g = f * mult.piso * inv; return { f, ganancia: g, neto: g + devolver - inv }; });
+  // Su objetivo, contra la meta y el techo de tu propuesta
+  const M = p.meta || {};
+  let objetivo = null;
+  if (el && n(M.valor) > 0) {
+    const tipoM = M.tipo || 'aumento';
+    const quiere = tipoM === 'total' ? Math.max(0, n(M.valor) - fact) : n(M.valor);
+    const da = k => tipoM === 'clientes' ? el.metas[k].unidades : tipoM === 'ganancia' ? el.metas[k].ganancia : el.metas[k].facturacion;
+    objetivo = { tipo: tipoM, valor: n(M.valor), quiere, meta: da('meta'), techo: da('techo'), esperado: tipoM === 'clientes' ? el.proy.meta.compras : tipoM === 'ganancia' ? el.proy.meta.ganancia : el.proy.meta.facturacion };
+  }
+  return { R, mon: R.moneda, fact, costos, queda, cobro, pauta, servicio, devolver, devolverPct: n(R.ventaDevolverPct), mult, inv, obj, objNombre: VENTA_OBJETIVOS[obj].nombre, campana: VENTA_OBJETIVOS[obj].campana, lista, el, pautaMin, peor, objetivo, pesoQueda: queda > 0 ? inv / queda : null };
 }
 
 const RANGO_VEREDICTO = { apto: 2, condiciones: 1, no: 0 };

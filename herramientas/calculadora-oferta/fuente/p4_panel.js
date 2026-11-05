@@ -43,6 +43,7 @@ function recalcular() {
   const topeC = document.querySelector('[data-clave="lanzamiento.topeCupones"]'); if (topeC && r.ev && r.lanz) topeC.placeholder = r.ev.stock !== null ? `Igual al stock: ${fmtN(r.ev.stock)}` : '';
   actualizarVivos();
   renderPanel(r);
+  renderVentaResultado();
 }
 const TABS = [['resumen', 'Resumen'], ['meta', 'Meta'], ['estrategia', 'Estrategia'], ['plata', 'Plata'], ['revision', 'Revisión']];
 function htmlTabs(lanz) { return `<div class="tabs-panel"><div class="segmento" role="tablist" aria-label="Partes del panel">${(lanz ? TABS_LANZ : TABS).map(([v, t]) => `<button type="button" role="tab" aria-selected="${estado.tab === v}" data-tab="${v}">${t}</button>`).join('')}</div></div>`; }

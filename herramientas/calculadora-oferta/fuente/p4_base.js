@@ -83,7 +83,7 @@ function normalizarProspecto(p) {
   p = p || {};
   const base = prospectoVacio();
   const out = { ...base, ...p };
-  for (const k of ['negocio', 'meta', 'hoy', 'servicio', 'compromiso', 'capacidad', 'plan', 'anuncios', 'lanzamiento']) out[k] = { ...base[k], ...(p[k] || {}) };
+  for (const k of ['negocio', 'meta', 'hoy', 'servicio', 'compromiso', 'capacidad', 'plan', 'anuncios', 'lanzamiento', 'venta']) out[k] = { ...base[k], ...(p[k] || {}) };
   out.modelo = p.modelo === 'lanzamiento' ? 'lanzamiento' : 'mensual';
   const sb = supuestosBase();
   out.supuestos = {};
@@ -110,6 +110,7 @@ const estado = {
   abiertas: new Set(),
   paso: leerLocal('co4.paso') || 1,
   guia: leerLocal('co4.guia') === true,
+  area: leerLocal('co4.area') === 'clientes' ? 'clientes' : 'venta', // pestaña de arriba: Llamada de venta o Clientes
   cliente: false,
   vista: 'preguntas',
   tab: leerLocal('co4.tab') || 'resumen',

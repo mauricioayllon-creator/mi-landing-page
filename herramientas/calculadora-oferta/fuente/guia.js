@@ -115,6 +115,14 @@ const GUIA_CAMPOS = {
   'anuncios.costoResultadoReal': { s: 'S', q: 'Si ya pusiste publicidad: ¿cuánto te costaba cada mensaje o cada persona interesada?', para: 'Su dato real vale más que cualquier promedio.' },
   'anuncios.cpmReal': { s: 'S', q: '¿Y cuánto te costaban mil vistas?' },
 
+  // Llamada de venta (2026-11-05)
+  'venta.costosMes': { s: 'S', q: '¿Cuánto se te va al mes en total, contando la mercadería, el alquiler y los sueldos?', para: 'Saber cuánto le queda de verdad cada mes: de ahí sale si tu propuesta le duele o no.', mas: ['Si no sabe, pregúntale cuánto le queda a él a fin de mes.'] },
+  'venta.productos': { s: 'S', q: '¿Cuáles son tus 3 productos que más vendes? ¿A cuánto los vendes y cuánto te cuestan?', para: 'Con lo que le deja cada venta salen el piso, la meta y el techo, y cuál conviene explotar.', mas: ['Si no sabe cuánto le cuesta, pregúntale a cuánto lo compra.', 'Si vende muchos productos, que te diga el que más le gustaría vender.'] },
+  'venta.limita': { s: 'P', q: '¿Qué crees que te está limitando para vender más?', para: 'Que diga su problema con sus palabras: esas palabras van en los videos.', sigue: ['I', '¿Y eso cuánto te está costando al mes?'] },
+  'venta.intento': { s: 'P', q: '¿Qué has intentado y cómo te fue?', para: 'Saber qué no repetir y de qué desconfía.', mas: ['Si dice «pagué publicidad y no vendí», pregunta: «¿te escribían y no compraban, o nadie escribía?».'] },
+  'venta.cobro': { s: 'T', q: 'Lo decides tú: lo que él pone en total (tu servicio + la pauta).', para: 'Con esto salen el piso (recupera), la meta (duplica) y el techo (triplica).' },
+  'venta.pauta': { s: 'T', q: 'La parte que va directo a TikTok, desde su cuenta.', para: 'No se divide en tu garantía: si no llega al piso, devuelves solo de tu servicio.' },
+  'venta.objetivo': { s: 'T', q: 'Visitas al perfil, si el cupón va en el link del perfil. Que le escriban, si vende por chat.', para: 'Cambia cuántos llegan y cuántos compran.' },
   'servicio.modo': { s: 'T', q: 'Esto lo decides tú: no se lo preguntes.', para: 'Traer clientes nuevos o mejorar la publicidad que ya tiene.' },
   'servicio.contenido': { s: 'T', q: 'Decide si haces los videos o solo das ideas y guiones.' },
   'servicio.campanas': { s: 'T', q: 'Decide si manejas su publicidad.' },

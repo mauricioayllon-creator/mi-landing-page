@@ -1,6 +1,6 @@
 /*EJEMPLOS-INICIO*/
 function lineaBase(extra) {
-  return { id: 'n' + Math.random().toString(36).slice(2, 8), nombre: '', facturacion: '', margen: '', tipo: 'repetida', ticket: '', vidaMeses: '', comprasAnio: '', aniosCliente: '', cicloDias: '', tipoVenta: 'b2cAlto', competencia: 'media', capacidad: 'media', abrePuertas: false, ventaCruzadaPct: '', ventaCruzadaGanancia: '', ...(extra || {}) };
+  return { id: 'n' + Math.random().toString(36).slice(2, 8), nombre: '', facturacion: '', margen: '', tipo: 'repetida', ticket: '', vidaMeses: '', comprasAnio: '', aniosCliente: '', cicloDias: '', tipoVenta: 'b2cAlto', competencia: 'media', capacidad: 'media', abrePuertas: false, ventaCruzadaPct: '', ventaCruzadaGanancia: '', costo: '', unidadesMes: '', ...(extra || {}) };
 }
 function bonoBase(extra) { return { nombre: '', costo: '', valor: '', ...(extra || {}) }; }
 function segmentoBase(extra) { return { nombre: '', cuantos: '', compraAnio: '', margen: '', paga: 'atiempo', lio: 'normal', ...(extra || {}) }; }
@@ -12,6 +12,9 @@ function anunciosVacios() {
 }
 function lanzamientoVacio() {
   return { fecha: '', porque: '', publicidad: '', stock: '', topeCupones: '', diasCanje: '2', atiendeDia: '', llegadaPct: '', compraPct: '', ofrecerPlan: true, pautaPlan: '' };
+}
+function ventaVacia() {
+  return { costosMes: '', limita: '', intento: '', cobro: '', pauta: '', objetivo: 'perfil', producto: '' };
 }
 function prospectoVacio() {
   return {
@@ -27,6 +30,7 @@ function prospectoVacio() {
     oferta: ofertaVacia(),
     anuncios: anunciosVacios(),
     lanzamiento: lanzamientoVacio(),
+    venta: ventaVacia(),
     supuestos: supuestosBase(),
     plan: { duracionManual: '', herramientas: '', inicial: '', ahorro: '' },
     rangos: {},

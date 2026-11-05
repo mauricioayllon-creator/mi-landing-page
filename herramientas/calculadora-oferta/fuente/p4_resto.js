@@ -143,7 +143,7 @@ function textoResumen() {
   return l.join('\n');
 }
 async function copiarResumen() {
-  const t = textoResumen();
+  const t = estado.area === 'venta' ? textoResumenVenta() : textoResumen();
   try { await navigator.clipboard.writeText(t); aviso('Resumen copiado.'); }
   catch {
     cambiarVista('panel');
@@ -202,7 +202,7 @@ function cargarProspecto(datos, id) {
   guardarLocal('co4.actual', estado.actualId); guardarLocal('co4.borrador', estado.prospecto); guardarLocal('co4.paso', 1);
   iaEstado = { resp: null, clave: '', error: '', cargando: false };
   $('#ruta').innerHTML = htmlRutaLlamada();
-  recalcular(); renderForm();
+  recalcular(); renderForm(); if (estado.area === 'venta') renderVenta();
 }
 function suscribirLista() {
   if (!DB || unsubLista) return;
@@ -229,8 +229,7 @@ function alternarCliente() {
   $('#app').dataset.cliente = estado.cliente ? 'on' : 'off';
   const b = $('#btn-cliente'); b.setAttribute('aria-pressed', String(estado.cliente)); b.querySelector('.txt').textContent = estado.cliente ? 'Salir de la vista del cliente' : 'Vista del cliente';
   cerrarDetalle();
-  renderPanel(ultimo);
-  if (!estado.cliente && estado.tab === 'plata') dibujarGrafico();
+  if (estado.area === 'venta') renderVenta(); else { renderPanel(ultimo); if (!estado.cliente && estado.tab === 'plata') dibujarGrafico(); }
   window.scrollTo({ top: 0 }); const cp = $('#col-panel'); if (cp) cp.scrollTop = 0;
 }
 
@@ -289,7 +288,10 @@ function iniciar() {
   $('#detalle').addEventListener('close', () => { estado.detalle = null; });
   $$('.vista-switch [data-vista]').forEach(b => b.addEventListener('click', () => cambiarVista(b.dataset.vista)));
   $('#mini-panel').addEventListener('click', () => cambiarVista('panel'));
-  recalcular(); renderForm();
+  // Llamada de venta o Clientes
+  $('#areas').addEventListener('click', e => { const b = e.target.closest('[data-area]'); if (b) cambiarArea(b.dataset.area); });
+  const vt = $('#venta'); vt.addEventListener('input', onEntradaVenta); vt.addEventListener('focusout', onSalidaVenta); vt.addEventListener('click', onClicVenta);
+  recalcular(); renderForm(); aplicarArea();
   conectarCapacidades();
 }
 async function conectarCapacidades() {

@@ -4,7 +4,7 @@ const fs = require('fs'), path = require('path');
 const d = __dirname;
 const r = f => fs.readFileSync(path.join(d, f), 'utf8');
 const head = r('p4_markup.html').replace('/*@@CSS4@@*/', () => r('estilos_v4.css'));
-const js = ['motor4.js', 'ayudas4.js', 'guia.js', 'ejemplos4.js', 'p4_base.js', 'p4_form.js', 'p4_panel.js', 'p4_lanz.js', 'p4_resto.js'].map(r).join('\n');
+const js = ['motor4.js', 'ayudas4.js', 'guia.js', 'ejemplos4.js', 'p4_base.js', 'p4_form.js', 'p4_panel.js', 'p4_lanz.js', 'p4_venta.js', 'p4_resto.js'].map(r).join('\n');
 const pagina = head + '<script>\n' + js + '\n</script>\n';
 const i = pagina.indexOf('</style>') + '</style>'.length;
 const html = '<!doctype html>\n<html lang="es">\n<head>\n<meta charset="utf-8">\n'

@@ -13,4 +13,4 @@
 (vacio)
 
 ## reference/ — Donde encontrar cosas
-(vacio)
+- [paneles-por-cliente.md](reference/paneles-por-cliente.md) — cómo están hechos y cómo se actualizan los paneles /clientes/<cliente>

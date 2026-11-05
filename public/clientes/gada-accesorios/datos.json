@@ -1,0 +1,77 @@
+{
+  "actualizado": "2026-11-05",
+  "cliente": {
+    "nombre": "GADA Accesorios",
+    "inicial": "G",
+    "lead": "Este es su panel. Aquí ven <b>qué estamos haciendo, en qué día vamos y qué viene después</b>. Son <b>15 días de lanzamiento</b> que arrancan con la Sesión 2: la primera semana dejamos todo listo y ya testeamos los primeros videos; la segunda semana, solo lanzamos.",
+    "canales": ["Instagram", "TikTok", "WhatsApp"]
+  },
+  "contacto": { "nombre": "Belén", "rol": "Su contacto en Grow Business. Cualquier solicitud o duda, escríbanle a ella." },
+  "plan": {
+    "duracionDias": 15,
+    "dia1": null,
+    "anclaNombre": "Sesión 2"
+  },
+  "etapas": [
+    {
+      "n": 1, "color": "f1", "nombre": "Preparación", "desde": "2026-11-04", "hastaDia": 0,
+      "corto": "Conocer el negocio y armar la oferta",
+      "que": "Antes de contar los 15 días, conocemos GADA a fondo. Belén ya les pidió información del negocio. En la Sesión 1 trabajamos las ofertas (qué le ofrecemos al cliente para que compre ahora y no después) y entendemos el negocio más a detalle. Con eso preparamos todo para la Sesión 2.",
+      "hacemos": ["Revisar el catálogo, los precios y lo que nos manden", "Sesión 1 (viernes 6 de noviembre, 19:00): ofertas y detalle del negocio", "Definir juntos qué vamos a lanzar", "Preparar la oferta, los ángulos y el plan para la Sesión 2"],
+      "ustedes": ["Mandarnos la información que tengan (ver la lista de abajo)", "Venir a la Sesión 1 con sus dudas e ideas", "Agendar la Sesión 2 con nosotros"],
+      "sale": "Una primera versión de la oferta y todo listo para la Sesión 2."
+    },
+    {
+      "n": 2, "color": "f3", "nombre": "Semana 1 · Alistar y testear", "desdeDia": 1, "hastaDia": 7,
+      "corto": "Oferta final, grabación y primeros videos",
+      "que": "El día 1 es la Sesión 2: terminamos de pulir la oferta, vemos los ángulos y armamos el plan de acción. Un ángulo es la idea o el motivo por el que alguien se detiene a ver un video. Después grabamos y publicamos los primeros videos para testear: sin pagar (orgánico) y con un poco de publicidad pagada (pauta), para ver rápido qué le gusta más a la gente.",
+      "hacemos": ["Sesión 2: pulir la oferta, ver ángulos y plan de acción", "Agendar y hacer la sesión de grabación", "Publicar los primeros videos en Instagram y TikTok", "Pautar un poco y medir qué videos traen más mensajes y ventas"],
+      "ustedes": ["Aprobar la oferta y los ángulos", "Tener los productos listos para la grabación", "Contarnos qué pasa en WhatsApp: cuántos escriben y cuántos compran"],
+      "sale": "Los videos y ángulos que mejor funcionan, listos para el lanzamiento."
+    },
+    {
+      "n": 3, "color": "f5", "nombre": "Semana 2 · Lanzar", "desdeDia": 8, "hastaDia": 15,
+      "corto": "Solo lanzar los videos que funcionan",
+      "que": "En la segunda semana ya no probamos. Publicamos y empujamos los videos que mejor funcionaron, con la oferta lista, y llevamos todo hacia el día del lanzamiento.",
+      "hacemos": ["Publicar los videos ganadores", "Poner la pauta en lo que mejor rinde", "Preparar el día del lanzamiento"],
+      "ustedes": ["Tener stock y la oferta listos", "Responder rápido por WhatsApp e Instagram"],
+      "sale": "🚀 El lanzamiento, el día 15."
+    }
+  ],
+  "hitos": [
+    { "fecha": "2026-11-04", "icono": "💬", "titulo": "Belén se puso en contacto", "texto": "Les escribió para quedar como su contacto y pedirles información del negocio: catálogos, precios y lo que consideren importante." },
+    { "fecha": "2026-11-06", "hora": "19:00", "icono": "🎙️", "titulo": "Sesión 1 de consultoría", "texto": "Vemos las ofertas y entendemos el negocio más a detalle, para preparar la Sesión 2." },
+    { "dia": 1, "icono": "🎙️", "titulo": "Sesión 2 de consultoría", "texto": "Terminamos de pulir la oferta, vemos los ángulos y armamos el plan de acción. Aquí agendamos la grabación." },
+    { "dia": 8, "icono": "📣", "titulo": "Arranca la semana de lanzamiento", "texto": "Desde hoy solo lanzamos los videos que funcionaron." },
+    { "dia": 15, "icono": "🚀", "titulo": "Día del lanzamiento", "texto": "Qué lanzamos lo definimos juntos en la Sesión 1." }
+  ],
+  "pedidos": [
+    { "t": "Catálogo", "d": "Todos los productos, con fotos si las tienen." },
+    { "t": "Precios", "d": "Precio de cada producto y, si existen, precios por mayor o combos." },
+    { "t": "Lo que más se vende", "d": "Los productos que más salen y los que más ganancia les dejan." },
+    { "t": "Quién les compra", "d": "Cómo es su cliente: edad, ciudad, para qué compra (uso propio, regalo, reventa)." },
+    { "t": "Cómo venden hoy", "d": "Qué funciona en Instagram, TikTok y WhatsApp. Promos o publicidad que ya hayan probado." },
+    { "t": "Pruebas de clientes", "d": "Capturas de mensajes, reseñas, fotos de clientes usando sus productos." },
+    { "t": "Lo que consideren importante", "d": "Cualquier cosa que nos ayude a entender GADA." }
+  ],
+  "avances": [
+    { "t": "Información del negocio", "d": "La que nos manden antes y durante la Sesión 1.", "estado": "curso" },
+    { "t": "Qué vamos a lanzar", "d": "Se define en la Sesión 1.", "estado": "prox" },
+    { "t": "Oferta", "d": "Se arma en la Sesión 1 y se pule en la Sesión 2.", "estado": "prox" },
+    { "t": "Ángulos y plan de acción", "d": "Se presentan en la Sesión 2.", "estado": "prox" },
+    { "t": "Grabación", "d": "Se agenda en la Sesión 2.", "estado": "prox" },
+    { "t": "Videos de testeo", "d": "Semana 1: orgánico + un poco de pauta.", "estado": "prox" },
+    { "t": "Videos de lanzamiento", "d": "Semana 2.", "estado": "prox" },
+    { "t": "Lanzamiento", "d": "Día 15.", "estado": "prox" }
+  ],
+  "sesiones": [
+    { "t": "Sesión 1 · Ofertas y detalle del negocio", "fecha": "2026-11-06", "hora": "19:00" },
+    { "t": "Sesión 2 · Oferta final, ángulos y plan · Día 1", "dia": 1, "d": "Se agenda en la Sesión 1." },
+    { "t": "Sesión de grabación", "d": "Se agenda en la Sesión 2." },
+    { "t": "Próximas sesiones", "d": "Se agendan en cada sesión, según lo que vayamos necesitando." }
+  ],
+  "novedades": [
+    { "fecha": "2026-11-04", "texto": "Belén les escribió para quedar como su contacto y pedirles catálogo, precios e información del negocio." },
+    { "fecha": "2026-11-05", "texto": "Creamos su panel: aquí van a ver el plan, el calendario y los avances. Se actualiza después de cada sesión." }
+  ]
+}

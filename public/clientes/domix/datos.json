@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-05",
+  "actualizado": "2026-11-09",
   "cliente": {
     "nombre": "Domix",
     "inicial": "D",
@@ -9,7 +9,7 @@
     "duracionDias": 30,
     "dia1": "2026-11-04",
     "anclaNombre": "Sesión 1",
-    "etiqueta": "PLAN DE TRABAJO · 30 DÍAS"
+    "etiqueta": "Plan de 30 días"
   },
   "etapas": [
     {
@@ -124,30 +124,6 @@
       "titulo": "Sesión 2 de consultoría",
       "texto": "Fecha a confirmar. Presentamos ángulos, guiones y confirmamos las ofertas.",
       "textoAgendada": "Presentamos ángulos, guiones y confirmamos las ofertas."
-    },
-    {
-      "dia": 3,
-      "icono": "▶️",
-      "titulo": "Arranca el testeo",
-      "texto": "Primer día publicando videos con los ángulos a probar."
-    },
-    {
-      "dia": 10,
-      "icono": "🏆",
-      "titulo": "Tenemos ganadores",
-      "texto": "Empezamos a potenciar los ángulos que mejor funcionaron."
-    },
-    {
-      "dia": 24,
-      "icono": "🔥",
-      "titulo": "Semana de lanzamiento",
-      "texto": "Empezamos a explotar el contenido ganador."
-    },
-    {
-      "dia": 30,
-      "icono": "🚀",
-      "titulo": "Día del lanzamiento",
-      "texto": "Todo el trabajo de los 30 días apunta a este día."
     }
   ],
   "publicos": [
@@ -197,48 +173,6 @@
       "d": "Logo, colores, cuentas de redes y acceso a la cuenta de publicidad. Presupuesto para pauta."
     }
   ],
-  "avances": [
-    {
-      "t": "Brief del negocio",
-      "d": "El documento base con toda la información de Domix.",
-      "estado": "curso"
-    },
-    {
-      "t": "Ofertas para anfitrión y huésped",
-      "d": "Planeadas en la Sesión 1, confirmadas en la Sesión 2.",
-      "estado": "curso"
-    },
-    {
-      "t": "Ángulos a probar",
-      "d": "Se presentan en la Sesión 2.",
-      "estado": "prox"
-    },
-    {
-      "t": "Guiones",
-      "d": "Se presentan en la Sesión 2.",
-      "estado": "prox"
-    },
-    {
-      "t": "Videos del testeo",
-      "d": "Del 6 al 12 de noviembre.",
-      "estado": "prox"
-    },
-    {
-      "t": "Ángulos ganadores",
-      "d": "Se anuncian aquí al terminar el testeo.",
-      "estado": "prox"
-    },
-    {
-      "t": "Contenido ganador en nuevos formatos",
-      "d": "Del 13 al 26 de noviembre.",
-      "estado": "prox"
-    },
-    {
-      "t": "Lanzamiento",
-      "d": "Jueves 3 de diciembre.",
-      "estado": "prox"
-    }
-  ],
   "sesiones": [
     {
       "id": "sesion-1",
@@ -248,7 +182,7 @@
     {
       "id": "sesion-2",
       "t": "Sesión 2 · Ángulos, guiones y oferta",
-      "fecha": "2026-11-05",
+      "fecha": "2026-11-07",
       "tentativa": true,
       "agendable": true,
       "d": "Fecha tentativa, a confirmar."
@@ -263,5 +197,43 @@
       "fecha": "2026-11-03",
       "texto": "Sesión 1 de consultoría: arrancamos el plan de 30 días hacia el lanzamiento del 3 de diciembre."
     }
-  ]
+  ],
+  "contacto": {
+    "nombre": "Belén",
+    "rol": "Su contacto en Grow Business."
+  },
+  "camino": {
+    "on": {
+      "bienvenida": true,
+      "info": true,
+      "accesos": true,
+      "s1": true,
+      "s2": true,
+      "s3": false,
+      "guiones": true,
+      "confguion": true,
+      "sguion": false,
+      "g1": true,
+      "g2": false,
+      "g3": false,
+      "equipo": false,
+      "edicion": true,
+      "confvideos": true,
+      "sventa": true,
+      "publicar": true,
+      "pauta": true,
+      "srev": true,
+      "sextra": false,
+      "lanz": true,
+      "sres": true,
+      "victoria": true
+    },
+    "aqui": "guiones",
+    "fechas": {
+      "lanz": {
+        "f": "2026-12-03"
+      }
+    },
+    "txt": {}
+  }
 }

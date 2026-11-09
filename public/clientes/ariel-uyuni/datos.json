@@ -1,0 +1,56 @@
+{
+  "actualizado": "2026-11-09",
+  "cliente": {
+    "nombre": "Ariel",
+    "inicial": "A"
+  },
+  "contacto": {
+    "nombre": "Belén",
+    "rol": "Su contacto en Grow Business."
+  },
+  "plan": {
+    "duracionDias": 30,
+    "dia1": null,
+    "anclaNombre": "Sesión 1",
+    "etiqueta": "Plan de 30 días",
+    "titulo": "Plan de 30 días"
+  },
+  "etapas": [],
+  "hitos": [],
+  "sesiones": [
+    {
+      "t": "Próximas sesiones",
+      "d": "Cada sesión se agenda al terminar la anterior."
+    }
+  ],
+  "camino": {
+    "on": {
+      "bienvenida": true,
+      "info": true,
+      "accesos": true,
+      "s1": true,
+      "s2": true,
+      "s3": false,
+      "guiones": true,
+      "confguion": true,
+      "sguion": false,
+      "g1": true,
+      "g2": false,
+      "g3": false,
+      "equipo": false,
+      "edicion": true,
+      "confvideos": true,
+      "sventa": true,
+      "publicar": true,
+      "pauta": true,
+      "srev": true,
+      "sextra": false,
+      "lanz": false,
+      "sres": true,
+      "victoria": true
+    },
+    "aqui": "info",
+    "fechas": {},
+    "txt": {}
+  }
+}

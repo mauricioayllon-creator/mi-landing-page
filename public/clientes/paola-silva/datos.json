@@ -1,0 +1,73 @@
+{
+  "actualizado": "2026-11-09",
+  "cliente": {
+    "nombre": "Paola Silva",
+    "inicial": "P"
+  },
+  "contacto": {
+    "nombre": "Belén",
+    "rol": "Su contacto en Grow Business."
+  },
+  "plan": {
+    "duracionDias": 30,
+    "dia1": null,
+    "anclaNombre": "Sesión 1",
+    "etiqueta": "Plan de lanzamiento · 30 días",
+    "titulo": "Plan de lanzamiento"
+  },
+  "etapas": [],
+  "hitos": [],
+  "sesiones": [
+    {
+      "id": "sesion-1",
+      "t": "Sesión 1 · Tu producto y tu oferta",
+      "fecha": "2026-11-11",
+      "hora": "20:30",
+      "meet": "https://meet.google.com/xfo-zpbs-tez"
+    },
+    {
+      "t": "Próximas sesiones",
+      "d": "Cada sesión se agenda al terminar la anterior."
+    }
+  ],
+  "camino": {
+    "on": {
+      "bienvenida": true,
+      "info": true,
+      "accesos": true,
+      "s1": true,
+      "s2": true,
+      "s3": false,
+      "guiones": true,
+      "confguion": true,
+      "sguion": false,
+      "g1": true,
+      "g2": false,
+      "g3": false,
+      "equipo": false,
+      "edicion": true,
+      "confvideos": true,
+      "sventa": true,
+      "publicar": true,
+      "pauta": true,
+      "srev": true,
+      "sextra": false,
+      "lanz": true,
+      "sres": true,
+      "victoria": true
+    },
+    "aqui": "info",
+    "fechas": {
+      "s1": {
+        "f": "2026-11-11",
+        "h": "20:30",
+        "meet": "https://meet.google.com/xfo-zpbs-tez"
+      }
+    },
+    "txt": {
+      "lanz": {
+        "d": "Primera semana de diciembre."
+      }
+    }
+  }
+}

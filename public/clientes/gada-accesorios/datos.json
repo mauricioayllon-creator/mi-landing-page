@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-05",
+  "actualizado": "2026-11-09",
   "cliente": {
     "nombre": "GADA Accesorios",
     "inicial": "G",
@@ -12,12 +12,13 @@
   },
   "contacto": {
     "nombre": "Belén",
-    "rol": "Su contacto en Grow Business. Cualquier solicitud o duda, escríbanle a ella."
+    "rol": "Su contacto en Grow Business."
   },
   "plan": {
     "duracionDias": 15,
     "dia1": null,
-    "anclaNombre": "Sesión 2"
+    "anclaNombre": "Sesión 2",
+    "etiqueta": "Plan de lanzamiento · 15 días"
   },
   "etapas": [
     {
@@ -88,32 +89,6 @@
       "icono": "💬",
       "titulo": "Belén se puso en contacto",
       "texto": "Les escribió para quedar como su contacto y pedirles información del negocio: catálogos, precios y lo que consideren importante."
-    },
-    {
-      "fecha": "2026-11-06",
-      "hora": "19:00",
-      "icono": "🎙️",
-      "titulo": "Sesión 1 de consultoría",
-      "texto": "Vemos las ofertas y entendemos el negocio más a detalle, para preparar la Sesión 2."
-    },
-    {
-      "dia": 1,
-      "icono": "🎙️",
-      "titulo": "Sesión 2 de consultoría",
-      "texto": "Terminamos de pulir la oferta, vemos los ángulos y armamos el plan de acción. Aquí agendamos la grabación.",
-      "sesion": "sesion-2"
-    },
-    {
-      "dia": 8,
-      "icono": "📣",
-      "titulo": "Arranca la semana de lanzamiento",
-      "texto": "Desde hoy solo lanzamos los videos que funcionaron."
-    },
-    {
-      "dia": 15,
-      "icono": "🚀",
-      "titulo": "Día del lanzamiento",
-      "texto": "Qué lanzamos lo definimos juntos en la Sesión 1."
     }
   ],
   "pedidos": [
@@ -146,54 +121,13 @@
       "d": "Cualquier cosa que nos ayude a entender GADA."
     }
   ],
-  "avances": [
-    {
-      "t": "Información del negocio",
-      "d": "La que nos manden antes y durante la Sesión 1.",
-      "estado": "curso"
-    },
-    {
-      "t": "Qué vamos a lanzar",
-      "d": "Se define en la Sesión 1.",
-      "estado": "prox"
-    },
-    {
-      "t": "Oferta",
-      "d": "Se arma en la Sesión 1 y se pule en la Sesión 2.",
-      "estado": "prox"
-    },
-    {
-      "t": "Ángulos y plan de acción",
-      "d": "Se presentan en la Sesión 2.",
-      "estado": "prox"
-    },
-    {
-      "t": "Grabación",
-      "d": "Se agenda en la Sesión 2.",
-      "estado": "prox"
-    },
-    {
-      "t": "Videos de testeo",
-      "d": "Semana 1: orgánico + un poco de pauta.",
-      "estado": "prox"
-    },
-    {
-      "t": "Videos de lanzamiento",
-      "d": "Semana 2.",
-      "estado": "prox"
-    },
-    {
-      "t": "Lanzamiento",
-      "d": "Día 15.",
-      "estado": "prox"
-    }
-  ],
   "sesiones": [
     {
       "id": "sesion-1",
       "t": "Sesión 1 · Ofertas y detalle del negocio",
-      "fecha": "2026-11-06",
-      "hora": "19:00"
+      "fecha": "2026-11-11",
+      "hora": "18:00",
+      "meet": "https://meet.google.com/xsv-xuvw-qrn"
     },
     {
       "id": "sesion-2",
@@ -225,5 +159,41 @@
       "fecha": "2026-11-05",
       "texto": "Creamos su panel: aquí van a ver el plan, el calendario y los avances. Se actualiza después de cada sesión."
     }
-  ]
+  ],
+  "camino": {
+    "on": {
+      "bienvenida": true,
+      "info": true,
+      "accesos": true,
+      "s1": true,
+      "s2": true,
+      "s3": false,
+      "guiones": true,
+      "confguion": true,
+      "sguion": false,
+      "g1": false,
+      "g2": false,
+      "g3": false,
+      "equipo": true,
+      "edicion": false,
+      "confvideos": false,
+      "sventa": true,
+      "publicar": true,
+      "pauta": true,
+      "srev": true,
+      "sextra": false,
+      "lanz": true,
+      "sres": true,
+      "victoria": true
+    },
+    "aqui": "info",
+    "fechas": {
+      "s1": {
+        "f": "2026-11-11",
+        "h": "18:00",
+        "meet": "https://meet.google.com/xsv-xuvw-qrn"
+      }
+    },
+    "txt": {}
+  }
 }

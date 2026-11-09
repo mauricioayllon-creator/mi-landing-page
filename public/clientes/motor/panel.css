@@ -271,3 +271,48 @@ body.corto .publico .em{display:none}
 .contacto-c .avatar{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:16px;border:0}
 .contacto-c b{display:block;font-size:14px}
 .contacto-c small{display:block;font-size:12.5px;color:var(--ink-3)}
+
+/* ---------- blanco, tipo Apple (09/11) ---------- */
+body.corto{--bg:#f5f5f7;--surface:#fff;--surface-2:#f5f5f7;--ink:#1d1d1f;--ink-2:#6e6e73;--ink-3:#86868b;--line:#e5e5ea;--line-2:#ececf0;--blue:#0071e3;--blue-2:#0071e3;--blue-soft:#e8f2fd;--display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body.corto .wrap{max-width:620px}
+body.corto .hero{background:none;color:var(--ink);padding:22px 0 10px;overflow:visible}
+body.corto .hero::after{display:none}
+body.corto .top{margin-bottom:30px;font-weight:600;font-size:14px;color:var(--ink-2)}
+body.corto .marca i{background:var(--ink);color:#fff;border-radius:7px;font-family:var(--display)}
+body.corto .pill{display:none}
+body.corto .avatar{display:none}
+body.corto .cliente small{color:var(--ink-3);font-size:13px;font-weight:500;letter-spacing:0;text-transform:none;margin-bottom:2px}
+body.corto .cliente h1{font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1.08}
+body.corto .ahora{margin-top:18px}
+body.corto .card{border:0;border-radius:22px;box-shadow:0 1px 2px rgba(0,0,0,.03),0 8px 28px rgba(0,0,0,.05)}
+body.corto .ahora .card{padding:24px 22px;box-shadow:0 1px 2px rgba(0,0,0,.03),0 8px 28px rgba(0,0,0,.05)}
+body.corto .etiq{font-size:13px;font-weight:500;letter-spacing:0;text-transform:none}
+body.corto .cuenta-pasos{font-weight:500}
+body.corto .ahora-fila{gap:12px;margin:12px 0 8px}
+body.corto .ahora h2{font-size:28px;font-weight:700;letter-spacing:-.025em;line-height:1.12}
+body.corto .rueda{width:40px;height:40px;border-radius:12px}
+body.corto .ahora-msg{font-size:16px;line-height:1.45}
+body.corto .riel{gap:3px;margin-top:18px}
+body.corto .riel i{height:4px;border-radius:2px}
+body.corto .riel i.ya{background:var(--blue);opacity:.5}
+body.corto .proximo{background:var(--surface-2);border:0;border-radius:14px;margin-top:18px}
+body.corto .sec{padding:22px;margin-top:14px}
+body.corto .sec-cab{margin-bottom:10px}
+body.corto .sec-cab .burbuja{display:none}
+body.corto .sec-cab h2{font-size:20px;font-weight:700;letter-spacing:-.02em}
+body.corto .camino b{font-size:16px;font-weight:600}
+body.corto .camino small{font-size:13.5px}
+body.corto .camino .pt{background:var(--line-2)}
+body.corto .camino .ok .pt{background:var(--blue)}
+body.corto .camino .vamos .pt{background:#fff}
+body.corto .camino .viene b{color:var(--ink-3);font-weight:500}
+body.corto .btn{border-radius:980px;font-weight:600}
+body.corto .btn.azul{background:var(--blue);border-color:var(--blue);box-shadow:none}
+body.corto .btn.verde{background:var(--blue);border-color:var(--blue);color:#fff}
+body.corto .candado{background:#f5f5f7}
+body.corto .candado .card{padding:34px 26px}
+body.corto .candado .burbuja{background:var(--blue-soft);color:var(--blue)}
+body.corto .candado h2{font-size:24px;font-weight:700;letter-spacing:-.02em}
+body.corto .candado input{text-align:center;letter-spacing:.14em;font-size:18px;text-transform:uppercase;border-radius:14px;background:var(--surface-2);border:0}
+body.corto .contacto-c{margin:22px 0 4px;padding:0 6px}
+body.corto footer{font-weight:400}

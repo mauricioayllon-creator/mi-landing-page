@@ -86,35 +86,51 @@
     ]);
   }
 
+  /** La clave que Mauricio ve en su panel. Devuelve { ok, ajustes }, { ok:false, error:"clave" } o null si no hubo respuesta. */
+  function entrar(k) {
+    if (!window.PANEL_ENDPOINT || !k) return Promise.resolve(k ? null : { ok: false, error: "clave" });
+    return Promise.race([
+      fetch(window.PANEL_ENDPOINT, { method: "POST", body: JSON.stringify({ accion: "panel-entrar", carpeta: CLIENTE, k: k }) }).then(function (r) { return r.json(); }).catch(function () { return null; }),
+      new Promise(function (ok) { setTimeout(function () { ok(null); }, 15000); })
+    ]);
+  }
+
   var CLAVE = leerClave();
   Promise.all([
     fetch(BASE + "/datos.json", { cache: "no-store" }).then(function (r) { return r.json(); }),
-    pedirRemoto(CLAVE),
-    pedirAjustes()
+    entrar(CLAVE)
   ]).then(function (res) {
-    var D = res[0], R = res[1];
-    if (R && R.error === "clave") return candado(!!CLAVE);
-    if (R && R.ok) { mezclar(D, R); D._agenda = { endpoint: ENDPOINT, cliente: CLIENTE, clave: CLAVE, correos: R.correos || "" }; }
-    armar(D, res[2] || {});
+    var D = res[0], E = res[1];
+    if (E && E.ok) return armar(D, E.ajustes || {});
+    if (!CLAVE) return candado(false);
+    if (!E) return candado(false, "No pudimos comprobar tu clave. Intenta de nuevo.");
+    // Los links de antes (con la clave de la hoja de agenda) siguen entrando
+    return Promise.all([pedirRemoto(CLAVE), pedirAjustes()]).then(function (r2) {
+      var R = r2[0];
+      if (!R || !R.ok) return candado(true);
+      mezclar(D, R); D._agenda = { endpoint: ENDPOINT, cliente: CLIENTE, clave: CLAVE, correos: R.correos || "" };
+      armar(D, r2[1] || {});
+    });
   }).catch(function () { $("ahoraTitulo").textContent = "No pudimos cargar el plan. Recarga la página."; });
 
   /** Pantalla de clave: el panel no se muestra hasta que la clave sea correcta. */
-  function candado(fallo) {
+  function candado(fallo, aviso) {
     document.body.classList.add("bloqueado");
     var c = document.createElement("div");
     c.className = "candado";
     c.innerHTML = "<div class='card'><div class='burbuja'>" + svg(I.candado, 22) + "</div><h2>Tu panel de Grow Business</h2>" +
       "<p class='mudo'>Escribe la clave que te pasamos para entrar.</p>" +
       "<form><input id='claveIn' autocomplete='off' autocapitalize='off' spellcheck='false' placeholder='Clave' required>" +
-      "<button class='btn azul' type='submit'>Entrar</button></form><p class='err' id='claveErr'>" + (fallo ? "Esa clave no es correcta. Revisa el link o la clave." : "") + "</p></div>";
+      "<button class='btn azul' type='submit'>Entrar</button></form><p class='err' id='claveErr'>" + (aviso || (fallo ? "Esa clave no es correcta." : "")) + "</p></div>";
     document.body.appendChild(c);
     c.querySelector("form").addEventListener("submit", function (ev) {
       ev.preventDefault();
       var k = $("claveIn").value.trim(), b = c.querySelector("button");
       b.disabled = true; b.textContent = "Entrando…";
-      pedirRemoto(k).then(function (R) {
+      var mala = false;
+      entrar(k).then(function (E) { mala = !!(E && E.error === "clave"); return E && E.ok ? E : pedirRemoto(k); }).then(function (R) {
         if (R && R.ok) { guardarClave(k); location.replace(BASE + location.search.replace(/([?&])k=[^&]*&?/, "$1").replace(/[?&]$/, "")); }
-        else { b.disabled = false; b.textContent = "Entrar"; $("claveErr").textContent = R ? "Esa clave no es correcta." : "No pudimos comprobar la clave. Intenta de nuevo."; }
+        else { b.disabled = false; b.textContent = "Entrar"; $("claveErr").textContent = R || mala ? "Esa clave no es correcta." : "No pudimos comprobar la clave. Intenta de nuevo."; }
       });
     });
   }
@@ -143,6 +159,7 @@
   }
 
   function armar(D, A) {
+    D.etapas = D.etapas || []; D.hitos = D.hitos || []; D.sesiones = D.sesiones || [];
     var P = D.plan, N = P.duracionDias, DIA1 = P.dia1 || null, AG = D._agenda;
     var SEC = Object.assign({}, SEC_BASE, A.secciones || {});
     function fechaDia(n) { return DIA1 ? sumar(DIA1, n - 1) : null; }
@@ -159,7 +176,8 @@
     $("cliEtiqueta").textContent = P.etiqueta || "PLAN DE " + N + " DÍAS";
 
     // ---------- el camino: los pasos (engranajes), con lo que Mauricio cambió o apagó ----------
-    var pasos = (D.avances || []).map(function (x) {
+    var cfg = A.camino || D.camino;
+    var pasos = (cfg && window.PasosGB) ? window.PasosGB.armar(cfg) : (D.avances || []).map(function (x) {
       var o = (A.pasos || {})[slug(x.t)] || {};
       return { t: o.t || x.t, d: o.d || x.d || "", estado: o.estado || (x.ok ? "listo" : x.estado) || "prox", link: o.link || x.link || "", oculto: !!o.oculto };
     }).filter(function (x) { return !x.oculto; });
@@ -177,7 +195,13 @@
     var h = "";
     var riel = pasos.map(function (x, i) { return "<i class='" + (x.estado === "listo" ? "ok" : i === iAhora ? "ya" : "") + "'></i>"; }).join("");
     var lineaProx = "";
-    if (prox) {
+    var conPasos = !!(cfg && window.PasosGB);
+    if (conPasos && iAhora >= 0) {
+      // Lo próximo con fecha entre los pasos que faltan; si no hay fecha, simplemente el paso que sigue
+      var cf = pasos.slice(iAhora).filter(function (x) { return x.fecha && x.fecha >= HOY; })[0], sig = pasos[iAhora + 1];
+      if (cf) lineaProx = "<div class='proximo'>" + svg(I.cal) + "<div><small>Lo próximo</small><b>" + esc(cf.t) + "</b><span>" + cap(largo(cf.fecha)) + (cf.hora ? " · " + esc(cf.hora) : "") + "</span></div>" + (cf.meet ? "<a class='btn mini verde' href='" + esc(cf.meet) + "' target='_blank' rel='noopener'>Entrar</a>" : "") + "</div>";
+      else if (sig) lineaProx = "<div class='proximo'>" + svg(I.cal) + "<div><small>Después</small><b>" + esc(sig.t) + "</b>" + (sig.d ? "<span>" + esc(sig.d) + "</span>" : "") + "</div></div>";
+    } else if (prox) {
       lineaProx = "<div class='proximo'>" + svg(I.cal) + "<div><small>Lo próximo</small><b>" + esc(prox.s.t) + "</b><span>" + cap(largo(prox.f)) + (prox.s.hora ? " · " + esc(prox.s.hora) : "") + "</span></div>" +
         (prox.s.meet ? "<a class='btn mini verde' href='" + esc(prox.s.meet) + "' target='_blank' rel='noopener'>Entrar</a>" : "") + "</div>";
     } else if (porAgendar) {
@@ -187,12 +211,13 @@
     }
     h += "<div class='ahora'><div class='card'><div class='ahora-sup'><span class='etiq'>Dónde estamos</span>" + (pasos.length ? "<span class='cuenta-pasos'>" + listos + " de " + pasos.length + "</span>" : "") + "</div>" +
       "<div class='ahora-fila'><span class='rueda" + (actual ? " gira" : "") + "'>" + svg(actual ? I.gear : I.check, 26) + "</span><h2>" + esc(actual ? actual.t : "Todo listo") + "</h2></div>" +
-      ((A.mensaje || (actual && actual.d)) ? "<p class='ahora-msg'>" + esc(A.mensaje || actual.d) + "</p>" : "") +
+      ((A.mensaje || (actual && (actual.msg || actual.d))) ? "<p class='ahora-msg'>" + esc(A.mensaje || actual.msg || actual.d) + "</p>" : "") +
       (pasos.length ? "<div class='riel'>" + riel + "</div>" : "") + lineaProx + "</div></div>";
 
     // ---------- lo que les toca (solo si hay algo) ----------
     if (SEC.toca) {
       var toca = [];
+      if (actual && actual.toca) toca.push({ que: actual.toca });
       D.sesiones.slice().reverse().forEach(function (s) { (s.tareas || []).forEach(function (t) { if (t.quien !== "nosotros" && !t.hecho) toca.push(t); }); });
       if (toca.length) {
         var fila = function (t) { return "<div class='tarea-c'><i></i><span>" + esc(t.que) + (t.cuando ? "<small>" + esc(/^\d{4}-\d{2}-\d{2}$/.test(t.cuando) ? corto(t.cuando) : t.cuando) + "</small>" : "") + "</span></div>"; };
@@ -202,12 +227,19 @@
 
     // ---------- el camino ----------
     if (pasos.length) {
-      h += sec(I.gear, "El camino", "", "<ol class='camino'>" + pasos.map(function (x, i) {
-        var ya = x.estado === "listo", ahora = i === iAhora;
+      var filaCamino = function (x) {
+        var i = pasos.indexOf(x), ya = x.estado === "listo", ahora = i === iAhora;
+        var cuando = x.fecha ? corto(x.fecha) + (x.hora ? " · " + x.hora : "") : x.d;
         return "<li class='" + (ya ? "ok" : ahora ? "vamos" : "viene") + "'><span class='pt'>" + (ya ? svg(I.check, 14) : ahora ? svg(I.gear, 16) : "") + "</span><div><b>" + esc(x.t) + "</b>" +
-          (x.d && !ya && !ahora ? "<small>" + esc(x.d) + "</small>" : "") + "</div>" +
+          (cuando && !ya && !ahora ? "<small>" + esc(cuando) + "</small>" : "") + "</div>" +
           (x.link && (ya || ahora) ? "<a class='btn mini' href='" + esc(x.link) + "' target='_blank' rel='noopener'>" + svg(I.enlace, 13) + "Ver</a>" : "") + "</li>";
-      }).join("") + "</ol>");
+      };
+      // A la vista: lo que está pasando y lo que sigue. Lo hecho y lo lejano, plegados.
+      var desde = iAhora < 0 ? pasos.length : iAhora, hechos = pasos.slice(0, desde), cerca = pasos.slice(desde, desde + 4), lejos = pasos.slice(desde + 4);
+      var cuerpoCamino = (hechos.length ? "<details class='mas'><summary>" + hechos.length + (hechos.length === 1 ? " paso listo" : " pasos listos") + "</summary><ol class='camino'>" + hechos.map(filaCamino).join("") + "</ol></details>" : "") +
+        "<ol class='camino'>" + cerca.map(filaCamino).join("") + "</ol>" +
+        (lejos.length ? "<details class='mas'><summary>Ver el camino completo</summary><ol class='camino'>" + lejos.map(filaCamino).join("") + "</ol></details>" : "");
+      h += sec(I.gear, "El camino", "", cuerpoCamino);
     }
 
     // ---------- sesiones: lo último que acordamos; lo demás, adentro ----------
@@ -216,7 +248,8 @@
       return "<div class='item" + (ok ? " ok" : "") + "'><span class='ck'>" + (ok ? svg(I.check, 13) : "") + "</span><span class='txt'><b>" + esc(x.t) + "</b><small>" + esc(sub) + "</small>" + (extra || "") + "</span>" +
         (est ? "<span class='est estado " + est + "'>" + TXT[est] + "</span>" : "") + "</div>";
     }
-    if (SEC.sesiones) {
+    var conFecha = D.sesiones.filter(function (x) { return fechaDe(x); }).length;
+    if (SEC.sesiones && conFecha) {
       var ultima = D.sesiones.filter(function (x) { var f = fechaDe(x); return f && f < HOY && !x.tentativa && ((x.acuerdos && x.acuerdos.length) || (x.tareas && x.tareas.length)); }).pop();
       var cuerpo = "";
       if (ultima) {
@@ -235,7 +268,7 @@
         return item(x, est, sub, (botones ? "<span class='acciones'>" + botones + "</span>" : "") + acuerdos);
       }).join("");
       cuerpo += "<details class='mas'><summary>Ver todas las sesiones</summary><div class='lista'>" + todas + "</div>" + (AG ? "<button class='btn ancho' data-agendar='nueva'>Agendar una nueva sesión</button>" : "") + "</details>";
-      h += sec(I.charla, ultima ? "Lo que acordamos" : "Sesiones", "", cuerpo, "sesiones");
+      if (ultima || conFecha > 1 || AG) h += sec(I.charla, ultima ? "Lo que acordamos" : "Sesiones", "", cuerpo, "sesiones");
     }
 
     // ---------- lo que Mauricio puede encender ----------
@@ -278,7 +311,7 @@
           "<div class='bloque'><h4>Lo que sale de esta etapa</h4><p>" + esc(e.sale) + "</p></div></div></div>");
       });
       le.addEventListener("click", function (ev) { var x = ev.target.closest(".etapa-cab"); if (x) x.parentNode.classList.toggle("abierta"); });
-      if (!le.querySelector(".abierta")) le.firstElementChild.classList.add("abierta");
+      if (!le.querySelector(".abierta") && le.firstElementChild) le.firstElementChild.classList.add("abierta");
     }
     function pintarCalendario() {
       etapasConFecha();

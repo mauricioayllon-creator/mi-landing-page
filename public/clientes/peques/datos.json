@@ -1,0 +1,63 @@
+{
+  "actualizado": "2026-11-09",
+  "cliente": {
+    "nombre": "Peque's Importadora",
+    "inicial": "P"
+  },
+  "contacto": {
+    "nombre": "Belén",
+    "rol": "Su contacto en Grow Business."
+  },
+  "plan": {
+    "duracionDias": 30,
+    "dia1": null,
+    "anclaNombre": "Sesión 1",
+    "etiqueta": "Campaña de alcance",
+    "titulo": "Campaña de alcance"
+  },
+  "etapas": [],
+  "hitos": [],
+  "sesiones": [
+    {
+      "t": "Próximas sesiones",
+      "d": "Cada sesión se agenda al terminar la anterior."
+    }
+  ],
+  "camino": {
+    "on": {
+      "bienvenida": false,
+      "info": false,
+      "accesos": false,
+      "s1": false,
+      "s2": false,
+      "s3": false,
+      "guiones": true,
+      "confguion": false,
+      "sguion": false,
+      "g1": true,
+      "g2": true,
+      "g3": true,
+      "equipo": false,
+      "edicion": true,
+      "confvideos": true,
+      "sventa": false,
+      "publicar": true,
+      "pauta": true,
+      "srev": false,
+      "sextra": false,
+      "lanz": false,
+      "sres": false,
+      "victoria": true
+    },
+    "aqui": "g2",
+    "fechas": {},
+    "txt": {
+      "publicar": {
+        "d": "Cuando tengamos el acceso a tu cuenta."
+      },
+      "guiones": {
+        "t": "Guiones de tus productos"
+      }
+    }
+  }
+}

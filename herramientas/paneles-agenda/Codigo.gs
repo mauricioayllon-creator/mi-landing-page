@@ -128,7 +128,7 @@ function agendar_(c, b) {
 }
 
 /* Cómo aparece cada cliente en tu calendario. Cliente nuevo: una línea aquí, o usa el botón «Agendar» de tu panel. */
-var BUSCA = { "domix": "domix|marvin", "gada-accesorios": "gada|deborah|d[eé]bora", "paola-silva": "paola", "ariel-uyuni": "ariel", "rodrigo-aduanas": "rodrigo", "peques": "peque" };
+var BUSCA = { "domix": "domix|marvin", "gada-accesorios": "gada|deborah|d[eé]bora", "paola-silva": "paola", "ariel-uyuni": "ariel", "rodrigo-aduanas": "rodrigo", "sal-dulce": "sal ?dulce|mar[ií]a elena", "peques": "peque" };
 
 /* Las sesiones de un cliente, leídas en vivo de tu calendario. Solo las suyas: nunca las de otro ni tus llamadas de venta. */
 function citas_(slug) {

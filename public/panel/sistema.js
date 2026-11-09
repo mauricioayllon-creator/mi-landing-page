@@ -25,11 +25,20 @@
   var PAGINA = "https://mauricio-ayllon.com";
 
   return {
-    version: 13,
-    fecha: "2026-10-30",
+    version: 14,
+    fecha: "2026-11-09",
 
     // ---------- lo que cambió (lo más nuevo arriba) ----------
     cambios: [
+      {
+        version: 14, fecha: "2026-11-09", titulo: "La guía de cada cliente: qué ver en cada sesión y qué tienes que terminar teniendo",
+        que: [
+          "Clientes › Sus paneles › el cliente › Guía. Cada sesión, grabación y paso tiene su lista, en orden, con quién la hace y lo que tiene que salir de ahí.",
+          "Lo que no se ve salta solo a la siguiente sesión. Si no queda dónde verlo, te avisa y te ofrece prender otra.",
+          "La ruta de venta entra en la Sesión 2, antes de los guiones. El guion de respuesta y su ensayo, antes de publicar.",
+          "Sale de la auditoría de tus llamadas: nosotros/17."
+        ]
+      },
       {
         version: 13, fecha: "2026-10-30", titulo: "Un ángulo nuevo: «Aquí solo compran por precio»",
         que: [

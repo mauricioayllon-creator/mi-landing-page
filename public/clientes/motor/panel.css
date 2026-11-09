@@ -316,3 +316,5 @@ body.corto .candado h2{font-size:24px;font-weight:700;letter-spacing:-.02em}
 body.corto .candado input{text-align:center;letter-spacing:.14em;font-size:18px;text-transform:uppercase;border-radius:14px;background:var(--surface-2);border:0}
 body.corto .contacto-c{margin:22px 0 4px;padding:0 6px}
 body.corto footer{font-weight:400}
+
+.marca img{width:28px;height:28px;object-fit:contain;display:block}

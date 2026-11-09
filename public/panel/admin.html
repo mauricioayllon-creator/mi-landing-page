@@ -1543,6 +1543,36 @@
     .md h1 { font-size: 26px; }
     .dk-hero-txt h1 { font-size: 24px; }
   }
+  /* ---------- La Cocina: el mapa, a toda la pantalla ---------- */
+  .cocina-marco { margin: -28px -32px -120px; height: 100vh; height: 100dvh; background: #000; }
+  .cocina-marco iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .cocina-msg { padding: 60px 24px; text-align: center; color: #98a3ba; }
+  @media (max-width: 900px) { .cocina-marco { margin: 0; height: calc(100vh - 124px); height: calc(100dvh - 124px); } }
+  /* ---------- Sus paneles: lo que ve cada cliente ---------- */
+  .pc-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .pc-cli { display: flex; align-items: center; gap: 12px; padding: 16px; cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%; }
+  .pc-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .pc-cab h3 { margin: 0; font-size: 18px; }
+  .pc-sec { padding: 16px; margin-bottom: 14px; }
+  .pc-sec h4 { margin: 0 0 4px; font-size: 14.5px; }
+  .pc-sec > p { margin: 0 0 12px; opacity: .65; font-size: 13px; }
+  .pc-sw { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid rgba(120,130,160,.16); font-size: 14px; }
+  .pc-t { flex: none; position: relative; width: 44px; height: 26px; border-radius: 13px; border: 0; padding: 0; background: rgba(120,130,160,.35); cursor: pointer; transition: background .18s; }
+  .pc-t::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform .18s; }
+  .pc-t.si { background: #1a6fe0; } .pc-t.si::after { transform: translateX(18px); }
+  .pc-paso { padding: 12px 0; border-top: 1px solid rgba(120,130,160,.16); }
+  .pc-paso.apagado > .pc-campos { display: none; }
+  .pc-paso.apagado input { opacity: .45; }
+  .pc-paso-top { display: flex; align-items: center; gap: 10px; }
+  .pc-paso-top input { flex: 1; min-width: 0; font-weight: 700; }
+  .pc-campos { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin: 8px 0 0 54px; }
+  .pc-campos .pc-link { grid-column: 1 / -1; }
+  .pc-paso input, .pc-msg { width: 100%; box-sizing: border-box; padding: 8px 10px; border-radius: 9px; border: 1px solid rgba(120,130,160,.3); background: transparent; color: inherit; font: inherit; font-size: 13.5px; }
+  .pc-seg { display: inline-flex; border-radius: 9px; overflow: hidden; border: 1px solid rgba(120,130,160,.3); justify-self: start; }
+  .pc-seg button { border: 0; background: transparent; color: inherit; font: inherit; font-size: 12.5px; padding: 7px 10px; cursor: pointer; }
+  .pc-seg button.si { background: #1a6fe0; color: #fff; }
+  .pc-pie { position: sticky; bottom: 12px; display: flex; justify-content: flex-end; }
+  @media (max-width: 900px) { .pc-campos { grid-template-columns: 1fr; margin-left: 0; } .pc-pie { bottom: 84px; } }
 </style>
 </head>
 <body>
@@ -1927,6 +1957,7 @@
       nav("agencia", "#/agencia", "calendario", "Mi semana") +
       nav("constancia", "#/constancia", "grafica", "Constancia") +
       nav("libreta", "#/libreta", "cuaderno", "Ideas") +
+      nav("cocina", "#/cocina", "brujula", "La Cocina") +
       nav("sistema", "#/sistema", "capas", "Mi sistema", '<span class="cuenta" style="background:rgba(255,255,255,.16)">v' + SIS.version + "</span>") +
       (orden.length ? '<div class="lado-tit">Clientes</div>' + orden.map(function (c) {
         var pct = motorDe(c).pct;
@@ -1937,10 +1968,10 @@
       '<a class="nav-i' + (r === "nuevo" ? " activo" : "") + '" href="#/nuevo" style="margin-top:6px">' + ICO("mas", 18) + "Nuevo cliente</a>" +
       '<div class="esp"></div>' + nav("guia", "#/guia", "libro", "Cómo funciona") + nav("ajustes", "#/ajustes", "ajustes", "Ajustes") +
       '<button class="nav-i" type="button" data-accion="salir">' + ICO("salir", 18) + "Salir</button>";
-    var titulos = { inicio: "Tu día", ventas: "Ventas", prospecto: "Prospecto", marketing: "Marketing", contenido: "Contenido", clientes: "Tus clientes", cliente: "Cliente", nuevo: "Nuevo cliente", agencia: "Mi semana", objetivos: "Tus objetivos", libreta: "Tus ideas", sistema: "Mi sistema", guia: "Cómo funciona", ajustes: "Ajustes", constancia: "Tu constancia", video: "Tu video", documentos: "Tus documentos", carpeta: "Documentos", doc: "Documento" };
+    var titulos = { inicio: "Tu día", ventas: "Ventas", prospecto: "Prospecto", marketing: "Marketing", contenido: "Contenido", clientes: "Tus clientes", cliente: "Cliente", nuevo: "Nuevo cliente", agencia: "Mi semana", objetivos: "Tus objetivos", libreta: "Tus ideas", sistema: "Mi sistema", guia: "Cómo funciona", ajustes: "Ajustes", constancia: "Tu constancia", video: "Tu video", documentos: "Tus documentos", carpeta: "Documentos", doc: "Documento", cocina: "La Cocina" };
     if ($("movil-tit")) $("movil-tit").textContent = titulos[r] || "Tu panel";
     var mn = function (rutas, hash, ico, txt) { return '<a class="' + (rutas.indexOf(r) >= 0 ? "activo" : "") + '" href="' + hash + '">' + ICO(ico, 22) + txt + "</a>"; };
-    var otras = ["documentos", "carpeta", "doc", "marketing", "clientes", "cliente", "nuevo", "agencia", "objetivos", "libreta", "constancia", "sistema", "guia", "ajustes"];
+    var otras = ["cocina", "documentos", "carpeta", "doc", "marketing", "clientes", "cliente", "nuevo", "agencia", "objetivos", "libreta", "constancia", "sistema", "guia", "ajustes"];
     $("movil-nav").innerHTML = mn(["inicio"], "#/inicio", "brujula", "Hoy") + mn(["ventas", "prospecto"], "#/ventas", "apreton", "Ventas") +
       '<a class="nuevo" href="#/nuevo" data-accion="mas-rapido">' + ICO("mas", 22) + "Anotar</a>" +
       mn(["contenido", "video"], "#/contenido", "camara", "Contenido") +
@@ -2507,7 +2538,7 @@
       $("app").innerHTML = '<div style="padding:40px 18px;max-width:900px;margin:0 auto"><div class="esq" style="height:90px;margin-bottom:16px"></div><div class="esq" style="height:140px;margin-bottom:16px"></div><div class="esq" style="height:300px"></div></div>';
       return cargarLista().then(ruta).catch(falloRed);
     }
-    var rutas = { c: "cliente", p: "prospecto", nuevo: "nuevo", ajustes: "ajustes", guia: "guia", ventas: "ventas", marketing: "marketing", contenido: "contenido", clientes: "clientes", agencia: "agencia", libreta: "libreta", sistema: "sistema", constancia: "constancia", objetivos: "objetivos", v: "video", idea: "idea", documentos: "documentos", carpeta: "carpeta", doc: "doc" };
+    var rutas = { c: "cliente", p: "prospecto", nuevo: "nuevo", ajustes: "ajustes", guia: "guia", ventas: "ventas", marketing: "marketing", contenido: "contenido", clientes: "clientes", agencia: "agencia", libreta: "libreta", sistema: "sistema", constancia: "constancia", objetivos: "objetivos", v: "video", idea: "idea", documentos: "documentos", carpeta: "carpeta", doc: "doc", cocina: "cocina" };
     var rutaAntes = S.ruta, hashAntes = S.hashAhora || "";
     S.ruta = rutas[h[0]] || "inicio";
     // Un video abierto desde Contenido vuelve a Contenido (a la misma pestaña)
@@ -2535,6 +2566,7 @@
       case "constancia": return vistaConstancia();
       case "objetivos": return vistaObjetivos();
       case "video": return vistaVideo(decodeURIComponent(h[1]), decodeURIComponent(h[2]), h[3]);
+      case "cocina": return vistaCocina();
       case "documentos": return vistaDocumentos();
       case "carpeta": return h[1] ? vistaCarpeta(decodeURIComponent(h[1])) : ir("#/documentos/clientes");
       case "doc": return vistaDoc(decodeURIComponent(h[1] || ""), h[2]);
@@ -2755,9 +2787,89 @@
       pestanas("clientes", [
         { clave: "activos", nombre: "Activos", ico: "gente", cuenta: act.length || "", html: '<div class="tarjetas">' + act.map(tarjeta).join("") + nuevo + "</div>" },
         pau.length ? { clave: "pausados", nombre: "En pausa", ico: "pausa", cuenta: pau.length, html: '<div class="tarjetas">' + pau.map(tarjeta).join("") + "</div>" } : null,
-        ter.length ? { clave: "terminados", nombre: "Terminados", ico: "trofeo", cuenta: ter.length, html: '<div class="tarjetas">' + ter.map(tarjeta).join("") + "</div>" } : null
-      ], tabDe("clientes", ["activos", "pausados", "terminados"], "activos")));
+        ter.length ? { clave: "terminados", nombre: "Terminados", ico: "trofeo", cuenta: ter.length, html: '<div class="tarjetas">' + ter.map(tarjeta).join("") + "</div>" } : null,
+        { clave: "paneles", nombre: "Sus paneles", ico: "ojo", cuenta: PANELES.length, html: '<div id="pc-zona">' + pcHTML() + "</div>" }
+      ], tabDe("clientes", ["activos", "pausados", "terminados", "paneles"], "activos")));
   }
+  // ---------- Sus paneles: lo que ve cada cliente en mauricio-ayllon.com/clientes/<carpeta> ----------
+  // El plan vive en su datos.json. Aquí solo se apaga o se cambia lo que ve; se guarda en tu hoja y su página lo lee al abrir.
+  var PANELES = [{ carpeta: "domix", nombre: "Domix" }, { carpeta: "gada-accesorios", nombre: "GADA Accesorios" }];
+  var PC_SEC = [["toca", "Lo que les toca", true], ["sesiones", "Sesiones y acuerdos", true], ["calendario", "Calendario", false], ["etapas", "Cómo trabajamos", false], ["pedidos", "Lo que nos mandan", false], ["novedades", "Novedades", false], ["publicos", "A quién le hablamos", false]];
+  var PC_EST = [["listo", "Hecho"], ["curso", "Ahora"], ["prox", "Viene"]];
+  var PC = null;
+  function pcSlug(t) { return String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60); }
+  function pcHTML() {
+    if (!PC) return '<div class="pc-lista">' + PANELES.map(function (p) { return '<button type="button" class="card pc-cli" data-pc-abrir="' + e(p.carpeta) + '">' + ICO("gente", 20) + "<b>" + e(p.nombre) + "</b></button>"; }).join("") + "</div>";
+    if (PC.cargando) return '<div class="esq" style="height:240px"></div>';
+    var A = PC.ajustes, D = PC.datos;
+    var sw = function (k, txt, def) { var si = A.secciones[k] != null ? A.secciones[k] : def; return '<div class="pc-sw"><span>' + e(txt) + '</span><button type="button" class="pc-t' + (si ? " si" : "") + '" role="switch" aria-checked="' + si + '" aria-label="' + e(txt) + '" data-pc-sec="' + k + '"></button></div>'; };
+    var pasos = (D.avances || []).map(function (x) {
+      var k = pcSlug(x.t), o = A.pasos[k] || {}, orig = (x.ok ? "listo" : x.estado) || "prox", est = o.estado || orig;
+      return '<div class="pc-paso' + (o.oculto ? " apagado" : "") + '"><div class="pc-paso-top"><button type="button" class="pc-t' + (o.oculto ? "" : " si") + '" role="switch" aria-checked="' + !o.oculto + '" aria-label="Mostrar este paso" data-pc-ver="' + e(k) + '"></button><input value="' + e(o.t || x.t) + '" data-pc-campo="t" data-k="' + e(k) + '" data-orig="' + e(x.t) + '" maxlength="80" aria-label="Nombre del paso"></div>' +
+        '<div class="pc-campos"><input value="' + e(o.d || x.d || "") + '" data-pc-campo="d" data-k="' + e(k) + '" data-orig="' + e(x.d || "") + '" maxlength="160" placeholder="Cuándo: «Se ve en la Sesión 2», «Cuando grabemos»…" aria-label="Cuándo"><span class="pc-seg">' +
+        PC_EST.map(function (s) { return '<button type="button" class="' + (s[0] === est ? "si" : "") + '" data-pc-est="' + s[0] + '" data-k="' + e(k) + '" data-orig="' + orig + '">' + s[1] + "</button>"; }).join("") + '</span><input class="pc-link" type="url" inputmode="url" value="' + e(o.link || "") + '" data-pc-campo="link" data-k="' + e(k) + '" data-orig="" placeholder="Link para que lo vean (opcional)" aria-label="Link"></div></div>';
+    }).join("");
+    return '<div class="pc-cab"><button type="button" class="btn" data-pc-volver>' + ICO("atras", 15) + "Todos</button><h3>" + e(PC.nombre) + '</h3><a class="btn" target="_blank" rel="noopener" href="/clientes/' + e(PC.carpeta) + '/">' + ICO("ojo", 15) + "Ver su panel</a></div>" +
+      '<div class="card pc-sec"><h4>Lo que dice arriba</h4><p>Si lo dejas vacío, sale lo del paso actual.</p><input class="pc-msg" value="' + e(A.mensaje || "") + '" data-pc-campo="mensaje" maxlength="240" placeholder="Ej: Esta semana grabamos sus primeros videos."></div>' +
+      '<div class="card pc-sec"><h4>Qué ve</h4><p>Dónde estamos y el camino siempre están.</p>' + PC_SEC.filter(function (s) { return s[0] !== "publicos" || D.publicos; }).map(function (s) { return sw(s[0], s[1], s[2]); }).join("") + "</div>" +
+      '<div class="card pc-sec"><h4>Los pasos</h4><p>Lo que aún no llega se ve apagado, solo con su «cuándo».</p>' + pasos + "</div>" +
+      '<div class="pc-pie"><button type="button" class="btn azul" data-pc-guardar>' + ICO("check", 15) + "Guardar</button></div>";
+  }
+  function pcPintar() { var z = $("pc-zona"); if (z) z.innerHTML = pcHTML(); }
+  function pcAbrir(carpeta) {
+    var p = PANELES.filter(function (x) { return x.carpeta === carpeta; })[0]; if (!p) return;
+    PC = { carpeta: carpeta, nombre: p.nombre, cargando: true }; pcPintar();
+    Promise.all([fetch("/clientes/" + carpeta + "/datos.json", { cache: "no-store" }).then(function (r) { return r.json(); }), pedir("panel-ajustes-ver", { carpeta: carpeta })]).then(function (res) {
+      if (!PC || PC.carpeta !== carpeta) return;
+      if (!res[1].ok) throw new Error("ajustes");
+      PC.datos = res[0]; PC.ajustes = res[1].ajustes; PC.cargando = false; pcPintar();
+    }).catch(function () { PC = null; pcPintar(); toast("No pude abrir ese panel. Intenta de nuevo.", true); });
+  }
+  function pcPaso(k) { return PC.ajustes.pasos[k] = PC.ajustes.pasos[k] || {}; }
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest && ev.target.closest("[data-pc-abrir],[data-pc-volver],[data-pc-sec],[data-pc-ver],[data-pc-est],[data-pc-guardar]"); if (!b) return;
+    if (b.dataset.pcAbrir) return pcAbrir(b.dataset.pcAbrir);
+    if (b.hasAttribute("data-pc-volver")) { PC = null; return pcPintar(); }
+    if (!PC || PC.cargando) return;
+    if (b.dataset.pcSec) { var si = !b.classList.contains("si"); PC.ajustes.secciones[b.dataset.pcSec] = si; b.classList.toggle("si", si); b.setAttribute("aria-checked", si); return; }
+    if (b.dataset.pcVer) { var p = pcPaso(b.dataset.pcVer); if (p.oculto) delete p.oculto; else p.oculto = true; return pcPintar(); }
+    if (b.dataset.pcEst) { var q = pcPaso(b.dataset.k); if (b.dataset.pcEst === b.dataset.orig) delete q.estado; else q.estado = b.dataset.pcEst; return pcPintar(); }
+    if (b.hasAttribute("data-pc-guardar")) {
+      b.disabled = true;
+      pedir("panel-ajustes-guardar", { carpeta: PC.carpeta, ajustes: PC.ajustes }).then(function (r) {
+        b.disabled = false;
+        if (!r.ok) return toast("No se guardó. Intenta de nuevo.", true);
+        PC.ajustes = r.ajustes; toast("Guardado. " + PC.nombre + " ya lo ve así.");
+      }).catch(function () { b.disabled = false; toast("Sin señal: no se guardó.", true); });
+    }
+  });
+  document.addEventListener("input", function (ev) {
+    var i = ev.target; if (!PC || PC.cargando || !i.dataset || !i.dataset.pcCampo) return;
+    if (i.dataset.pcCampo === "mensaje") { PC.ajustes.mensaje = i.value; return; }
+    var p = pcPaso(i.dataset.k), c = i.dataset.pcCampo;
+    if (i.value.trim() === "" || i.value === i.dataset.orig) delete p[c]; else p[c] = i.value;
+  });
+
+  // ---------- La Cocina: el mapa de cómo se trabaja. Va cifrado con tu contraseña (cocina/cifrar.js) ----------
+  var cocinaHTML = null;
+  function b64(s) { return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); }); }
+  function abrirCocina() {
+    if (cocinaHTML) return Promise.resolve(cocinaHTML);
+    return fetch("cocina.dat", { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("falta"); return r.json(); }).then(function (d) {
+      return crypto.subtle.importKey("raw", new TextEncoder().encode(S.clave), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+        return crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt: b64(d.s), iterations: d.v }, k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+      }).then(function (k) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(d.i) }, k, b64(d.c)); });
+    }).then(function (b) { cocinaHTML = new TextDecoder().decode(b); return cocinaHTML; });
+  }
+  function vistaCocina() {
+    $("principal").innerHTML = '<div class="cocina-marco" id="cocina"><div class="cocina-msg">Abriendo La Cocina…</div></div>';
+    abrirCocina().then(function (html) {
+      var m = $("cocina"); if (!m) return;
+      var f = document.createElement("iframe"); f.title = "La Cocina"; f.setAttribute("sandbox", "allow-scripts"); f.srcdoc = html;
+      m.innerHTML = ""; m.appendChild(f);
+    }).catch(function () { var m = $("cocina"); if (m) m.innerHTML = '<div class="cocina-msg">No pude abrirla. Si cambiaste tu contraseña, pídele a Claude que la vuelva a subir.</div>'; });
+  }
+
   /** Tu semana: lo que viene en 7 días, de todos tus clientes, para armar tus bloques de trabajo. */
   function semanaHTML() {
     var h = hoy(), ev = GB.semana(clientesVivos(), h, 7);
@@ -5169,7 +5281,7 @@
   /** El menú del celular: lo que no entra abajo. */
   function abrirMenuMovil() {
     var it = function (hash, ico, txt) { return '<a class="btn" href="' + hash + '" data-cerrar>' + ICO(ico, 17) + e(txt) + "</a>"; };
-    hoja("<h3>Tu panel</h3><p class=\"sub\">Tu negocio y tu orden.</p><div class=\"salidas\">" + it("#/marketing", "megafono", "Marketing") + it("#/clientes", "gente", "Clientes") + it("#/documentos", "carpeta", "Documentos") + it("#/agencia", "calendario", "Mi semana") +
+    hoja("<h3>Tu panel</h3><p class=\"sub\">Tu negocio y tu orden.</p><div class=\"salidas\">" + it("#/marketing", "megafono", "Marketing") + it("#/clientes", "gente", "Clientes") + it("#/documentos", "carpeta", "Documentos") + it("#/cocina", "brujula", "La Cocina") + it("#/agencia", "calendario", "Mi semana") +
       it("#/objetivos", "diana", "Objetivos") + it("#/constancia", "grafica", "Constancia") + it("#/libreta", "cuaderno", "Ideas") + it("#/sistema", "capas", "Mi sistema") + it("#/guia", "libro", "Cómo funciona") + it("#/ajustes", "ajustes", "Ajustes") +
       '<button class="btn suave" type="button" data-accion="salir">' + ICO("salir", 17) + "Salir</button></div>");
   }

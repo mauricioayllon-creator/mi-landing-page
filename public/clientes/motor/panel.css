@@ -213,3 +213,61 @@ body.bloqueado .hero,body.bloqueado main,body.bloqueado footer{display:none}
 .tarea .quien.nos{background:#e9f1fe;color:#0b4bb0}
 .tarea .quien.ust{background:#fff4dc;color:#8a4706}
 .tarea .ok{margin-left:auto;color:#12a150;font-weight:800}
+
+/* ---------- el panel corto (desde el 09/11): dónde estamos, lo próximo, les toca y el camino ---------- */
+body.corto .hero{padding:16px 0 88px}
+body.corto .top{margin-bottom:18px}
+body.corto .cliente{margin-bottom:0}
+body.corto .avatar{width:48px;height:48px;border-radius:14px;font-size:20px}
+body.corto .cliente h1{font-size:24px}
+body.corto .hero-lead{display:none}
+body.corto .sec{padding:18px;margin-top:14px}
+body.corto .sec-cab{margin-bottom:12px;align-items:center}
+body.corto .sec-cab .burbuja{width:36px;height:36px;border-radius:11px;font-size:0;display:grid;place-items:center;color:var(--blue);background:var(--blue-soft)}
+body.corto .sec-cab h2{font-size:17px}
+.ahora-sup{display:flex;align-items:center;justify-content:space-between}
+.cuenta-pasos{font-size:13px;font-weight:700;color:var(--ink-3)}
+body.corto .ahora-fila{justify-content:flex-start;align-items:center;flex-wrap:nowrap;margin:10px 0 6px}
+.rueda{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--blue-soft);color:var(--blue)}
+.rueda.gira svg{animation:girar 7s linear infinite}
+@keyframes girar{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.rueda.gira svg{animation:none}}
+.ahora-msg{color:var(--ink-2);font-size:15px;margin-top:4px}
+.riel{display:flex;gap:4px;margin-top:14px}
+.riel i{flex:1;height:6px;border-radius:3px;background:var(--line-2)}
+.riel i.ok{background:var(--blue)}
+.riel i.ya{background:linear-gradient(90deg,var(--blue),#7fb2f5)}
+.proximo{display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px 14px;border-radius:var(--r);background:var(--surface-2);border:1px solid var(--line-2);color:var(--blue)}
+.proximo>svg{flex:none}
+.proximo>div{flex:1;min-width:0;color:var(--ink)}
+.proximo small{display:block;font-size:11.5px;font-weight:700;color:var(--ink-3)}
+.proximo b{display:block;font-size:14.5px;line-height:1.3}
+.proximo span{display:block;font-size:13px;color:var(--ink-2)}
+.tarea-c{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line-2);font-size:14.5px}
+.tarea-c:first-of-type{border-top:0}
+.tarea-c i{flex:none;width:18px;height:18px;margin-top:2px;border-radius:6px;border:2px solid var(--line)}
+.tarea-c small{display:block;font-size:12.5px;color:var(--ink-3);font-weight:600}
+.camino{list-style:none;margin:0;padding:0}
+.camino li{position:relative;display:flex;align-items:center;gap:12px;padding:9px 0}
+.camino li:not(:last-child)::before{content:"";position:absolute;left:12px;top:36px;bottom:-9px;width:2px;background:var(--line-2)}
+.camino .pt{flex:none;position:relative;z-index:1;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--line-2);color:#fff}
+.camino li>div{flex:1;min-width:0}
+.camino b{display:block;font-size:14.5px;line-height:1.3;font-weight:700}
+.camino small{display:block;font-size:12.5px;color:var(--ink-3);line-height:1.35}
+.camino .ok .pt{background:var(--blue)}
+.camino .ok b{color:var(--ink-2);font-weight:600}
+.camino .vamos .pt{background:var(--blue-soft);color:var(--blue);box-shadow:0 0 0 2px var(--blue)}
+.camino .vamos .pt svg{animation:girar 7s linear infinite}
+.camino .viene b{color:var(--ink-3);font-weight:600}
+.camino .btn svg{vertical-align:-2px;margin-right:4px}
+.acordamos small{display:block;font-size:12.5px;font-weight:700;color:var(--ink-3);margin-bottom:4px}
+.acordamos ul{margin:0;padding-left:18px;font-size:14.5px}
+.acordamos li{margin:4px 0}
+details.mas{margin-top:10px}
+details.mas>summary{cursor:pointer;font-size:13.5px;font-weight:700;color:var(--blue);padding:6px 0;list-style:none}
+details.mas>summary::-webkit-details-marker{display:none}
+body.corto .publico .em{display:none}
+.contacto-c{display:flex;align-items:center;gap:12px;margin:16px 0 8px;padding:0 4px}
+.contacto-c .avatar{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:16px;border:0}
+.contacto-c b{display:block;font-size:14px}
+.contacto-c small{display:block;font-size:12.5px;color:var(--ink-3)}

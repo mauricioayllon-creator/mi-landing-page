@@ -70,9 +70,9 @@
 
   function listo(s) {
     var caja = document.querySelector("#modalAgenda .modal-caja");
-    caja.innerHTML = "<div class='hecho'><div class='burbuja'>✅</div><h2>¡Sesión agendada!</h2>" +
+    caja.innerHTML = "<div class='hecho'><h2>¡Sesión agendada!</h2>" +
       "<p><b>" + esc(s.titulo) + "</b><br>" + esc(largo(s.fecha).replace(/^./, function (c) { return c.toUpperCase(); })) + " a las " + esc(s.hora) + " (hora de Bolivia)</p>" +
-      (s.meet ? "<p><a class='btn mini verde' href='" + esc(s.meet) + "' target='_blank' rel='noopener'>🎥 Link de Google Meet</a></p>" : "") +
+      (s.meet ? "<p><a class='btn mini verde' href='" + esc(s.meet) + "' target='_blank' rel='noopener'>Link de Google Meet</a></p>" : "") +
       "<p class='mudo'>La invitación ya va en camino a su correo. Si usan Gmail, aparece sola en su Google Calendar.</p>" +
       "<button class='btn azul ancho' id='agFin'>Listo</button></div>";
     document.getElementById("agFin").onclick = function () { location.reload(); };

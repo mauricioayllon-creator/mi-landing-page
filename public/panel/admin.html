@@ -1551,6 +1551,61 @@
   /* ---------- Sus paneles: lo que ve cada cliente ---------- */
   .pc-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
   .pc-cli { display: flex; align-items: center; gap: 12px; padding: 16px; cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%; }
+  .pc-fila { padding: 4px 4px 14px; }
+  .pc-cli { background: none; border: 0; }
+  .pc-clave { display: flex; align-items: center; gap: 10px; padding: 0 16px; font-size: 13px; }
+  .pc-clave span { opacity: .6; }
+  .pc-clave code { flex: 1; font-size: 16px; font-weight: 700; letter-spacing: .1em; }
+  .pc-nom { flex: 1; min-width: 0; font-size: 14.5px; font-weight: 600; }
+  .pc-nom small { display: block; font-weight: 400; font-size: 12.5px; opacity: .6; }
+  .pc-paso.apagado .pc-nom { opacity: .45; font-weight: 500; }
+  .pc-paso.aqui { background: rgba(26,111,224,.07); border-radius: 10px; }
+  .pc-aqui { flex: none; border: 1px solid rgba(120,130,160,.3); background: transparent; color: inherit; font: inherit; font-size: 12.5px; padding: 6px 11px; border-radius: 99px; cursor: pointer; }
+  .pc-aqui.si { background: #1a6fe0; border-color: #1a6fe0; color: #fff; }
+  .pc-aqui.ok { opacity: .55; }
+  .pc-mas { margin: 6px 0 0 54px; font-size: 12.5px; }
+  .pc-mas summary { cursor: pointer; opacity: .65; }
+  .pc-mas .pc-campos { margin-left: 0; }
+  .pc-grupo { margin: 16px 0 2px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .55; }
+  .pc-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pc-estado { font-size: 12.5px; opacity: .6; min-width: 60px; text-align: right; }
+  .pc-fila .pc-cli { padding-bottom: 8px; }
+  #pc-zona .pt-barra { margin-bottom: 14px; }
+  .pg-ficha { padding: 12px 16px; margin-bottom: 10px; font-size: 13.5px; }
+  .pg-ficha summary { cursor: pointer; font-weight: 700; display: flex; gap: 8px; align-items: center; }
+  .pg-ficha p { margin: 8px 0 0; }
+  .pg-aviso { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 14px; border-radius: 12px; margin-bottom: 8px; font-size: 13.5px; border-left: 4px solid; background: rgba(120,130,160,.08); flex-wrap: wrap; }
+  .pg-aviso.k-rojo { border-color: #e5484d; } .pg-aviso.k-naranja { border-color: #e38a06; }
+  .pg-aviso div { flex: 1; min-width: 200px; } .pg-aviso span { display: block; opacity: .75; font-size: 12.5px; margin-top: 2px; }
+  .pg-chips { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 10px; }
+  .pg-chip { flex: none; display: inline-flex; align-items: center; gap: 5px; border: 1px solid rgba(120,130,160,.3); background: transparent; color: inherit; font: inherit; font-size: 12.5px; padding: 6px 10px; border-radius: 99px; cursor: pointer; opacity: .7; }
+  .pg-chip.curso { opacity: 1; border-color: #1a6fe0; color: #1a6fe0; font-weight: 700; }
+  .pg-chip.sel { background: #1a6fe0; color: #fff; border-color: #1a6fe0; opacity: 1; }
+  .pg-chip i { font-style: normal; font-size: 11px; background: rgba(120,130,160,.22); border-radius: 99px; padding: 0 6px; }
+  .pg-paso { padding: 18px; }
+  .pg-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+  .pg-top h4 { margin: 0; font-size: 18px; } .pg-top p { margin: 3px 0 0; opacity: .7; font-size: 13.5px; }
+  .pg-ciego { margin-top: 10px; font-size: 13px; } .pg-ciego summary { cursor: pointer; font-weight: 700; color: #e38a06; } .pg-ciego p { margin: 6px 0 0; }
+  .pg-min { height: 5px; border-radius: 3px; background: rgba(120,130,160,.2); margin-top: 14px; overflow: hidden; } .pg-min i { display: block; height: 100%; background: #1a6fe0; } .pg-min.pasado i { background: #e5484d; }
+  .pg-minx { opacity: .6; font-size: 12px; }
+  .pg-sal { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; } .pg-sal small { width: 100%; opacity: .6; }
+  .pg-sal span { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; padding: 4px 9px; border-radius: 99px; background: rgba(120,130,160,.12); } .pg-sal span.si { background: rgba(18,161,80,.14); color: #0d7a3c; }
+  .pg-lista { margin-top: 12px; }
+  .pg-it { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid rgba(120,130,160,.16); }
+  .pg-c { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(120,130,160,.45); background: transparent; color: transparent; display: grid; place-items: center; cursor: pointer; padding: 0; }
+  .pg-it.clave .pg-c { border-color: #1a6fe0; }
+  .pg-it.hecho .pg-c { background: #1a6fe0; border-color: #1a6fe0; color: #fff; }
+  .pg-it.hecho b { opacity: .55; font-weight: 500; }
+  .pg-tx { flex: 1; min-width: 0; font-size: 14px; } .pg-tx summary { cursor: pointer; list-style: none; } .pg-tx summary::-webkit-details-marker { display: none; }
+  .pg-tx em { font-style: normal; font-size: 11.5px; margin-left: 6px; padding: 2px 7px; border-radius: 99px; background: rgba(227,138,6,.15); color: #b36b00; }
+  .pg-tx p { margin: 5px 0 0; font-size: 13px; opacity: .8; } .pg-sale { font-weight: 600; }
+  .pg-acc { display: flex; align-items: center; gap: 10px; margin-top: 6px; } .pg-acc small { opacity: .5; font-size: 11.5px; } .pg-acc button { border: 0; background: none; color: inherit; font: inherit; font-size: 12.5px; text-decoration: underline; opacity: .7; cursor: pointer; padding: 0; }
+  .pg-q { flex: none; font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: rgba(120,130,160,.15); margin-top: 2px; }
+  .pg-p { flex: none; width: 28px; height: 26px; border-radius: 8px; border: 1px solid rgba(120,130,160,.3); background: transparent; color: inherit; display: grid; place-items: center; cursor: pointer; padding: 0; }
+  .pg-atras { margin-top: 10px; font-size: 13px; } .pg-atras summary { cursor: pointer; font-weight: 700; opacity: .75; }
+  .pg-add { display: flex; gap: 8px; margin-top: 12px; } .pg-add input { flex: 1; min-width: 0; padding: 8px 10px; border-radius: 9px; border: 1px solid rgba(120,130,160,.3); background: transparent; color: inherit; font: inherit; font-size: 13.5px; }
+  .pg-fin { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; } .pg-fin small { opacity: .7; }
+  .pg-vacio { opacity: .6; font-size: 13.5px; }
   .pc-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
   .pc-cab h3 { margin: 0; font-size: 18px; }
   .pc-sec { padding: 16px; margin-bottom: 14px; }
@@ -1581,6 +1636,8 @@
 <input type="file" id="archivo" accept="image/png,image/jpeg,image/webp" hidden>
 
 <script src="config.js"></script>
+<script src="/clientes/motor/pasos.js"></script>
+<script src="pasos-guia.js"></script>
 <script src="logica.js"></script>
 <script src="sistema.js"></script>
 <script src="guia.js"></script>
@@ -2793,27 +2850,111 @@
   }
   // ---------- Sus paneles: lo que ve cada cliente en mauricio-ayllon.com/clientes/<carpeta> ----------
   // El plan vive en su datos.json. Aquí solo se apaga o se cambia lo que ve; se guarda en tu hoja y su página lo lee al abrir.
-  var PANELES = [{ carpeta: "domix", nombre: "Domix" }, { carpeta: "gada-accesorios", nombre: "GADA Accesorios" }];
+  var PANELES = [{ carpeta: "domix", nombre: "Domix" }, { carpeta: "gada-accesorios", nombre: "GADA Accesorios" }, { carpeta: "paola-silva", nombre: "Paola Silva" }, { carpeta: "ariel-uyuni", nombre: "Ariel" }, { carpeta: "rodrigo-aduanas", nombre: "Rodrigo" }, { carpeta: "peques", nombre: "Peque's Importadora" }];
+  var PC_CLAVES = null, PC_PIDIENDO = false, PC_CAL = "";
+  function pcTraerClaves() {
+    if (PC_CLAVES || PC_PIDIENDO) return; PC_PIDIENDO = true;
+    pedir("panel-claves", { carpetas: PANELES.map(function (p) { return p.carpeta; }) }).then(function (r) { PC_PIDIENDO = false; if (r.ok) { PC_CLAVES = r.claves; PC_CAL = r.cal || ""; if (!PC) pcPintar(); } }).catch(function () { PC_PIDIENDO = false; });
+  }
+  function pcMensaje(p) { return "Tu panel de Grow Business:\nhttps://mauricio-ayllon.com/clientes/" + p.carpeta + "\nTu clave: " + (PC_CLAVES[p.carpeta] || ""); }
   var PC_SEC = [["toca", "Lo que les toca", true], ["sesiones", "Sesiones y acuerdos", true], ["calendario", "Calendario", false], ["etapas", "Cómo trabajamos", false], ["pedidos", "Lo que nos mandan", false], ["novedades", "Novedades", false], ["publicos", "A quién le hablamos", false]];
   var PC_EST = [["listo", "Hecho"], ["curso", "Ahora"], ["prox", "Viene"]];
   var PC = null;
   function pcSlug(t) { return String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60); }
   function pcHTML() {
-    if (!PC) return '<div class="pc-lista">' + PANELES.map(function (p) { return '<button type="button" class="card pc-cli" data-pc-abrir="' + e(p.carpeta) + '">' + ICO("gente", 20) + "<b>" + e(p.nombre) + "</b></button>"; }).join("") + "</div>";
+    if (!PC) {
+      pcTraerClaves();
+      return '<div class="pc-lista">' + PANELES.map(function (p) {
+        var k = PC_CLAVES && PC_CLAVES[p.carpeta];
+        return '<div class="card pc-fila"><button type="button" class="pc-cli" data-pc-abrir="' + e(p.carpeta) + '">' + ICO("gente", 20) + "<b>" + e(p.nombre) + '</b></button><div class="pc-clave"><span>Clave</span><code>' + e(k || "···") + '</code><button type="button" class="btn" data-pc-copiar="' + e(p.carpeta) + '"' + (k ? "" : " disabled") + ">Copiar</button></div></div>";
+      }).join("") + "</div>";
+    }
     if (PC.cargando) return '<div class="esq" style="height:240px"></div>';
+    var cab = '<div class="pc-cab"><button type="button" class="btn" data-pc-volver>' + ICO("atras", 15) + "Todos</button><h3>" + e(PC.nombre) + '</h3><span class="pc-estado" id="pc-estado">' + e(PC.guardado || "") + "</span></div>";
+    var tabs = [["guia", "Guía"], ["pasos", "Pasos"], ["ajustes", "Ajustes"]].map(function (t) { return '<button type="button" class="pt-tab' + (PC.tab === t[0] ? " activa" : "") + '" data-pc-tab="' + t[0] + '"><span>' + t[1] + "</span></button>"; }).join("");
+    var cuerpo = PC.tab === "pasos" ? pcPasos() : PC.tab === "ajustes" ? pcAjustes() : pcGuia();
+    return cab + '<div class="pt-barra">' + tabs + "</div>" + cuerpo;
+  }
+  var PG_QUIEN = { M: "Tú", J: "Julio", B: "Belén", C: "Claude", X: "Cliente" };
+  function pcFechaDe(p) { return p.fecha ? GB.diaCorto(p.fecha) + (p.hora ? " · " + p.hora : "") : ""; }
+  /** Abre tu Google Calendar con la sesión ya escrita; la marca [gb:…] es la que después lee la sincronización. */
+  function pcCalLink(p) {
+    var dur = (window.GuiaGB.CUPO[p.id] || 60), q = ["text=" + encodeURIComponent(p.t + " · " + PC.nombre), "ctz=America/La_Paz", "vcon=meet", "details=" + encodeURIComponent("Panel: https://mauricio-ayllon.com/clientes/" + PC.carpeta + "\n[gb:" + PC.carpeta + ":" + p.id + "]")];
+    if (PC_CAL) q.push("authuser=" + encodeURIComponent(PC_CAL));
+    if (p.fecha) {
+      var d = p.fecha.split("-").map(Number), h = (p.hora || "09:00").split(":").map(Number), i = new Date(d[0], d[1] - 1, d[2], h[0], h[1]), f = new Date(i.getTime() + dur * 60000);
+      var fm = function (x) { var z = function (n) { return (n < 10 ? "0" : "") + n; }; return x.getFullYear() + z(x.getMonth() + 1) + z(x.getDate()) + "T" + z(x.getHours()) + z(x.getMinutes()) + "00"; };
+      q.push("dates=" + fm(i) + "/" + fm(f));
+    }
+    return "https://calendar.google.com/calendar/u/0/r/eventedit?" + q.join("&");
+  }
+  function pcAviso(a, plan) {
+    var colores = { 3: "rojo", 2: "naranja" }, p = window.PasosGB.POR_ID[a.prender], paso = plan.pasos.filter(function (x) { return x.id === a.paso; })[0];
+    var txtBoton = p ? (p.tipo === "grabacion" ? "Prender otra grabación" : "Prender otra sesión") : "";
+    return '<div class="pg-aviso k-' + colores[a.nivel] + '"><div><b>' + e(a.texto) + "</b>" + (a.items.length ? "<span>" + e(a.items.join(" · ")) + "</span>" : "") + "</div>" +
+      (a.prender ? '<button type="button" class="btn azul" data-pc-on="' + a.prender + '">' + txtBoton + "</button>" : "") +
+      (a.tipo === "agenda" && paso ? '<a class="btn" target="_blank" rel="noopener" href="' + e(pcCalLink(paso)) + '">' + ICO("calendario", 15) + "Agendar</a>" : "") +
+      (a.tipo === "venta" ? '<button type="button" class="btn" data-pc-tab="pasos">Elegir</button>' : "") + "</div>";
+  }
+  function pcItem(it, paso) {
+    return '<div class="pg-it' + (it.hecho ? " hecho" : "") + (it.must && !it.hecho ? " clave" : "") + '">' +
+      '<button type="button" class="pg-c" data-pg-ok="' + e(it.id) + '" data-paso="' + e(paso.id) + '" data-hecho="' + (it.hecho ? 1 : 0) + '" aria-label="Marcar ' + e(it.t) + '">' + ICO("check", 15) + "</button>" +
+      '<div class="pg-tx"><details><summary><b>' + e(it.t) + "</b>" + (it.viene ? '<em>Viene de ' + e(it.viene) + "</em>" : "") + "</summary>" +
+      (it.como ? "<p>" + e(it.como) + "</p>" : "") + (it.sale ? '<p class="pg-sale">Tiene que salir: ' + e(it.sale) + "</p>" : "") +
+      '<div class="pg-acc">' + (it.por ? "<small>" + e(it.por) + "</small>" : "") + '<button type="button" data-pg-na="' + e(it.id) + '">No aplica</button>' + (it.propio ? '<button type="button" data-pg-quitar="' + e(it.id) + '" data-paso="' + e(it.paso) + '">Quitar</button>' : "") + "</div></details></div>" +
+      (it.q ? '<span class="pg-q" title="' + e(PG_QUIEN[it.q] || "") + '">' + e(it.q) + "</span>" : "") +
+      (it.hecho || window.GuiaGB.esFijo(it.id) ? "" : '<button type="button" class="pg-p" data-pg-pasa="' + e(it.id) + '" data-paso="' + e(paso.id) + '" title="Pasar a la siguiente" aria-label="Pasar a la siguiente">' + ICO("derecha", 15) + "</button>") + "</div>";
+  }
+  function pcGuia() {
+    var A = PC.ajustes, plan = window.GuiaGB.plan(A.camino, window.PasosGB), f = A.ficha || {};
+    var pronto = GB.sumarDias(hoy(), 1), yaViene = plan.pasos[plan.cur] && !plan.pasos[plan.cur].tipo ? plan.pasos.slice(plan.cur).filter(function (x) { return x.fecha && x.fecha >= hoy() && x.fecha <= pronto; })[0] : null;
+    var p = plan.pasos.filter(function (x) { return x.id === PC.sel; })[0] || yaViene || plan.pasos[plan.cur] || plan.pasos[plan.pasos.length - 1];
+    if (!p) return '<div class="card vacio">Prende al menos un paso.</div>';
+    var h = "";
+    if (f.promesa || f.piso || f.garantia || f.falta) h += '<details class="card pg-ficha"><summary>' + ICO("diana", 15) + "Lo que le prometiste</summary>" + (f.promesa ? "<p>" + e(f.promesa) + "</p>" : "") + (f.piso ? "<p><b>Piso:</b> " + e(f.piso) + "</p>" : "") + (f.garantia ? "<p><b>Garantía:</b> " + e(f.garantia) + "</p>" : "") + (f.falta ? '<p class="pg-sale"><b>Falta dejar claro:</b> ' + e(f.falta) + "</p>" : "") + "</details>";
+    h += plan.avisos.map(function (a) { return pcAviso(a, plan); }).join("");
+    h += '<div class="pg-chips">' + plan.pasos.map(function (x) {
+      var n = x.items.filter(function (i) { return !i.hecho && !i.atras; }).length;
+      return '<button type="button" class="pg-chip ' + x.estado + (x.id === p.id ? " sel" : "") + '" data-pg-sel="' + x.id + '">' + (x.estado === "listo" && !n ? ICO("check", 13) : "") + "<span>" + e(x.t.replace(/^Sesión (\d+) · /, "$1 · ")) + "</span>" + (n ? "<i>" + n + "</i>" : "") + "</button>";
+    }).join("") + "</div>";
+    var deSesion = p.items.filter(function (i) { return !i.atras; }), atras = p.items.filter(function (i) { return i.atras && !i.hecho; }), sal = window.GuiaGB.salidas(p), pend = deSesion.filter(function (i) { return !i.hecho; });
+    h += '<div class="card pg-paso"><div class="pg-top"><div><h4>' + e(p.t) + "</h4><p>" + e(p.obj || "") + "</p></div>" + (p.tipo ? '<a class="btn" target="_blank" rel="noopener" href="' + e(pcCalLink(p)) + '">' + ICO("calendario", 15) + (p.fecha ? e(pcFechaDe(p)) : "Agendar") + "</a>" : "") + "</div>";
+    if (p.ciego) h += '<details class="pg-ciego"><summary>Punto ciego</summary><p>' + e(p.ciego) + "</p></details>";
+    if (p.cap) { var pct = Math.min(100, Math.round(p.minutos / p.cap * 100)); h += '<div class="pg-min' + (p.minutos > p.cap + 10 ? " pasado" : "") + '"><i style="width:' + pct + '%"></i></div><small class="pg-minx">' + p.minutos + " de " + p.cap + " min</small>"; }
+    if (sal.length) h += '<div class="pg-sal"><small>Al terminar tienes que tener</small>' + sal.map(function (s) { return '<span class="' + (s.hecho ? "si" : "") + '">' + (s.hecho ? ICO("check", 12) : "") + e(s.t) + "</span>"; }).join("") + "</div>";
+    h += '<div class="pg-lista">' + (deSesion.length ? deSesion.map(function (i) { return pcItem(i, p); }).join("") : '<p class="pg-vacio">Nada por ver aquí.</p>') + "</div>";
+    if (atras.length) h += '<details class="pg-atras"><summary>Se quedó atrás (' + atras.length + ")</summary>" + atras.map(function (i) { return pcItem(i, p); }).join("") + "</details>";
+    h += '<div class="pg-add"><input id="pg-nuevo" maxlength="120" placeholder="Agregar algo a este paso"><button type="button" class="btn" data-pg-add="' + e(p.id) + '">' + ICO("mas", 15) + "</button></div>";
+    if (plan.noAplica.length) h += '<details class="pg-atras"><summary>No aplican (' + plan.noAplica.length + ")</summary>" + plan.noAplica.map(function (i) { return '<div class="pg-it"><div class="pg-tx"><b>' + e(i.t) + '</b></div><button type="button" class="btn" data-pg-volver="' + e(i.id) + '">Volver a ponerlo</button></div>'; }).join("") + "</details>";
+    if (p.estado === "curso") {
+      var i0 = plan.pasos.indexOf(p), sig = plan.pasos[i0 + 1];
+      var sigSes = plan.pasos.slice(i0 + 1).filter(function (x) { return p.tipo && x.tipo === p.tipo; })[0];
+      h += '<div class="pg-fin">' + (pend.length && sigSes ? "<small>" + pend.length + (pend.length === 1 ? " cosa pasa" : " cosas pasan") + " a " + e(sigSes.t.split(" · ")[0]) + "</small>" : pend.length && p.tipo ? "<small>" + pend.length + " sin lugar: te voy a avisar</small>" : "") + '<button type="button" class="btn azul" data-pc-aqui="' + (sig ? sig.id : "fin") + '">' + ICO("check", 15) + "Terminar este paso</button></div>";
+    }
+    return h + "</div>";
+  }
+  function pcPasos() {
+    var C = PC.ajustes.camino, PG = window.PasosGB, GG = window.GuiaGB, vista = PG.armar(C), estadoDe = {};
+    vista.forEach(function (x) { estadoDe[x.id] = x; });
+    var fila = function (c) {
+      var si = PG.prendido(C, c), v = estadoDe[c.id], f = C.fechas[c.id] || {}, t = C.txt[c.id] || {}, conFecha = c.tipo === "sesion" || c.tipo === "grabacion" || c.id === "lanz";
+      return '<div class="pc-paso' + (si ? "" : " apagado") + (v && v.estado === "curso" ? " aqui" : "") + '"><div class="pc-paso-top"><button type="button" class="pc-t' + (si ? " si" : "") + '" role="switch" aria-checked="' + si + '" aria-label="Mostrar ' + e(c.t) + '" data-pc-on="' + c.id + '"></button><span class="pc-nom">' + e(v ? v.t : c.tipo === "grabacion" ? "Otra grabación" : c.tipo === "sesion" ? "Sesión · " + c.t : c.t) + (v && v.d && v.estado === "prox" ? "<small>" + e(v.fecha ? pcFechaDe(v) : v.d) + "</small>" : "") + "</span>" +
+        (si ? '<button type="button" class="pc-aqui' + (v.estado === "curso" ? " si" : v.estado === "listo" ? " ok" : "") + '" data-pc-aqui="' + c.id + '">' + (v.estado === "curso" ? "Vamos aquí" : v.estado === "listo" ? "Hecho" : "Marcar") + "</button>" : "") + "</div>" +
+        (si ? '<details class="pc-mas"><summary>' + (conFecha && f.f ? e(GB.diaCorto(f.f)) + (f.h ? " · " + e(f.h) : "") : "Ajustar") + '</summary><div class="pc-campos">' +
+          (conFecha ? '<input type="date" value="' + e(f.f || "") + '" data-pc-c="fechas" data-k="' + c.id + '" data-f="f" aria-label="Fecha"><input type="time" value="' + e(f.h || "") + '" data-pc-c="fechas" data-k="' + c.id + '" data-f="h" aria-label="Hora"><input class="pc-link" type="url" value="' + e(f.meet || "") + '" data-pc-c="fechas" data-k="' + c.id + '" data-f="meet" placeholder="Link de Meet (opcional)" aria-label="Link de Meet">' : "") +
+          '<input class="pc-link" value="' + e(t.t || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="t" maxlength="80" placeholder="Otro nombre (opcional)" aria-label="Otro nombre"><input class="pc-link" value="' + e(t.d || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="d" maxlength="160" placeholder="Otro «cuándo» (opcional)" aria-label="Otro cuándo"><input class="pc-link" type="url" value="' + e(t.link || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="link" placeholder="Link para que lo vean (opcional)" aria-label="Link"></div></details>' : "") + "</div>";
+    };
+    return '<div class="card pc-sec"><h4>Cómo vende</h4><p>De esto depende la sesión de venta. Puedes elegir varias.</p><div class="pc-presets">' + GG.VENTAS.map(function (v) { return '<button type="button" class="pc-aqui' + (C.venta[v.id] ? " si" : "") + '" data-pc-venta="' + v.id + '">' + e(v.nombre) + "</button>"; }).join("") + "</div></div>" +
+      '<div class="card pc-sec"><h4>Sus pasos</h4><p>Prende lo que tendrá este cliente. Toca «Marcar» donde van: lo anterior queda hecho solo.</p><div class="pc-presets">' + PG.PRESETS.map(function (p) { return '<button type="button" class="btn" data-pc-preset="' + p.id + '">' + e(p.nombre) + "</button>"; }).join("") + "</div>" +
+      PG.GRUPOS.map(function (g) { return '<div class="pc-grupo">' + e(g.nombre) + "</div>" + PG.CATALOGO.filter(function (c) { return c.g === g.id; }).map(fila).join(""); }).join("") + "</div>";
+  }
+  function pcAjustes() {
     var A = PC.ajustes, D = PC.datos;
     var sw = function (k, txt, def) { var si = A.secciones[k] != null ? A.secciones[k] : def; return '<div class="pc-sw"><span>' + e(txt) + '</span><button type="button" class="pc-t' + (si ? " si" : "") + '" role="switch" aria-checked="' + si + '" aria-label="' + e(txt) + '" data-pc-sec="' + k + '"></button></div>'; };
-    var pasos = (D.avances || []).map(function (x) {
-      var k = pcSlug(x.t), o = A.pasos[k] || {}, orig = (x.ok ? "listo" : x.estado) || "prox", est = o.estado || orig;
-      return '<div class="pc-paso' + (o.oculto ? " apagado" : "") + '"><div class="pc-paso-top"><button type="button" class="pc-t' + (o.oculto ? "" : " si") + '" role="switch" aria-checked="' + !o.oculto + '" aria-label="Mostrar este paso" data-pc-ver="' + e(k) + '"></button><input value="' + e(o.t || x.t) + '" data-pc-campo="t" data-k="' + e(k) + '" data-orig="' + e(x.t) + '" maxlength="80" aria-label="Nombre del paso"></div>' +
-        '<div class="pc-campos"><input value="' + e(o.d || x.d || "") + '" data-pc-campo="d" data-k="' + e(k) + '" data-orig="' + e(x.d || "") + '" maxlength="160" placeholder="Cuándo: «Se ve en la Sesión 2», «Cuando grabemos»…" aria-label="Cuándo"><span class="pc-seg">' +
-        PC_EST.map(function (s) { return '<button type="button" class="' + (s[0] === est ? "si" : "") + '" data-pc-est="' + s[0] + '" data-k="' + e(k) + '" data-orig="' + orig + '">' + s[1] + "</button>"; }).join("") + '</span><input class="pc-link" type="url" inputmode="url" value="' + e(o.link || "") + '" data-pc-campo="link" data-k="' + e(k) + '" data-orig="" placeholder="Link para que lo vean (opcional)" aria-label="Link"></div></div>';
-    }).join("");
-    return '<div class="pc-cab"><button type="button" class="btn" data-pc-volver>' + ICO("atras", 15) + "Todos</button><h3>" + e(PC.nombre) + '</h3><a class="btn" target="_blank" rel="noopener" href="/clientes/' + e(PC.carpeta) + '/">' + ICO("ojo", 15) + "Ver su panel</a></div>" +
+    var cl = PC_CLAVES && PC_CLAVES[PC.carpeta];
+    return '<div class="card pc-sec"><h4>Su entrada</h4><div class="pc-clave"><span>Clave</span><code>' + e(cl || "···") + '</code><button type="button" class="btn" data-pc-copiar="' + e(PC.carpeta) + '"' + (cl ? "" : " disabled") + '>Copiar</button><button type="button" class="btn" data-pc-nueva>Nueva</button><a class="btn" target="_blank" rel="noopener" href="/clientes/' + e(PC.carpeta) + '/">' + ICO("ojo", 15) + "Ver</a></div></div>" +
       '<div class="card pc-sec"><h4>Lo que dice arriba</h4><p>Si lo dejas vacío, sale lo del paso actual.</p><input class="pc-msg" value="' + e(A.mensaje || "") + '" data-pc-campo="mensaje" maxlength="240" placeholder="Ej: Esta semana grabamos sus primeros videos."></div>' +
-      '<div class="card pc-sec"><h4>Qué ve</h4><p>Dónde estamos y el camino siempre están.</p>' + PC_SEC.filter(function (s) { return s[0] !== "publicos" || D.publicos; }).map(function (s) { return sw(s[0], s[1], s[2]); }).join("") + "</div>" +
-      '<div class="card pc-sec"><h4>Los pasos</h4><p>Lo que aún no llega se ve apagado, solo con su «cuándo».</p>' + pasos + "</div>" +
-      '<div class="pc-pie"><button type="button" class="btn azul" data-pc-guardar>' + ICO("check", 15) + "Guardar</button></div>";
+      '<div class="card pc-sec"><h4>Qué ve</h4><p>Dónde estamos y el camino siempre están.</p>' + PC_SEC.filter(function (s) { return s[0] !== "publicos" || D.publicos; }).map(function (s) { return sw(s[0], s[1], s[2]); }).join("") + "</div>";
   }
   function pcPintar() { var z = $("pc-zona"); if (z) z.innerHTML = pcHTML(); }
   function pcAbrir(carpeta) {
@@ -2822,32 +2963,59 @@
     Promise.all([fetch("/clientes/" + carpeta + "/datos.json", { cache: "no-store" }).then(function (r) { return r.json(); }), pedir("panel-ajustes-ver", { carpeta: carpeta })]).then(function (res) {
       if (!PC || PC.carpeta !== carpeta) return;
       if (!res[1].ok) throw new Error("ajustes");
-      PC.datos = res[0]; PC.ajustes = res[1].ajustes; PC.cargando = false; pcPintar();
+      PC.datos = res[0]; PC.ajustes = res[1].ajustes; PC.tab = "guia";
+      var base = PC.ajustes.camino || PC.datos.camino || {};
+      PC.ajustes.camino = { on: Object.assign({}, base.on), aqui: base.aqui || "", fechas: Object.assign({}, base.fechas), txt: Object.assign({}, base.txt), it: Object.assign({}, base.it), venta: Object.assign({}, base.venta), extra: Object.assign({}, base.extra) };
+      PC.cargando = false; pcPintar();
     }).catch(function () { PC = null; pcPintar(); toast("No pude abrir ese panel. Intenta de nuevo.", true); });
   }
-  function pcPaso(k) { return PC.ajustes.pasos[k] = PC.ajustes.pasos[k] || {}; }
+  var pcTimer = null;
+  function pcEstado(t) { if (PC) PC.guardado = t; var el = $("pc-estado"); if (el) el.textContent = t; }
+  /** Guarda solo, un momento después del último cambio. */
+  function pcGuardarLuego() {
+    clearTimeout(pcTimer); pcEstado("Guardando…");
+    var yo = PC;
+    pcTimer = setTimeout(function () {
+      pedir("panel-ajustes-guardar", { carpeta: yo.carpeta, ajustes: yo.ajustes }).then(function (r) { if (PC === yo) pcEstado(r.ok ? "Guardado" : "No se guardó"); if (!r.ok) toast(r.error === "largo" ? "Es demasiado para guardar: quita algo." : "No se guardó. Intenta de nuevo.", true); }).catch(function () { if (PC === yo) pcEstado("Sin señal"); toast("Sin señal: no se guardó.", true); });
+    }, 700);
+  }
+  function pcCambio() { pcPintar(); pcGuardarLuego(); }
   document.addEventListener("click", function (ev) {
-    var b = ev.target.closest && ev.target.closest("[data-pc-abrir],[data-pc-volver],[data-pc-sec],[data-pc-ver],[data-pc-est],[data-pc-guardar]"); if (!b) return;
-    if (b.dataset.pcAbrir) return pcAbrir(b.dataset.pcAbrir);
-    if (b.hasAttribute("data-pc-volver")) { PC = null; return pcPintar(); }
-    if (!PC || PC.cargando) return;
-    if (b.dataset.pcSec) { var si = !b.classList.contains("si"); PC.ajustes.secciones[b.dataset.pcSec] = si; b.classList.toggle("si", si); b.setAttribute("aria-checked", si); return; }
-    if (b.dataset.pcVer) { var p = pcPaso(b.dataset.pcVer); if (p.oculto) delete p.oculto; else p.oculto = true; return pcPintar(); }
-    if (b.dataset.pcEst) { var q = pcPaso(b.dataset.k); if (b.dataset.pcEst === b.dataset.orig) delete q.estado; else q.estado = b.dataset.pcEst; return pcPintar(); }
-    if (b.hasAttribute("data-pc-guardar")) {
-      b.disabled = true;
-      pedir("panel-ajustes-guardar", { carpeta: PC.carpeta, ajustes: PC.ajustes }).then(function (r) {
-        b.disabled = false;
-        if (!r.ok) return toast("No se guardó. Intenta de nuevo.", true);
-        PC.ajustes = r.ajustes; toast("Guardado. " + PC.nombre + " ya lo ve así.");
-      }).catch(function () { b.disabled = false; toast("Sin señal: no se guardó.", true); });
+    var b = ev.target.closest && ev.target.closest("[data-pc-tab],[data-pc-venta],[data-pg-sel],[data-pg-ok],[data-pg-pasa],[data-pg-na],[data-pg-volver],[data-pg-add],[data-pg-quitar],[data-pc-on],[data-pc-aqui],[data-pc-preset],[data-pc-copiar],[data-pc-nueva],[data-pc-abrir],[data-pc-volver],[data-pc-sec]"); if (!b) return;
+    if (b.dataset.pcCopiar) {
+      var pcp = PANELES.filter(function (x) { return x.carpeta === b.dataset.pcCopiar; })[0], txt = pcMensaje(pcp);
+      return (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast("Copiado: el link y la clave de " + pcp.nombre); }).catch(function () { toast("No pude copiar. La clave es " + PC_CLAVES[pcp.carpeta], true); });
     }
+    if (b.dataset.pcAbrir) return pcAbrir(b.dataset.pcAbrir);
+    if (b.hasAttribute("data-pc-volver")) { clearTimeout(pcTimer); PC = null; return pcPintar(); }
+    if (!PC || PC.cargando) return;
+    if (b.hasAttribute("data-pc-nueva")) {
+      if (!window.confirm("¿Cambiar la clave de " + PC.nombre + "? La anterior dejará de servir.")) return;
+      var pcc = PC.carpeta;
+      return pedir("panel-clave-nueva", { carpeta: pcc }).then(function (r) { if (!r.ok) return toast("No se cambió.", true); if (PC_CLAVES) PC_CLAVES[pcc] = r.clave; toast("Clave nueva: " + r.clave); pcPintar(); }).catch(function () { toast("Sin señal: no se cambió.", true); });
+    }
+    var C = PC.ajustes.camino;
+    if (b.dataset.pcTab) { PC.tab = b.dataset.pcTab; return pcPintar(); }
+    if (b.dataset.pgSel) { PC.sel = b.dataset.pgSel; return pcPintar(); }
+    if (b.dataset.pcVenta) { if (C.venta[b.dataset.pcVenta]) delete C.venta[b.dataset.pcVenta]; else C.venta[b.dataset.pcVenta] = true; return pcCambio(); }
+    if (b.dataset.pgOk) { if (b.dataset.hecho === "1") delete C.it[b.dataset.pgOk]; else C.it[b.dataset.pgOk] = "ok:" + b.dataset.paso; return pcCambio(); }
+    if (b.dataset.pgPasa) { C.it[b.dataset.pgPasa] = "pasa:" + b.dataset.paso; return pcCambio(); }
+    if (b.dataset.pgNa) { C.it[b.dataset.pgNa] = "na"; return pcCambio(); }
+    if (b.dataset.pgVolver) { delete C.it[b.dataset.pgVolver]; return pcCambio(); }
+    if (b.dataset.pgAdd) { var inp = $("pg-nuevo"), v = inp && inp.value.trim(); if (!v) return; var l = C.extra[b.dataset.pgAdd] = C.extra[b.dataset.pgAdd] || []; l.push({ id: "x" + Date.now().toString(36), t: v }); return pcCambio(); }
+    if (b.dataset.pgQuitar) { var q = b.dataset.paso; C.extra[q] = (C.extra[q] || []).filter(function (e) { return e.id !== b.dataset.pgQuitar; }); delete C.it[b.dataset.pgQuitar]; return pcCambio(); }
+    if (b.dataset.pcSec) { var si = !b.classList.contains("si"); PC.ajustes.secciones[b.dataset.pcSec] = si; return pcCambio(); }
+    if (b.dataset.pcOn) { var pcD = window.PasosGB.POR_ID[b.dataset.pcOn]; C.on[pcD.id] = !window.PasosGB.prendido(C, pcD); return pcCambio(); }
+    if (b.dataset.pcAqui) { C.aqui = b.dataset.pcAqui; PC.sel = null; return pcCambio(); }
+    if (b.dataset.pcPreset) { C.on = window.PasosGB.preset(b.dataset.pcPreset); return pcCambio(); }
   });
   document.addEventListener("input", function (ev) {
-    var i = ev.target; if (!PC || PC.cargando || !i.dataset || !i.dataset.pcCampo) return;
-    if (i.dataset.pcCampo === "mensaje") { PC.ajustes.mensaje = i.value; return; }
-    var p = pcPaso(i.dataset.k), c = i.dataset.pcCampo;
-    if (i.value.trim() === "" || i.value === i.dataset.orig) delete p[c]; else p[c] = i.value;
+    var i = ev.target; if (!PC || PC.cargando || !i.dataset) return;
+    if (i.dataset.pcCampo === "mensaje") { PC.ajustes.mensaje = i.value; pcGuardarLuego(); return; }
+    if (!i.dataset.pcC) return;
+    var m = PC.ajustes.camino[i.dataset.pcC], o = m[i.dataset.k] = m[i.dataset.k] || {};
+    if (i.value.trim()) o[i.dataset.f] = i.value; else delete o[i.dataset.f];
+    pcGuardarLuego();
   });
 
   // ---------- La Cocina: el mapa de cómo se trabaja. Va cifrado con tu contraseña (cocina/cifrar.js) ----------

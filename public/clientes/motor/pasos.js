@@ -98,7 +98,40 @@
       };
     });
   }
-  var API = { GRUPOS: GRUPOS, CATALOGO: CATALOGO, PRESETS: PRESETS, POR_ID: POR_ID, preset: preset, prendido: prendido, armar: armar };
+  /** Qué número de sesión dice el título: «1 CONSULTORÍA», «2da Consultoría», «CONSULTORÍA 1», «Primera consultoría». */
+  function numeroDe(t) {
+    var m = t.match(/(\d+)\s*(?:ra|da|er|ro|ta|°|º|\.)?\s*(?:consult|sesi)/i) || t.match(/(?:consult[\wÀ-ÿ]*|sesi[oó]n)\s*(?:n[°º.]?\s*)?(\d+)/i);
+    if (m) return Number(m[1]);
+    var w = t.toLowerCase().match(/primera|segunda|tercera|cuarta|quinta/);
+    return w ? { primera: 1, segunda: 2, tercera: 3, cuarta: 4, quinta: 5 }[w[0]] : 0;
+  }
+  function pasoPorTitulo(t, vista, usados) {
+    var ses = vista.filter(function (p) { return p.tipo === S; }), gr = vista.filter(function (p) { return p.tipo === G; });
+    var libre = function (l) { return l.filter(function (p) { return !p.fecha && p.estado !== "listo" && !usados[p.id]; })[0]; };
+    var de = function (id) { return vista.filter(function (p) { return p.id === id; })[0] || null; };
+    if (/grab/i.test(t)) { var n = (t.match(/grab\S*\s*(\d)/i) || [])[1]; return (n && gr[Number(n) - 1]) || libre(gr) || gr[0] || null; }
+    if (/venta/i.test(t)) return de("sventa");
+    if (/revisi/i.test(t)) return de("srev");
+    if (/resultado/i.test(t)) return de("sres");
+    if (/consult|sesi/i.test(t)) { var k = numeroDe(t); return (k && ses[k - 1]) || libre(ses) || null; }
+    return null;
+  }
+  /** Tu Google Calendar manda: pone a cada sesión su fecha, su hora y su Meet, y le quita la fecha a la que ya no está. */
+  function aplicarCalendario(cfg, citas, hoy) {
+    var out = Object.assign({}, cfg, { fechas: Object.assign({}, cfg && cfg.fechas) }), usados = {};
+    (citas || []).slice().sort(function (a, b) { return (a.f + a.h).localeCompare(b.f + b.h); }).forEach(function (c) {
+      if (c.f < hoy) return;
+      var vista = armar(out), por = function (fn) { return vista.filter(fn)[0]; };
+      var paso = c.paso ? por(function (p) { return p.id === c.paso; }) : (c.meet && por(function (p) { return p.meet === c.meet; })) || pasoPorTitulo(c.titulo || "", vista, usados);
+      if (!paso || usados[paso.id]) return;
+      usados[paso.id] = true;
+      out.fechas[paso.id] = { f: c.f, h: c.h };
+      if (c.meet) out.fechas[paso.id].meet = c.meet;
+    });
+    armar(out).forEach(function (p) { if ((p.tipo === S || p.tipo === G) && !usados[p.id] && p.fecha >= hoy) delete out.fechas[p.id]; });
+    return out;
+  }
+  var API = { GRUPOS: GRUPOS, CATALOGO: CATALOGO, PRESETS: PRESETS, POR_ID: POR_ID, preset: preset, prendido: prendido, armar: armar, aplicarCalendario: aplicarCalendario };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   raiz.PasosGB = API;
 })(typeof window !== "undefined" ? window : globalThis);

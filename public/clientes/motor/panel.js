@@ -95,13 +95,28 @@
     ]);
   }
 
+  /** Lo que dice tu Google Calendar ahora mismo. Si tarda o falla, el panel sale con lo último guardado. */
+  function pedirCitas() {
+    if (!ENDPOINT) return Promise.resolve(null);
+    return Promise.race([
+      fetch(ENDPOINT + "?accion=citas&cliente=" + encodeURIComponent(CLIENTE)).then(function (r) { return r.json(); }).then(function (r) { return r && r.ok ? r.citas : null; }).catch(function () { return null; }),
+      new Promise(function (ok) { setTimeout(function () { ok(null); }, 7000); })
+    ]);
+  }
+  function conCalendario(D, A, citas) {
+    var base = A.camino || D.camino;
+    if (citas && base && window.PasosGB) A.camino = window.PasosGB.aplicarCalendario(base, citas, HOY);
+    return A;
+  }
+
   var CLAVE = leerClave();
   Promise.all([
     fetch(BASE + "/datos.json", { cache: "no-store" }).then(function (r) { return r.json(); }),
-    entrar(CLAVE)
+    entrar(CLAVE),
+    pedirCitas()
   ]).then(function (res) {
-    var D = res[0], E = res[1];
-    if (E && E.ok) return armar(D, E.ajustes || {});
+    var D = res[0], E = res[1], CITAS = res[2];
+    if (E && E.ok) return armar(D, conCalendario(D, E.ajustes || {}, CITAS));
     if (!CLAVE) return candado(false);
     if (!E) return candado(false, "No pudimos comprobar tu clave. Intenta de nuevo.");
     // Los links de antes (con la clave de la hoja de agenda) siguen entrando
@@ -109,7 +124,7 @@
       var R = r2[0];
       if (!R || !R.ok) return candado(true);
       mezclar(D, R); D._agenda = { endpoint: ENDPOINT, cliente: CLIENTE, clave: CLAVE, correos: R.correos || "" };
-      armar(D, r2[1] || {});
+      armar(D, conCalendario(D, r2[1] || {}, CITAS));
     });
   }).catch(function () { $("ahoraTitulo").textContent = "No pudimos cargar el plan. Recarga la página."; });
 

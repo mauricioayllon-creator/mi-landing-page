@@ -46,6 +46,7 @@ function configurar() {
 function doGet(e) {
   var p = (e && e.parameter) || {};
   return responder_(function () {
+    if (p.accion === "citas") return { ok: true, citas: citas_(p.cliente) };
     var c = cliente_(p.cliente, p.k);
     return { ok: true, nombre: c.nombre, correos: c.correos, sesiones: sesiones_(c.cliente) };
   });
@@ -124,6 +125,26 @@ function agendar_(c, b) {
   } catch (err) { /* el aviso no es crítico */ }
 
   return { id: id, titulo: titulo, fecha: b.fecha, hora: b.hora, duracion: dur, meet: meet };
+}
+
+/* Cómo aparece cada cliente en tu calendario. Cliente nuevo: una línea aquí, o usa el botón «Agendar» de tu panel. */
+var BUSCA = { "domix": "domix|marvin", "gada-accesorios": "gada|deborah|d[eé]bora", "paola-silva": "paola", "ariel-uyuni": "ariel", "rodrigo-aduanas": "rodrigo", "peques": "peque" };
+
+/* Las sesiones de un cliente, leídas en vivo de tu calendario. Solo las suyas: nunca las de otro ni tus llamadas de venta. */
+function citas_(slug) {
+  slug = String(slug || "");
+  if (!/^[a-z0-9-]{1,50}$/.test(slug)) throw fallo_("datos", "Cliente no válido.");
+  var re = BUSCA[slug] ? new RegExp(BUSCA[slug], "i") : null, marca = "[gb:" + slug + ":";
+  var ini = Utilities.parseDate(Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd") + " 00:00", TZ, "yyyy-MM-dd HH:mm");
+  var r = Calendar.Events.list("primary", { timeMin: ini.toISOString(), timeMax: new Date(ini.getTime() + 75 * 864e5).toISOString(), singleEvents: true, orderBy: "startTime", maxResults: 250 });
+  return (r.items || []).filter(function (ev) {
+    if (ev.status === "cancelled" || !ev.start || !ev.start.dateTime) return false;
+    if (String(ev.description || "").indexOf(marca) >= 0) return true;
+    return !!re && re.test(ev.summary || "") && !/\blead\b/i.test(ev.summary || "");
+  }).map(function (ev) {
+    var d = new Date(ev.start.dateTime), m = String(ev.description || "").match(/\[gb:[a-z0-9-]+:([a-z0-9]+)\]/);
+    return { titulo: String(ev.summary || ""), f: Utilities.formatDate(d, TZ, "yyyy-MM-dd"), h: Utilities.formatDate(d, TZ, "HH:mm"), meet: ev.hangoutLink || "", paso: m ? m[1] : "" };
+  });
 }
 
 function sesiones_(slug) {

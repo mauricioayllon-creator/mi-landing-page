@@ -27,11 +27,11 @@
 
   /** Para qué existe cada paso, en una línea, y el punto ciego que salió de tus llamadas. */
   var PASO = {
-    bienvenida: { obj: "Que en 48 horas sienta que eligió bien.", ciego: "Después del cobro no hay nada escrito. Peque's quedó en tierra de nadie y a Rodrigo le debes un recibo." },
+    bienvenida: { obj: "Que en 48 horas sienta que eligió bien.", ciego: "Después del cobro no hay nada escrito, y el cliente queda en tierra de nadie." },
     info: { obj: "Llegar a la Sesión 1 con sus datos, no a pedirlos ahí.", ciego: "Si los números se piden en la sesión, se va la hora preguntando." },
-    accesos: { obj: "Que nada frene el día de publicar.", ciego: "El video de Peque's estaba listo y no salió porque faltaba su TikTok." },
-    s1: { obj: "Salir con sus números, un solo comprador y una oferta escrita.", ciego: "Ninguna de tus llamadas dejó línea base, y varias garantías no dicen cómo se cuenta. Si no sale hoy, el día 30 se discute." },
-    s2: { obj: "Saber qué le decimos, a quién, y qué pasa cuando responde.", ciego: "En la Sesión 2 de Domix, Marvin preguntó qué pasa con los interesados. La sesión siguió y no se le respondió." },
+    accesos: { obj: "Que nada frene el día de publicar.", ciego: "Un video listo no sale si falta el acceso a su cuenta." },
+    s1: { obj: "Salir con sus números, un solo comprador y una oferta escrita.", ciego: "Sin línea base ni una medida escrita, el día 30 se discute." },
+    s2: { obj: "Saber qué le decimos, a quién, y qué pasa cuando responde.", ciego: "Si preguntan qué pasa con los interesados y no hay respuesta, falta la ruta." },
     s3: { obj: "Cerrar lo que quedó sin ver.", ciego: "Una sesión extra sirve solo si se enfoca en lo que faltó." },
     guiones: { obj: "Guiones que un extraño no pasa de largo y que llevan a la ruta de venta.", ciego: "Si el guion termina en «escríbeme» y nadie sabe qué pasa después, la venta se cae afuera del video." },
     confguion: { obj: "Que apruebe por escrito antes de grabar.", ciego: "Cada día sin su ok es un día menos de anuncio." },
@@ -42,9 +42,9 @@
     equipo: { obj: "Que su equipo grabe con tus guiones.", ciego: "Si su equipo graba sin tabla, te llegan videos que no puedes arreglar." },
     edicion: { obj: "Editar en 4 pasadas, una a la vez.", ciego: "Saltar entre pasadas es lo que te hace divagar." },
     confvideos: { obj: "Su ok en 24 horas.", ciego: "Es el único paso que no controlas: va con reloj." },
-    sventa: { obj: "Que el que llega se vuelva venta: quién responde, qué dice y cómo se cobra.", ciego: "El pilar 3 lo explicaste de tres formas: el cupón, «el control lo tienes tú» y «es un tema más tuyo». Hoy no se entrega." },
+    sventa: { obj: "Que el que llega se vuelva venta: quién responde, qué dice y cómo se cobra.", ciego: "Si el pilar 3 se explica distinto en cada llamada, no se entrega." },
     publicar: { obj: "Que salga el primero cuanto antes.", ciego: "No esperes a tener todos: el primero es el que da la primera señal." },
-    pauta: { obj: "Poner plata solo en lo que trae clientes.", ciego: "El video ganador se puede caer un día. Sin más piezas listas, te quedas sin llamadas, como hoy." },
+    pauta: { obj: "Poner plata solo en lo que trae clientes.", ciego: "El video ganador se puede caer un día. Sin más piezas listas, te quedas sin llamadas." },
     victoria: { obj: "Que vea al primer cliente que llegó por esto, y aprovecharlo.", ciego: "Es el mejor momento para pedir testimonio y referido, y hoy no está en ningún lado." },
     srev: { obj: "Decidir con números qué se apaga y qué se empuja.", ciego: "Sin línea base ni hoja, la reunión se vuelve opinión." },
     sextra: { obj: "Lo que haga falta.", ciego: "Si la prendes seguido, falta un paso en el camino." },

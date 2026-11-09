@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#082e6e">
 <title>Tus clientes · Grow Business</title>
+<link rel="icon" type="image/png" href="/grow-business-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1628,6 +1629,8 @@
   .pc-seg button.si { background: #1a6fe0; color: #fff; }
   .pc-pie { position: sticky; bottom: 12px; display: flex; justify-content: flex-end; }
   @media (max-width: 900px) { .pc-campos { grid-template-columns: 1fr; margin-left: 0; } .pc-pie { bottom: 84px; } }
+  .logo-gb { background: #fff !important; overflow: hidden; }
+  .logo-gb img { width: 86%; height: 86%; object-fit: contain; display: block; }
 </style>
 </head>
 <body>
@@ -1985,7 +1988,7 @@
   function shell() {
     if (!$("principal")) {
       var vidrio = ' style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff"';
-      $("app").innerHTML = '<div class="app"><aside class="lado" id="lado"></aside><div><div class="movil-top"><span class="logo-gb" style="width:32px;height:32px;font-size:16px">G</span><b id="movil-tit">Tu día</b>' +
+      $("app").innerHTML = '<div class="app"><aside class="lado" id="lado"></aside><div><div class="movil-top"><span class="logo-gb" style="width:32px;height:32px;font-size:16px"><img src="/grow-business-logo.png" alt="Grow Business"></span><b id="movil-tit">Tu día</b>' +
         '<a class="btn-ico chico"' + vidrio + ' href="#/sistema" aria-label="Mi sistema">' + ICO("brujula", 16) + "</a>" +
         '<a class="btn-ico chico"' + vidrio + ' href="#/guia" aria-label="Cómo funciona">' + ICO("ayuda", 16) + "</a>" +
         '<a class="btn-ico chico"' + vidrio + ' href="#/ajustes" aria-label="Ajustes">' + ICO("ajustes", 16) + '</a></div><main class="principal" id="principal"></main></div></div>' +
@@ -2002,7 +2005,7 @@
       if (rojo) return '<span class="cuenta" title="' + rojo + (rojo === 1 ? " cosa" : " cosas") + ' en rojo: ya">' + rojo + "</span>";
       return nar ? '<span class="cuenta k-naranja" title="' + nar + (nar === 1 ? " cosa" : " cosas") + ' en naranja: hoy">' + nar + "</span>" : "";
     };
-    $("lado").innerHTML = '<div class="lado-marca"><span class="logo-gb">G</span><div><b>' + e(S.datos ? S.datos.ajustes.marca : "Grow Business") + "</b><small>Tu panel · tu método</small></div></div>" +
+    $("lado").innerHTML = '<div class="lado-marca"><span class="logo-gb"><img src="/grow-business-logo.png" alt="Grow Business"></span><div><b>' + e(S.datos ? S.datos.ajustes.marca : "Grow Business") + "</b><small>Tu panel · tu método</small></div></div>" +
       nav("inicio", "#/inicio", "brujula", "Hoy", cuenta(dia)) +
       '<div class="lado-tit area">Tu negocio</div>' +
       nav(["ventas", "prospecto"], "#/ventas", "apreton", "Ventas", cuenta(dia.filter(function (x) { return x.prospecto; }))) +
@@ -2145,7 +2148,7 @@
   }
   function pintarDocumentos() {
     var a = arbolDocs(), anim = !S.sinAnim, q = S.docQ || "";
-    var nosotros = '<div class="dk-hero-n" style="--h:215"><span class="logo-gb">G</span><div><b>Grow Business</b><small>Lo nuestro: lo que hay que saber antes de subir un video, y tus llamadas de venta.</small></div></div>' +
+    var nosotros = '<div class="dk-hero-n" style="--h:215"><span class="logo-gb"><img src="/grow-business-logo.png" alt="Grow Business"></span><div><b>Grow Business</b><small>Lo nuestro: lo que hay que saber antes de subir un video, y tus llamadas de venta.</small></div></div>' +
       a.nosotros.subs.map(function (s) {
         return '<div class="sec-tit">' + ICO(s.ico, 15) + e(s.nombre) + (s.docs.length ? " (" + s.docs.length + ")" : "") + "</div>" + subHTML(a.nosotros, s);
       }).join("");
@@ -2660,7 +2663,7 @@
 
   // ---------- entrar ----------
   function vistaEntrar() {
-    $("app").innerHTML = '<div class="login"><form class="login-card aparece" id="f-entrar"><span class="logo-gb">G</span><h1>Tus clientes</h1><p>Todo lo de cada cliente, en un solo lugar.</p>' +
+    $("app").innerHTML = '<div class="login"><form class="login-card aparece" id="f-entrar"><span class="logo-gb"><img src="/grow-business-logo.png" alt="Grow Business"></span><h1>Tus clientes</h1><p>Todo lo de cada cliente, en un solo lugar.</p>' +
       '<label class="etq" for="clave">Contraseña</label><input class="inp" id="clave" type="password" autocomplete="current-password" required>' +
       '<button class="btn primario" type="submit">Entrar ' + ICO("derecha", 18) + '</button><p class="msg-err" id="login-err" hidden></p>' +
       (ENDPOINT ? "" : '<p class="ayuda" style="text-align:left;margin-top:14px"><b>Falta un paso:</b> pega la URL /exec de tu hoja en <code>config.js</code> (ver LEEME).</p>') + "</form></div>";
@@ -2846,9 +2849,26 @@
         { clave: "activos", nombre: "Activos", ico: "gente", cuenta: act.length || "", html: '<div class="tarjetas">' + act.map(tarjeta).join("") + nuevo + "</div>" },
         pau.length ? { clave: "pausados", nombre: "En pausa", ico: "pausa", cuenta: pau.length, html: '<div class="tarjetas">' + pau.map(tarjeta).join("") + "</div>" } : null,
         ter.length ? { clave: "terminados", nombre: "Terminados", ico: "trofeo", cuenta: ter.length, html: '<div class="tarjetas">' + ter.map(tarjeta).join("") + "</div>" } : null,
-        { clave: "paneles", nombre: "Sus paneles", ico: "ojo", cuenta: PANELES.length, html: '<div id="pc-zona">' + pcHTML() + "</div>" }
-      ], tabDe("clientes", ["activos", "pausados", "terminados", "paneles"], "activos")));
+        { clave: "paneles", nombre: "Sus paneles", ico: "ojo", cuenta: PANELES.length, html: '<div id="pc-zona">' + pcHTML() + "</div>" },
+        { clave: "equipo", nombre: "Equipo", ico: "gente", html: '<div id="eq-zona">' + eqHTML() + "</div>" }
+      ], tabDe("clientes", ["activos", "pausados", "terminados", "paneles", "equipo"], "activos")));
   }
+  // ---------- Tu equipo: el link y la clave de Julio y Belén. Lo que ve cada uno lo decide el servidor (Code.gs). ----------
+  var EQ_CLAVES = null, EQ_PIDIENDO = false, EQ = [{ id: "belen", nombre: "Belén", ve: "Sus tareas · agenda con Meet · clientes y sus claves · lo prometido y saldos · tareas de Julio · documentos · caja" }, { id: "julio", nombre: "Julio", ve: "Sus tareas · grabaciones · comprador, ángulos y guiones. Sin plata, sin claves, sin llamadas de venta" }];
+  function eqLink(id) { return "https://mauricio-ayllon.com/panel/equipo.html?p=" + id; }
+  function eqHTML() {
+    if (!EQ_CLAVES && !EQ_PIDIENDO) { EQ_PIDIENDO = true; pedir("equipo-claves", {}).then(function (r) { EQ_PIDIENDO = false; if (r.ok) { EQ_CLAVES = r.claves; eqPintar(); } }).catch(function () { EQ_PIDIENDO = false; }); }
+    return '<div class="pc-lista">' + EQ.map(function (p) { var k = EQ_CLAVES && EQ_CLAVES[p.id]; return '<div class="card pc-sec"><h4>' + e(p.nombre) + "</h4><p>" + e(p.ve) + '</p><div class="pc-clave"><span>Clave</span><code>' + e(k || "···") + '</code><button type="button" class="btn" data-eq-copiar="' + p.id + '"' + (k ? "" : " disabled") + '>Copiar</button><button type="button" class="btn" data-eq-nueva="' + p.id + '"' + (k ? "" : " disabled") + ">Nueva</button></div></div>"; }).join("") + "</div>";
+  }
+  function eqPintar() { var z = $("eq-zona"); if (z) z.innerHTML = eqHTML(); }
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest && ev.target.closest("[data-eq-copiar],[data-eq-nueva]"); if (!b) return;
+    if (b.dataset.eqCopiar) { var id = b.dataset.eqCopiar, t = "Tu panel de Grow Business:\n" + eqLink(id) + "\nTu clave: " + EQ_CLAVES[id]; return (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { toast("Copiado: su link y su clave"); }).catch(function () { toast("La clave es " + EQ_CLAVES[id], true); }); }
+    var q = b.dataset.eqNueva;
+    if (!window.confirm("¿Cambiar la clave? La anterior dejará de servir.")) return;
+    pedir("equipo-clave-nueva", { quien: q }).then(function (r) { if (!r.ok) return toast("No se cambió.", true); EQ_CLAVES[q] = r.clave; eqPintar(); toast("Clave nueva: " + r.clave); }).catch(function () { toast("Sin señal: no se cambió.", true); });
+  });
+
   // ---------- Sus paneles: lo que ve cada cliente en mauricio-ayllon.com/clientes/<carpeta> ----------
   // El plan vive en su datos.json. Aquí solo se apaga o se cambia lo que ve; se guarda en tu hoja y su página lo lee al abrir.
   var PANELES = [{ carpeta: "domix", nombre: "Domix" }, { carpeta: "gada-accesorios", nombre: "GADA Accesorios" }, { carpeta: "paola-silva", nombre: "Paola Silva" }, { carpeta: "ariel-uyuni", nombre: "Ariel" }, { carpeta: "rodrigo-aduanas", nombre: "Rodrigo" }, { carpeta: "peques", nombre: "Peque's Importadora" }];

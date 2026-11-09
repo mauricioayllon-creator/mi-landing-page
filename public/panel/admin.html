@@ -1636,6 +1636,7 @@
 <input type="file" id="archivo" accept="image/png,image/jpeg,image/webp" hidden>
 
 <script src="config.js"></script>
+<script src="/clientes/motor/config.js"></script>
 <script src="/clientes/motor/pasos.js"></script>
 <script src="pasos-guia.js"></script>
 <script src="logica.js"></script>
@@ -2960,12 +2961,13 @@
   function pcAbrir(carpeta) {
     var p = PANELES.filter(function (x) { return x.carpeta === carpeta; })[0]; if (!p) return;
     PC = { carpeta: carpeta, nombre: p.nombre, cargando: true }; pcPintar();
-    Promise.all([fetch("/clientes/" + carpeta + "/datos.json", { cache: "no-store" }).then(function (r) { return r.json(); }), pedir("panel-ajustes-ver", { carpeta: carpeta })]).then(function (res) {
+    Promise.all([fetch("/clientes/" + carpeta + "/datos.json", { cache: "no-store" }).then(function (r) { return r.json(); }), pedir("panel-ajustes-ver", { carpeta: carpeta }), window.AGENDA_ENDPOINT ? fetch(window.AGENDA_ENDPOINT + "?accion=citas&cliente=" + encodeURIComponent(carpeta)).then(function (r) { return r.json(); }).catch(function () { return null; }) : null]).then(function (res) {
       if (!PC || PC.carpeta !== carpeta) return;
       if (!res[1].ok) throw new Error("ajustes");
       PC.datos = res[0]; PC.ajustes = res[1].ajustes; PC.tab = "guia";
       var base = PC.ajustes.camino || PC.datos.camino || {};
       PC.ajustes.camino = { on: Object.assign({}, base.on), aqui: base.aqui || "", fechas: Object.assign({}, base.fechas), txt: Object.assign({}, base.txt), it: Object.assign({}, base.it), venta: Object.assign({}, base.venta), extra: Object.assign({}, base.extra) };
+      if (res[2] && res[2].ok) PC.ajustes.camino = window.PasosGB.aplicarCalendario(PC.ajustes.camino, res[2].citas, hoy());
       PC.cargando = false; pcPintar();
     }).catch(function () { PC = null; pcPintar(); toast("No pude abrir ese panel. Intenta de nuevo.", true); });
   }

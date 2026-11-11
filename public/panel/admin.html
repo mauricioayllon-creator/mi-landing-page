@@ -1564,6 +1564,11 @@
   .pc-aqui { flex: none; border: 1px solid rgba(120,130,160,.3); background: transparent; color: inherit; font: inherit; font-size: 12.5px; padding: 6px 11px; border-radius: 99px; cursor: pointer; }
   .pc-aqui.si { background: #1a6fe0; border-color: #1a6fe0; color: #fff; }
   .pc-aqui.ok { opacity: .55; }
+  .pc-fecha { position: relative; flex: none; display: inline-flex; align-items: center; gap: 5px; border: 1px dashed rgba(120,130,160,.5); border-radius: 99px; padding: 6px 11px; font-size: 12.5px; color: inherit; text-decoration: none; white-space: nowrap; cursor: pointer; }
+  .pc-fecha.si { border-style: solid; border-color: #1a6fe0; color: #1a6fe0; font-weight: 600; }
+  .pc-paso-top .pc-fecha input, .pc-fecha input { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; opacity: 0; cursor: pointer; }
+  .pc-fecha input::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; cursor: pointer; }
+  @media (max-width: 600px) { .pc-paso-top { flex-wrap: wrap; } .pc-nom { flex: 1 1 calc(100% - 56px); } .pc-paso-top .pc-fecha { margin-left: 54px; } }
   .pc-mas { margin: 6px 0 0 54px; font-size: 12.5px; }
   .pc-mas summary { cursor: pointer; opacity: .65; }
   .pc-mas .pc-campos { margin-left: 0; }
@@ -2898,6 +2903,14 @@
   }
   var PG_QUIEN = { M: "Tú", J: "Julio", B: "Belén", C: "Claude", X: "Cliente" };
   function pcFechaDe(p) { return p.fecha ? GB.diaCorto(p.fecha) + (p.hora ? " · " + p.hora : "") : ""; }
+  /** La fecha de un paso que no va en tu calendario (entrega de guiones, edición, publicar…): la pones tú y la ve el cliente. */
+  function pcChipFecha(id, f) { return '<label class="pc-fecha' + (f ? " si" : "") + '">' + ICO("calendario", 14) + "<span>" + e(f ? GB.diaCorto(f) : "Poner fecha") + '</span><input type="date" value="' + e(f || "") + '" data-pc-c="fechas" data-k="' + e(id) + '" data-f="f" aria-label="Fecha"></label>'; }
+  /** Las sesiones y grabaciones las manda tu Google Calendar: el botón te lleva allá. */
+  function pcChipCita(v) {
+    var d = v.fecha ? v.fecha.split("-").map(Number) : null;
+    var dia = d ? "https://calendar.google.com/calendar/u/0/r/day/" + d[0] + "/" + d[1] + "/" + d[2] + (PC_CAL ? "?authuser=" + encodeURIComponent(PC_CAL) : "") : "";
+    return '<a class="pc-fecha' + (d ? " si" : "") + '" target="_blank" rel="noopener" href="' + e(d ? dia : pcCalLink(v)) + '">' + ICO("calendario", 14) + "<span>" + e(d ? pcFechaDe(v) : "Agendar") + "</span></a>";
+  }
   /** Abre tu Google Calendar con la sesión ya escrita; la marca [gb:…] es la que después lee la sincronización. */
   function pcCalLink(p) {
     var dur = (window.GuiaGB.CUPO[p.id] || 60), q = ["text=" + encodeURIComponent(p.t + " · " + PC.nombre), "ctz=America/La_Paz", "vcon=meet", "details=" + encodeURIComponent("Panel: https://mauricio-ayllon.com/clientes/" + PC.carpeta + "\n[gb:" + PC.carpeta + ":" + p.id + "]")];
@@ -2928,7 +2941,7 @@
   }
   function pcGuia() {
     var A = PC.ajustes, plan = window.GuiaGB.plan(A.camino, window.PasosGB), f = A.ficha || {};
-    var pronto = GB.sumarDias(hoy(), 1), yaViene = plan.pasos[plan.cur] && !plan.pasos[plan.cur].tipo ? plan.pasos.slice(plan.cur).filter(function (x) { return x.fecha && x.fecha >= hoy() && x.fecha <= pronto; })[0] : null;
+    var pronto = GB.sumarDias(hoy(), 1), yaViene = plan.pasos[plan.cur] && !plan.pasos[plan.cur].tipo ? plan.pasos.slice(plan.cur).filter(function (x) { return x.tipo && x.fecha && x.fecha >= hoy() && x.fecha <= pronto; })[0] : null;
     var p = plan.pasos.filter(function (x) { return x.id === PC.sel; })[0] || yaViene || plan.pasos[plan.cur] || plan.pasos[plan.pasos.length - 1];
     if (!p) return '<div class="card vacio">Prende al menos un paso.</div>';
     var h = "";
@@ -2939,7 +2952,7 @@
       return '<button type="button" class="pg-chip ' + x.estado + (x.id === p.id ? " sel" : "") + '" data-pg-sel="' + x.id + '">' + (x.estado === "listo" && !n ? ICO("check", 13) : "") + "<span>" + e(x.t.replace(/^Sesión (\d+) · /, "$1 · ")) + "</span>" + (n ? "<i>" + n + "</i>" : "") + "</button>";
     }).join("") + "</div>";
     var deSesion = p.items.filter(function (i) { return !i.atras; }), atras = p.items.filter(function (i) { return i.atras && !i.hecho; }), sal = window.GuiaGB.salidas(p), pend = deSesion.filter(function (i) { return !i.hecho; });
-    h += '<div class="card pg-paso"><div class="pg-top"><div><h4>' + e(p.t) + "</h4><p>" + e(p.obj || "") + "</p></div>" + (p.tipo ? '<div class="pg-cita">' + (p.fecha ? '<span class="btn" style="cursor:default">' + ICO("calendario", 15) + e(pcFechaDe(p)) + "</span>" : '<a class="btn" target="_blank" rel="noopener" href="' + e(pcCalLink(p)) + '">' + ICO("calendario", 15) + "Agendar</a>") + (p.meet ? '<a class="btn azul" target="_blank" rel="noopener" href="' + e(p.meet) + '">Entrar</a>' : "") + "</div>" : "") + "</div>";
+    h += '<div class="card pg-paso"><div class="pg-top"><div><h4>' + e(p.t) + "</h4><p>" + e(p.obj || "") + "</p></div>" + (p.tipo ? '<div class="pg-cita">' + (p.fecha ? '<span class="btn" style="cursor:default">' + ICO("calendario", 15) + e(pcFechaDe(p)) + "</span>" : '<a class="btn" target="_blank" rel="noopener" href="' + e(pcCalLink(p)) + '">' + ICO("calendario", 15) + "Agendar</a>") + (p.meet ? '<a class="btn azul" target="_blank" rel="noopener" href="' + e(p.meet) + '">Entrar</a>' : "") + "</div>" : '<div class="pg-cita">' + pcChipFecha(p.id, p.fecha) + "</div>") + "</div>";
     if (p.ciego) h += '<details class="pg-ciego"><summary>Punto ciego</summary><p>' + e(p.ciego) + "</p></details>";
     if (p.cap) { var pct = Math.min(100, Math.round(p.minutos / p.cap * 100)); h += '<div class="pg-min' + (p.minutos > p.cap + 10 ? " pasado" : "") + '"><i style="width:' + pct + '%"></i></div><small class="pg-minx">' + p.minutos + " de " + p.cap + " min</small>"; }
     if (sal.length) h += '<div class="pg-sal"><small>Al terminar tienes que tener</small>' + sal.map(function (s) { return '<span class="' + (s.hecho ? "si" : "") + '">' + (s.hecho ? ICO("check", 12) : "") + e(s.t) + "</span>"; }).join("") + "</div>";
@@ -2958,12 +2971,12 @@
     var C = PC.ajustes.camino, PG = window.PasosGB, GG = window.GuiaGB, vista = PG.armar(C), estadoDe = {};
     vista.forEach(function (x) { estadoDe[x.id] = x; });
     var fila = function (c) {
-      var si = PG.prendido(C, c), v = estadoDe[c.id], f = C.fechas[c.id] || {}, t = C.txt[c.id] || {}, conFecha = c.tipo === "sesion" || c.tipo === "grabacion" || c.id === "lanz";
-      return '<div class="pc-paso' + (si ? "" : " apagado") + (v && v.estado === "curso" ? " aqui" : "") + '"><div class="pc-paso-top"><button type="button" class="pc-t' + (si ? " si" : "") + '" role="switch" aria-checked="' + si + '" aria-label="Mostrar ' + e(c.t) + '" data-pc-on="' + c.id + '"></button><span class="pc-nom">' + e(v ? v.t : c.tipo === "grabacion" ? "Otra grabación" : c.tipo === "sesion" ? "Sesión · " + c.t : c.t) + (v && v.d && v.estado === "prox" ? "<small>" + e(v.fecha ? pcFechaDe(v) : v.d) + "</small>" : "") + "</span>" +
+      var si = PG.prendido(C, c), v = estadoDe[c.id], t = C.txt[c.id] || {}, cita = c.tipo === "sesion" || c.tipo === "grabacion";
+      return '<div class="pc-paso' + (si ? "" : " apagado") + (v && v.estado === "curso" ? " aqui" : "") + '"><div class="pc-paso-top"><button type="button" class="pc-t' + (si ? " si" : "") + '" role="switch" aria-checked="' + si + '" aria-label="Mostrar ' + e(c.t) + '" data-pc-on="' + c.id + '"></button><span class="pc-nom">' + e(v ? v.t : c.tipo === "grabacion" ? "Otra grabación" : c.tipo === "sesion" ? "Sesión · " + c.t : c.t) + (v && v.d && !v.fecha && v.estado === "prox" ? "<small>" + e(v.d) + "</small>" : "") + "</span>" +
+        (si && (v.estado !== "listo" || v.fecha) ? (cita ? pcChipCita(v) : pcChipFecha(c.id, v.fecha)) : "") +
         (si ? '<button type="button" class="pc-aqui' + (v.estado === "curso" ? " si" : v.estado === "listo" ? " ok" : "") + '" data-pc-aqui="' + c.id + '">' + (v.estado === "curso" ? "Vamos aquí" : v.estado === "listo" ? "Hecho" : "Marcar") + "</button>" : "") + "</div>" +
-        (si ? '<details class="pc-mas"><summary>' + (conFecha && f.f ? e(GB.diaCorto(f.f)) + (f.h ? " · " + e(f.h) : "") : "Ajustar") + '</summary><div class="pc-campos">' +
-          (conFecha ? '<input type="date" value="' + e(f.f || "") + '" data-pc-c="fechas" data-k="' + c.id + '" data-f="f" aria-label="Fecha"><input type="time" value="' + e(f.h || "") + '" data-pc-c="fechas" data-k="' + c.id + '" data-f="h" aria-label="Hora"><input class="pc-link" type="url" value="' + e(f.meet || "") + '" data-pc-c="fechas" data-k="' + c.id + '" data-f="meet" placeholder="Link de Meet (opcional)" aria-label="Link de Meet">' : "") +
-          '<input class="pc-link" value="' + e(t.t || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="t" maxlength="80" placeholder="Otro nombre (opcional)" aria-label="Otro nombre"><input class="pc-link" value="' + e(t.d || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="d" maxlength="160" placeholder="Otro «cuándo» (opcional)" aria-label="Otro cuándo"><input class="pc-link" type="url" value="' + e(t.link || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="link" placeholder="Link para que lo vean (opcional)" aria-label="Link"></div></details>' : "") + "</div>";
+        (si ? '<details class="pc-mas"><summary>Ajustar</summary><div class="pc-campos">' +
+          '<input class="pc-link" value="' + e(t.t || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="t" maxlength="80" placeholder="Otro nombre (opcional)" aria-label="Otro nombre"><input class="pc-link" value="' + e(t.msg || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="msg" maxlength="160" placeholder="' + e("Lo que dice: " + c.msg) + '" aria-label="Lo que dice"><input class="pc-link" value="' + e(t.toca || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="toca" maxlength="160" placeholder="' + e("Les toca: " + (c.toca || "nada")) + '" aria-label="Lo que les toca"><input class="pc-link" value="' + e(t.d || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="d" maxlength="160" placeholder="Otro «cuándo» (opcional)" aria-label="Otro cuándo"><input class="pc-link" type="url" value="' + e(t.link || "") + '" data-pc-c="txt" data-k="' + c.id + '" data-f="link" placeholder="Link para que lo vean (opcional)" aria-label="Link"></div></details>' : "") + "</div>";
     };
     return '<div class="card pc-sec"><h4>Cómo vende</h4><p>De esto depende la sesión de venta. Puedes elegir varias.</p><div class="pc-presets">' + GG.VENTAS.map(function (v) { return '<button type="button" class="pc-aqui' + (C.venta[v.id] ? " si" : "") + '" data-pc-venta="' + v.id + '">' + e(v.nombre) + "</button>"; }).join("") + "</div></div>" +
       '<div class="card pc-sec"><h4>Sus pasos</h4><p>Prende lo que tendrá este cliente. Toca «Marcar» donde van: lo anterior queda hecho solo.</p><div class="pc-presets">' + PG.PRESETS.map(function (p) { return '<button type="button" class="btn" data-pc-preset="' + p.id + '">' + e(p.nombre) + "</button>"; }).join("") + "</div>" +
@@ -3031,12 +3044,23 @@
     if (b.dataset.pcAqui) { C.aqui = b.dataset.pcAqui; PC.sel = null; return pcCambio(); }
     if (b.dataset.pcPreset) { C.on = window.PasosGB.preset(b.dataset.pcPreset); return pcCambio(); }
   });
+  // Al poner el link de una entrega (guiones o videos), el panel pasa solo a «aprobar»: el servidor anota la hora y el cliente ve sus 24 horas
+  var PC_APRUEBA = { guiones: "confguion", edicion: "confvideos" };
+  document.addEventListener("change", function (ev) {
+    var i = ev.target; if (!PC || PC.cargando || !i.dataset || i.dataset.pcC !== "txt" || i.dataset.f !== "link") return;
+    var C = PC.ajustes.camino, sig = PC_APRUEBA[i.dataset.k];
+    if (!i.value.trim() || !sig || C.aqui !== i.dataset.k) return;
+    C.aqui = sig; PC.sel = null; pcCambio();
+    toast("Entregado. Su panel ya le cuenta 24 horas para aprobarlo.");
+  });
   document.addEventListener("input", function (ev) {
     var i = ev.target; if (!PC || PC.cargando || !i.dataset) return;
     if (i.dataset.pcCampo === "mensaje") { PC.ajustes.mensaje = i.value; pcGuardarLuego(); return; }
     if (!i.dataset.pcC) return;
     var m = PC.ajustes.camino[i.dataset.pcC], o = m[i.dataset.k] = m[i.dataset.k] || {};
     if (i.value.trim()) o[i.dataset.f] = i.value; else delete o[i.dataset.f];
+    var pcChip = i.closest(".pc-fecha");
+    if (pcChip) { pcChip.classList.toggle("si", !!i.value); pcChip.querySelector("span").textContent = i.value ? GB.diaCorto(i.value) : "Poner fecha"; }
     pcGuardarLuego();
   });
 

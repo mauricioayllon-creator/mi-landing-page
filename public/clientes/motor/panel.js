@@ -201,6 +201,17 @@
     if (iAhora < 0) pasos.some(function (x, i) { if (x.estado !== "listo") { iAhora = i; return true; } return false; });
     var actual = pasos[iAhora], listos = pasos.filter(function (x) { return x.estado === "listo"; }).length;
 
+    // Entregas con hora: el servidor anota cuándo se puso el link; si lo que sigue es aprobar, el panel cuenta 24 horas
+    function cuandoHora(t) { var f = new Date(t); return corto(iso(f)) + " · " + pad(f.getHours()) + ":" + pad(f.getMinutes()); }
+    var APRUEBA = { confguion: "guiones", confvideos: "edicion" }, entrega = null;
+    if (actual && APRUEBA[actual.id]) {
+      var origen = pasos.filter(function (x) { return x.id === APRUEBA[actual.id]; })[0];
+      if (origen && origen.entregado) {
+        var limite = new Date(new Date(origen.entregado).getTime() + 864e5), falta = limite - Date.now();
+        entrega = { link: origen.link || actual.link, de: cuandoHora(origen.entregado), hasta: cuandoHora(limite), horas: Math.max(1, Math.ceil(falta / 36e5)), vencio: falta <= 0 };
+      }
+    }
+
     // lo próximo con fecha: una sesión o un hito
     var proximas = D.sesiones.map(function (s) { return { s: s, f: fechaDe(s) }; }).filter(function (x) { return x.f && x.f >= HOY && !x.s.tentativa; }).sort(function (a, b) { return a.f < b.f ? -1 : 1; });
     var prox = proximas[0];
@@ -227,12 +238,15 @@
     h += "<div class='ahora'><div class='card'><div class='ahora-sup'><span class='etiq'>Dónde estamos</span>" + (pasos.length ? "<span class='cuenta-pasos'>" + listos + " de " + pasos.length + "</span>" : "") + "</div>" +
       "<div class='ahora-fila'><span class='rueda" + (actual ? " gira" : "") + "'>" + svg(actual ? I.gear : I.check, 26) + "</span><h2>" + esc(actual ? actual.t : "Todo listo") + "</h2></div>" +
       ((A.mensaje || (actual && (actual.msg || actual.d))) ? "<p class='ahora-msg'>" + esc(A.mensaje || actual.msg || actual.d) + "</p>" : "") +
-      (pasos.length ? "<div class='riel'>" + riel + "</div>" : "") + lineaProx + "</div></div>";
+      (pasos.length ? "<div class='riel'>" + riel + "</div>" : "") +
+      (entrega ? "<div class='proximo'>" + svg(I.cal) + "<div><small>Te lo entregamos el " + esc(entrega.de) + "</small><b>" + (entrega.vencio ? "El plazo para aprobarlo venció el " + esc(entrega.hasta) : "Apruébalo hasta el " + esc(entrega.hasta)) + "</b><span>" + (entrega.vencio ? "Escríbenos para coordinar." : "Tienes 24 horas: quedan " + entrega.horas + (entrega.horas === 1 ? " hora." : " horas.")) + "</span></div>" +
+        (entrega.link ? "<a class='btn mini azul' href='" + esc(entrega.link) + "' target='_blank' rel='noopener'>Abrir</a>" : "") + "</div>" : "") +
+      lineaProx + "</div></div>";
 
     // ---------- lo que les toca (solo si hay algo) ----------
     if (SEC.toca) {
       var toca = [];
-      if (actual && actual.toca) toca.push({ que: actual.toca });
+      if (actual && actual.toca) toca.push({ que: actual.toca, cuando: entrega ? "Hasta el " + entrega.hasta : actual.fecha || "" });
       D.sesiones.slice().reverse().forEach(function (s) { (s.tareas || []).forEach(function (t) { if (t.quien !== "nosotros" && !t.hecho) toca.push(t); }); });
       if (toca.length) {
         var fila = function (t) { return "<div class='tarea-c'><i></i><span>" + esc(t.que) + (t.cuando ? "<small>" + esc(/^\d{4}-\d{2}-\d{2}$/.test(t.cuando) ? corto(t.cuando) : t.cuando) + "</small>" : "") + "</span></div>"; };
@@ -246,7 +260,8 @@
         var i = pasos.indexOf(x), ya = x.estado === "listo", ahora = i === iAhora;
         var cuando = x.fecha ? corto(x.fecha) + (x.hora ? " · " + x.hora : "") : x.d;
         return "<li class='" + (ya ? "ok" : ahora ? "vamos" : "viene") + "'><span class='pt'>" + (ya ? svg(I.check, 14) : ahora ? svg(I.gear, 16) : "") + "</span><div><b>" + esc(x.t) + "</b>" +
-          (cuando && !ya && !ahora ? "<small>" + esc(cuando) + "</small>" : "") + "</div>" +
+          (cuando && !ya && (!ahora || x.fecha) ? "<small>" + esc(cuando) + "</small>" : "") +
+          (ya && x.entregado ? "<small>Entregado el " + esc(cuandoHora(x.entregado)) + "</small>" : "") + "</div>" +
           (x.link && (ya || ahora) ? "<a class='btn mini' href='" + esc(x.link) + "' target='_blank' rel='noopener'>" + svg(I.enlace, 13) + "Ver</a>" : "") + "</li>";
       };
       // A la vista: lo que está pasando y lo que sigue. Lo hecho y lo lejano, plegados.

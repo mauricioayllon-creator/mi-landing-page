@@ -92,9 +92,9 @@
       if (!d && c.tipo === S) d = "Por agendar.";
       if (!d && c.tipo === G) d = "Por agendar.";
       return {
-        id: c.id, tipo: c.tipo || "", t: tx.t || nombre[c.id], d: d, msg: c.msg, toca: c.toca || "",
+        id: c.id, tipo: c.tipo || "", t: tx.t || nombre[c.id], d: d, msg: tx.msg || c.msg, toca: tx.toca || c.toca || "",
         estado: i < iAqui ? "listo" : i === iAqui ? "curso" : "prox",
-        fecha: f.f || "", hora: f.h || "", meet: f.meet || "", link: tx.link || ""
+        fecha: f.f || "", hora: f.h || "", meet: f.meet || "", link: tx.link || "", entregado: tx.el || ""
       };
     });
   }

@@ -130,13 +130,14 @@ function agendar_(c, b) {
 /* Cómo aparece cada cliente en tu calendario. Cliente nuevo: una línea aquí, o usa el botón «Agendar» de tu panel. */
 var BUSCA = { "domix": "domix|marvin", "gada-accesorios": "gada|deborah|d[eé]bora", "paola-silva": "paola", "ariel-uyuni": "ariel", "rodrigo-aduanas": "rodrigo", "sal-dulce": "sal ?dulce|mar[ií]a elena", "peques": "peque" };
 
-/* Las sesiones de un cliente, leídas en vivo de tu calendario. Solo las suyas: nunca las de otro ni tus llamadas de venta. */
+/* Las sesiones de un cliente, leídas en vivo de tu calendario. Solo las suyas: nunca las de otro ni tus llamadas de venta.
+   Desde el 12/11 también las de los últimos 30 días: con ellas el panel sabe qué sesión ya pasó y avanza solo. */
 function citas_(slug) {
   slug = String(slug || "");
   if (!/^[a-z0-9-]{1,50}$/.test(slug)) throw fallo_("datos", "Cliente no válido.");
   var re = BUSCA[slug] ? new RegExp(BUSCA[slug], "i") : null, marca = "[gb:" + slug + ":";
   var ini = Utilities.parseDate(Utilities.formatDate(new Date(), TZ, "yyyy-MM-dd") + " 00:00", TZ, "yyyy-MM-dd HH:mm");
-  var r = Calendar.Events.list("primary", { timeMin: ini.toISOString(), timeMax: new Date(ini.getTime() + 75 * 864e5).toISOString(), singleEvents: true, orderBy: "startTime", maxResults: 250 });
+  var r = Calendar.Events.list("primary", { timeMin: new Date(ini.getTime() - 30 * 864e5).toISOString(), timeMax: new Date(ini.getTime() + 75 * 864e5).toISOString(), singleEvents: true, orderBy: "startTime", maxResults: 2500 });
   return (r.items || []).filter(function (ev) {
     if (ev.status === "cancelled" || !ev.start || !ev.start.dateTime) return false;
     if (String(ev.description || "").indexOf(marca) >= 0) return true;

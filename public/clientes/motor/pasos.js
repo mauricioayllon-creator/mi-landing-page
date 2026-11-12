@@ -116,10 +116,44 @@
     if (/consult|sesi/i.test(t)) { var k = numeroDe(t); return (k && ses[k - 1]) || libre(ses) || null; }
     return null;
   }
-  /** Tu Google Calendar manda: pone a cada sesión su fecha, su hora y su Meet, y le quita la fecha a la que ya no está. */
-  function aplicarCalendario(cfg, citas, hoy) {
+  /** Una cita que ya pasó solo cuenta si dice cuál es: su marca, su Meet o su número («Consultoría 2», «Grabación 1»). Del pasado no se adivina. */
+  function pasoSeguro(t, vista) {
+    var ses = vista.filter(function (p) { return p.tipo === S; }), gr = vista.filter(function (p) { return p.tipo === G; });
+    var de = function (id) { return vista.filter(function (p) { return p.id === id; })[0] || null; };
+    if (/grab/i.test(t)) { var n = (t.match(/grab\S*\s*(\d)/i) || [])[1]; return n ? gr[Number(n) - 1] || null : null; }
+    if (/venta/i.test(t)) return de("sventa");
+    if (/revisi/i.test(t)) return de("srev");
+    if (/resultado/i.test(t)) return de("sres");
+    if (/consult|sesi/i.test(t)) { var k = numeroDe(t); return k ? ses[k - 1] || null : null; }
+    return null;
+  }
+  /** Ya pasó: un día anterior, o hoy 90 minutos después de que empezó. */
+  function pasado(p, hoy, ahora) {
+    if (!p.fecha || !hoy) return false;
+    if (p.fecha < hoy) return true;
+    if (p.fecha > hoy || !ahora || !p.hora) return false;
+    var min = function (t) { var x = String(t).split(":"); return Number(x[0]) * 60 + Number(x[1] || 0); };
+    return min(ahora) >= min(p.hora) + 90;
+  }
+  /** Lo que ya pasó en tu calendario ya pasó: si una sesión o una grabación es de antes, el panel sigue al paso de después. Nunca retrocede. */
+  function alDia(cfg, hoy, ahora) {
+    if (!cfg || cfg.aqui === "fin") return cfg;
+    var vista = armar(cfg), cur = 0, ultimo = -1;
+    vista.forEach(function (p, i) {
+      if (p.estado === "curso") cur = i;
+      if ((p.tipo === S || p.tipo === G) && pasado(p, hoy, ahora)) ultimo = i;
+    });
+    if (ultimo < cur) return cfg;
+    return Object.assign({}, cfg, { aqui: vista[ultimo + 1] ? vista[ultimo + 1].id : "fin" });
+  }
+  /** Tu Google Calendar manda: pone a cada sesión su fecha, su hora y su Meet, le quita la fecha a la que ya no está
+   *  y, si una sesión ya pasó, el panel avanza solo (12/11: un cliente vio «Sesión 1» como pendiente cuando ya la habían tenido).
+   *  ahora (opcional) = "HH:MM" en La Paz. */
+  function aplicarCalendario(cfg, citas, hoy, ahora) {
     var out = Object.assign({}, cfg, { fechas: Object.assign({}, cfg && cfg.fechas) }), usados = {};
-    (citas || []).slice().sort(function (a, b) { return (a.f + a.h).localeCompare(b.f + b.h); }).forEach(function (c) {
+    var orden = (citas || []).slice().sort(function (a, b) { return (a.f + a.h).localeCompare(b.f + b.h); });
+    // Primero lo que viene: si una sesión se movió, gana su fecha nueva
+    orden.forEach(function (c) {
       if (c.f < hoy) return;
       var vista = armar(out), por = function (fn) { return vista.filter(fn)[0]; };
       var paso = c.paso ? por(function (p) { return p.id === c.paso; }) : (c.meet && por(function (p) { return p.meet === c.meet; })) || pasoPorTitulo(c.titulo || "", vista, usados);
@@ -128,10 +162,20 @@
       out.fechas[paso.id] = { f: c.f, h: c.h };
       if (c.meet) out.fechas[paso.id].meet = c.meet;
     });
+    // Después lo que ya pasó, solo si se sabe cuál es
+    orden.forEach(function (c) {
+      if (c.f >= hoy) return;
+      var vista = armar(out), por = function (fn) { return vista.filter(fn)[0]; };
+      var paso = c.paso ? por(function (p) { return p.id === c.paso; }) : (c.meet && por(function (p) { return p.meet === c.meet; })) || pasoSeguro(c.titulo || "", vista);
+      if (!paso || usados[paso.id]) return;
+      usados[paso.id] = true;
+      out.fechas[paso.id] = { f: c.f, h: c.h };
+      if (c.meet) out.fechas[paso.id].meet = c.meet;
+    });
     armar(out).forEach(function (p) { if ((p.tipo === S || p.tipo === G) && !usados[p.id] && p.fecha >= hoy) delete out.fechas[p.id]; });
-    return out;
+    return alDia(out, hoy, ahora);
   }
-  var API = { GRUPOS: GRUPOS, CATALOGO: CATALOGO, PRESETS: PRESETS, POR_ID: POR_ID, preset: preset, prendido: prendido, armar: armar, aplicarCalendario: aplicarCalendario };
+  var API = { GRUPOS: GRUPOS, CATALOGO: CATALOGO, PRESETS: PRESETS, POR_ID: POR_ID, preset: preset, prendido: prendido, armar: armar, aplicarCalendario: aplicarCalendario, alDia: alDia };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   raiz.PasosGB = API;
 })(typeof window !== "undefined" ? window : globalThis);

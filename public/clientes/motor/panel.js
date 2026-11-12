@@ -55,6 +55,14 @@
     try { return new Intl.DateTimeFormat("en-CA", { timeZone: "America/La_Paz", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); }
     catch (e) { return iso(new Date()); }
   })();
+  /** La hora en La Paz ("HH:MM"): con ella, una sesión de hoy pasa a «lista» 90 minutos después de empezar. */
+  var AHORA = (function () {
+    var q = new URLSearchParams(location.search).get("ahora");
+    if (q && /^\d{2}:\d{2}$/.test(q)) return q;
+    if (new URLSearchParams(location.search).get("hoy")) return "";
+    try { return new Intl.DateTimeFormat("en-GB", { timeZone: "America/La_Paz", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date()); }
+    catch (e) { var d = new Date(); return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+  })();
 
   // datos.json vive junto al index.html del cliente (sirve con o sin "/" al final del link)
   var BASE = location.pathname.replace(/\/index\.html$/, "").replace(/\/$/, "");
@@ -105,7 +113,8 @@
   }
   function conCalendario(D, A, citas) {
     var base = A.camino || D.camino;
-    if (citas && base && window.PasosGB) A.camino = window.PasosGB.aplicarCalendario(base, citas, HOY);
+    // Sin respuesta del calendario no se avanza: una fecha guardada puede ser de una sesión que se movió
+    if (citas && base && window.PasosGB) A.camino = window.PasosGB.aplicarCalendario(base, citas, HOY, AHORA);
     return A;
   }
 

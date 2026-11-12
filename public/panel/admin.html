@@ -3000,7 +3000,7 @@
       PC.datos = res[0]; PC.ajustes = res[1].ajustes; PC.tab = "guia";
       var base = PC.ajustes.camino || PC.datos.camino || {};
       PC.ajustes.camino = { on: Object.assign({}, base.on), aqui: base.aqui || "", fechas: Object.assign({}, base.fechas), txt: Object.assign({}, base.txt), it: Object.assign({}, base.it), venta: Object.assign({}, base.venta), extra: Object.assign({}, base.extra) };
-      if (res[2] && res[2].ok) PC.ajustes.camino = window.PasosGB.aplicarCalendario(PC.ajustes.camino, res[2].citas, hoy());
+      if (res[2] && res[2].ok) PC.ajustes.camino = window.PasosGB.aplicarCalendario(PC.ajustes.camino, res[2].citas, hoy(), ahora().slice(11, 16));
       PC.cargando = false; pcPintar();
     }).catch(function () { PC = null; pcPintar(); toast("No pude abrir ese panel. Intenta de nuevo.", true); });
   }

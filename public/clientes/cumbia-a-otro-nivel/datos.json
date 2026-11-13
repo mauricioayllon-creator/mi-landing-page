@@ -1,0 +1,101 @@
+{
+  "actualizado": "2026-11-12",
+  "cliente": {
+    "nombre": "Cumbia a otro nivel",
+    "inicial": "C"
+  },
+  "contacto": {
+    "nombre": "Belén",
+    "rol": "Su contacto en Grow Business."
+  },
+  "plan": {
+    "duracionDias": 30,
+    "dia1": null,
+    "anclaNombre": "Sesión 1",
+    "etiqueta": "Plan de 30 días",
+    "titulo": "Plan de 30 días"
+  },
+  "etapas": [],
+  "hitos": [],
+  "sesiones": [
+    {
+      "id": "inicio",
+      "t": "Empezamos",
+      "fecha": "2026-11-12",
+      "hora": "17:00",
+      "acuerdos": [
+        "En estos 30 días medimos los contratos que se cierran, no las visitas a su música.",
+        "Ustedes ponen 1.000 Bs de publicidad desde su tarjeta y nosotros manejamos su administrador de anuncios, con reportes.",
+        "Armamos con ustedes a quién le hablamos, la oferta y los ángulos. De ahí salen los guiones para su filmmaker."
+      ],
+      "tareas": [
+        {
+          "quien": "ustedes",
+          "que": "Mandarnos por escrito su servicio: tipo de cumbia, covers o temas propios, cuántos músicos, cuánto dura y qué incluye",
+          "cuando": "2026-11-14"
+        },
+        {
+          "quien": "ustedes",
+          "que": "10 a 20 chats de personas que preguntaron y no contrataron",
+          "cuando": "2026-11-14"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Sus mejores clips con la pista llena y el link de su TikTok",
+          "cuando": "2026-11-14"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Lo que les queda de una tanda: lo que pagan a los músicos, el transporte y los viáticos",
+          "cuando": "2026-11-15"
+        },
+        {
+          "quien": "nosotros",
+          "que": "Llegar a la Sesión 1 con su público, su oferta y la cuenta de cuántos contratos necesitan",
+          "cuando": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "t": "Próximas sesiones",
+      "d": "Cada sesión se agenda al terminar la anterior."
+    }
+  ],
+  "camino": {
+    "on": {
+      "bienvenida": true,
+      "info": true,
+      "accesos": true,
+      "s1": true,
+      "s2": true,
+      "s3": false,
+      "guiones": true,
+      "confguion": true,
+      "sguion": false,
+      "g1": true,
+      "g2": false,
+      "g3": false,
+      "equipo": true,
+      "edicion": false,
+      "confvideos": false,
+      "sventa": true,
+      "publicar": true,
+      "pauta": true,
+      "srev": true,
+      "sextra": false,
+      "lanz": false,
+      "sres": true,
+      "victoria": true
+    },
+    "aqui": "bienvenida",
+    "fechas": {},
+    "txt": {
+      "g1": {
+        "msg": "La primera grabación la hacemos juntos con su filmmaker."
+      },
+      "equipo": {
+        "msg": "Su filmmaker graba y edita con nuestros guiones, 4 o 5 videos por semana."
+      }
+    }
+  }
+}

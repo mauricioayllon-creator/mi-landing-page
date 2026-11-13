@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-09",
+  "actualizado": "2026-11-12",
   "cliente": {
     "nombre": "Domix",
     "inicial": "D",
@@ -183,9 +183,39 @@
       "id": "sesion-2",
       "t": "Sesión 2 · Ángulos, guiones y oferta",
       "fecha": "2026-11-07",
-      "tentativa": true,
-      "agendable": true,
-      "d": "Fecha tentativa, a confirmar."
+      "acuerdos": [
+        "Los 30 días van a alquileres y anticréticos en La Paz, hasta el 3 de diciembre.",
+        "A los propietarios: el programa Dueño Fundador, con la ficha armada por WhatsApp. Al que busca: elegir la hora de la visita en la app.",
+        "Primero probamos dos ángulos: el de los propietarios (recibir solo al que va en serio) y el de quien busca (dejar de rogar un «¿sigue disponible?»).",
+        "Marvin sale en los videos."
+      ],
+      "tareas": [
+        {
+          "quien": "ustedes",
+          "que": "Aprobar por escrito los 6 guiones que les entregamos el 10/11",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Confirmar la pantalla de solicitud de visita, la oferta Dueño Fundador y el WhatsApp para propietarios",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Completar el saldo antes de la grabación",
+          "cuando": "2026-11-14"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Un departamento real con permiso del dueño, para el video del Depa de la Semana",
+          "cuando": ""
+        },
+        {
+          "quien": "nosotros",
+          "que": "La lista de tomas para la grabación del sábado",
+          "cuando": "2026-11-14"
+        }
+      ]
     },
     {
       "t": "Próximas sesiones",

@@ -1,0 +1,91 @@
+{
+  "actualizado": "2026-11-12",
+  "cliente": {
+    "nombre": "Jessica",
+    "inicial": "J"
+  },
+  "contacto": {
+    "nombre": "Belén",
+    "rol": "Su contacto en Grow Business."
+  },
+  "plan": {
+    "duracionDias": 30,
+    "dia1": null,
+    "anclaNombre": "Sesión 1",
+    "etiqueta": "Plan de 30 días",
+    "titulo": "Plan de 30 días"
+  },
+  "etapas": [],
+  "hitos": [],
+  "sesiones": [
+    {
+      "id": "inicio",
+      "t": "Empezamos",
+      "fecha": "2026-11-12",
+      "hora": "18:00",
+      "acuerdos": [
+        "Antes de empezar vemos el plan contigo y con tu esposo.",
+        "Tú eliges a una persona que responda los mensajes; nosotros le pasamos cómo responder.",
+        "Medimos la ganancia extra que llegue por la publicidad, no lo que se factura."
+      ],
+      "tareas": [
+        {
+          "quien": "ustedes",
+          "que": "Confirmar el día y la hora de la reunión con tu esposo",
+          "cuando": "2026-11-16"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Elegir a la persona que va a responder los mensajes",
+          "cuando": "2026-11-19"
+        },
+        {
+          "quien": "nosotros",
+          "que": "El plan de los 30 días, semana a semana, con la cuenta del objetivo",
+          "cuando": "2026-11-17"
+        }
+      ]
+    },
+    {
+      "t": "Próximas sesiones",
+      "d": "Cada sesión se agenda al terminar la anterior."
+    }
+  ],
+  "camino": {
+    "on": {
+      "bienvenida": true,
+      "info": true,
+      "accesos": true,
+      "s1": true,
+      "s2": true,
+      "s3": false,
+      "guiones": true,
+      "confguion": true,
+      "sguion": false,
+      "g1": false,
+      "g2": false,
+      "g3": false,
+      "equipo": true,
+      "edicion": false,
+      "confvideos": false,
+      "sventa": true,
+      "publicar": true,
+      "pauta": true,
+      "srev": true,
+      "sextra": false,
+      "lanz": false,
+      "sres": true,
+      "victoria": true
+    },
+    "aqui": "bienvenida",
+    "fechas": {},
+    "txt": {
+      "bienvenida": {
+        "msg": "Vemos el plan contigo y con tu esposo antes de empezar."
+      },
+      "sventa": {
+        "toca": "Traer a la persona que va a responder tus mensajes."
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-09",
+  "actualizado": "2026-11-12",
   "cliente": {
     "nombre": "Paola Silva",
     "inicial": "P"
@@ -22,8 +22,36 @@
       "id": "sesion-1",
       "t": "Sesión 1 · Tu producto y tu oferta",
       "fecha": "2026-11-11",
-      "hora": "20:30",
-      "meet": "https://meet.google.com/xfo-zpbs-tez"
+      "hora": "22:30",
+      "meet": "https://meet.google.com/xfo-zpbs-tez",
+      "acuerdos": [
+        "La promesa: que se vayan las ojeras pigmentadas, las que cuestan perder.",
+        "Lo que te hace distinta: la fórmula a base de cafeína, el laboratorio y las recargas.",
+        "Te mandamos propuestas de oferta con tus públicos. Con la que elijas, escribimos los guiones.",
+        "El saldo queda para el miércoles 18 de noviembre."
+      ],
+      "tareas": [
+        {
+          "quien": "nosotros",
+          "que": "Las propuestas de oferta con tus públicos",
+          "cuando": ""
+        },
+        {
+          "quien": "ustedes",
+          "que": "Mandarnos tus ideas de contenido",
+          "cuando": ""
+        },
+        {
+          "quien": "ustedes",
+          "que": "Los prototipos para grabar",
+          "cuando": "2026-11-15"
+        },
+        {
+          "quien": "ustedes",
+          "que": "El saldo",
+          "cuando": "2026-11-18"
+        }
+      ]
     },
     {
       "t": "Próximas sesiones",
@@ -56,7 +84,7 @@
       "sres": true,
       "victoria": true
     },
-    "aqui": "info",
+    "aqui": "s2",
     "fechas": {
       "s1": {
         "f": "2026-11-11",

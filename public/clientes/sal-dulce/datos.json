@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-09",
+  "actualizado": "2026-11-12",
   "cliente": {
     "nombre": "Sal Dulce",
     "inicial": "S"
@@ -18,6 +18,37 @@
   "etapas": [],
   "hitos": [],
   "sesiones": [
+    {
+      "id": "sesion-1",
+      "t": "Sesión 1 · Tu negocio y tu oferta",
+      "fecha": "2026-11-11",
+      "acuerdos": [
+        "Los guiones les llegan a más tardar el sábado 14/11.",
+        "Grabamos la semana del 16/11, después de que los aprueben."
+      ],
+      "tareas": [
+        {
+          "quien": "ustedes",
+          "que": "Mandarnos sus ventas por semana de octubre y noviembre, y lo que les cuesta un pescado, una caras y una picana",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Que María Elena confirme el pescado como plato principal de los videos",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Hablar con su contacto de la Cámara de Senadores",
+          "cuando": ""
+        },
+        {
+          "quien": "nosotros",
+          "que": "Los guiones, para que los aprueben",
+          "cuando": "2026-11-14"
+        }
+      ]
+    },
     {
       "t": "Próximas sesiones",
       "d": "Cada sesión se agenda al terminar la anterior."

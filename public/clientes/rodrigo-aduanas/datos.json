@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-09",
+  "actualizado": "2026-11-12",
   "cliente": {
     "nombre": "Rodrigo",
     "inicial": "R"
@@ -22,8 +22,30 @@
       "id": "sesion-1",
       "t": "Sesión 1 · Tu negocio y tu oferta",
       "fecha": "2026-11-09",
-      "hora": "18:30",
-      "meet": "https://meet.google.com/bfn-qqzy-kyv"
+      "hora": "19:30",
+      "meet": "https://meet.google.com/bfn-qqzy-kyv",
+      "acuerdos": [
+        "Le vamos a hablar a quien ya tiene tiendas y compra a un distribuidor, y quiere dejarlo por los precios y el stock.",
+        "Lo que te hace distinto: la cuenta completa puesta en Bolivia, el precio máximo firmado, el reporte diario de la carga y el cobro por etapas.",
+        "En la Sesión 2 te traemos ofertas para que apruebes o rechaces, con sus precios. De la que elijas salen los ángulos y los guiones."
+      ],
+      "tareas": [
+        {
+          "quien": "nosotros",
+          "que": "Las ofertas para aprobar o rechazar",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Un prospecto de tu WhatsApp o tu Excel que no cerró, para revisar la venta",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Preguntarle a tu cliente si cuenta por mensaje lo que le cobraban de más en aduana",
+          "cuando": ""
+        }
+      ]
     },
     {
       "t": "Próximas sesiones",
@@ -56,7 +78,7 @@
       "sres": true,
       "victoria": true
     },
-    "aqui": "info",
+    "aqui": "s2",
     "fechas": {
       "s1": {
         "f": "2026-11-09",

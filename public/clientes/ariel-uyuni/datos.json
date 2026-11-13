@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-09",
+  "actualizado": "2026-11-11",
   "cliente": {
     "nombre": "Ariel",
     "inicial": "A"
@@ -18,6 +18,40 @@
   "etapas": [],
   "hitos": [],
   "sesiones": [
+    {
+      "id": "sesion-1",
+      "t": "Sesión 1 · Tu negocio y tu oferta",
+      "fecha": "2026-11-11",
+      "hora": "10:00",
+      "acuerdos": [
+        "Vamos a llegar a las tiendas y friales de los pueblos cercanos (San Cristóbal, Río Grande, Colchani, Atocha, Chorolque y Pulacayo) y a los negocios de Uyuni que todavía no te compran.",
+        "En la publicidad vas como Cámara Frigorífica Sorimar, distribuidor de Sofía en Uyuni. No publicamos precios: el precio lo da tu equipo en la conversación.",
+        "Lo que te hace distinto: respondes al toque, entregas en el negocio (y cargas al bus para los pueblos), el peso se puede revisar y repones si algo sale mal.",
+        "Los mensajes los atienden tu boletera y tu contadora. Nosotros les pasamos cómo responder."
+      ],
+      "tareas": [
+        {
+          "quien": "nosotros",
+          "que": "Los guiones, para que los apruebes",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "nosotros",
+          "que": "Cómo responder los mensajes que lleguen",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Fotos de la fachada y de las camionetas",
+          "cuando": "2026-11-13"
+        },
+        {
+          "quien": "ustedes",
+          "que": "Aprobar los guiones en 24 horas",
+          "cuando": ""
+        }
+      ]
+    },
     {
       "t": "Próximas sesiones",
       "d": "Cada sesión se agenda al terminar la anterior."

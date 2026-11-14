@@ -1549,6 +1549,10 @@
   .cocina-marco iframe { display: block; width: 100%; height: 100%; border: 0; }
   .cocina-msg { padding: 60px 24px; text-align: center; color: #98a3ba; }
   @media (max-width: 900px) { .cocina-marco { margin: 0; height: calc(100vh - 124px); height: calc(100dvh - 124px); } }
+  /* ---------- La Caja: la plata, en la misma página del panel (publicar/caja.html, armada con caja/construir.js) ---------- */
+  .caja-marco { margin: -28px -32px -120px; height: 100vh; height: 100dvh; background: #f2f3f6; }
+  .caja-marco iframe { display: block; width: 100%; height: 100%; border: 0; }
+  @media (max-width: 900px) { .caja-marco { margin: 0; height: calc(100vh - 124px); height: calc(100dvh - 124px); } }
   /* ---------- Sus paneles: lo que ve cada cliente ---------- */
   .pc-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
   .pc-cli { display: flex; align-items: center; gap: 12px; padding: 16px; cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%; }
@@ -2017,6 +2021,7 @@
       nav("marketing", "#/marketing", "megafono", "Marketing") +
       nav(["contenido", "video"], "#/contenido", "camara", "Contenido", cuenta(vc.filter(function (x) { return x.nivel >= 2; }))) +
       nav(["clientes", "nuevo"], "#/clientes", "gente", "Clientes") +
+      nav("caja", "#/caja", "billetera", "Caja") +
       nav(["documentos", "carpeta", "doc"], "#/documentos", "carpeta", "Documentos") +
       '<div class="lado-tit area">Tu orden</div>' +
       nav("objetivos", "#/objetivos", "diana", "Objetivos", cuenta(GB.itemsObjetivos(ag(), hoy()).filter(function (x) { return x.nivel >= 2; }))) +
@@ -2034,10 +2039,10 @@
       '<a class="nav-i' + (r === "nuevo" ? " activo" : "") + '" href="#/nuevo" style="margin-top:6px">' + ICO("mas", 18) + "Nuevo cliente</a>" +
       '<div class="esp"></div>' + nav("guia", "#/guia", "libro", "Cómo funciona") + nav("ajustes", "#/ajustes", "ajustes", "Ajustes") +
       '<button class="nav-i" type="button" data-accion="salir">' + ICO("salir", 18) + "Salir</button>";
-    var titulos = { inicio: "Tu día", ventas: "Ventas", prospecto: "Prospecto", marketing: "Marketing", contenido: "Contenido", clientes: "Tus clientes", cliente: "Cliente", nuevo: "Nuevo cliente", agencia: "Mi semana", objetivos: "Tus objetivos", libreta: "Tus ideas", sistema: "Mi sistema", guia: "Cómo funciona", ajustes: "Ajustes", constancia: "Tu constancia", video: "Tu video", documentos: "Tus documentos", carpeta: "Documentos", doc: "Documento", cocina: "La Cocina" };
+    var titulos = { inicio: "Tu día", ventas: "Ventas", prospecto: "Prospecto", marketing: "Marketing", contenido: "Contenido", clientes: "Tus clientes", cliente: "Cliente", nuevo: "Nuevo cliente", agencia: "Mi semana", objetivos: "Tus objetivos", libreta: "Tus ideas", sistema: "Mi sistema", guia: "Cómo funciona", ajustes: "Ajustes", constancia: "Tu constancia", video: "Tu video", documentos: "Tus documentos", carpeta: "Documentos", doc: "Documento", cocina: "La Cocina", caja: "Caja" };
     if ($("movil-tit")) $("movil-tit").textContent = titulos[r] || "Tu panel";
     var mn = function (rutas, hash, ico, txt) { return '<a class="' + (rutas.indexOf(r) >= 0 ? "activo" : "") + '" href="' + hash + '">' + ICO(ico, 22) + txt + "</a>"; };
-    var otras = ["cocina", "documentos", "carpeta", "doc", "marketing", "clientes", "cliente", "nuevo", "agencia", "objetivos", "libreta", "constancia", "sistema", "guia", "ajustes"];
+    var otras = ["cocina", "caja", "documentos", "carpeta", "doc", "marketing", "clientes", "cliente", "nuevo", "agencia", "objetivos", "libreta", "constancia", "sistema", "guia", "ajustes"];
     $("movil-nav").innerHTML = mn(["inicio"], "#/inicio", "brujula", "Hoy") + mn(["ventas", "prospecto"], "#/ventas", "apreton", "Ventas") +
       '<a class="nuevo" href="#/nuevo" data-accion="mas-rapido">' + ICO("mas", 22) + "Anotar</a>" +
       mn(["contenido", "video"], "#/contenido", "camara", "Contenido") +
@@ -2604,7 +2609,7 @@
       $("app").innerHTML = '<div style="padding:40px 18px;max-width:900px;margin:0 auto"><div class="esq" style="height:90px;margin-bottom:16px"></div><div class="esq" style="height:140px;margin-bottom:16px"></div><div class="esq" style="height:300px"></div></div>';
       return cargarLista().then(ruta).catch(falloRed);
     }
-    var rutas = { c: "cliente", p: "prospecto", nuevo: "nuevo", ajustes: "ajustes", guia: "guia", ventas: "ventas", marketing: "marketing", contenido: "contenido", clientes: "clientes", agencia: "agencia", libreta: "libreta", sistema: "sistema", constancia: "constancia", objetivos: "objetivos", v: "video", idea: "idea", documentos: "documentos", carpeta: "carpeta", doc: "doc", cocina: "cocina" };
+    var rutas = { c: "cliente", p: "prospecto", nuevo: "nuevo", ajustes: "ajustes", guia: "guia", ventas: "ventas", marketing: "marketing", contenido: "contenido", clientes: "clientes", agencia: "agencia", libreta: "libreta", sistema: "sistema", constancia: "constancia", objetivos: "objetivos", v: "video", idea: "idea", documentos: "documentos", carpeta: "carpeta", doc: "doc", cocina: "cocina", caja: "caja" };
     var rutaAntes = S.ruta, hashAntes = S.hashAhora || "";
     S.ruta = rutas[h[0]] || "inicio";
     // Un video abierto desde Contenido vuelve a Contenido (a la misma pestaña)
@@ -2633,6 +2638,7 @@
       case "objetivos": return vistaObjetivos();
       case "video": return vistaVideo(decodeURIComponent(h[1]), decodeURIComponent(h[2]), h[3]);
       case "cocina": return vistaCocina();
+      case "caja": return vistaCaja();
       case "documentos": return vistaDocumentos();
       case "carpeta": return h[1] ? vistaCarpeta(decodeURIComponent(h[1])) : ir("#/documentos/clientes");
       case "doc": return vistaDoc(decodeURIComponent(h[1] || ""), h[2]);
@@ -3074,6 +3080,10 @@
         return crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt: b64(d.s), iterations: d.v }, k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
       }).then(function (k) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(d.i) }, k, b64(d.c)); });
     }).then(function (b) { cocinaHTML = new TextDecoder().decode(b); return cocinaHTML; });
+  }
+  /** La Caja: movimientos del banco y del efectivo, clientes, costos y pauta. Lee y guarda en tu hoja con tu clave. */
+  function vistaCaja() {
+    $("principal").innerHTML = '<div class="caja-marco"><iframe src="caja.html" title="Caja"></iframe></div>';
   }
   function vistaCocina() {
     $("principal").innerHTML = '<div class="cocina-marco" id="cocina"><div class="cocina-msg">Abriendo La Cocina…</div></div>';
@@ -5495,7 +5505,7 @@
   /** El menú del celular: lo que no entra abajo. */
   function abrirMenuMovil() {
     var it = function (hash, ico, txt) { return '<a class="btn" href="' + hash + '" data-cerrar>' + ICO(ico, 17) + e(txt) + "</a>"; };
-    hoja("<h3>Tu panel</h3><p class=\"sub\">Tu negocio y tu orden.</p><div class=\"salidas\">" + it("#/marketing", "megafono", "Marketing") + it("#/clientes", "gente", "Clientes") + it("#/documentos", "carpeta", "Documentos") + it("#/cocina", "brujula", "La Cocina") + it("#/agencia", "calendario", "Mi semana") +
+    hoja("<h3>Tu panel</h3><p class=\"sub\">Tu negocio y tu orden.</p><div class=\"salidas\">" + it("#/marketing", "megafono", "Marketing") + it("#/clientes", "gente", "Clientes") + it("#/caja", "billetera", "Caja") + it("#/documentos", "carpeta", "Documentos") + it("#/cocina", "brujula", "La Cocina") + it("#/agencia", "calendario", "Mi semana") +
       it("#/objetivos", "diana", "Objetivos") + it("#/constancia", "grafica", "Constancia") + it("#/libreta", "cuaderno", "Ideas") + it("#/sistema", "capas", "Mi sistema") + it("#/guia", "libro", "Cómo funciona") + it("#/ajustes", "ajustes", "Ajustes") +
       '<button class="btn suave" type="button" data-accion="salir">' + ICO("salir", 17) + "Salir</button></div>");
   }

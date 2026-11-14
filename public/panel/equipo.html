@@ -75,7 +75,7 @@ details summary::-webkit-details-marker{display:none}
   var APP = document.getElementById("app"), LS = "equipo-clave", S = null;
   var P = new URLSearchParams(location.search).get("p");
   var NOMBRE_LINK = P === "julio" ? "Julio" : P === "belen" ? "Belén" : "";
-  var CAJA = "https://claude.ai/artifact/K7bAHWknKrR6q8JW3NUYwH#belen";
+  var CAJA = "caja.html?p=belen";
   var HOY = new Intl.DateTimeFormat("en-CA", { timeZone: "America/La_Paz", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
   var AHORA = new Intl.DateTimeFormat("en-GB", { timeZone: "America/La_Paz", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date());
   var I = {

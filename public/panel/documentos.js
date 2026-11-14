@@ -162,7 +162,8 @@
   var SUBS = {
     nosotros: [
       { clave: "", nombre: "Estrategia", ico: "brujula", ayuda: "Lo nuestro, antes de subir un video: el negocio, a quién le hablamos, la oferta, los ángulos, cómo vendemos y la prueba." },
-      { clave: "llamadas", nombre: "Llamadas de venta", ico: "telefono", ayuda: "Cada llamada con un prospecto: arriba el resumen, abajo la transcripción. Si cierra, la llamada se mueve a su carpeta." }
+      { clave: "llamadas", nombre: "Llamadas de venta", ico: "telefono", ayuda: "Cada llamada con un prospecto: arriba el resumen, abajo la transcripción. Si cierra, la llamada se mueve a su carpeta." },
+      { clave: "guiones", nombre: "Guiones finales", ico: "lapiz", ayuda: "Cada guion tal como lo grabaste, con su ángulo, su formato y si ya se publicó. Se cargan más fácil desde Guiones › Guiones finales." }
     ],
     clientes: [
       { clave: "", nombre: "Estrategia", ico: "brujula", ayuda: "Lo que hay que saber antes de hacer su video: su ficha, su comprador, su oferta, sus ángulos, cómo vende y su bitácora." },

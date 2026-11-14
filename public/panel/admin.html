@@ -1640,6 +1640,174 @@
   @media (max-width: 900px) { .pc-campos { grid-template-columns: 1fr; margin-left: 0; } .pc-pie { bottom: 84px; } }
   .logo-gb { background: #fff !important; overflow: hidden; }
   .logo-gb img { width: 86%; height: 86%; object-fit: contain; display: block; }
+
+  /* ---------- tus guiones (14/11): el mapa de ángulos, los formatos y los guiones finales ---------- */
+  .ancho:has(.gz-pagina) { max-width: 1480px; }
+  .gz-cab { display: flex; align-items: center; gap: 14px 24px; flex-wrap: wrap; padding: 14px 18px; background: linear-gradient(135deg, #051d47 0%, #0b4bb0 58%, #1a6fe0 100%); }
+  .gz-cab-t { flex: 0 0 auto; max-width: 100%; }
+  .gz-cab-t h1 { font-size: 27px; margin: 0; }
+  .gz-pedido { flex: 1 1 560px; display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+  .gz-slot { flex: 1 1 220px; display: flex; align-items: center; gap: 12px; text-align: left; min-height: 60px; padding: 10px 14px; border-radius: 16px; border: 1.5px dashed rgba(255, 255, 255, .42); background: rgba(255, 255, 255, .08); color: #fff; cursor: pointer; font: inherit; transition: background .2s, border-color .2s; }
+  .gz-slot:hover { background: rgba(255, 255, 255, .17); }
+  .gz-slot.lleno { border-style: solid; border-color: rgba(255, 255, 255, .55); background: rgba(255, 255, 255, .16); }
+  .gz-slot-n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex: none; background: rgba(255, 255, 255, .2); font-weight: 800; font-size: 13px; }
+  .gz-slot.lleno .gz-slot-n { background: var(--lima); color: #05301a; }
+  .gz-slot small { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; opacity: .78; }
+  .gz-slot b { display: block; font-size: 15px; line-height: 1.25; }
+  .gz-mas { display: grid; place-items: center; opacity: .6; }
+  .gz-copiar { flex: 0 0 auto; min-height: 60px; padding: 0 22px; font-size: 15px; }
+  .gz-copiar[data-falta] { opacity: .6; }
+  .gz-niveles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .gz-nivel { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px 14px; border-radius: 16px; border: 1px solid var(--line); background: #fff; cursor: pointer; font: inherit; color: var(--ink); box-shadow: var(--sh-1); transition: border-color .2s, box-shadow .2s; }
+  .gz-nivel:hover { border-color: var(--blue); box-shadow: var(--sh-2); }
+  .gz-nivel > span:nth-child(2) { flex: 1; min-width: 0; }
+  .gz-nivel b { display: block; font-size: 14.5px; }
+  .gz-nivel small { display: block; font-size: 12.5px; color: var(--ink-2); font-weight: 600; }
+  .gz-nivel > svg { color: var(--ink-3); }
+  .gz-nivel-n { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; flex: none; font-family: var(--display); font-weight: 800; font-size: 17px; }
+  .gz-nivel.n1 .gz-nivel-n, .gz-ll-n.n1 { background: var(--lima-soft); color: var(--lima-2); }
+  .gz-nivel.n2 .gz-nivel-n, .gz-ll-n.n2 { background: var(--blue-soft); color: var(--blue-2); }
+  .gz-nivel.n3 .gz-nivel-n, .gz-ll-n.n3 { background: var(--coral-soft); color: var(--coral-ink); }
+  .gz-barra { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+  .gz-ley { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; font-weight: 700; color: var(--ink-2); }
+  .gz-ley-i { display: inline-flex; align-items: center; gap: 6px; }
+  .gz-ley-i i { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
+  .gz-ley-i.e-ganador i { background: var(--lima-2); }
+  .gz-ley-i.e-en-prueba i { background: var(--amber); }
+  .gz-ley-i.e-no-usar i { background: var(--coral); }
+  .gz-lienzo { position: relative; height: min(72vh, 780px); min-height: 440px; overflow: hidden; border-radius: var(--r-lg); border: 1px solid var(--line); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; background-color: #f7f9fd; background-image: radial-gradient(circle, #d3dcea 1.1px, transparent 1.4px); background-size: 22px 22px; }
+  .gz-lienzo.moviendo { cursor: grabbing; }
+  .gz-mundo { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+  .gz-lineas { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+  .gz-lineas path { fill: none; stroke: #c3cee0; stroke-width: 2.2; }
+  .gz-lineas path.si { stroke: var(--lima-2); }
+  .gz-lineas path.no { stroke: #f0a9ad; stroke-dasharray: 6 6; }
+  .gz-zoom { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 6px; padding: 5px; border-radius: 14px; background: rgba(255, 255, 255, .94); border: 1px solid var(--line); box-shadow: var(--sh-1); cursor: default; }
+  .gz-zoom .btn { min-height: 32px; }
+  .gz-nodo { position: absolute; display: flex; flex-direction: column; gap: 6px; text-align: left; padding: 12px 14px; border-radius: 18px; border: 1.5px solid var(--line); background: #fff; color: var(--ink); font: inherit; cursor: pointer; box-shadow: var(--sh-1); overflow: hidden; transition: box-shadow .2s, border-color .2s, transform .15s var(--ease); }
+  .gz-nodo:hover { border-color: var(--blue); box-shadow: var(--sh-2); transform: translateY(-1px); }
+  .gz-nodo.elegido { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(26, 111, 224, .22), var(--sh-2); }
+  .gz-n-top { display: flex; align-items: center; gap: 6px; }
+  .gz-est { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; padding: 3px 8px; border-radius: 99px; background: var(--blue-soft); color: var(--blue-2); white-space: nowrap; }
+  .gz-pri { margin-left: auto; font-size: 11.5px; font-weight: 800; color: var(--ink-3); }
+  .gz-nota { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 8px; display: inline-grid; place-items: center; font-size: 11.5px; font-weight: 800; background: #fff3c4; color: #8a5a00; }
+  .gz-n-top > .gz-nota:nth-child(2) { margin-left: auto; }
+  .gz-n-tit { font-size: 15.5px; line-height: 1.22; letter-spacing: -.01em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .gz-n-pie { margin-top: auto; font-size: 12px; font-weight: 700; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gz-n-pie b { font-family: var(--display); font-size: 17px; color: var(--ink); margin-right: 2px; }
+  .gz-n-pie i { font-style: normal; font-weight: 600; color: var(--ink-3); margin-left: 6px; }
+  .gz-nodo.e-ganador .gz-est { background: var(--lima-soft); color: var(--lima-2); }
+  .gz-nodo.e-en-prueba .gz-est { background: var(--amber-soft); color: var(--amber-ink); }
+  .gz-nodo.e-no-usar { background: #fff8f8; border-color: #f6cfd1; }
+  .gz-nodo.e-no-usar .gz-est { background: var(--coral-soft); color: var(--coral-ink); }
+  .gz-nodo.e-no-usar .gz-n-tit { color: var(--coral-ink); }
+  .gz-nodo.t-publico { border-left: 6px solid var(--blue); background: linear-gradient(180deg, #fff, #f4f8ff); }
+  .gz-nodo.t-publico .gz-est { background: var(--navy); color: #fff; }
+  .gz-nodo.t-publico .gz-n-tit { font-family: var(--display); font-size: 18px; }
+  .gz-nodo.t-publico.e-no-usar { border-left-color: var(--coral); background: #fff1f1; }
+  .gz-nodo.t-publico.e-no-usar .gz-est { background: var(--coral); color: #fff; }
+  .gz-nodo.t-madre { border: 0; color: #fff; padding: 16px 18px; border-radius: 24px; background: linear-gradient(140deg, #051d47 0%, #0b4bb0 70%, #1a6fe0 100%); box-shadow: 0 18px 40px -14px rgba(8, 46, 110, .7); }
+  .gz-nodo.t-madre.elegido { box-shadow: 0 0 0 5px rgba(255, 217, 94, .75), 0 18px 40px -14px rgba(8, 46, 110, .7); }
+  .gz-nodo.t-madre .gz-est { background: #ffd95e; color: #4d3600; }
+  .gz-nodo.t-madre .gz-n-tit { font-family: var(--display); font-size: 25px; line-height: 1.08; }
+  .gz-nodo.t-madre .gz-n-pie { color: rgba(255, 255, 255, .86); font-size: 13px; }
+  .gz-nodo.t-madre .gz-n-pie b { color: #fff; font-size: 24px; }
+  .gz-nodo.t-madre .gz-n-pie i { color: rgba(255, 255, 255, .72); }
+  .gz-nodo.t-madre .gz-nota { background: rgba(255, 255, 255, .2); color: #fff; }
+  .gz-lista { display: grid; gap: 8px; }
+  .gz-li { display: grid; }
+  .gz-li.p1 { padding-left: 14px; }
+  .gz-li.p2 { padding-left: 30px; }
+  .gz-li.p3 { padding-left: 46px; }
+  .gz-nodo.en-lista { position: static; width: 100%; height: auto; min-height: 86px; }
+  .gz-pie { margin: 10px 2px 0; }
+  .gz-aviso { display: flex; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--coral-soft); color: var(--coral-ink); font-weight: 700; font-size: 13.5px; margin-top: 12px; }
+  .gz-aviso ul { margin: 4px 0 0; padding-left: 18px; font-weight: 600; }
+  .gz-fmts { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .gz-fmt { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; text-align: left; min-height: 196px; padding: 18px 16px 14px; border-radius: 20px; border: 1.5px solid var(--line); background: #fff; cursor: pointer; font: inherit; color: var(--ink); box-shadow: var(--sh-1); transition: box-shadow .2s, border-color .2s, transform .15s var(--ease); }
+  .gz-fmt:hover { border-color: var(--blue); box-shadow: var(--sh-2); transform: translateY(-2px); }
+  .gz-fmt.elegido { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(26, 111, 224, .2), var(--sh-2); }
+  .gz-fmt.despues { opacity: .66; border-style: dashed; box-shadow: none; }
+  .gz-fmt-ico { width: 48px; height: 48px; border-radius: 15px; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue); }
+  .gz-fmt.elegido .gz-fmt-ico { background: var(--blue); color: #fff; }
+  .gz-fmt b { font-family: var(--display); font-size: 18.5px; line-height: 1.15; }
+  .gz-fmt small { font-size: 13px; color: var(--ink-2); font-weight: 600; line-height: 1.42; }
+  .gz-fmt-pie { margin-top: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+  .gz-blos { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; }
+  .gz-blo { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px 14px; border-radius: 16px; border: 1px solid var(--line); background: #fff; cursor: pointer; font: inherit; color: var(--ink); }
+  .gz-blo:hover { border-color: var(--blue); }
+  .gz-blo > span { flex: 1; min-width: 0; }
+  .gz-blo b { display: block; font-size: 14px; }
+  .gz-blo small { display: block; font-size: 12.5px; color: var(--ink-2); font-weight: 600; }
+  .gz-blo > svg:first-child { color: var(--blue); flex: none; }
+  .gz-blo > svg:last-child { color: var(--ink-3); flex: none; }
+  .gz-fin-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .gz-fin-cab .ayuda { flex: 1; min-width: 240px; margin: 0; }
+  .gz-falta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 16px; border-radius: 16px; background: var(--amber-soft); color: var(--amber-ink); font-weight: 700; margin-bottom: 12px; }
+  .gz-falta > span { flex: 1; min-width: 200px; }
+  .gz-fins { display: grid; gap: 8px; }
+  .gz-fin { display: flex; align-items: stretch; border-radius: 16px; border: 1px solid var(--line); border-left: 5px solid var(--line); background: #fff; box-shadow: var(--sh-1); overflow: hidden; }
+  .gz-fin.pub { border-left-color: var(--lima-2); }
+  .gz-fin-c { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7px; text-align: left; padding: 12px 14px; border: 0; background: none; cursor: pointer; font: inherit; color: var(--ink); }
+  .gz-fin-c:hover b { color: var(--blue-2); }
+  .gz-fin-c b { font-size: 15px; }
+  .gz-fin-ch { display: flex; gap: 6px; flex-wrap: wrap; }
+  .gz-pub { flex: none; align-self: center; display: inline-flex; align-items: center; gap: 6px; min-height: 38px; margin: 10px; padding: 0 12px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; font: inherit; font-size: 13px; font-weight: 800; color: var(--ink-2); cursor: pointer; white-space: nowrap; }
+  .gz-pub:hover { border-color: var(--blue); }
+  .gz-pub[aria-pressed="true"] { background: var(--lima-soft); border-color: transparent; color: var(--lima-2); }
+  .hoja.gz-hoja { max-width: 740px; }
+  .gz-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; padding-right: 40px; }
+  .gz-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 4px 0 14px; }
+  .gz-kpi { padding: 10px 12px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-2); }
+  .gz-kpi b { font-family: var(--display); font-size: 25px; line-height: 1; }
+  .gz-kpi span { font-size: 12.5px; font-weight: 800; margin-left: 5px; }
+  .gz-kpi small { display: block; font-size: 12px; color: var(--ink-2); font-weight: 600; margin-top: 3px; }
+  .gz-md.md { font-size: 14.5px; line-height: 1.58; }
+  .gz-md.md ul, .gz-md.md ol { padding-left: 20px; margin-bottom: 8px; }
+  .gz-md.md p { margin-bottom: 8px; }
+  .gz-md.md > :last-child { margin-bottom: 0; }
+  .gz-md .md-cita { font-size: 14px; margin-bottom: 8px; }
+  .gz-lectura { display: flex; gap: 10px; padding: 14px; border-radius: 16px; background: linear-gradient(135deg, #f3efff, #eaf2ff); margin-bottom: 14px; }
+  .gz-lectura > svg { flex: none; color: #6b4fd8; margin-top: 3px; }
+  .gz-lectura > div { min-width: 0; }
+  .gz-lectura small { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: #6b4fd8; margin-bottom: 4px; }
+  .gz-con { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-bottom: 14px; }
+  .gz-con button { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; text-align: left; padding: 10px 12px; border-radius: 14px; border: 1.5px solid var(--line); background: #fff; cursor: pointer; font: inherit; color: var(--ink); transition: border-color .2s, background .2s; }
+  .gz-con button:hover { border-color: var(--blue); background: var(--blue-soft); }
+  .gz-con b { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; }
+  .gz-con b svg { color: var(--blue); }
+  .gz-con small { font-size: 12px; color: var(--ink-2); font-weight: 600; }
+  .gz-sec { border: 1px solid var(--line); border-radius: 14px; background: #fff; margin-bottom: 6px; overflow: hidden; }
+  .gz-sec > summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; list-style: none; font-weight: 800; font-size: 14px; }
+  .gz-sec > summary::-webkit-details-marker { display: none; }
+  .gz-sec > summary > svg:first-child { color: var(--blue); flex: none; }
+  .gz-sec > summary > span { flex: 1; }
+  .gz-sec > summary small { font-size: 10.5px; font-weight: 800; color: var(--ink-3); text-transform: uppercase; letter-spacing: .07em; }
+  .gz-sec > summary > svg:last-child { color: var(--ink-3); flex: none; transition: transform .2s; }
+  .gz-sec[open] > summary > svg:last-child { transform: rotate(90deg); }
+  .gz-sec[open] > summary { border-bottom: 1px solid var(--line-2); }
+  .gz-sec > div { padding: 12px 14px 14px; }
+  .gz-sec.rojo { border-color: #f6cfd1; }
+  .gz-sec.rojo > summary > svg:first-child { color: var(--coral); }
+  .gz-abrir { display: flex; justify-content: flex-end; margin: 0 0 6px; }
+  .gz-ll { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line-2); }
+  .gz-ll > span:nth-child(2) { flex: 1; min-width: 0; }
+  .gz-ll b { display: block; font-size: 13.5px; }
+  .gz-ll small { display: block; font-size: 12px; color: var(--ink-2); font-weight: 600; }
+  .gz-ll-n { width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; flex: none; font-weight: 800; font-size: 12px; background: var(--line-2); }
+  .gz-guion { white-space: pre-wrap; overflow-wrap: anywhere; padding: 14px 16px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-2); font-size: 14.5px; line-height: 1.62; max-height: 46vh; overflow: auto; }
+  .gz-check { display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer; padding: 11px 12px; border-radius: 12px; background: var(--surface-2); margin-bottom: 14px; }
+  .gz-check input { width: 18px; height: 18px; accent-color: var(--lima-2); }
+  .gz-dos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 760px) {
+    .gz-niveles { grid-template-columns: 1fr; }
+    .gz-mas { display: none; }
+    .gz-copiar { flex: 1 1 100%; }
+    .gz-dos { grid-template-columns: 1fr; }
+    .gz-lienzo { height: 64vh; }
+    .gz-fin { flex-direction: column; }
+    .gz-pub { align-self: flex-start; margin: 0 14px 12px; }
+  }
 </style>
 </head>
 <body>
@@ -1658,6 +1826,7 @@
 <script src="areas.js"></script>
 <script src="contenido.js"></script>
 <script src="documentos.js"></script>
+<script src="guiones.js"></script>
 <script src="iconos.js"></script>
 <script>
 (function () {
@@ -2020,6 +2189,7 @@
       nav(["ventas", "prospecto"], "#/ventas", "apreton", "Ventas", cuenta(dia.filter(function (x) { return x.prospecto; }))) +
       nav("marketing", "#/marketing", "megafono", "Marketing") +
       nav(["contenido", "video"], "#/contenido", "camara", "Contenido", cuenta(vc.filter(function (x) { return x.nivel >= 2; }))) +
+      nav("guiones", "#/guiones", "lapiz", "Guiones") +
       nav(["clientes", "nuevo"], "#/clientes", "gente", "Clientes") +
       nav("caja", "#/caja", "billetera", "Caja") +
       nav(["documentos", "carpeta", "doc"], "#/documentos", "carpeta", "Documentos") +
@@ -2039,10 +2209,10 @@
       '<a class="nav-i' + (r === "nuevo" ? " activo" : "") + '" href="#/nuevo" style="margin-top:6px">' + ICO("mas", 18) + "Nuevo cliente</a>" +
       '<div class="esp"></div>' + nav("guia", "#/guia", "libro", "Cómo funciona") + nav("ajustes", "#/ajustes", "ajustes", "Ajustes") +
       '<button class="nav-i" type="button" data-accion="salir">' + ICO("salir", 18) + "Salir</button>";
-    var titulos = { inicio: "Tu día", ventas: "Ventas", prospecto: "Prospecto", marketing: "Marketing", contenido: "Contenido", clientes: "Tus clientes", cliente: "Cliente", nuevo: "Nuevo cliente", agencia: "Mi semana", objetivos: "Tus objetivos", libreta: "Tus ideas", sistema: "Mi sistema", guia: "Cómo funciona", ajustes: "Ajustes", constancia: "Tu constancia", video: "Tu video", documentos: "Tus documentos", carpeta: "Documentos", doc: "Documento", cocina: "La Cocina", caja: "Caja" };
+    var titulos = { inicio: "Tu día", ventas: "Ventas", prospecto: "Prospecto", marketing: "Marketing", contenido: "Contenido", clientes: "Tus clientes", cliente: "Cliente", nuevo: "Nuevo cliente", agencia: "Mi semana", objetivos: "Tus objetivos", libreta: "Tus ideas", sistema: "Mi sistema", guia: "Cómo funciona", ajustes: "Ajustes", constancia: "Tu constancia", video: "Tu video", documentos: "Tus documentos", carpeta: "Documentos", doc: "Documento", cocina: "La Cocina", caja: "Caja", guiones: "Guiones" };
     if ($("movil-tit")) $("movil-tit").textContent = titulos[r] || "Tu panel";
     var mn = function (rutas, hash, ico, txt) { return '<a class="' + (rutas.indexOf(r) >= 0 ? "activo" : "") + '" href="' + hash + '">' + ICO(ico, 22) + txt + "</a>"; };
-    var otras = ["cocina", "caja", "documentos", "carpeta", "doc", "marketing", "clientes", "cliente", "nuevo", "agencia", "objetivos", "libreta", "constancia", "sistema", "guia", "ajustes"];
+    var otras = ["guiones", "cocina", "caja", "documentos", "carpeta", "doc", "marketing", "clientes", "cliente", "nuevo", "agencia", "objetivos", "libreta", "constancia", "sistema", "guia", "ajustes"];
     $("movil-nav").innerHTML = mn(["inicio"], "#/inicio", "brujula", "Hoy") + mn(["ventas", "prospecto"], "#/ventas", "apreton", "Ventas") +
       '<a class="nuevo" href="#/nuevo" data-accion="mas-rapido">' + ICO("mas", 22) + "Anotar</a>" +
       mn(["contenido", "video"], "#/contenido", "camara", "Contenido") +
@@ -2503,6 +2673,390 @@
   });
   window.addEventListener("beforeunload", function (ev) { if (S.docSucio && $("doc-ed")) { ev.preventDefault(); ev.returnValue = ""; } });
 
+  // ---------- tus guiones (14/11): el árbol de ángulos, tus formatos y tus guiones finales ----------
+  // Los datos son tres cosas de tus documentos (nosotros/23, nosotros/24 y nosotros/guiones/): se leen con tu clave.
+  // Esta carpeta es pública, así que aquí no hay nombres ni números. La lógica (leer, contar, dibujar, armar el pedido) está en guiones.js.
+  var GZ_CACHE = "gb-gz-docs", GZ_SEL = "gb-gz-sel", GZ_VISTA = "gb-gz-vista";
+  var GZ_ICO = { "respuesta-a-comentario": "whatsapp", "camara-con-motion": "pelicula", "selfie-casero": "camara", "gancho-con-ia": "brillo" };
+  var GZ_MENOS = '<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>';
+  function gzJSON(k) { try { return JSON.parse(leerLocal(k) || "{}") || {}; } catch (x) { return {}; } }
+  function gzSel() { return gzJSON(GZ_SEL); }
+  function gzPonerSel(o) { guardarLocal(GZ_SEL, JSON.stringify(Object.assign(gzSel(), o))); }
+  function gzVista() { return leerLocal(GZ_VISTA) || (window.innerWidth < 760 ? "lista" : "mapa"); }
+  function gzEstado(k) { return (GUI.ESTADOS.find(function (x) { return x.clave === k; }) || { nombre: k }).nombre; }
+  function gzBs(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " Bs"; }
+  function gzMd(t) { return '<div class="md gz-md">' + DOCS.html(t) + "</div>"; }
+  function gzGrabable(a) { return !!a && a.tipo !== "publico" && a.estado !== "no-usar"; }
+  /** Arma todo lo que se dibuja, con los dos documentos y la lista de tus guiones finales. */
+  function gzArmar(tArbol, tFormatos, lista) {
+    var arbol = GUI.leerArbol(tArbol), fm = GUI.leerFormatos(tFormatos);
+    var finales = (lista || []).filter(function (x) { return GUI.esFinal(x.ruta); }).map(GUI.finalDeLista)
+      .sort(function (a, b) { return String(b.fecha).localeCompare(String(a.fecha)) || String(b.actualizado).localeCompare(String(a.actualizado)); });
+    return { arbol: arbol, fm: fm, finales: finales, est: GUI.estadisticas(arbol, finales), mapa: GUI.disponer(arbol), rev: GUI.revisar(arbol, fm), textos: [tArbol, tFormatos], cuando: Date.now() };
+  }
+  function gzRehacer() { if (S.gz) S.gz = gzArmar(S.gz.textos[0], S.gz.textos[1], S.docs ? S.docs.lista : []); }
+  /** Trae la lista de tus documentos y, solo si cambiaron, el árbol y los formatos (lo demás sale de la memoria de este aparato). */
+  function cargarGuiones() {
+    return cargarDocs(true).then(function (d) {
+      var c = gzJSON(GZ_CACHE);
+      var traer = function (clave) {
+        var ruta = GUI.RUTAS[clave], m = d.lista.find(function (x) { return x.ruta === ruta; });
+        if (!m) return Promise.resolve({ rev: 0, texto: "" });
+        if (c[clave] && c[clave].rev === m.rev && c[clave].texto) return Promise.resolve(c[clave]);
+        return pedir("doc", { ruta: ruta }).then(function (res) { if (!res.ok) throw new Error(res.error || "doc"); return { rev: res.doc.rev, texto: res.doc.texto }; });
+      };
+      return Promise.all([traer("arbol"), traer("formatos")]).then(function (r) {
+        guardarLocal(GZ_CACHE, JSON.stringify({ arbol: r[0], formatos: r[1] }));
+        S.gz = gzArmar(r[0].texto, r[1].texto, d.lista);
+        return S.gz;
+      });
+    });
+  }
+  function vistaGuiones() {
+    S.sinAnim = false;
+    if (!S.gz) { var c = gzJSON(GZ_CACHE); if (c.arbol && c.arbol.texto && c.formatos && c.formatos.texto) S.gz = gzArmar(c.arbol.texto, c.formatos.texto, S.docs ? S.docs.lista : []); }
+    if (S.gz) pintarGuiones(); else pintar('<div class="esq" style="height:150px;margin-bottom:16px"></div><div class="esq" style="height:420px"></div>');
+    cargarGuiones().then(function () { if (S.ruta === "guiones" && !$("velo")) { S.sinAnim = true; pintarGuiones(); S.sinAnim = false; } }).catch(falloDocs);
+  }
+  function pintarGuiones() {
+    var g = S.gz; if (!g) return;
+    if (!g.arbol.raiz || !g.fm.formatos.length) {
+      return pintar('<div class="cab"><div><h1>Guiones</h1><p>Tu árbol de ángulos, tus formatos y tus guiones finales.</p></div></div><div class="card vacio">' + ICO("diana", 28) +
+        "<br>Todavía no llegó tu árbol de ángulos a tu hoja.<br>Pídele a Claude: «actualiza los ángulos».</div>");
+    }
+    var nGrab = GUI.grabables(g.arbol).length, nFmt = g.fm.formatos.filter(function (f) { return f.estado === "listo"; }).length;
+    pintar('<div class="gz-pagina">' + gzCabHTML(!S.sinAnim) + pestanas("guiones", [
+      { clave: "angulos", nombre: "Ángulos", ico: "diana", cuenta: nGrab, html: gzAngulosHTML() },
+      { clave: "formatos", nombre: "Formatos", ico: "pelicula", cuenta: nFmt, html: gzFormatosHTML() },
+      { clave: "finales", nombre: "Guiones finales", ico: "lapiz", cuenta: g.finales.length || "", html: gzFinalesHTML() }
+    ], tabDe("guiones", ["angulos", "formatos", "finales"], "angulos")) + "</div>");
+    gzMontar();
+  }
+  /** Arriba: el pedido que estás armando. 1 el formato, 2 el ángulo, y el botón que lo copia entero para Claude. */
+  function gzCabHTML(anim) {
+    var g = S.gz, sel = gzSel(), a = g.arbol.porId[sel.ang], f = g.fm.porId[sel.fmt];
+    if (!gzGrabable(a)) a = null;
+    if (f && f.estado !== "listo") f = null;
+    var slot = function (n, etiqueta, valor, tab) {
+      return '<button type="button" class="gz-slot' + (valor ? " lleno" : "") + '" data-accion="gz-ir" data-tab="' + tab + '"><span class="gz-slot-n">' + (valor ? ICO("check", 14) : n) + "</span><span><small>" + etiqueta + "</small><b>" + e(valor || "Elige uno") + "</b></span></button>";
+    };
+    return '<div class="estudio gz-cab' + (anim ? " aparece" : "") + '"><div class="gz-cab-t"><small>Tu mesa de guiones</small><h1>Guiones</h1><p>' +
+      mas("Elige, copia y pega en Claude.", "Eliges un formato y un ángulo, y copias el pedido: lleva el formato, el ángulo, a quién le hablas, tu voz y cómo trabajamos. Cuando el guion queda como lo grabaste, lo pegas en Guiones finales y lo marcas «Publicado»: así Claude sabe qué ángulo ya salió y cómo suenas.") + "</p></div>" +
+      '<div class="gz-pedido">' + slot(1, "Formato", f && f.titulo, "formatos") + '<i class="gz-mas">' + ICO("mas", 16) + "</i>" + slot(2, "Ángulo", a && a.titulo, "angulos") +
+      '<button type="button" class="btn blanco gz-copiar" data-accion="gz-copiar-todo"' + (a && f ? "" : ' data-falta="1"') + ">" + ICO("copiar", 17) + "Copiar para Claude</button></div></div>";
+  }
+  /** Los números de un nodo: el grande y lo que significa. */
+  function gzNumeros(a) {
+    var s = S.gz.est.porId[a.id];
+    if (a.estado === "no-usar") return { n: s.trajo.n, t: s.trajo.n === 1 ? "llamada" : "llamadas", sub: s.trajo.n ? "pagó " + s.trajo.pagaron : "sin llamadas anotadas" };
+    if (a.tipo === "publico") return { n: s.trajo.pagaron, t: "pagaron", sub: "de " + s.trajo.n + " que lo dijeron" };
+    if (s.llegaron.n) return { n: s.llegaron.pagaron, t: s.llegaron.pagaron === 1 ? "pagó" : "pagaron", sub: "de " + s.llegaron.n + (s.llegaron.n === 1 ? " llamada" : " llamadas") };
+    return { n: s.publicados, t: s.publicados === 1 ? "video" : "videos", sub: "lo dijeron " + s.nombraron.n + " · pagaron " + s.nombraron.pagaron };
+  }
+  function gzNodoHTML(a, pos, elegido) {
+    var k = gzNumeros(a), grab = gzGrabable(a);
+    var estilo = pos ? ' style="left:' + pos.x + "px;top:" + pos.y + "px;width:" + pos.w + "px;height:" + pos.h + 'px"' : "";
+    var etiqueta = a.tipo === "madre" ? "Ángulo madre" : a.tipo === "publico" ? (a.estado === "no-usar" ? "No usar" : "Público") : gzEstado(a.estado);
+    return '<button type="button" class="gz-nodo t-' + e(a.tipo) + " e-" + e(a.estado) + (elegido ? " elegido" : "") + (pos ? "" : " en-lista") + '"' + estilo + ' data-accion="gz-nodo" data-id="' + e(a.id) + '">' +
+      '<span class="gz-n-top"><span class="gz-est">' + e(etiqueta) + "</span>" + (grab && a.tipo !== "madre" && a.prioridad ? '<span class="gz-pri" title="El orden en que yo lo grabaría">' + a.prioridad + "º</span>" : "") +
+      (a.estado !== "no-usar" && a.nota ? '<span class="gz-nota" title="Nota de Claude, de 1 a 10">' + a.nota + "</span>" : "") + "</span>" +
+      '<b class="gz-n-tit">' + e(a.titulo) + '</b><span class="gz-n-pie"><b>' + k.n + "</b> " + e(k.t) + "<i>" + e(k.sub) + "</i></span></button>";
+  }
+  function gzMapaHTML() {
+    var g = S.gz, m = g.mapa, sel = gzSel();
+    var lineas = '<svg class="gz-lineas" width="' + m.ancho + '" height="' + m.alto + '" aria-hidden="true">' + m.lineas.map(function (l) {
+      var a = g.arbol.porId[l.a]; return '<path d="' + l.d + '" class="' + (a.estado === "no-usar" ? "no" : a.estado === "ganador" ? "si" : "") + '"/>';
+    }).join("") + "</svg>";
+    return '<div class="gz-lienzo" id="gz-lienzo"><div class="gz-mundo" id="gz-mundo" style="width:' + m.ancho + "px;height:" + m.alto + 'px">' + lineas +
+      m.nodos.map(function (n) { return gzNodoHTML(g.arbol.porId[n.id], n, sel.ang === n.id); }).join("") + "</div>" +
+      '<div class="gz-zoom"><button type="button" class="btn-ico chico" data-accion="gz-zoom" data-valor="-" aria-label="Alejar" title="Alejar">' + GZ_MENOS + '</button><button type="button" class="btn-ico chico" data-accion="gz-zoom" data-valor="+" aria-label="Acercar" title="Acercar">' + ICO("mas", 16) +
+      '</button><button type="button" class="btn chico suave" data-accion="gz-zoom" data-valor="0">' + ICO("diana", 14) + "Encuadrar</button></div></div>";
+  }
+  function gzListaHTML() {
+    var g = S.gz, sel = gzSel();
+    var baja = function (a, prof) { return '<div class="gz-li p' + Math.min(prof, 3) + '">' + gzNodoHTML(a, null, sel.ang === a.id) + "</div>" + GUI.hijosDe(g.arbol, a.id).map(function (h) { return baja(h, prof + 1); }).join(""); };
+    return '<div class="gz-lista">' + baja(g.arbol.raiz, 0) + "</div>";
+  }
+  function gzAngulosHTML() {
+    var g = S.gz, vista = gzVista(), t = g.est.total;
+    var niveles = '<div class="gz-niveles">' + g.arbol.niveles.map(function (n, i) {
+      var s = g.est.niveles[i + 1] || { n: 0, pagaron: 0 };
+      return '<button type="button" class="gz-nivel n' + (i + 1) + '" data-accion="gz-nivel" data-id="' + e(n.id) + '"><span class="gz-nivel-n">' + (i + 1) + "</span><span><b>" + e(n.titulo) + "</b><small>" + s.n + (s.n === 1 ? " llamada" : " llamadas") + " · pagaron " + s.pagaron + "</small></span>" + ICO("derecha", 15) + "</button>";
+    }).join("") + "</div>";
+    var seg = '<div class="seg" role="group" aria-label="Cómo verlo"><button type="button" data-accion="gz-vista" data-valor="mapa" aria-pressed="' + (vista === "mapa") + '">' + ICO("ruta", 14) + 'Mapa</button><button type="button" data-accion="gz-vista" data-valor="lista" aria-pressed="' + (vista === "lista") + '">' + ICO("tareas", 14) + "Lista</button></div>";
+    var ley = '<div class="gz-ley">' + [["ganador", "Ganador"], ["en-prueba", "En prueba"], ["por-probar", "Por probar"], ["no-usar", "No usar"]].map(function (x) { return '<span class="gz-ley-i e-' + x[0] + '"><i></i>' + x[1] + "</span>"; }).join("") + "</div>";
+    var aviso = g.rev.errores.length ? '<div class="gz-aviso">' + ICO("alerta", 18) + "<div>El árbol tiene algo mal escrito. Díselo a Claude:<ul>" + g.rev.errores.slice(0, 6).map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ul></div></div>" : "";
+    return niveles + '<div class="gz-barra">' + seg + ley + "</div>" + (vista === "mapa" ? gzMapaHTML() : gzListaHTML()) +
+      '<p class="ayuda gz-pie">' + mas(vista === "mapa" ? "Arrastra para moverte. Toca un ángulo para ver todo." : "Toca un ángulo para ver todo.", (vista === "mapa" ? "Para acercar: Ctrl + rueda, o pellizca con dos dedos. " : "") + "El número grande es cuántos pagaron después de llegar por un video de ese ángulo. Si todavía no tiene video, dice cuántos lo dijeron en una llamada y cuántos de esos pagaron. Sale de tus " + t.n + " llamadas: lo pone al día Claude cuando le dices «actualiza los ángulos».") + "</p>" + aviso;
+  }
+  function gzFormatosHTML() {
+    var g = S.gz, sel = gzSel();
+    var tarjeta = function (f) {
+      var pub = g.finales.filter(function (x) { return x.formato === f.id && x.publicado; }).length, listo = f.estado === "listo";
+      return '<button type="button" class="gz-fmt' + (sel.fmt === f.id && listo ? " elegido" : "") + (listo ? "" : " despues") + '" data-accion="gz-formato" data-id="' + e(f.id) + '"><span class="gz-fmt-ico">' + ICO(GZ_ICO[f.id] || "pelicula", 24) + "</span><b>" + e(f.titulo) + "</b><small>" + e(f.frase) + '</small><span class="gz-fmt-pie">' +
+        (listo ? '<span class="chip">' + ICO("reloj", 12) + e(f.duracion) + '</span><span class="chip' + (pub ? " verde" : "") + '">' + pub + (pub === 1 ? " publicado" : " publicados") + "</span>" : '<span class="chip ambar">' + ICO("reloj", 12) + "Se arma después</span>") + "</span></button>";
+    };
+    var bloque = function (id, ico, sub) { var b = g.fm.bloques[id]; return b ? '<button type="button" class="gz-blo" data-accion="gz-bloque" data-id="' + id + '">' + ICO(ico, 18) + "<span><b>" + e(b.titulo) + "</b><small>" + sub + "</small></span>" + ICO("derecha", 15) + "</button>" : ""; };
+    return '<p class="ayuda" style="margin:0 0 12px">' + mas("Toca un formato para ver cómo se arma y elegirlo.", "Cada formato lleva cómo arranca, su estructura, cómo lo grabas y lo que le pides a Claude. Al copiarlo van también tu voz y cómo trabajamos.") + "</p>" +
+      '<div class="gz-fmts">' + g.fm.formatos.map(tarjeta).join("") + "</div>" +
+      '<div class="sec-tit">' + ICO("capas", 15) + 'Lo que va en todos tus pedidos</div><div class="gz-blos">' + bloque("voz", "megafono", "Cómo suenas y lo que nunca dices") + bloque("proceso", "tareas", "Primero el cuerpo, después los ganchos") + bloque("estructuras", "capas", "Según la familia del ángulo") + "</div>";
+  }
+  function gzFinalesHTML() {
+    var g = S.gz, fl = S.gzFiltro || "todos", madre = g.arbol.raiz, nPub = g.finales.filter(function (x) { return x.publicado; }).length;
+    var lista = g.finales.filter(function (x) { return fl === "todos" || (fl === "si") === !!x.publicado; });
+    var tarjeta = function (x) {
+      var a = g.arbol.porId[x.angulo], f = g.fm.porId[x.formato];
+      return '<div class="gz-fin' + (x.publicado ? " pub" : "") + '"><button type="button" class="gz-fin-c" data-accion="gz-final" data-ruta="' + e(x.ruta) + '"><b>' + e(x.titulo) + '</b><span class="gz-fin-ch"><span class="chip azul">' + ICO("diana", 12) + e(a ? a.titulo : "Sin ángulo") + '</span><span class="chip">' + ICO(GZ_ICO[x.formato] || "pelicula", 12) + e(f ? f.titulo : "Sin formato") + "</span>" +
+        (x.fecha ? '<span class="chip">' + ICO("calendario", 12) + e(GB.diaCorto(x.fecha)) + "</span>" : "") + "</span></button>" +
+        '<button type="button" class="gz-pub" data-accion="gz-publicado" data-ruta="' + e(x.ruta) + '" aria-pressed="' + !!x.publicado + '" title="Tócalo para cambiarlo">' + ICO(x.publicado ? "check" : "enviar", 15) + (x.publicado ? "Publicado" : "Sin publicar") + "</button></div>";
+    };
+    var falta = madre && !g.finales.some(function (x) { return x.angulo === madre.id; })
+      ? '<div class="gz-falta">' + ICO("alerta", 18) + "<span>Falta el más importante: el texto de tu video ganador, «" + e(madre.titulo) + '».</span><button type="button" class="btn chico blanco" data-accion="gz-final-nuevo" data-ang="' + e(madre.id) + '">' + ICO("mas", 15) + "Pegarlo ahora</button></div>" : "";
+    var filtro = g.finales.length ? '<div class="filtro" role="group" aria-label="Cuáles ver">' + [["todos", "Todos", g.finales.length], ["si", "Publicados", nPub], ["no", "Sin publicar", g.finales.length - nPub]].map(function (x) {
+      return '<button type="button" data-accion="gz-filtro" data-valor="' + x[0] + '" aria-pressed="' + (fl === x[0]) + '">' + x[1] + ' <span class="n">' + x[2] + "</span></button>";
+    }).join("") + "</div>" : "";
+    return '<div class="gz-fin-cab"><p class="ayuda">' + mas("El guion tal como lo grabaste, con su ángulo y su formato.", "Cuando lo marcas «Publicado», cuenta en su ángulo y en su formato, y Claude lo usa para saber qué ya salió, cómo suenas y de qué video te hablan en una llamada.") + '</p><button type="button" class="btn primario" data-accion="gz-final-nuevo">' + ICO("mas", 17) + "Pegar un guion</button></div>" + falta + filtro +
+      (lista.length ? '<div class="gz-fins">' + lista.map(tarjeta).join("") + "</div>" : '<div class="card vacio">' + ICO("lapiz", 28) + "<br>" + (g.finales.length ? "Ninguno con ese filtro." : "Todavía no pegaste ningún guion final.") + "</div>");
+  }
+  // --- las fichas que se abren al tocar ---
+  function gzKpi(n, t, sub) { return '<div class="gz-kpi"><b>' + n + "</b><span>" + e(t) + "</span>" + (sub ? "<small>" + e(sub) + "</small>" : "") + "</div>"; }
+  function gzLlamadasHTML(tit, r, conFrase) {
+    if (!r.n) return "";
+    return '<div class="g-tit">' + ICO("telefono", 14) + e(tit) + " (" + r.n + ")</div>" + r.filas.map(function (x) {
+      return '<div class="gz-ll"><span class="gz-ll-n n' + x.nivel + '" title="Nivel ' + x.nivel + '">' + x.nivel + "</span><span><b>" + e(x.quien) + "</b><small>" + e(x.negocio) + (conFrase && x.dijo ? " · " + e(x.dijo) : "") + '</small></span><span class="chip' + (x.pago ? " verde" : "") + '">' + (x.pago ? "Pagó " + gzBs(x.pago) + (x.certeza === "probable" ? " · probable" : "") : "No pagó") + "</span></div>";
+    }).join("");
+  }
+  function gzSeccionesHTML(o, partes, abiertas, clase) {
+    return partes.map(function (p, i) {
+      var t = GUI.seccion(o, p.n); if (!t) return "";
+      return '<details class="gz-sec' + (clase ? " " + clase : "") + '"' + (abiertas === true || i < abiertas ? " open" : "") + "><summary>" + ICO(p.ico, 16) + "<span>" + e(p.corto) + "</span>" + (p.extra || "") + ICO("derecha", 14) + "</summary><div>" + gzMd(t) + (p.mas || "") + "</div></details>";
+    }).join("");
+  }
+  function gzAbrirAngulo(id) {
+    var g = S.gz, a = g.arbol.porId[id]; if (!a) return;
+    var s = g.est.porId[id], ficha = GUI.fichaDe(a), grab = gzGrabable(a), pub = a.tipo === "publico" ? null : GUI.publicoDe(g.arbol, id);
+    var chips = '<span class="chip ' + ({ ganador: "verde", "en-prueba": "ambar", "no-usar": "rojo" }[a.estado] || "azul") + '">' + e(a.tipo === "madre" ? "Ángulo madre · ganador" : a.tipo === "publico" && a.estado !== "no-usar" ? "Público" : gzEstado(a.estado)) + "</span>" +
+      (grab && a.familia ? '<span class="chip">' + e(GB.cap(a.familia)) + "</span>" : "") + (a.nivel ? '<span class="chip">Nivel ' + e(a.nivel) + "</span>" : "") +
+      (a.estado !== "no-usar" && a.nota ? '<span class="chip oro">Nota ' + a.nota + " de 10</span>" : "") + (pub && pub.estado !== "no-usar" ? '<span class="chip">' + ICO("gente", 12) + e(pub.titulo) + "</span>" : "");
+    var kpis = a.estado === "no-usar" ? gzKpi(s.trajo.n, s.trajo.n === 1 ? "llamada" : "llamadas", "pagó " + s.trajo.pagaron)
+      : !grab ? gzKpi(s.trajo.pagaron, "pagaron", "de " + s.trajo.n + " que lo dijeron") + gzKpi(GUI.hijosDe(g.arbol, id).length, "ángulos", "cuelgan de este público")
+        : gzKpi(s.llegaron.pagaron, s.llegaron.pagaron === 1 ? "pagó" : "pagaron", s.llegaron.n ? "de " + s.llegaron.n + (s.llegaron.n === 1 ? " llamada" : " llamadas") + " por un video suyo" : "todavía sin video") +
+          (s.nombraron.n ? gzKpi(s.nombraron.n, "lo dijeron", "en la llamada · pagaron " + s.nombraron.pagaron) : "") + gzKpi(s.publicados, s.publicados === 1 ? "publicado" : "publicados", s.guiones + (s.guiones === 1 ? " guion guardado" : " guiones guardados"));
+    var lectura = GUI.seccion(a, "Lectura de Claude");
+    var acciones = grab ? '<div class="acc" style="margin:0 0 12px"><button class="btn primario" type="button" data-accion="gz-usar-ang" data-id="' + e(id) + '">' + ICO("check", 17) + 'Usar este ángulo</button><button class="btn" type="button" data-accion="gz-copiar-ang" data-id="' + e(id) + '">' + ICO("copiar", 16) + "Copiar solo el ángulo</button></div>" +
+      '<div class="g-tit" style="margin-top:0">' + ICO("copiar", 14) + 'O copia el pedido completo, ya con su formato</div><div class="gz-con">' + g.fm.formatos.filter(function (f) { return f.estado === "listo"; }).map(function (f) {
+        var n = s.porFormato[f.id] || 0;
+        return '<button type="button" data-accion="gz-copiar-con" data-ang="' + e(id) + '" data-fmt="' + e(f.id) + '"><b>' + ICO(GZ_ICO[f.id] || "pelicula", 15) + e(f.titulo) + "</b><small>" + (n ? n + (n === 1 ? " publicado" : " publicados") + " en este formato" : "Todavía sin probar así") + "</small></button>";
+      }).join("") + "</div>" : "";
+    var partes = GUI.PARTES[ficha].filter(function (p) { return p.n !== "Lectura de Claude"; }).map(function (p) {
+      var x = Object.assign({}, p);
+      if (grab && !p.pedido) x.extra = "<small>para ti</small>";
+      if (p.n === "De dónde sale") x.mas = gzLlamadasHTML("Llegaron por un video de este ángulo", s.llegaron, true) + gzLlamadasHTML("Lo dijeron en la llamada", s.nombraron, false);
+      if (p.n === "A quién trajo" || p.n === "Quién pagó") x.mas = gzLlamadasHTML(p.n === "Quién pagó" ? "Los que lo dijeron" : "En tus llamadas", s.trajo, p.n === "A quién trajo");
+      if (p.n === "Guiones míos de este ángulo") {
+        var gs = g.finales.filter(function (f) { return f.angulo === id; });
+        x.mas = gs.length ? '<div class="g-tit">' + ICO("lapiz", 14) + "En tus guiones finales (" + gs.length + ")</div>" + gs.map(function (f) { return '<button type="button" class="lnk" data-accion="gz-final" data-ruta="' + e(f.ruta) + '" style="display:block;text-align:left;margin:4px 0">' + e(f.titulo) + (f.publicado ? " · publicado" : " · sin publicar") + "</button>"; }).join("") : "";
+      }
+      return x;
+    });
+    hoja('<div class="gz-chips">' + chips + "</div><h3>" + e(a.titulo) + '</h3><p class="sub">' + e(a.frase) + '</p><div class="gz-kpis">' + kpis + "</div>" +
+      (lectura ? '<div class="gz-lectura">' + ICO("brillo", 18) + "<div><small>Lectura de Claude</small>" + gzMd(lectura) + "</div></div>" : "") + acciones +
+      (grab ? '<div class="gz-abrir"><button type="button" class="lnk" data-accion="gz-abrir-todo">Abrir todo</button></div>' : "") +
+      gzSeccionesHTML(a, partes, grab ? 1 : true, a.estado === "no-usar" ? "rojo" : ""), null, "gz-hoja");
+  }
+  function gzAbrirNivel(id) {
+    var g = S.gz, i = g.arbol.niveles.findIndex(function (n) { return n.id === id; }), n = g.arbol.niveles[i]; if (!n) return;
+    var s = g.est.niveles[i + 1] || { n: 0, pagaron: 0, filas: [] }, completos = s.filas.filter(function (r) { return /todo/i.test(r.quedo); }).length;
+    hoja('<div class="gz-chips"><span class="chip ' + ["verde", "azul", "rojo"][i] + '">Nivel ' + (i + 1) + "</span></div><h3>" + e(n.titulo) + '</h3><p class="sub">' + e(n.frase) + '</p><div class="gz-kpis">' +
+      gzKpi(s.n, s.n === 1 ? "llamada" : "llamadas", "de tus " + g.est.total.n) + gzKpi(s.pagaron, s.pagaron === 1 ? "pagó" : "pagaron", completos ? completos + " pagaron todo en la llamada" : "") + "</div>" +
+      gzSeccionesHTML(n, GUI.PARTES.nivel, true, i === 2 ? "rojo" : "") +
+      '<details class="gz-sec"><summary>' + ICO("telefono", 16) + "<span>Sus llamadas</span>" + ICO("derecha", 14) + "</summary><div>" + gzLlamadasHTML("De este nivel", s, false) + "</div></details>", null, "gz-hoja");
+  }
+  function gzAbrirFormato(id) {
+    var g = S.gz, f = g.fm.porId[id]; if (!f) return;
+    var listo = f.estado === "listo", pub = g.finales.filter(function (x) { return x.formato === id && x.publicado; }).length;
+    hoja('<div class="gz-chips"><span class="chip ' + (listo ? "azul" : "ambar") + '">' + ICO(GZ_ICO[id] || "pelicula", 12) + (listo ? "Formato" : "Se arma después") + "</span>" + (f.duracion ? '<span class="chip">' + ICO("reloj", 12) + e(f.duracion) + "</span>" : "") + (listo ? '<span class="chip' + (pub ? " verde" : "") + '">' + pub + (pub === 1 ? " publicado" : " publicados") + "</span>" : "") + "</div><h3>" + e(f.titulo) + '</h3><p class="sub">' + e(f.frase) + (f.sirve ? " Sirve para: " + e(f.sirve) + "." : "") + "</p>" +
+      (listo ? '<div class="acc" style="margin:0 0 14px"><button class="btn primario" type="button" data-accion="gz-usar-fmt" data-id="' + e(id) + '">' + ICO("check", 17) + 'Usar este formato</button><button class="btn" type="button" data-accion="gz-copiar-fmt" data-id="' + e(id) + '" title="El formato, tu voz y cómo trabajamos: para mandarlo primero">' + ICO("copiar", 16) + "Copiar solo el formato</button></div>" +
+        '<div class="gz-abrir"><button type="button" class="lnk" data-accion="gz-abrir-todo">Abrir todo</button></div>' : "") +
+      gzSeccionesHTML(f, GUI.PARTES.formato, listo ? 1 : true, ""), null, "gz-hoja");
+  }
+  function gzAbrirBloque(id) {
+    var b = S.gz.fm.bloques[id]; if (!b) return;
+    hoja('<div class="gz-chips"><span class="chip azul">' + ICO("capas", 12) + "Va en todos tus pedidos</span></div><h3>" + e(b.titulo) + '</h3><p class="sub">Sale de tu manual de guiones y de cómo editas. Si algo ya no es así, díselo a Claude y lo cambia.</p>' +
+      '<div class="acc" style="margin:0 0 14px"><button class="btn" type="button" data-accion="gz-copiar-bloque" data-id="' + e(id) + '">' + ICO("copiar", 16) + "Copiarlo</button></div>" +
+      b.secciones.map(function (s) { return '<details class="gz-sec" open><summary>' + ICO("derecha", 14) + "<span>" + e(s.nombre) + "</span>" + ICO("derecha", 14) + "</summary><div>" + gzMd(s.texto) + "</div></details>"; }).join(""), null, "gz-hoja");
+  }
+  // --- copiar el pedido ---
+  function gzCopiar(ang, fmt, que) {
+    var g = S.gz, texto = GUI.pedido(g.arbol, g.fm, ang, fmt, que);
+    if (!texto) return toast("No pude armar el pedido", true);
+    copiar(texto, que === "formato" ? "Formato copiado: pégalo en Claude y después mándale el ángulo" : que === "angulo" ? "Ángulo copiado: pégalo en Claude" : "Pedido copiado: pégalo en Claude");
+  }
+  function gzCopiarTodo() {
+    var g = S.gz, sel = gzSel(), a = g.arbol.porId[sel.ang], f = g.fm.porId[sel.fmt];
+    if (!f || f.estado !== "listo") { irPestana("guiones", "formatos"); return toast("Primero elige un formato", true); }
+    if (!gzGrabable(a)) { irPestana("guiones", "angulos"); return toast("Ahora elige un ángulo", true); }
+    gzCopiar(a.id, f.id, "todo");
+  }
+  // --- tus guiones finales ---
+  function gzFormFinal(o, ruta, rev) {
+    var g = S.gz, sel = gzSel();
+    o = Object.assign({ titulo: "", angulo: gzGrabable(g.arbol.porId[sel.ang]) ? sel.ang : "", formato: sel.fmt || "", publicado: false, fecha: hoy(), link: "", guion: "", notas: "" }, o || {});
+    var op = function (lista, valor, vacio) { return '<option value="">' + vacio + "</option>" + lista.map(function (x) { return '<option value="' + e(x.id) + '"' + (x.id === valor ? " selected" : "") + ">" + e(x.titulo) + "</option>"; }).join(""); };
+    hoja('<span class="chip azul" style="margin-bottom:10px">' + ICO("lapiz", 13) + "Guion final</span><h3>" + (ruta ? "Cambiar este guion" : "Pegar un guion") + '</h3><p class="sub">Pégalo tal como lo grabaste, con tus palabras. Con su ángulo y su formato, Claude sabe qué ya salió.</p>' +
+      '<form id="f-gz-final" data-ruta="' + e(ruta || "") + '" data-rev="' + (rev || 0) + '" novalidate>' +
+      '<div class="campo"><label class="etq" for="gzf-titulo">Cómo se llama</label><input class="inp" id="gzf-titulo" maxlength="110" required placeholder="El camión y el helado" value="' + e(o.titulo) + '"></div>' +
+      '<div class="gz-dos"><div class="campo"><label class="etq" for="gzf-ang">Su ángulo</label><select class="inp" id="gzf-ang">' + op(GUI.grabables(g.arbol), o.angulo, "Otro, o no sé") + '</select></div><div class="campo"><label class="etq" for="gzf-fmt">Su formato</label><select class="inp" id="gzf-fmt">' + op(g.fm.formatos, o.formato, "Otro") + "</select></div></div>" +
+      '<div class="campo"><label class="etq" for="gzf-guion">El guion</label><textarea class="inp" id="gzf-guion" rows="11" required placeholder="Pega aquí lo que dices en el video">' + e(o.guion) + "</textarea></div>" +
+      '<div class="gz-dos"><div class="campo"><label class="etq" for="gzf-fecha">Fecha</label><input class="inp" id="gzf-fecha" type="date" value="' + e(o.fecha || hoy()) + '"></div><div class="campo"><label class="etq" for="gzf-link">Link del video (si ya salió)</label><input class="inp" id="gzf-link" type="url" inputmode="url" placeholder="https://www.tiktok.com/…" value="' + e(o.link) + '"></div></div>' +
+      '<div class="campo"><label class="etq" for="gzf-notas">Notas (si quieres)</label><textarea class="inp" id="gzf-notas" rows="2" placeholder="Qué cambiaste, cuánta pauta le pusiste, qué te dijeron">' + e(o.notas) + "</textarea></div>" +
+      '<label class="gz-check"><input type="checkbox" id="gzf-pub"' + (o.publicado ? " checked" : "") + "> Ya está publicado</label>" +
+      '<button class="btn primario" type="submit" style="width:100%">' + ICO("check", 17) + "Guardar</button></form>", function () { if (!ruta) $("gzf-titulo").focus(); }, "gz-hoja");
+  }
+  function gzGuardarFinal(form) {
+    var o = { titulo: $("gzf-titulo").value.trim(), angulo: $("gzf-ang").value, formato: $("gzf-fmt").value, fecha: $("gzf-fecha").value || hoy(), link: $("gzf-link").value.trim(), publicado: $("gzf-pub").checked, guion: $("gzf-guion").value, notas: $("gzf-notas").value };
+    if (!o.titulo) return toast("Ponle un nombre", true);
+    if (!o.guion.trim()) return toast("Pega el guion", true);
+    if (o.link && !/^https?:\/\//.test(o.link)) o.link = "https://" + o.link;
+    var ruta = form.dataset.ruta || GUI.rutaFinal(o, (S.docs ? S.docs.lista : []).map(function (x) { return x.ruta; })), texto = GUI.armarFinal(o);
+    var btn = form.querySelector("button[type=submit]"); btn.disabled = true;
+    pedir("doc-guardar", { ruta: ruta, texto: texto, rev: +form.dataset.rev || 0, desde: "panel" }).then(function (res) {
+      if (!res.ok) { btn.disabled = false; return toast(res.error === "conflicto" ? "Cambió en otro lado: ciérralo y ábrelo de nuevo" : res.error === "grande" ? "Es muy largo: pártelo en dos" : "No se pudo guardar (" + res.error + ")", true); }
+      S.docTxt[ruta] = Object.assign({}, res.doc, { texto: DOCS.normalizar(texto) }); meterMeta(res.doc);
+      gzRehacer(); cerrarHoja(); S.sub = "finales"; if (S.ruta === "guiones") { S.sinAnim = true; pintarGuiones(); S.sinAnim = false; }
+      toast(o.publicado ? "Guardado: ya cuenta en su ángulo" : "Guardado");
+    }, function (x) { btn.disabled = false; falloRed(x); });
+  }
+  function gzAbrirFinal(ruta) {
+    var g = S.gz, m = g.finales.find(function (x) { return x.ruta === ruta; });
+    traerDoc(ruta).then(function (d) {
+      var o = GUI.leerFinal(d.texto, ruta), a = g.arbol.porId[o.angulo], f = g.fm.porId[o.formato];
+      S.gzFinal = { ruta: ruta, rev: d.rev, o: o };
+      hoja('<div class="gz-chips"><span class="chip ' + (o.publicado ? "verde" : "") + '">' + ICO(o.publicado ? "check" : "reloj", 12) + (o.publicado ? "Publicado" : "Sin publicar") + '</span><span class="chip azul">' + ICO("diana", 12) + e(a ? a.titulo : "Sin ángulo") + '</span><span class="chip">' + ICO(GZ_ICO[o.formato] || "pelicula", 12) + e(f ? f.titulo : "Sin formato") + "</span>" +
+        (o.fecha ? '<span class="chip">' + e(GB.diaCorto(o.fecha)) + "</span>" : "") + "</div><h3>" + e(o.titulo || (m && m.titulo) || "Guion") + "</h3>" +
+        (o.link ? '<p class="sub"><a class="lnk" href="' + e(o.link) + '" target="_blank" rel="noopener">' + ICO("afuera", 13) + " Ver el video</a></p>" : "") +
+        '<div class="gz-guion">' + e(o.guion) + "</div>" + (o.notas ? '<div class="g-tit">' + ICO("cuaderno", 14) + 'Notas</div><div class="gz-guion" style="max-height:20vh">' + e(o.notas) + "</div>" : "") +
+        '<div class="acc"><button class="btn primario" type="button" data-accion="gz-final-copiar">' + ICO("copiar", 16) + 'Copiar</button><button class="btn" type="button" data-accion="gz-final-editar">' + ICO("lapiz", 16) + 'Cambiar</button><a class="btn suave" href="' + hrefDoc(ruta) + '" data-cerrar>' + ICO("archivo", 16) + "Verlo en Documentos</a></div>", null, "gz-hoja");
+    }).catch(falloDocs);
+  }
+  function gzAlternarPublicado(ruta, b) {
+    var x = S.gz.finales.find(function (f) { return f.ruta === ruta; }); if (!x) return;
+    var nuevo = !x.publicado; if (b) { b.disabled = true; b.textContent = "Guardando…"; }
+    traerDoc(ruta, true).then(function (d) {
+      var texto = GUI.ponerDatos(d.texto, { publicado: nuevo, fecha: x.fecha || hoy() });
+      return pedir("doc-guardar", { ruta: ruta, texto: texto, rev: d.rev, desde: "panel" }).then(function (res) {
+        if (!res.ok) throw new Error(res.error || "doc");
+        S.docTxt[ruta] = Object.assign({}, res.doc, { texto: DOCS.normalizar(texto) }); meterMeta(res.doc);
+        gzRehacer(); S.sub = "finales"; if (S.ruta === "guiones") { S.sinAnim = true; pintarGuiones(); S.sinAnim = false; }
+        toast(nuevo ? "Publicado: ya cuenta en su ángulo" : "Quedó sin publicar");
+      });
+    }).catch(function (err) { if (S.ruta === "guiones") pintarGuiones(); falloDocs(err); });
+  }
+  // --- el mapa: moverse y acercar ---
+  function gzAplicarCam() { var m = $("gz-mundo"), c = S.gzCam; if (m && c) m.style.transform = "translate(" + Math.round(c.x) + "px," + Math.round(c.y) + "px) scale(" + c.k + ")"; }
+  /** Encuadra el mapa: entero si se lee; si no, centrado en la madre a un tamaño que se lea. */
+  function gzEncuadrar() {
+    var l = $("gz-lienzo"); if (!l || !l.clientWidth) return false;
+    var m = S.gz.mapa, W = l.clientWidth, k = gzAlto(l);
+    S.gzCam = { k: k, x: m.ancho * k <= W ? (W - m.ancho * k) / 2 : W / 2 - m.centro.x * k, y: 4 };
+    gzAplicarCam();
+    return true;
+  }
+  /** En la compu el lienzo toma el alto del árbol: se ve entero bajando la página, sin tener que arrastrar. Devuelve el tamaño al que entra a lo ancho. */
+  function gzAlto(l) {
+    var m = S.gz.mapa, W = l.clientWidth, chico = W < 760, k = Math.min(W / m.ancho, .86);
+    if (chico) k = Math.max(k, .62);
+    else l.style.height = Math.max(440, Math.min(1400, Math.round(m.alto * k) + 12)) + "px";
+    return k;
+  }
+  function gzZoom(f, cx, cy) {
+    var l = $("gz-lienzo"), c = S.gzCam; if (!l || !c) return;
+    var k = Math.max(.3, Math.min(1.6, c.k * f));
+    if (cx == null) { cx = l.clientWidth / 2; cy = l.clientHeight / 2; }
+    c.x = cx - (cx - c.x) * (k / c.k); c.y = cy - (cy - c.y) * (k / c.k); c.k = k;
+    gzAplicarCam();
+  }
+  function gzMontar() {
+    var l = $("gz-lienzo"); if (!l) return;
+    if (S.gzCam && l.clientWidth) { gzAlto(l); gzAplicarCam(); } else { S.gzCam = null; gzEncuadrar(); }
+    // Si la pestaña estaba escondida, se encuadra la primera vez que se ve
+    if (typeof ResizeObserver !== "undefined") { var anchoVisto = l.clientWidth; new ResizeObserver(function () { if (!S.gzCam || (l.clientWidth && l.clientWidth !== anchoVisto)) { anchoVisto = l.clientWidth; gzEncuadrar(); } }).observe(l); }
+    var pts = {}, ini = null, pin = null, movio = false;
+    var pos = function (ev) { var r = l.getBoundingClientRect(); return { x: ev.clientX - r.left, y: ev.clientY - r.top }; };
+    l.addEventListener("pointerdown", function (ev) {
+      if (ev.target.closest(".gz-zoom") || (ev.pointerType === "mouse" && ev.button !== 0)) return;
+      if (!S.gzCam && !gzEncuadrar()) return;
+      pts[ev.pointerId] = pos(ev); movio = false;
+      var ids = Object.keys(pts);
+      if (ids.length === 1) { ini = { x: ev.clientX, y: ev.clientY, cx: S.gzCam.x, cy: S.gzCam.y }; pin = null; }
+      else if (ids.length === 2) { var a = pts[ids[0]], b = pts[ids[1]]; pin = { d: Math.hypot(a.x - b.x, a.y - b.y) }; ini = null; }
+    });
+    l.addEventListener("pointermove", function (ev) {
+      if (!pts[ev.pointerId]) return;
+      var antes = pts[ev.pointerId]; pts[ev.pointerId] = pos(ev);
+      var ids = Object.keys(pts);
+      if (ids.length >= 2 && pin) {
+        var a = pts[ids[0]], b = pts[ids[1]], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (pin.d > 0 && d > 0) { gzZoom(d / pin.d, (a.x + b.x) / 2, (a.y + b.y) / 2); pin.d = d; }
+        movio = true; S.gzArrastro = Date.now();
+        return;
+      }
+      if (!ini) { ini = { x: ev.clientX, y: ev.clientY, cx: S.gzCam.x, cy: S.gzCam.y }; return; }
+      var dx = ev.clientX - ini.x, dy = ev.clientY - ini.y;
+      if (!movio && Math.hypot(dx, dy) < 6) { pts[ev.pointerId] = antes; return; }
+      if (!movio) { movio = true; l.classList.add("moviendo"); try { l.setPointerCapture(ev.pointerId); } catch (x) { /* sin captura */ } }
+      S.gzCam.x = ini.cx + dx; S.gzCam.y = ini.cy + dy; gzAplicarCam();
+    });
+    var soltar = function (ev) {
+      if (!pts[ev.pointerId]) return;
+      delete pts[ev.pointerId]; ini = null; pin = null;
+      if (movio) S.gzArrastro = Date.now();
+      if (!Object.keys(pts).length) { l.classList.remove("moviendo"); movio = false; }
+    };
+    l.addEventListener("pointerup", soltar); l.addEventListener("pointercancel", soltar);
+    l.addEventListener("wheel", function (ev) {
+      if (!ev.ctrlKey && !ev.metaKey) return;
+      ev.preventDefault(); if (!S.gzCam && !gzEncuadrar()) return;
+      var p = pos(ev); gzZoom(ev.deltaY < 0 ? 1.12 : 1 / 1.12, p.x, p.y);
+    }, { passive: false });
+  }
+  function accionGuiones(a, b) {
+    var g = S.gz; if (!g) return true;
+    switch (a) {
+      case "gz-nodo": if (S.gzArrastro && Date.now() - S.gzArrastro < 250) return true; gzAbrirAngulo(b.dataset.id); return true;
+      case "gz-nivel": gzAbrirNivel(b.dataset.id); return true;
+      case "gz-formato": gzAbrirFormato(b.dataset.id); return true;
+      case "gz-bloque": gzAbrirBloque(b.dataset.id); return true;
+      case "gz-ir": irPestana("guiones", b.dataset.tab); if (b.dataset.tab === "angulos" && !S.gzCam) gzEncuadrar(); return true;
+      case "gz-vista": guardarLocal(GZ_VISTA, b.dataset.valor); S.gzCam = null; S.sub = "angulos"; S.sinAnim = true; pintarGuiones(); S.sinAnim = false; return true;
+      case "gz-zoom": if (b.dataset.valor === "0") gzEncuadrar(); else gzZoom(b.dataset.valor === "+" ? 1.25 : .8); return true;
+      case "gz-abrir-todo": Array.prototype.forEach.call(document.querySelectorAll("#velo .gz-sec"), function (d) { d.open = true; }); b.parentNode.remove(); return true;
+      case "gz-usar-ang": {
+        gzPonerSel({ ang: b.dataset.id }); cerrarHoja(); S.sinAnim = true; pintarGuiones(); S.sinAnim = false;
+        var f1 = g.fm.porId[gzSel().fmt];
+        if (!f1 || f1.estado !== "listo") { irPestana("guiones", "formatos"); toast("Ángulo elegido. Ahora elige un formato"); } else toast("Ángulo elegido: ya puedes copiar el pedido");
+        return true;
+      }
+      case "gz-usar-fmt": {
+        gzPonerSel({ fmt: b.dataset.id }); cerrarHoja(); S.sinAnim = true; pintarGuiones(); S.sinAnim = false;
+        if (!gzGrabable(g.arbol.porId[gzSel().ang])) { irPestana("guiones", "angulos"); if (!S.gzCam) gzEncuadrar(); toast("Formato elegido. Ahora elige un ángulo"); } else toast("Formato elegido: ya puedes copiar el pedido");
+        return true;
+      }
+      case "gz-copiar-todo": gzCopiarTodo(); return true;
+      case "gz-copiar-ang": gzCopiar(b.dataset.id, null, "angulo"); return true;
+      case "gz-copiar-fmt": gzCopiar(null, b.dataset.id, "formato"); return true;
+      case "gz-copiar-con": gzPonerSel({ ang: b.dataset.ang, fmt: b.dataset.fmt }); gzCopiar(b.dataset.ang, b.dataset.fmt, "todo"); cerrarHoja(); S.sinAnim = true; pintarGuiones(); S.sinAnim = false; return true;
+      case "gz-copiar-bloque": { var bl = g.fm.bloques[b.dataset.id]; if (bl) copiar(bl.titulo.toUpperCase() + "\n\n" + GUI.textoBloque(g.fm, b.dataset.id), "Copiado"); return true; }
+      case "gz-filtro": S.gzFiltro = b.dataset.valor; S.sub = "finales"; S.sinAnim = true; pintarGuiones(); S.sinAnim = false; return true;
+      case "gz-final-nuevo": gzFormFinal(b.dataset.ang ? { angulo: b.dataset.ang } : null); return true;
+      case "gz-final": gzAbrirFinal(b.dataset.ruta); return true;
+      case "gz-final-copiar": if (S.gzFinal) copiar(S.gzFinal.o.guion, "Guion copiado"); return true;
+      case "gz-final-editar": if (S.gzFinal) gzFormFinal(S.gzFinal.o, S.gzFinal.ruta, S.gzFinal.rev); return true;
+      case "gz-publicado": gzAlternarPublicado(b.dataset.ruta, b); return true;
+    }
+    return false;
+  }
+
   // ---------- pestañas tipo Chrome: cada pantalla ordenada en pestañas, no en una hoja larga ----------
   // Para una pantalla nueva: arma cada parte por separado y usa pestanas("ruta", [{ clave, nombre, ico, cuenta, html }], tabDe("ruta", claves, "la de siempre")).
   var PT_LOCAL = "gb-pestanas";
@@ -2609,7 +3163,7 @@
       $("app").innerHTML = '<div style="padding:40px 18px;max-width:900px;margin:0 auto"><div class="esq" style="height:90px;margin-bottom:16px"></div><div class="esq" style="height:140px;margin-bottom:16px"></div><div class="esq" style="height:300px"></div></div>';
       return cargarLista().then(ruta).catch(falloRed);
     }
-    var rutas = { c: "cliente", p: "prospecto", nuevo: "nuevo", ajustes: "ajustes", guia: "guia", ventas: "ventas", marketing: "marketing", contenido: "contenido", clientes: "clientes", agencia: "agencia", libreta: "libreta", sistema: "sistema", constancia: "constancia", objetivos: "objetivos", v: "video", idea: "idea", documentos: "documentos", carpeta: "carpeta", doc: "doc", cocina: "cocina", caja: "caja" };
+    var rutas = { c: "cliente", p: "prospecto", nuevo: "nuevo", ajustes: "ajustes", guia: "guia", ventas: "ventas", marketing: "marketing", contenido: "contenido", clientes: "clientes", agencia: "agencia", libreta: "libreta", sistema: "sistema", constancia: "constancia", objetivos: "objetivos", v: "video", idea: "idea", documentos: "documentos", carpeta: "carpeta", doc: "doc", cocina: "cocina", caja: "caja", guiones: "guiones" };
     var rutaAntes = S.ruta, hashAntes = S.hashAhora || "";
     S.ruta = rutas[h[0]] || "inicio";
     // Un video abierto desde Contenido vuelve a Contenido (a la misma pestaña)
@@ -2639,6 +3193,7 @@
       case "video": return vistaVideo(decodeURIComponent(h[1]), decodeURIComponent(h[2]), h[3]);
       case "cocina": return vistaCocina();
       case "caja": return vistaCaja();
+      case "guiones": return vistaGuiones();
       case "documentos": return vistaDocumentos();
       case "carpeta": return h[1] ? vistaCarpeta(decodeURIComponent(h[1])) : ir("#/documentos/clientes");
       case "doc": return vistaDoc(decodeURIComponent(h[1] || ""), h[2]);
@@ -2649,7 +3204,7 @@
   function repintar() {
     var y = window.scrollY;
     S.sinAnim = true;
-    var f = { inicio: pintarInicio, ventas: pintarVentas, marketing: pintarMarketing, contenido: pintarContenido, prospecto: pintarProspecto, clientes: pintarClientes, agencia: pintarAgencia, libreta: pintarLibreta, constancia: pintarConstancia, video: pintarVideo, documentos: pintarDocumentos, carpeta: pintarCarpeta, doc: pintarDoc }[S.ruta];
+    var f = { inicio: pintarInicio, ventas: pintarVentas, marketing: pintarMarketing, contenido: pintarContenido, prospecto: pintarProspecto, clientes: pintarClientes, agencia: pintarAgencia, libreta: pintarLibreta, constancia: pintarConstancia, video: pintarVideo, documentos: pintarDocumentos, carpeta: pintarCarpeta, doc: pintarDoc, guiones: pintarGuiones }[S.ruta];
     if (f) f(); else if (S.ruta === "cliente" && S.det) pintarCliente();
     shell();
     S.sinAnim = false;
@@ -5505,7 +6060,7 @@
   /** El menú del celular: lo que no entra abajo. */
   function abrirMenuMovil() {
     var it = function (hash, ico, txt) { return '<a class="btn" href="' + hash + '" data-cerrar>' + ICO(ico, 17) + e(txt) + "</a>"; };
-    hoja("<h3>Tu panel</h3><p class=\"sub\">Tu negocio y tu orden.</p><div class=\"salidas\">" + it("#/marketing", "megafono", "Marketing") + it("#/clientes", "gente", "Clientes") + it("#/caja", "billetera", "Caja") + it("#/documentos", "carpeta", "Documentos") + it("#/cocina", "brujula", "La Cocina") + it("#/agencia", "calendario", "Mi semana") +
+    hoja("<h3>Tu panel</h3><p class=\"sub\">Tu negocio y tu orden.</p><div class=\"salidas\">" + it("#/guiones", "lapiz", "Guiones") + it("#/marketing", "megafono", "Marketing") + it("#/clientes", "gente", "Clientes") + it("#/caja", "billetera", "Caja") + it("#/documentos", "carpeta", "Documentos") + it("#/cocina", "brujula", "La Cocina") + it("#/agencia", "calendario", "Mi semana") +
       it("#/objetivos", "diana", "Objetivos") + it("#/constancia", "grafica", "Constancia") + it("#/libreta", "cuaderno", "Ideas") + it("#/sistema", "capas", "Mi sistema") + it("#/guia", "libro", "Cómo funciona") + it("#/ajustes", "ajustes", "Ajustes") +
       '<button class="btn suave" type="button" data-accion="salir">' + ICO("salir", 17) + "Salir</button></div>");
   }
@@ -7229,6 +7784,7 @@
   }
   function accionGeneral(a, b, ev) {
     if (/^doc-/.test(a) && accionDocs(a, b, ev)) return true;
+    if (/^gz-/.test(a) && accionGuiones(a, b, ev)) return true;
     switch (a) {
       case "gps": abrirGuia((S.gps || [])[+b.dataset.i], "gps", +b.dataset.i); return true;
       case "gps-p": abrirGuia((S.gpsP || [])[+b.dataset.i], "p", +b.dataset.i); return true;
@@ -7917,6 +8473,7 @@
     if (ev.target.id === "f-edicion") guardarEdicion(ev.target);
     if (ev.target.id === "f-barrida") guardarBarrida(ev.target);
     if (ev.target.id === "f-paraclaude") guardarParaClaude(ev.target);
+    if (ev.target.id === "f-gz-final") gzGuardarFinal(ev.target);
     if (ev.target.id === "f-otarea") guardarTareaObj();
     if (ev.target.id === "f-ganchos") { var imp = GB.importarGanchos($("gc-texto").value); if (!imp.length) toast("No encontré ganchos en lo que pegaste", true); else { cerrarHoja(); cargarGanchos(imp).catch(falloRed); } }
   });

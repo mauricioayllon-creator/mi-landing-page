@@ -306,6 +306,11 @@ npm run lint         # ESLint
 - **Fix**: Siempre usar `npm run dev` (auto-detecta puerto)
 - **Aplicar en**: Todos los proyectos
 
+### 2026-11-16: No dejar esta carpeta en otra rama
+- **Error**: Una sesion cambio esta carpeta a una rama de trabajo. El publicador del panel de clientes hace commit y push en la rama que este activa, asi que guardo su actualizacion en esa rama y no en main
+- **Fix**: Cambios chicos directo en main; trabajo largo en un worktree aparte. Nunca dejar esta carpeta en otra rama
+- **Aplicar en**: Este proyecto (la carpeta la comparten el panel de clientes y otras sesiones)
+
 ---
 
 *V4: Todo es un Skill. Agent-First. El usuario habla, tu construyes.*

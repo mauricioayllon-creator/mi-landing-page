@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
       // Calculadora de Oferta (herramientas/calculadora-oferta → public/calculadora)
       { source: "/calculadora", destination: "/calculadora/index.html" },
       { source: "/calculadora/", destination: "/calculadora/index.html" },
+      // Calculadora de Pauta (public/calculadora-pauta): si conviene pautar, cuánto y qué arreglar primero
+      { source: "/calculadora-pauta", destination: "/calculadora-pauta/index.html" },
+      { source: "/calculadora-pauta/", destination: "/calculadora-pauta/index.html" },
       // Paneles por cliente (public/clientes/<cliente>/index.html), p. ej. /clientes/domix
       { source: "/clientes/:cliente", destination: "/clientes/:cliente/index.html" },
       { source: "/clientes/:cliente/", destination: "/clientes/:cliente/index.html" },

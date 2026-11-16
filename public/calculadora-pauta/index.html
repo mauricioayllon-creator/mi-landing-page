@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Calculadora de pauta: si a un negocio le conviene poner plata en anuncios, cuánto poner y qué arreglar primero.">
+<meta name="robots" content="noindex">
+<title>Calculadora de Pauta</title>
+<link rel="stylesheet" href="/calculadora-pauta/estilo.css?v=1">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="marca">
+      <div class="app-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-4l10-5v14L4 14z"/><path d="M18 9a4 4 0 0 1 0 6"/><path d="M7 15v4"/></svg>
+      </div>
+      <div>
+        <h1>Calculadora de Pauta</h1>
+        <p id="subtitulo">¿Le conviene pautar, cuánto y qué arreglar primero?</p>
+      </div>
+    </div>
+    <div class="acciones">
+      <button type="button" class="btn-azul" data-accion="guia">Paso a paso</button>
+      <button type="button" class="btn-g" data-accion="ejemplo">Ejemplo</button>
+      <button type="button" class="btn-g" data-accion="nuevo">Nuevo</button>
+      <button type="button" class="btn-g" data-accion="copiar">Copiar resumen</button>
+    </div>
+  </div>
+</header>
+
+<main class="app">
+  <section class="col-datos" id="datos" aria-label="Datos del negocio"></section>
+  <section class="col-panel" id="panel" aria-label="Resultado"></section>
+</main>
+
+<button type="button" class="barra-movil" id="barraMovil" data-abrir="resultado"></button>
+
+<dialog class="hoja" id="hoja" aria-labelledby="hojaTitulo">
+  <div class="hoja-cuerpo" id="hojaCuerpo"></div>
+  <div class="aviso" id="avisoHoja" role="status" aria-live="polite"></div>
+</dialog>
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+<noscript><p style="padding:24px">Esta calculadora necesita JavaScript para funcionar.</p></noscript>
+<script src="/calculadora-pauta/formato.js?v=1"></script>
+<script src="/calculadora-pauta/motor.js?v=1"></script>
+<script src="/calculadora-pauta/campos.js?v=1"></script>
+<script src="/calculadora-pauta/fichas-negocio.js?v=1"></script>
+<script src="/calculadora-pauta/fichas-sistema.js?v=1"></script>
+<script src="/calculadora-pauta/textos.js?v=1"></script>
+<script src="/calculadora-pauta/pintar.js?v=1"></script>
+<script src="/calculadora-pauta/hoja.js?v=1"></script>
+<script src="/calculadora-pauta/app.js?v=1"></script>
+</body>
+</html>

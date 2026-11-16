@@ -14,3 +14,4 @@
 
 ## reference/ — Donde encontrar cosas
 - [paneles-por-cliente.md](reference/paneles-por-cliente.md) — cómo están hechos y cómo se actualizan los paneles /clientes/<cliente>
+- [calculadora-pauta.md](reference/calculadora-pauta.md) — la Calculadora de Pauta (/calculadora-pauta): archivos, reglas del dueño y supuestos

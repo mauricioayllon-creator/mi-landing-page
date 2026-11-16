@@ -1723,6 +1723,11 @@
   .gz-pie { margin: 10px 2px 0; }
   .gz-aviso { display: flex; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--coral-soft); color: var(--coral-ink); font-weight: 700; font-size: 13.5px; margin-top: 12px; }
   .gz-aviso ul { margin: 4px 0 0; padding-left: 18px; font-weight: 600; }
+  .gz-para { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+  .gz-para button { flex: 0 0 auto; }
+  .gz-fmt.gzc { min-height: 150px; }
+  .gzc-grupo { margin: 18px 0 10px; }
+  .gzc-grupo:first-child { margin-top: 0; }
   .gz-fmts { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
   .gz-fmt { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; text-align: left; min-height: 196px; padding: 18px 16px 14px; border-radius: 20px; border: 1.5px solid var(--line); background: #fff; cursor: pointer; font: inherit; color: var(--ink); box-shadow: var(--sh-1); transition: box-shadow .2s, border-color .2s, transform .15s var(--ease); }
   .gz-fmt:hover { border-color: var(--blue); box-shadow: var(--sh-2); transform: translateY(-2px); }
@@ -2712,11 +2717,114 @@
       });
     });
   }
+  // --- los guiones de tus clientes (16/11): «Para quién» arriba; cada cliente con sus ángulos, su base y sus guiones ---
+  // Lee clientes/<carpeta>/07-angulos-para-guiones.md (solo lo que ya estaba escrito) y su 01, 02 y 03. La lógica está en guiones.js.
+  var GZ_CLI = "gb-gz-cli", GZC_CACHE = "gb-gzc:", GZC_BASE = { "01-comprador.md": "Su comprador", "02-oferta.md": "Su oferta", "03-angulos-y-marca.md": "Sus ángulos y su marca" };
+  function gzCliSel() { return leerLocal(GZ_CLI) || ""; }
+  function gzClientes() {
+    return ((S.docs && S.docs.lista) || []).map(function (d) { var c = GUI.carpetaDe(d.ruta); return c ? { carpeta: c, nombre: String(d.titulo || c).split(" · ")[0], ruta: d.ruta } : null; })
+      .filter(Boolean).sort(function (a, b) { return a.nombre.localeCompare(b.nombre); });
+  }
+  function gzParaHTML(act) {
+    var cs = gzClientes(); if (!cs.length) return "";
+    return '<div class="filtro gz-para" role="group" aria-label="Para quién"><span>' + ICO("gente", 13) + "Para</span>" + [{ carpeta: "", nombre: "Míos" }].concat(cs).map(function (c) {
+      return '<button type="button" data-accion="gz-para" data-valor="' + e(c.carpeta) + '" aria-pressed="' + (c.carpeta === act) + '">' + e(c.nombre) + "</button>";
+    }).join("") + "</div>";
+  }
+  function gzcArmar(carpeta, nc, lista) {
+    var pre = "clientes/" + carpeta + "/", t = function (f) { return (nc[pre + f] || {}).texto || ""; };
+    return {
+      carpeta: carpeta, ruta: pre + GUI.CLI.archivo, cli: GUI.leerCliente(t(GUI.CLI.archivo)),
+      base: GUI.CLI.base.map(function (f) { return { ruta: pre + f, titulo: GZC_BASE[f] || f, texto: t(f) }; }),
+      guiones: (lista || []).filter(function (x) { return x.ruta.indexOf(pre + "guiones/") === 0; }),
+      estudio: (lista || []).find(function (x) { return x.ruta === pre + "06-pilar-1-estudio.md"; }) || null, nc: nc
+    };
+  }
+  function gzcCargar(carpeta) {
+    return cargarDocs(true).then(function (d) {
+      var pre = "clientes/" + carpeta + "/", rutas = [GUI.CLI.archivo].concat(GUI.CLI.base).map(function (f) { return pre + f; }), c = gzJSON(GZC_CACHE + carpeta);
+      var traer = function (ruta) {
+        var m = d.lista.find(function (x) { return x.ruta === ruta; });
+        if (!m) return Promise.resolve({ rev: 0, texto: "" });
+        if (c[ruta] && c[ruta].rev === m.rev && c[ruta].texto) return Promise.resolve(c[ruta]);
+        return pedir("doc", { ruta: ruta }).then(function (res) { if (!res.ok) throw new Error(res.error || "doc"); return { rev: res.doc.rev, texto: res.doc.texto }; });
+      };
+      return Promise.all(rutas.map(traer)).then(function (r) {
+        var nc = {}; rutas.forEach(function (ru, i) { nc[ru] = r[i]; });
+        guardarLocal(GZC_CACHE + carpeta, JSON.stringify(nc));
+        S.gzc = gzcArmar(carpeta, nc, d.lista);
+        return S.gzc;
+      });
+    });
+  }
+  function gzcVista(carpeta) {
+    if (!S.gzc || S.gzc.carpeta !== carpeta) { var c = gzJSON(GZC_CACHE + carpeta); S.gzc = Object.keys(c).length ? gzcArmar(carpeta, c, S.docs ? S.docs.lista : []) : null; }
+    if (S.gzc) gzcPintar(); else pintar((S.docs ? gzParaHTML(carpeta) : "") + '<div class="esq" style="height:150px;margin-bottom:16px"></div><div class="esq" style="height:420px"></div>');
+    gzcCargar(carpeta).then(function () {
+      if (S.ruta !== "guiones" || gzCliSel() !== carpeta || $("velo")) return;
+      if (!gzClientes().some(function (x) { return x.carpeta === carpeta; })) { guardarLocal(GZ_CLI, ""); return vistaGuiones(); }
+      gzcPintar();
+    }).catch(falloDocs);
+    if (!S.gz) cargarGuiones().catch(function () { /* los formatos son opcionales aquí */ });
+  }
+  function gzcTarjeta(a) {
+    var est = GUI.estadoCli(a.estado);
+    return '<button type="button" class="gz-fmt gzc" data-accion="gz-c-ang" data-id="' + e(a.id) + '"><b>' + e(a.titulo) + "</b><small>" + e(a.frase || a.quien) + '</small><span class="gz-fmt-pie"><span class="chip ' + est.color + '">' + e(est.nombre) + "</span>" +
+      (GUI.faltaDe(a) ? '<span class="chip ambar">' + ICO("alerta", 12) + "Falta algo</span>" : "") + "</span></button>";
+  }
+  function gzcPintar() {
+    var z = S.gzc, cli = z.cli;
+    var notas = cli.notas.map(function (n) { return '<details class="gz-sec"><summary>' + ICO("capas", 16) + "<span>" + e(n.titulo) + "</span>" + ICO("derecha", 14) + "</summary><div>" + gzMd(n.texto) + "</div></details>"; }).join("");
+    var grupos = GUI.ESTADOS_CLI.map(function (s) {
+      var xs = cli.angulos.filter(function (a) { return a.estado === s.clave; });
+      return xs.length ? '<div class="sec-tit gzc-grupo">' + ICO("diana", 15) + e(s.nombre) + " (" + xs.length + ')</div><div class="gz-fmts">' + xs.map(gzcTarjeta).join("") + "</div>" : "";
+    }).join("");
+    var angulos = (cli.angulos.length ? '<p class="ayuda" style="margin:0 0 12px">' + mas("Toca un ángulo y copia el pedido para Claude.", "Solo está lo que ya estaba escrito en su carpeta: nada inventado. Lo que dice «Falta» se decide contigo antes de escribir. Para cambiar o sumar un ángulo, díselo a Claude.") + "</p>" + grupos
+      : '<div class="card vacio">' + ICO("diana", 28) + "<br>Todavía no tiene ángulos.<br>Se arman contigo, con lo que salga de sus sesiones.</div>") +
+      (notas ? '<div class="sec-tit">' + ICO("capas", 15) + "Lo que vale para todos sus guiones</div>" + notas : "");
+    var base = z.base.map(function (b, i) {
+      return '<details class="gz-sec"' + (i === 0 ? " open" : "") + "><summary>" + ICO(["persona", "regalo", "megafono"][i] || "archivo", 16) + "<span>" + e(b.titulo) + "</span>" + ICO("derecha", 14) + "</summary><div>" +
+        (b.texto ? gzMd(b.texto) + '<a class="lnk" href="' + hrefDoc(b.ruta) + '">Abrir el documento</a>' : '<p class="ayuda">Todavía no está en su carpeta.</p>') + "</div></details>";
+    }).join("") + '<div class="acc" style="margin-top:12px">' + (z.estudio ? '<a class="btn" href="' + hrefDoc(z.estudio.ruta) + '">' + ICO("foco", 16) + "Su estudio del pilar 1</a>" : "") +
+      '<a class="btn" href="' + hrefDoc(z.ruta) + '">' + ICO("lapiz", 16) + "Ver sus ángulos como documento</a></div>";
+    var guiones = z.guiones.length ? '<div class="gz-fins">' + z.guiones.map(function (x) {
+      return '<div class="gz-fin"><a class="gz-fin-c" href="' + hrefDoc(x.ruta) + '"><b>' + e(x.titulo) + '</b><span class="gz-fin-ch"><span class="chip">' + ICO("calendario", 12) + e(String(x.actualizado || "").slice(0, 10)) + "</span></span></a></div>";
+    }).join("") + "</div>" : '<div class="card vacio">' + ICO("lapiz", 28) + "<br>Todavía no hay guiones en su carpeta.<br>Cuando Claude escriba uno, queda en <code>clientes/" + e(z.carpeta) + "/guiones/</code>.</div>";
+    var nCon = cli.angulos.filter(function (a) { return a.estado === "con-guion"; }).length;
+    pintar('<div class="gz-pagina">' + gzParaHTML(z.carpeta) + '<div class="estudio gz-cab"><div class="gz-cab-t"><small>Los guiones de tu cliente</small><h1>' + e(cli.negocio || z.carpeta) + "</h1><p>" +
+      e(cli.angulos.length + (cli.angulos.length === 1 ? " ángulo" : " ángulos") + (nCon ? " · " + nCon + " ya con guion" : "")) + "</p></div></div>" +
+      pestanas("guiones", [
+        { clave: "c-angulos", nombre: "Ángulos", ico: "diana", cuenta: cli.angulos.length || "", html: angulos },
+        { clave: "c-base", nombre: "Su base", ico: "carpeta", html: base },
+        { clave: "c-guiones", nombre: "Sus guiones", ico: "lapiz", cuenta: z.guiones.length || "", html: guiones }
+      ], tabDe("guiones", ["c-angulos", "c-base", "c-guiones"], "c-angulos")) + "</div>");
+  }
+  function gzcAbrir(id) {
+    var z = S.gzc, a = z && z.cli.porId[id]; if (!a) return;
+    var est = GUI.estadoCli(a.estado), fms = S.gz ? S.gz.fm.formatos.filter(function (f) { return f.estado === "listo"; }) : [];
+    var secs = a.secciones.map(function (s) {
+      var falta = /^falta$/i.test(s.nombre);
+      return '<details class="gz-sec' + (falta ? " rojo" : "") + '"' + (falta || s === a.secciones[0] ? " open" : "") + "><summary>" + ICO(falta ? "alerta" : /dónde|donde/i.test(s.nombre) ? "telefono" : "archivo", 16) + "<span>" + e(s.nombre) + "</span>" + ICO("derecha", 14) + "</summary><div>" + gzMd(s.texto) + "</div></details>";
+    }).join("");
+    hoja('<div class="gz-chips"><span class="chip ' + est.color + '">' + e(est.nombre) + "</span>" + (a.quien ? '<span class="chip">' + ICO("gente", 12) + e(a.quien) + "</span>" : "") + "</div><h3>" + e(a.titulo) + '</h3><p class="sub">' + e(a.frase) + "</p>" +
+      '<div class="acc" style="margin:0 0 12px"><button class="btn primario" type="button" data-accion="gz-c-copiar" data-id="' + e(id) + '">' + ICO("copiar", 17) + "Copiar para Claude</button></div>" +
+      (fms.length ? '<div class="g-tit" style="margin-top:0">' + ICO("copiar", 14) + 'O cópialo ya con un formato</div><div class="gz-con">' + fms.map(function (f) {
+        return '<button type="button" data-accion="gz-c-copiar" data-id="' + e(id) + '" data-fmt="' + e(f.id) + '"><b>' + ICO(GZ_ICO[f.id] || "pelicula", 15) + e(f.titulo) + "</b><small>" + e(f.duracion || "") + "</small></button>";
+      }).join("") + "</div>" : "") + secs, null, "gz-hoja");
+  }
+  function gzcCopiar(id, fmt) {
+    var z = S.gzc; if (!z) return;
+    var texto = GUI.pedidoCliente({ carpeta: z.carpeta, cli: z.cli, angId: id, base: z.base, formato: fmt && S.gz ? GUI.textoFormato(S.gz.fm, fmt) : "" });
+    if (!texto) return toast("No pude armar el pedido", true);
+    copiar(texto, "Pedido copiado: pégalo en Claude");
+  }
   function vistaGuiones() {
+    var cliSel = gzCliSel();
+    if (cliSel) return gzcVista(cliSel);
     S.sinAnim = false;
     if (!S.gz) { var c = gzJSON(GZ_CACHE); if (c.arbol && c.arbol.texto && c.formatos && c.formatos.texto) S.gz = gzArmar(c.arbol.texto, c.formatos.texto, S.docs ? S.docs.lista : []); }
     if (S.gz) pintarGuiones(); else pintar('<div class="esq" style="height:150px;margin-bottom:16px"></div><div class="esq" style="height:420px"></div>');
-    cargarGuiones().then(function () { if (S.ruta === "guiones" && !$("velo")) { S.sinAnim = true; pintarGuiones(); S.sinAnim = false; } }).catch(falloDocs);
+    cargarGuiones().then(function () { if (S.ruta === "guiones" && !gzCliSel() && !$("velo")) { S.sinAnim = true; pintarGuiones(); S.sinAnim = false; } }).catch(falloDocs);
   }
   function pintarGuiones() {
     var g = S.gz; if (!g) return;
@@ -2725,7 +2833,7 @@
         "<br>Todavía no llegó tu árbol de ángulos a tu hoja.<br>Pídele a Claude: «actualiza los ángulos».</div>");
     }
     var nGrab = GUI.grabables(g.arbol).length, nFmt = g.fm.formatos.filter(function (f) { return f.estado === "listo"; }).length;
-    pintar('<div class="gz-pagina">' + gzCabHTML(!S.sinAnim) + pestanas("guiones", [
+    pintar('<div class="gz-pagina">' + gzParaHTML("") + gzCabHTML(!S.sinAnim) + pestanas("guiones", [
       { clave: "angulos", nombre: "Ángulos", ico: "diana", cuenta: nGrab, html: gzAngulosHTML() },
       { clave: "formatos", nombre: "Formatos", ico: "pelicula", cuenta: nFmt, html: gzFormatosHTML() },
       { clave: "finales", nombre: "Guiones finales", ico: "lapiz", cuenta: g.finales.length || "", html: gzFinalesHTML() }
@@ -3021,6 +3129,9 @@
     }, { passive: false });
   }
   function accionGuiones(a, b) {
+    if (a === "gz-para") { guardarLocal(GZ_CLI, b.dataset.valor || ""); S.sub = null; vistaGuiones(); return true; }
+    if (a === "gz-c-ang") { gzcAbrir(b.dataset.id); return true; }
+    if (a === "gz-c-copiar") { gzcCopiar(b.dataset.id, b.dataset.fmt || ""); return true; }
     var g = S.gz; if (!g) return true;
     switch (a) {
       case "gz-nodo": if (S.gzArrastro && Date.now() - S.gzArrastro < 250) return true; gzAbrirAngulo(b.dataset.id); return true;
@@ -3204,7 +3315,7 @@
   function repintar() {
     var y = window.scrollY;
     S.sinAnim = true;
-    var f = { inicio: pintarInicio, ventas: pintarVentas, marketing: pintarMarketing, contenido: pintarContenido, prospecto: pintarProspecto, clientes: pintarClientes, agencia: pintarAgencia, libreta: pintarLibreta, constancia: pintarConstancia, video: pintarVideo, documentos: pintarDocumentos, carpeta: pintarCarpeta, doc: pintarDoc, guiones: pintarGuiones }[S.ruta];
+    var f = { inicio: pintarInicio, ventas: pintarVentas, marketing: pintarMarketing, contenido: pintarContenido, prospecto: pintarProspecto, clientes: pintarClientes, agencia: pintarAgencia, libreta: pintarLibreta, constancia: pintarConstancia, video: pintarVideo, documentos: pintarDocumentos, carpeta: pintarCarpeta, doc: pintarDoc, guiones: function () { if (!gzCliSel()) pintarGuiones(); else if (S.gzc) gzcPintar(); } }[S.ruta];
     if (f) f(); else if (S.ruta === "cliente" && S.det) pintarCliente();
     shell();
     S.sinAnim = false;

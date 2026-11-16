@@ -440,7 +440,60 @@
     return { errores: err, avisos: av };
   }
 
+  // ---------- los ángulos de cada cliente (16/11): clientes/<carpeta>/07-angulos-para-guiones.md ----------
+  // Solo lo que ya estaba escrito en su carpeta; lo que no se sabe dice «Falta:». Aquí no hay nombres: viven en el documento.
+  var CLI = { archivo: "07-angulos-para-guiones.md", base: ["01-comprador.md", "02-oferta.md", "03-angulos-y-marca.md"] };
+  var ESTADOS_CLI = [
+    { clave: "con-guion", nombre: "Con guion", color: "verde" },
+    { clave: "decidido", nombre: "Decidido", color: "azul" },
+    { clave: "propuesta", nombre: "Propuesta sin decidir", color: "ambar" },
+    { clave: "idea", nombre: "Idea de una llamada", color: "" }
+  ];
+  function carpetaDe(ruta) { var m = String(ruta || "").match(/^clientes\/([a-z0-9-]+)\/07-angulos-para-guiones\.md$/); return m ? m[1] : ""; }
+  /** → { negocio, intro, angulos: [{ id, titulo, estado, quien, frase, secciones }], notas: [{ titulo, texto }], porId } */
+  function leerCliente(md) {
+    var t = String(md || "").replace(/\r\n?/g, "\n"), out = { negocio: "", intro: "", angulos: [], notas: [], porId: {} };
+    var h1 = (t.match(/^#\s+(.+)$/m) || ["", ""])[1].trim();
+    out.negocio = h1.split(" · ")[0].trim();
+    out.intro = t.split("\n").filter(function (l) { return /^>\s?/.test(l); }).map(function (l) { return l.replace(/^>\s?/, ""); }).join("\n").split(/\n## /)[0].trim();
+    partes2(t).forEach(function (p) {
+      var tp = tipoDe(p.titulo);
+      if (tp && tp.tipo === "angulo") {
+        var b = leerBloque(p.lineas), m = b.meta;
+        var a = { id: tp.id, titulo: m.titulo || tp.id, estado: (m.estado || "idea").toLowerCase(), quien: m["a quien"] || "", frase: m.frase || "", secciones: b.secciones };
+        out.angulos.push(a); out.porId[a.id] = a;
+      } else out.notas.push({ titulo: p.titulo, texto: limpio(p.lineas) });
+    });
+    var orden = ESTADOS_CLI.map(function (e) { return e.clave; });
+    out.angulos.sort(function (x, y) { return (orden.indexOf(x.estado) + 1 || 9) - (orden.indexOf(y.estado) + 1 || 9); });
+    return out;
+  }
+  function estadoCli(k) { return ESTADOS_CLI.find(function (e) { return e.clave === k; }) || { clave: k, nombre: k, color: "" }; }
+  function faltaDe(a) { var t = seccion(a, "Falta"); return !!t && !/falta:\s*nada/i.test(t); }
+  /**
+   * El pedido para escribir el guion de un cliente: el ángulo entero, su base (comprador, oferta, ángulos y marca),
+   * el formato si elegiste uno, y la regla de no inventar. o: { carpeta, cli, angId, base: [{ titulo, texto }], formato (texto), voz (texto) }
+   */
+  function pedidoCliente(o) {
+    var c = o.cli || { angulos: [], porId: {}, notas: [] }, a = c.porId[o.angId]; if (!a) return "";
+    var ang = ["ÁNGULO: " + a.titulo, a.frase ? "En una frase: " + a.frase : "", a.quien ? "A quién: " + a.quien : "", "Estado: " + estadoCli(a.estado).nombre, ""]
+      .concat(a.secciones.map(function (s) { return "## " + s.nombre + "\n" + s.texto; })).join("\n");
+    var notas = c.notas.map(function (n) { return "## " + n.titulo + "\n" + n.texto; }).join("\n\n");
+    var base = (o.base || []).filter(function (b) { return b && b.texto; }).map(function (b) { return "### " + b.titulo + "\n" + b.texto.replace(/^#\s+.+\n/, ""); }).join("\n\n");
+    var n = 1, out = [
+      "Vamos a escribir un guion para mi cliente " + (c.negocio || o.carpeta) + ".",
+      "Antes de escribir, lee entero `_cerebro/mi-forma-de-hacer-guiones-clientes.md` y la carpeta `_cerebro/clientes/" + o.carpeta + "/` (sobre todo su 06-pilar-1-estudio.md).",
+      "No inventes: si algo del ángulo dice «Falta», pregúntamelo antes de escribir. Solo el texto que se dice; la intención visual al final. Empieza por el cuerpo.", "",
+      titulo(n++, "EL ÁNGULO"), ang.replace(/\n{3,}/g, "\n\n").trim(), ""];
+    if (notas) out.push(titulo(n++, "LO QUE VALE PARA TODOS SUS GUIONES"), notas, "");
+    if (o.formato) out.push(titulo(n++, "EL FORMATO"), o.formato, "");
+    if (base) out.push(titulo(n++, "SU BASE"), base, "");
+    if (o.voz) out.push(titulo(n++, "CÓMO SUENO (para mi voz, si salgo yo; si sale el cliente, la suya)"), o.voz, "");
+    return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  }
+
   return {
+    CLI: CLI, ESTADOS_CLI: ESTADOS_CLI, carpetaDe: carpetaDe, leerCliente: leerCliente, estadoCli: estadoCli, faltaDe: faltaDe, pedidoCliente: pedidoCliente,
     RUTAS: RUTAS, ESTADOS: ESTADOS, PARTES: PARTES, PAUTAS: PAUTAS, TAM: TAM,
     leerArbol: leerArbol, leerFormatos: leerFormatos, seccion: seccion, hijosDe: hijosDe, descendientes: descendientes, publicoDe: publicoDe, fichaDe: fichaDe, grabables: grabables,
     estadisticas: estadisticas, disponer: disponer,

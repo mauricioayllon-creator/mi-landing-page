@@ -13,6 +13,6 @@
 (vacio)
 
 ## reference/ — Donde encontrar cosas
-- [tu-panel.md](reference/tu-panel.md) — Tu panel (/panel): la única puerta de todo (Mi negocio, Calculadoras, Links, Mapa) y cómo agregarle algo
+- [tu-panel.md](reference/tu-panel.md) — Tu panel (/panel): la única puerta de todo, con modo simple (por defecto) y completo, y cómo agregarle algo
 - [paneles-por-cliente.md](reference/paneles-por-cliente.md) — cómo están hechos y cómo se actualizan los paneles /clientes/<cliente>
 - [calculadora-pauta.md](reference/calculadora-pauta.md) — la Calculadora de Pauta (/calculadora-pauta): archivos, reglas del dueño y supuestos

@@ -12,6 +12,7 @@ import {
   LINKS_PROSPECTOS,
   SECCIONES_NEGOCIO,
   normalizar,
+  type Modo,
   type PanelCliente,
 } from './catalogo'
 
@@ -91,7 +92,7 @@ function todo(clientes: PanelCliente[]): Item[] {
   return [...negocio, ...calcs, ...enlaces, paneles, ...porCliente]
 }
 
-export default function Mapa({ clientes, salir }: { clientes: PanelCliente[]; salir: () => void }) {
+export default function Mapa({ clientes, salir, modo, alModo }: { clientes: PanelCliente[]; salir: () => void; modo: Modo; alModo: () => void }) {
   const [q, setQ] = useState('')
   const items = useMemo(() => todo(clientes), [clientes])
   const nq = normalizar(q.trim())
@@ -103,11 +104,30 @@ export default function Mapa({ clientes, salir }: { clientes: PanelCliente[]; sa
     <div className={s.pagina}>
       <div className={s.ancho}>
         <header className={`${s.cab} ${s.aparece}`}>
-          <h1>Mapa de tu panel</h1>
-          <p>Así quedó ordenado todo: cuatro pestañas arriba. Aquí abajo está cada cosa, para qué sirve y un botón para ir directo.</p>
+          <h1>{modo === 'simple' ? 'Buscar algo' : 'Mapa de tu panel'}</h1>
+          <p>
+            {modo === 'simple'
+              ? 'Todo lo que tienes, para qué sirve y un botón para ir directo. Escribe lo que buscas.'
+              : 'Así quedó ordenado todo: cuatro pestañas arriba. Aquí abajo está cada cosa, para qué sirve y un botón para ir directo.'}
+          </p>
         </header>
 
-        <div className={s.areas}>
+        {modo === 'completo' && (
+          <div className={`${s.card} ${s.avisoModo}`}>
+            <span className={`${s.burbuja} ${s.burbujaAzul}`}>
+              <Icono n="brillo" t={20} />
+            </span>
+            <span>
+              <b>Estás en el modo completo</b>
+              <small>El modo simple tiene solo lo de todos los días: Hoy, Ventas, Clientes, Contenido, Caja y Herramientas.</small>
+            </span>
+            <button className={`${s.btn} ${s.primario} ${s.chico}`} type="button" onClick={alModo}>
+              Volver al simple
+            </button>
+          </div>
+        )}
+
+        <div className={`${s.areas} ${modo === 'simple' ? s.capaOculta : ''}`}>
           {AREAS.map((a) => (
             <a key={a.id} className={`${s.card} ${s.area}`} href={'#' + a.id}>
               <span className={`${s.burbuja} ${s.burbujaAzul}`}>

@@ -14,7 +14,14 @@ import type { NombreIcono } from './Iconos'
 /** El dominio de los links que se copian y se mandan. */
 export const SITIO = 'https://mauricio-ayllon.com'
 
-export type AreaId = 'negocio' | 'calculadoras' | 'links' | 'mapa'
+export type AreaId = 'negocio' | 'herramientas' | 'calculadoras' | 'links' | 'mapa'
+
+/**
+ * Dos modos (pedido de Mauricio, 17/11/2026: «una parte simple y otra completa, sin sacar nada»):
+ * - simple: seis pestañas con lo de todos los días, «＋ Anotar» y «Más» (lo demás). Sin el menú largo de Mi negocio.
+ * - completo: todo como antes (Mi negocio con su menú, Calculadoras, Links y Mapa).
+ */
+export type Modo = 'simple' | 'completo'
 
 export type Area = { id: AreaId; nombre: string; corto: string; icono: NombreIcono; para: string; adentro: string }
 
@@ -53,6 +60,22 @@ export const AREAS: Area[] = [
   },
 ]
 
+/**
+ * Las pestañas del modo simple. Las de Mi negocio llevan a su pantalla (#negocio/<ruta>); `activa` dice qué
+ * pantallas de adentro cuentan como esa pestaña (p. ej. la ficha de un cliente, c/<id>, es «Clientes»).
+ * En el celular van abajo las tres primeras, «＋» al medio y «Más».
+ */
+export type PestanaSimple = { id: string; nombre: string; icono: NombreIcono; href: string; para: string; activa: RegExp | AreaId[] }
+
+export const PESTANAS_SIMPLES: PestanaSimple[] = [
+  { id: 'hoy', nombre: 'Hoy', icono: 'brujula', href: '#negocio/inicio', para: 'Lo que toca hoy, en orden.', activa: /^(inicio)?$/ },
+  { id: 'ventas', nombre: 'Ventas', icono: 'apreton', href: '#negocio/ventas', para: 'Tus prospectos: leads, llamadas y visitas.', activa: /^(ventas|prospectos|p\/)/ },
+  { id: 'clientes', nombre: 'Clientes', icono: 'gente', href: '#negocio/clientes', para: 'Cómo va cada cliente.', activa: /^(clientes|c\/|nuevo)/ },
+  { id: 'contenido', nombre: 'Contenido', icono: 'camara', href: '#negocio/contenido', para: 'Tus videos: grabar, editar y publicar.', activa: /^(contenido|v\/)/ },
+  { id: 'caja', nombre: 'Caja', icono: 'billetera', href: '#negocio/caja', para: 'La plata que entra y sale.', activa: /^caja/ },
+  { id: 'herramientas', nombre: 'Herramientas', icono: 'calculadora', href: '#herramientas', para: 'Las calculadoras y los links para mandar.', activa: ['herramientas', 'calculadoras', 'links'] },
+]
+
 /** Las pantallas de Mi negocio (tu panel de trabajo). `ruta` es su dirección adentro: #negocio/<ruta>. */
 export type Seccion = { ruta: string; nombre: string; icono: NombreIcono; para: string; dentroDe?: string; palabras?: string }
 
@@ -77,6 +100,12 @@ export const SECCIONES_NEGOCIO: Seccion[] = [
   { ruta: 'guia', nombre: 'Cómo funciona', icono: 'libro', para: 'Tu método, paso a paso: cómo se arma tu día y qué hace cada pantalla.', palabras: 'ayuda guia manual' },
   { ruta: 'ajustes', nombre: 'Ajustes', icono: 'ajustes', para: 'Lo que tus clientes ven de ti en su link (tu marca, tu QR de pago) y tu tiempo.', palabras: 'configuracion qr marca' },
 ]
+
+/** Lo que va en «Más» del modo simple: las pantallas de Mi negocio que no tienen pestaña (sin las de adentro de otra). */
+export function seccionesDeMas(): Seccion[] {
+  const conPestana = PESTANAS_SIMPLES.map((p) => p.href.replace('#negocio/', ''))
+  return SECCIONES_NEGOCIO.filter((x) => !x.dentroDe && !conPestana.includes(x.ruta))
+}
 
 /** Las calculadoras. `src` = la página que se abre adentro; sin `src`, se dibuja aquí mismo. */
 export type Calculadora = {

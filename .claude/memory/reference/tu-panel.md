@@ -3,6 +3,23 @@
 Pedido de Mauricio (17/11/2026): «Todo está desordenado, tengo que guardar el link de cada cosa y al final no uso nada.
 Ordénalo todo dentro del panel, con los mismos colores y la misma marca, y las calculadoras juntas diciendo para qué sirve cada una.»
 
+## Dos modos (pedido del 17/11/2026, tarde: «una parte simple y otra completa, sin sacar nada»)
+- **Simple** (sin elegir, el de siempre): arriba seis pestañas: Hoy, Ventas, Clientes, Contenido, Caja y Herramientas,
+  más «＋ Anotar» y «Más». El menú largo de Mi negocio (y sus barras del celular) se esconde; cada pantalla se ve igual,
+  a lo ancho. En el celular: arriba el logo y dónde estás; abajo Hoy, Ventas, ＋, Clientes y Más.
+  - «＋ Anotar» toca el botón Anotar de Mi negocio (abre su «¿Qué anotas?»: lead, visita, cliente nuevo o idea).
+  - «Más»: Contenido, Caja y Herramientas (en el celular), el resto de Mi negocio, Buscar algo (el Mapa),
+    Modo claro/noche (toca el botón de Mi negocio), Modo completo y Salir.
+  - Herramientas: las tres calculadoras y «Links para mandar», en una página corta (src/features/tu-panel/Herramientas.tsx).
+- **Completo**: lo de antes (Mi negocio con su menú, Calculadoras, Links, Mapa) + botón «Modo simple».
+- Se recuerda en el navegador («tu-panel-modo»). Las pestañas simples salen de `PESTANAS_SIMPLES` (catalogo.ts):
+  cada una dice qué pantallas de Mi negocio la marcan (p. ej. `c/<id>` = Clientes). Lo de «Más» sale solo de
+  `SECCIONES_NEGOCIO` (las que no tienen pestaña).
+- Cómo se esconde el menú sin tocar admin.html: MiNegocio.tsx le pone la clase `tp-simple` a su `<html>` y un estilo
+  (`.lado`, `.movil-top`, `.movil-nav` ocultos; `.capas`, `.idea-flota` y `.reloj` acomodados). Si admin.html cambia
+  esos nombres, lo peor es que en modo simple se ve también su menú. Anotar y claro/noche usan sus botones
+  `data-accion="mas-rapido"` y `data-accion="tema"` (si no los encuentra: avisa / lo cambia desde Tu panel).
+
 ## Qué es
 - `/panel` (sin `?c=`) abre **Tu panel**: entra con la misma contraseña de su panel de trabajo (`gb_clave` en el navegador:
   entrar en uno es entrar en el otro, y «Salir» en cualquiera cierra los dos).

@@ -313,7 +313,7 @@ npm run lint         # ESLint
 
 ### 2026-11-17: Todo entra por /panel (Tu panel)
 - **Error**: Cada herramienta nueva quedaba suelta en su propio link (calculadoras, paneles, propuesta) y Mauricio no las usaba porque no las encontraba
-- **Fix**: mauricio-ayllon.com/panel es la única puerta (src/features/tu-panel). Herramienta o página nueva → agregarla en src/features/tu-panel/catalogo.ts: aparece en su pestaña y en el Mapa. Detalle en .claude/memory/reference/tu-panel.md
+- **Fix**: mauricio-ayllon.com/panel es la única puerta (src/features/tu-panel), con modo simple (por defecto: Hoy, Ventas, Clientes, Contenido, Caja, Herramientas) y modo completo. Herramienta o página nueva → agregarla en src/features/tu-panel/catalogo.ts: aparece en su pestaña, en «Más» y en el Mapa. No sumar pestañas al modo simple sin que Mauricio lo pida. Detalle en .claude/memory/reference/tu-panel.md
 - **Aplicar en**: Este proyecto
 
 ### 2026-11-17: En Vercel, una carpeta de public/ responde sola antes de los rewrites

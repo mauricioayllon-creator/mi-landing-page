@@ -4,7 +4,7 @@
  * entrar aquí es entrar allá, y «Salir» en cualquiera de los dos cierra los dos.
  */
 
-import type { AreaId } from './catalogo'
+import type { AreaId, Modo } from './catalogo'
 
 /** La misma llave que usa tu panel de trabajo para recordar tu contraseña en este aparato. */
 export const CLAVE_LS = 'gb_clave'
@@ -95,7 +95,13 @@ export function mensajeConClave(link: string, clave: string) {
   return 'Tu panel de Grow Business:\n' + link + '\nTu clave: ' + clave
 }
 
-const AREAS_VALIDAS: AreaId[] = ['negocio', 'calculadoras', 'links', 'mapa']
+const AREAS_VALIDAS: AreaId[] = ['negocio', 'herramientas', 'calculadoras', 'links', 'mapa']
+
+/** Simple o completo: se recuerda en este aparato. Sin elegir = simple. */
+export const MODO_LS = 'tu-panel-modo'
+export function leerModo(): Modo {
+  return leerLocal(MODO_LS) === 'completo' ? 'completo' : 'simple'
+}
 
 /** #calculadoras/oferta → { area: 'calculadoras', resto: 'oferta' }. Sin área conocida, la de por defecto. */
 export function leerRuta(hash: string, porDefecto: AreaId): { area: AreaId; resto: string } {

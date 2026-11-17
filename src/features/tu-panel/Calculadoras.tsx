@@ -14,7 +14,18 @@ import { CALCULADORAS, CUAL_USO, type Calculadora } from './catalogo'
  * Cada una se abre aquí mismo. Las que ya abriste quedan abiertas por detrás: si vas a Mi negocio y vuelves,
  * siguen como las dejaste.
  */
-export default function Calculadoras({ abierta, visible }: { abierta: string; visible: boolean }) {
+export default function Calculadoras({
+  abierta,
+  visible,
+  volver = '#calculadoras',
+  volverTexto = 'Calculadoras',
+}: {
+  abierta: string
+  visible: boolean
+  /** A dónde vuelve «←»: en el modo simple, a Herramientas. */
+  volver?: string
+  volverTexto?: string
+}) {
   const actual = CALCULADORAS.find((c) => c.id === abierta)
   const [abiertas, setAbiertas] = useState<Calculadora['id'][]>([])
   const montadas = actual && !abiertas.includes(actual.id) ? [...abiertas, actual.id] : abiertas
@@ -34,8 +45,8 @@ export default function Calculadoras({ abierta, visible }: { abierta: string; vi
         return (
           <div key={id} className={id === actual?.id ? s.capa : s.capaOculta}>
             <Visor
-              volver="#calculadoras"
-              volverTexto="Calculadoras"
+              volver={volver}
+              volverTexto={volverTexto}
               icono={c.icono}
               titulo={c.nombre}
               sub={c.pregunta}

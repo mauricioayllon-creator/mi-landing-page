@@ -73,10 +73,7 @@ export default async function Propuesta({ searchParams }: { searchParams: Params
       <Nav mensaje={mensajeDuda} />
 
       <main>
-        <section
-          className="relative overflow-hidden text-titulo"
-          style={{ background: 'radial-gradient(ellipse 90% 80% at 50% 0%, #1559c9 0%, #0b3b8c 32%, #071a40 75%, #0d0d0d 100%)' }}
-        >
+        <section className="fondo-portada relative overflow-hidden text-titulo">
           <div className="grid-pattern pointer-events-none absolute inset-0" aria-hidden="true" />
           <div className="relative mx-auto max-w-3xl px-6 pb-16 pt-32 text-center md:pt-36">
             <span className="inline-flex rounded-pill bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-acento ring-1 ring-white/15 md:text-sm">
@@ -104,36 +101,36 @@ export default async function Propuesta({ searchParams }: { searchParams: Params
           </div>
         </section>
 
-        <section className="bg-hielo px-6 py-20">
+        <section className="bg-noche-2 px-6 py-20">
           <TituloSeccion>
-            Cómo lo <span className="text-marca">hacemos</span>
+            Cómo lo <span className="text-acento">hacemos</span>
           </TituloSeccion>
           <ol className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2">
             {PASOS.map(({ titulo, texto: detalle }, i) => (
-              <li key={titulo} className="flex items-start gap-4 rounded-3xl bg-white p-6 shadow-float ring-1 ring-black/5">
+              <li key={titulo} className="flex items-start gap-4 rounded-3xl bg-tarjeta p-6 shadow-float ring-1 ring-white/10">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl degradado-marca font-bold text-titulo">
                   {i + 1}
                 </span>
                 <span>
-                  <span className="block text-lg font-bold text-ink">{titulo}</span>
-                  <span className="mt-1 block leading-relaxed text-ink/70">{detalle}</span>
+                  <span className="block text-lg font-bold text-titulo">{titulo}</span>
+                  <span className="mt-1 block leading-relaxed text-texto2">{detalle}</span>
                 </span>
               </li>
             ))}
           </ol>
         </section>
 
-        <section className="bg-hielo px-6 pb-20">
+        <section className="bg-noche-2 px-6 pb-20">
           <TituloSeccion
             bajada={`El servicio es ${precio.toLocaleString('es-BO')} Bs: la mitad para empezar y la otra mitad cuando te lleguen tus clientes. La publicidad (${PAUTA_MIN} a ${PAUTA_MAX} Bs) la pagas tú desde tu cuenta y nunca pasa por mí.`}
           >
-            ¿En cuántas ventas lo <span className="text-marca">recuperas</span>?
+            ¿En cuántas ventas lo <span className="text-acento">recuperas</span>?
           </TituloSeccion>
           <Simulador inversion={precio + PAUTA_MAX} />
         </section>
 
         {GARANTIA_PARTE && (
-          <section className="bg-hielo px-6 pb-12">
+          <section className="bg-noche-2 px-6 pb-12">
             <div className="mx-auto max-w-3xl rounded-3xl degradado-marca p-7 text-center text-titulo shadow-card">
               <p className="text-sm font-semibold uppercase tracking-widest text-acento">Si no funciona</p>
               <p className="mt-3 text-xl leading-relaxed">
@@ -146,21 +143,21 @@ export default async function Propuesta({ searchParams }: { searchParams: Params
           </section>
         )}
 
-        <section className="bg-hielo px-6 pb-20">
+        <section className="bg-noche-2 px-6 pb-20">
           <TituloSeccion>
-            Lo que te puede <span className="text-marca">preocupar</span>
+            Lo que te puede <span className="text-acento">preocupar</span>
           </TituloSeccion>
           <div className="mx-auto grid max-w-4xl gap-4 md:grid-cols-3">
             {RIESGOS.map(({ q, a }) => (
-              <div key={q} className="rounded-3xl bg-white p-6 shadow-float ring-1 ring-black/5">
-                <h3 className="text-lg font-bold text-ink">{q}</h3>
-                <p className="mt-2 leading-relaxed text-ink/70">{a}</p>
+              <div key={q} className="rounded-3xl bg-tarjeta p-6 shadow-float ring-1 ring-white/10">
+                <h3 className="text-lg font-bold text-titulo">{q}</h3>
+                <p className="mt-2 leading-relaxed text-texto2">{a}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="bg-ink px-6 py-20">
+        <section className="fondo-cierre px-6 py-20">
           <TituloSeccion claro bajada="Si quieres, hacemos 15 minutos con tu socio o tu pareja, en tu tienda o por llamada.">
             Confirmemos <span className="text-acento">tu fecha</span>
           </TituloSeccion>

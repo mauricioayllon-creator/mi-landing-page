@@ -18,7 +18,7 @@ export default function WhatsAppButton({
 }) {
   const colores = secundario
     ? 'bg-white/10 text-titulo ring-1 ring-white/20'
-    : 'degradado-acento text-ink shadow-[0_10px_30px_-8px_rgba(30,200,255,0.55)]'
+    : 'degradado-acento text-ink shadow-[0_10px_30px_-8px_rgba(47,123,240,0.55)]'
   return (
     <a
       href={linkWhatsApp(mensaje)}

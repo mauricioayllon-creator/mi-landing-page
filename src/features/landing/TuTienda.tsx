@@ -34,7 +34,7 @@ export default function TuTienda() {
             type="button"
             onClick={() => setI(n)}
             className={`rounded-pill px-4 py-2 text-sm font-semibold transition-colors ${
-              n === i ? 'degradado-marca text-titulo shadow-float' : 'bg-white text-ink/70 ring-1 ring-black/10 hover:ring-marca'
+              n === i ? 'degradado-marca text-titulo shadow-float' : 'bg-tarjeta text-texto2 ring-1 ring-white/10 hover:ring-acento'
             }`}
           >
             {rubro.nombre}
@@ -42,12 +42,12 @@ export default function TuTienda() {
         ))}
       </div>
 
-      <div className="mx-auto mt-6 max-w-xl rounded-3xl border-2 border-dashed border-marca/40 bg-white p-6 text-center shadow-float">
-        <p className="text-sm font-semibold uppercase tracking-widest text-marca">Tu promo, por ejemplo</p>
-        <p className="mt-3 text-xl font-bold leading-snug text-ink">
+      <div className="mx-auto mt-6 max-w-xl rounded-3xl border-2 border-dashed border-acento/40 bg-tarjeta p-6 text-center shadow-float">
+        <p className="text-sm font-semibold uppercase tracking-widest text-acento">Tu promo, por ejemplo</p>
+        <p className="mt-3 text-xl font-bold leading-snug text-titulo">
           {r.porque}: cupón de {r.cupon} Bs + {r.regalo} de regalo.
         </p>
-        <p className="mt-2 text-ink/65">
+        <p className="mt-2 text-texto2">
           Solo el fin de semana de tu promo, con día y hora reservados, hasta agotar {r.unidades} unidades.
         </p>
       </div>
@@ -58,7 +58,7 @@ export default function TuTienda() {
         >
           Quiero la de mi tienda
         </WhatsAppButton>
-        <p className="text-sm text-ink/60">Es gratis, y es tuya aunque no trabajemos juntos.</p>
+        <p className="text-sm text-texto2">Es gratis, y es tuya aunque no trabajemos juntos.</p>
       </div>
     </div>
   )

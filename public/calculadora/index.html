@@ -16,22 +16,22 @@
 /* Concepto: dos columnas como una app de Apple. A la izquierda, la llamada (preguntas por pasos, en listas agrupadas). A la derecha, el panel tipo widgets que se arma solo.
    Colores y letras de Grow Business (los de tu panel, public/panel/estilo.css), pedido del 17/11/2026: el estilo de tarjetas y controles de Apple se queda. */
 :root {
-  --bg: #F2F5FB;
+  --bg: #eef1fd;
   --card: #FFFFFF;
-  --card-2: #F7F9FD;
+  --card-2: #f6f7ff;
   --fill: rgba(30, 80, 167, 0.08);
   --fill-2: rgba(30, 80, 167, 0.05);
-  --text: #0B1530;
-  --text-2: #56627D;
-  --text-3: #7C879F;
-  --sep: rgba(11, 21, 48, 0.10);
-  --blue: #1A6FE0; --green: #34C759; --orange: #FF9500; --red: #FF3B30; --indigo: #5856D6; --teal: #30B0C7; --yellow: #FFCC00; --pink: #FF2D55; --purple: #AF52DE; --gray: #8E8E93;
-  --blue-ink: #0B4BB0; --ok-ink: #248A3D; --warn-ink: #B25000; --bad-ink: #D70015;
-  --tint-blue: rgba(26, 111, 224, 0.10); --tint-green: rgba(52, 199, 89, 0.14); --tint-orange: rgba(255, 149, 0, 0.15); --tint-red: rgba(255, 59, 48, 0.11); --tint-gray: rgba(118, 118, 128, 0.12);
-  --s1: #1A6FE0; --s2: #FF9500; --s3: #30B0C7;
+  --text: #0f0a33;
+  --text-2: #5a5d86;
+  --text-3: #9A9DC2;
+  --sep: rgba(15, 10, 51, 0.10);
+  --blue: #2f7bf0; --green: #34C759; --orange: #FF9500; --red: #FF3B30; --indigo: #5856D6; --teal: #30B0C7; --yellow: #FFCC00; --pink: #FF2D55; --purple: #AF52DE; --gray: #8E8E93;
+  --blue-ink: #1450a0; --ok-ink: #248A3D; --warn-ink: #B25000; --bad-ink: #D70015;
+  --tint-blue: rgba(47, 123, 240, 0.10); --tint-green: rgba(52, 199, 89, 0.14); --tint-orange: rgba(255, 149, 0, 0.15); --tint-red: rgba(255, 59, 48, 0.11); --tint-gray: rgba(118, 118, 128, 0.12);
+  --s1: #2f7bf0; --s2: #FF9500; --s3: #30B0C7;
   --on-blue: #FFFFFF;
   --barra: rgba(242, 245, 251, 0.82);
-  --sombra: 0 1px 2px rgba(11, 21, 48, 0.04), 0 8px 28px rgba(11, 21, 48, 0.06);
+  --sombra: 0 1px 2px rgba(15, 10, 51, 0.04), 0 8px 28px rgba(15, 10, 51, 0.06);
   --sombra-2: 0 1px 1px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.06);
   --f: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --f-display: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -40,25 +40,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #000000; --card: #1C1C1E; --card-2: #2C2C2E; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
-    --text: #F5F5F7; --text-2: #A1A1A6; --text-3: #8E8E93; --sep: rgba(84, 84, 88, 0.55);
-    --blue: #4D94FF; --green: #30D158; --orange: #FF9F0A; --red: #FF453A; --indigo: #5E5CE6; --teal: #40C8E0; --yellow: #FFD60A; --pink: #FF375F; --purple: #BF5AF2; --gray: #8E8E93;
-    --blue-ink: #7AB0FF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
-    --tint-blue: rgba(77, 148, 255, 0.20); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
-    --s1: #4D94FF; --s2: #d95926; --s3: #199e70;
-    --barra: rgba(22, 22, 24, 0.78);
+    --bg: #07061A; --card: #110D30; --card-2: #1A1545; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
+    --text: #F3F0FF; --text-2: #B4ADDC; --text-3: #8F8AC0; --sep: rgba(80, 70, 160, 0.5);
+    --blue: #3F86F5; --green: #30D158; --orange: #FF9F0A; --red: #FF453A; --indigo: #5E5CE6; --teal: #40C8E0; --yellow: #FFD60A; --pink: #FF375F; --purple: #BF5AF2; --gray: #8E8E93;
+    --blue-ink: #9DBBFF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
+    --tint-blue: rgba(63, 134, 245, 0.22); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
+    --s1: #3F86F5; --s2: #d95926; --s3: #199e70;
+    --barra: rgba(11, 8, 48, 0.78);
     --sombra: 0 0 0 1px rgba(255, 255, 255, 0.04); --sombra-2: 0 0 0 1px rgba(255, 255, 255, 0.06);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #000000; --card: #1C1C1E; --card-2: #2C2C2E; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
-  --text: #F5F5F7; --text-2: #A1A1A6; --text-3: #8E8E93; --sep: rgba(84, 84, 88, 0.55);
-  --blue: #4D94FF; --green: #30D158; --orange: #FF9F0A; --red: #FF453A; --indigo: #5E5CE6; --teal: #40C8E0; --yellow: #FFD60A; --pink: #FF375F; --purple: #BF5AF2; --gray: #8E8E93;
-  --blue-ink: #7AB0FF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
-  --tint-blue: rgba(77, 148, 255, 0.20); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
-  --s1: #4D94FF; --s2: #d95926; --s3: #199e70;
-  --barra: rgba(22, 22, 24, 0.78);
+  --bg: #07061A; --card: #110D30; --card-2: #1A1545; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
+  --text: #F3F0FF; --text-2: #B4ADDC; --text-3: #8F8AC0; --sep: rgba(80, 70, 160, 0.5);
+  --blue: #3F86F5; --green: #30D158; --orange: #FF9F0A; --red: #FF453A; --indigo: #5E5CE6; --teal: #40C8E0; --yellow: #FFD60A; --pink: #FF375F; --purple: #BF5AF2; --gray: #8E8E93;
+  --blue-ink: #9DBBFF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
+  --tint-blue: rgba(63, 134, 245, 0.22); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
+  --s1: #3F86F5; --s2: #d95926; --s3: #199e70;
+  --barra: rgba(11, 8, 48, 0.78);
   --sombra: 0 0 0 1px rgba(255, 255, 255, 0.04); --sombra-2: 0 0 0 1px rgba(255, 255, 255, 0.06);
   color-scheme: dark;
 }
@@ -85,7 +85,7 @@ button { -webkit-tap-highlight-color: transparent; }
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px;
 }
 .marca { display: flex; gap: 12px; align-items: center; min-width: 0; }
-.app-ico { width: 38px; height: 38px; border-radius: 11px; flex: none; display: grid; place-items: center; background: #fff; box-shadow: 0 6px 16px -8px rgba(11, 21, 48, 0.45), var(--sombra-2); }
+.app-ico { width: 38px; height: 38px; border-radius: 11px; flex: none; display: grid; place-items: center; background: #fff; box-shadow: 0 6px 16px -8px rgba(15, 10, 51, 0.45), var(--sombra-2); }
 .app-ico img { width: 86%; height: 86%; object-fit: contain; display: block; }
 a.app-ico:hover { transform: translateY(-1px); }
 /* Dentro de Tu panel (mauricio-ayllon.com/panel) arriba ya dice qué calculadora es: aquí no se repite. */
@@ -622,7 +622,7 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 .guia-mas-cuerpo ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
 .guia-spin-txt { opacity: .85; font-size: 12px; }
 .ayuda .guia { display: none !important; }
-.guia-paso .guia-burbuja { background: linear-gradient(135deg, #1A6FE0, #0B4BB0); }
+.guia-paso .guia-burbuja { background: linear-gradient(135deg, #2f7bf0, #1450a0); }
 .guia-paso .guia-burbuja::after { border-top-color: #125cc8; }
 .guia-panel .guia-burbuja { margin-bottom: 4px; }
 .ruta { margin-bottom: 2px; }
@@ -643,7 +643,7 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 .ads-cab { display: flex; gap: 6px; flex-wrap: wrap; }
 .embudo { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .embudo li { display: grid; gap: 1px; justify-items: start; }
-.emb-barra { min-width: fit-content; max-width: 100%; border-radius: 10px; padding: 7px 10px; display: flex; gap: 8px; align-items: baseline; color: #fff; background: linear-gradient(90deg, #1A6FE0, #0B4BB0); box-shadow: var(--sombra-2); }
+.emb-barra { min-width: fit-content; max-width: 100%; border-radius: 10px; padding: 7px 10px; display: flex; gap: 8px; align-items: baseline; color: #fff; background: linear-gradient(90deg, #2f7bf0, #1450a0); box-shadow: var(--sombra-2); }
 .embudo li:last-child .emb-barra { background: linear-gradient(90deg, #30D158, #248A3D); }
 .emb-barra b { font-family: var(--f-num); font-size: 17px; white-space: nowrap; }
 .emb-barra span { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -659,7 +659,7 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 .app[data-cliente="on"] .col-preguntas { display: none !important; }
 .app[data-cliente="on"] .col-panel { display: block !important; position: static; max-height: none; overflow: visible; }
 .vc { display: grid; gap: 16px; }
-.vc-portada { background: linear-gradient(145deg, #1A6FE0 0%, #0B3B8C 60%, #081f4d 100%); color: #fff; border-radius: 24px; padding: 28px 26px; display: grid; gap: 6px; box-shadow: var(--sombra); }
+.vc-portada { background: linear-gradient(145deg, #2f7bf0 0%, #3000a0 60%, #081f4d 100%); color: #fff; border-radius: 24px; padding: 28px 26px; display: grid; gap: 6px; box-shadow: var(--sombra); }
 .vc-marca { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; opacity: .8; }
 .vc-portada h1 { font-size: clamp(28px, 4.4vw, 44px); font-weight: 800; letter-spacing: -.025em; line-height: 1.05; }
 .vc-para { font-size: 17px; opacity: .92; }

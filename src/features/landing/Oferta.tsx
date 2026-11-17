@@ -50,24 +50,24 @@ export default function Oferta() {
   ]
 
   return (
-    <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl bg-white shadow-card ring-1 ring-black/5">
+    <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl bg-tarjeta shadow-card ring-1 ring-white/10">
       <div className="degradado-marca px-7 py-6 text-titulo">
         <p className="text-sm font-semibold uppercase tracking-widest text-acento">La oferta</p>
         <h3 className="mt-1 text-2xl font-bold tracking-tight md:text-3xl">{NOMBRE_OFERTA}</h3>
       </div>
 
-      <dl className="divide-y divide-black/5 px-7">
+      <dl className="divide-y divide-white/10 px-7">
         {filas.map(({ q, a }) => (
           <div key={q} className="grid gap-1 py-5 sm:grid-cols-[10rem_1fr] sm:gap-6">
-            <dt className="font-bold text-ink">{q}</dt>
-            <dd className="leading-relaxed text-ink/75">{a}</dd>
+            <dt className="font-bold text-titulo">{q}</dt>
+            <dd className="leading-relaxed text-texto2">{a}</dd>
           </div>
         ))}
         {GARANTIA_PARTE && (
           <div className="grid gap-1 py-5 sm:grid-cols-[10rem_1fr] sm:gap-6">
-            <dt className="font-bold text-ink">Si no funciona</dt>
-            <dd className="leading-relaxed text-ink/75">
-              <span className="font-semibold text-ink">
+            <dt className="font-bold text-titulo">Si no funciona</dt>
+            <dd className="leading-relaxed text-texto2">
+              <span className="font-semibold text-titulo">
                 <TextoGarantia />
               </span>{' '}
               <CondicionesGarantia />
@@ -76,7 +76,7 @@ export default function Oferta() {
         )}
       </dl>
 
-      <p className="bg-hielo px-7 py-4 text-center text-sm text-ink/65">
+      <p className="bg-white/5 px-7 py-4 text-center text-sm text-texto2">
         Tomo {LANZAMIENTOS_POR_MES} tiendas por mes, porque grabo y edito yo. Mi servicio parte en{' '}
         {PRECIO_SERVICIO.toLocaleString('es-BO')} Bs.
       </p>

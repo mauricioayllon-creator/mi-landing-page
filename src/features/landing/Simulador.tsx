@@ -20,16 +20,16 @@ const pct = (parte: number, total: number) => `${Math.min(100, (parte / total) *
 function CampoBs({ id, label, valor, onChange }: { id: string; label: string; valor: string; onChange: (v: string) => void }) {
   return (
     <label htmlFor={id} className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-ink/60">{label}</span>
-      <span className="flex items-center gap-2 rounded-2xl bg-hielo px-4 py-3 ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-azul">
+      <span className="text-sm font-medium text-texto2">{label}</span>
+      <span className="flex items-center gap-2 rounded-2xl bg-noche px-4 py-3 ring-1 ring-white/15 focus-within:ring-2 focus-within:ring-acento">
         <input
           id={id}
           inputMode="numeric"
           value={valor}
           onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, '').slice(0, 6))}
-          className="w-full bg-transparent text-2xl font-bold text-ink outline-none"
+          className="w-full bg-transparent text-2xl font-bold text-titulo outline-none"
         />
-        <span className="text-sm font-semibold text-ink/45">Bs</span>
+        <span className="text-sm font-semibold text-texto2">Bs</span>
       </span>
     </label>
   )
@@ -57,9 +57,9 @@ function Deslizador({
   return (
     <label htmlFor={id} className="flex flex-col gap-2">
       <span className="flex items-baseline justify-between">
-        <span className="text-sm font-medium text-ink/60">{label}</span>
-        <span className="text-xl font-bold text-marca">
-          {valor.toLocaleString('es-BO')} <span className="text-sm font-semibold text-ink/45">{unidad}</span>
+        <span className="text-sm font-medium text-texto2">{label}</span>
+        <span className="text-xl font-bold text-acento">
+          {valor.toLocaleString('es-BO')} <span className="text-sm font-semibold text-texto2">{unidad}</span>
         </span>
       </span>
       <input
@@ -70,7 +70,7 @@ function Deslizador({
         step={paso}
         value={Math.min(valor, max)}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="h-2 w-full cursor-pointer accent-azul"
+        className="h-2 w-full cursor-pointer accent-[#C8DCFF]"
       />
     </label>
   )
@@ -101,7 +101,7 @@ export default function Simulador({
   const tope = Math.max(unidades, recupera)
 
   return (
-    <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl bg-white shadow-card ring-1 ring-black/5">
+    <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl bg-tarjeta shadow-card ring-1 ring-white/10">
       <div className="grid gap-6 p-6 md:grid-cols-2 md:p-8">
         <div className="flex flex-col gap-5">
           <div className="grid grid-cols-2 gap-3">
@@ -110,15 +110,15 @@ export default function Simulador({
           </div>
           <Deslizador id="cupon" label="Lo que te cuesta el regalo" valor={cupon} unidad="Bs" min={0} max={maxCupon} paso={5} onChange={setCupon} />
           <Deslizador id="unidades" label="Unidades que separas" valor={unidades} unidad="u." min={5} max={200} paso={5} onChange={setUnidades} />
-          <p className="rounded-2xl bg-hielo px-4 py-3 text-sm text-ink/70">
-            Lo que inviertes: <span className="font-bold text-ink">{desde ? 'desde ' : ''}{bs(inversion)}</span> (mi servicio + la
+          <p className="rounded-2xl bg-white/5 px-4 py-3 text-sm text-texto2 ring-1 ring-white/10">
+            Lo que inviertes: <span className="font-bold text-titulo">{desde ? 'desde ' : ''}{bs(inversion)}</span> (mi servicio + la
             publicidad).
           </p>
         </div>
 
         <div
           className="flex flex-col justify-center gap-5 rounded-2xl p-6 text-titulo"
-          style={{ background: 'linear-gradient(145deg, #1A6FE0 0%, #0B3B8C 60%, #081f4d 100%)' }}
+          style={{ background: 'linear-gradient(145deg, #5000D0 0%, #3000A0 60%, #200090 100%)' }}
         >
           {!listo ? (
             <p className="text-lg leading-relaxed">
@@ -149,40 +149,40 @@ export default function Simulador({
       </div>
 
       {listo && (
-        <div className="border-t border-black/5 bg-hielo/60 p-6 md:p-8">
-          <p className="text-sm font-semibold uppercase tracking-widest text-marca">Tu promo, venta por venta</p>
+        <div className="border-t border-white/10 bg-noche/60 p-6 md:p-8">
+          <p className="text-sm font-semibold uppercase tracking-widest text-acento">Tu promo, venta por venta</p>
 
           <div className="relative mt-10 mb-12">
-            <div className="flex h-4 overflow-hidden rounded-full bg-black/5">
-              <div className="bg-azul" style={{ width: pct(Math.min(recupera, tope), tope) }} />
+            <div className="flex h-4 overflow-hidden rounded-full bg-white/10">
+              <div className="bg-[#2F7BF0]" style={{ width: pct(Math.min(recupera, tope), tope) }} />
               <div className="degradado-acento" style={{ width: pct(Math.max(0, unidades - recupera), tope) }} />
             </div>
-            <span className="absolute top-6 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-azul" style={{ left: pct(recupera, tope) }}>
+            <span className="absolute top-6 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-acento" style={{ left: pct(recupera, tope) }}>
               Recuperas: {recupera}
             </span>
             {recupera <= unidades && (
-              <span className="absolute -top-8 right-0 whitespace-nowrap text-xs font-semibold text-ink/50">{unidades} u.</span>
+              <span className="absolute -top-8 right-0 whitespace-nowrap text-xs font-semibold text-texto2">{unidades} u.</span>
             )}
           </div>
 
-          <p className="leading-relaxed text-ink/75">
-            Con <span className="font-bold text-azul">{recupera} ventas</span> recuperas todo lo que inviertes.
+          <p className="leading-relaxed text-texto2">
+            Con <span className="font-bold text-acento">{recupera} ventas</span> recuperas todo lo que inviertes.
             {recupera <= unidades ? (
               <> Lo que vendas después es ganancia.</>
             ) : (
-              <span className="font-semibold text-ink"> Con {unidades} unidades no alcanza: separa más o baja el cupón.</span>
+              <span className="font-semibold text-titulo"> Con {unidades} unidades no alcanza: separa más o baja el cupón.</span>
             )}
           </p>
 
           {garantia > GARANTIA_TOPE && (
-            <div className="mt-4 flex gap-3 rounded-2xl bg-white p-4 ring-1 ring-amber-300">
+            <div className="mt-4 flex gap-3 rounded-2xl bg-white/5 p-4 ring-1 ring-amber-300/60">
               <svg className="mt-0.5 h-6 w-6 shrink-0 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M12 9v4" />
                 <path d="M12 17h.01" />
                 <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
               </svg>
-              <p className="leading-relaxed text-ink/80">
-                <span className="font-bold text-ink">Con este producto necesitas {garantia} clientes:</span> es mucho
+              <p className="leading-relaxed text-texto2">
+                <span className="font-bold text-titulo">Con este producto necesitas {garantia} clientes:</span> es mucho
                 para una promo, porque te deja poco por venta. Elijamos otro producto, uno que te deje más, y ahí sale
                 tu garantía.
               </p>
@@ -190,14 +190,14 @@ export default function Simulador({
           )}
 
           {garantia > 0 && garantia <= GARANTIA_TOPE && garantia <= unidades && (
-            <div className="mt-4 flex gap-3 rounded-2xl bg-white p-4 ring-1 ring-marca/15">
-              <svg className="mt-0.5 h-6 w-6 shrink-0 text-marca" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <div className="mt-4 flex gap-3 rounded-2xl bg-white/5 p-4 ring-1 ring-white/15">
+              <svg className="mt-0.5 h-6 w-6 shrink-0 text-acento" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" />
                 <path d="m9 12 2 2 4-4" />
               </svg>
-              <p className="leading-relaxed text-ink/80">
-                <span className="font-bold text-ink">Tu garantía:</span> me pagas la mitad para empezar, y la otra
-                mitad recién cuando te lleguen <span className="font-bold text-marca">{garantia} clientes</span> con su
+              <p className="leading-relaxed text-texto2">
+                <span className="font-bold text-titulo">Tu garantía:</span> me pagas la mitad para empezar, y la otra
+                mitad recién cuando te lleguen <span className="font-bold text-acento">{garantia} clientes</span> con su
                 cupón, los que necesitas para recuperar lo que pusiste. Cuenta cada cliente que llega con su cupón y
                 tú lo validas, compre o no. Si en tu fecha no llegan, sigo {GARANTIA_DIAS_EXTRA} días más con tu video
                 ganador, sin costo; y si igual no llegan, no me la pagas.
@@ -205,7 +205,7 @@ export default function Simulador({
             </div>
           )}
 
-          <p className="mt-4 text-xs text-ink/50">
+          <p className="mt-4 text-xs text-texto2">
             Es una cuenta, no una promesa: depende de cuántos lleguen y compren. En la visita la hacemos con tus números reales.
           </p>
         </div>

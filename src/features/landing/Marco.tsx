@@ -14,7 +14,7 @@ export function Nav({
 }) {
   return (
     <header className="fixed inset-x-0 top-4 z-50 px-4">
-      <nav className="mx-auto flex max-w-5xl items-center justify-between rounded-pill bg-ink/95 px-4 py-3 shadow-float backdrop-blur md:px-5">
+      <nav className="mx-auto flex max-w-5xl items-center justify-between rounded-pill bg-noche/80 px-4 py-3 shadow-float ring-1 ring-white/10 backdrop-blur-md md:px-5">
         <a href="/" className="flex items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white p-1">
             <Image src={LOGO} alt={MARCA} width={32} height={38} className="h-full w-auto object-contain" />
@@ -56,19 +56,20 @@ export function TituloSeccion({
 }) {
   return (
     <div className="mx-auto mb-10 max-w-3xl text-center">
+      {/* Toda la página es oscura desde la marca "Noche con luz": `claro` queda por compatibilidad. */}
       {etiqueta && (
-        <p className={`mb-3 text-sm font-semibold uppercase tracking-widest ${claro ? 'text-acento' : 'text-marca'}`}>
+        <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-acento">
           {etiqueta}
         </p>
       )}
       <h2
-        className={`font-bold ${claro ? 'text-titulo' : 'text-ink'}`}
+        className="font-bold text-titulo"
         style={{ fontSize: 'clamp(1.75rem, 4.5vw, 2.75rem)', lineHeight: 1.12, letterSpacing: '-1px' }}
       >
         {children}
       </h2>
       {bajada && (
-        <p className={`mt-4 text-lg leading-relaxed ${claro ? 'text-white/75' : 'text-ink/65'}`}>{bajada}</p>
+        <p className={`mt-4 text-lg leading-relaxed ${claro ? 'text-white/75' : 'text-texto2'}`}>{bajada}</p>
       )}
     </div>
   )
@@ -76,17 +77,17 @@ export function TituloSeccion({
 
 export function Footer() {
   return (
-    <footer className="bg-hielo px-6 py-10 pb-28">
+    <footer className="border-t border-white/10 bg-noche px-6 py-10 pb-28">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1 ring-1 ring-black/5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white p-1 ring-1 ring-white/10">
             <Image src={LOGO} alt={MARCA} width={28} height={34} className="h-full w-auto object-contain" />
           </span>
-          <span className="text-sm font-semibold text-ink">
+          <span className="text-sm font-semibold text-titulo">
             {MARCA} · {PERSONA}
           </span>
         </div>
-        <p className="text-center text-sm text-ink/50">
+        <p className="text-center text-sm text-white/50">
           La Paz, Bolivia · antes Unreal Marketing · © {new Date().getFullYear()}
         </p>
       </div>
@@ -108,7 +109,7 @@ export function BarraWhatsApp({
 }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-pill bg-ink px-5 py-3 shadow-float md:px-6">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-pill bg-noche/90 px-5 py-3 shadow-float ring-1 ring-white/10 backdrop-blur-md md:px-6">
         <p className="text-sm font-medium text-titulo sm:text-base">{texto}</p>
         <WhatsAppButton mensaje={mensaje} className="shrink-0 px-4 py-2.5 text-sm">
           <TextoBoton largo={boton} corto={botonCorto} />

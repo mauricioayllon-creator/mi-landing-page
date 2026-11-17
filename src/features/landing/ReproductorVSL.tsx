@@ -149,7 +149,7 @@ const ICONO_SIN_SONIDO = (
 function BotonGrande({ icono, children, onClick }: { icono: React.ReactNode; children: React.ReactNode; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-ink/40 text-titulo">
-      <span className="flex h-14 w-14 items-center justify-center rounded-full degradado-acento text-ink shadow-[0_0_0_8px_rgba(30,200,255,0.25)] motion-safe:animate-pulse sm:h-20 sm:w-20">
+      <span className="flex h-14 w-14 items-center justify-center rounded-full degradado-acento text-ink shadow-[0_0_0_8px_rgba(200,220,255,0.25)] motion-safe:animate-pulse sm:h-20 sm:w-20">
         {icono}
       </span>
       <span className="rounded-2xl bg-ink/80 px-4 py-2 text-sm font-bold leading-snug sm:text-lg">{children}</span>

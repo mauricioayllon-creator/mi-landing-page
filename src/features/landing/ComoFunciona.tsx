@@ -103,12 +103,12 @@ export default function ComoFunciona() {
             <li key={titulo} className="flex gap-4">
               <span className={`mt-1 h-10 w-2 shrink-0 rounded-full ${color}`} aria-hidden="true" />
               <div>
-                <h3 className="text-lg font-bold text-ink">
+                <h3 className="text-lg font-bold text-titulo">
                   {i + 1}. {titulo}
                 </h3>
-                <p className="mt-1 leading-relaxed text-ink/80">{que}</p>
-                <p className="mt-1 text-sm leading-relaxed text-ink/60">
-                  <span className="font-semibold text-marca">Por qué funciona:</span> {porque}
+                <p className="mt-1 leading-relaxed text-texto2">{que}</p>
+                <p className="mt-1 text-sm leading-relaxed text-texto2">
+                  <span className="font-semibold text-acento">Por qué funciona:</span> {porque}
                 </p>
               </div>
             </li>
@@ -116,8 +116,8 @@ export default function ComoFunciona() {
           <li className="flex gap-4">
             <span className="mt-1 h-10 w-2 shrink-0 rounded-full bg-gradient-to-b from-[#1F2937] to-ink" aria-hidden="true" />
             <div>
-              <h3 className="text-lg font-bold text-ink">Y todo se cuenta</h3>
-              <p className="mt-1 leading-relaxed text-ink/80">
+              <h3 className="text-lg font-bold text-titulo">Y todo se cuenta</h3>
+              <p className="mt-1 leading-relaxed text-texto2">
                 Cada cupón canjeado es una venta registrada. Al final sabes cuánto vendió tu promo y qué
                 video te trajo a cada cliente.
               </p>
@@ -127,15 +127,15 @@ export default function ComoFunciona() {
       </div>
 
       <div className="mt-16">
-        <p className="mb-2 text-center text-2xl font-bold tracking-tight text-ink">
-          Así llega tu cliente <span className="text-marca">a su cupón</span>
+        <p className="mb-2 text-center text-2xl font-bold tracking-tight text-titulo">
+          Así llega tu cliente <span className="text-acento">a su cupón</span>
         </p>
-        <p className="mb-8 text-center text-ink/60">Pruébalo en este celular, como si fueras él.</p>
+        <p className="mb-8 text-center text-texto2">Pruébalo en este celular, como si fueras él.</p>
         <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:items-start md:gap-10">
           {VIDEO_EJEMPLO && (
             <>
               <div className="flex w-full max-w-[320px] flex-col items-center">
-                <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-marca">El video</p>
+                <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-acento">El video</p>
                 <div className="marco-celular w-full">
                   <video
                     className="block aspect-[9/16] w-full rounded-[2.2rem] bg-ink object-cover"
@@ -146,9 +146,9 @@ export default function ComoFunciona() {
                     preload="none"
                   />
                 </div>
-                <p className="mt-3 text-center text-sm text-ink/55">{VIDEO_EJEMPLO.pie}</p>
+                <p className="mt-3 text-center text-sm text-texto2">{VIDEO_EJEMPLO.pie}</p>
               </div>
-              <span className="text-3xl font-bold text-azul md:mt-64" aria-hidden="true">
+              <span className="text-3xl font-bold text-acento md:mt-64" aria-hidden="true">
                 <span className="md:hidden">↓</span>
                 <span className="hidden md:inline">→</span>
               </span>

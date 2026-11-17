@@ -5,15 +5,18 @@
 /* ─────────────────────────────────────────────────────────────
  * UNREAL MARKETING — Design tokens (variables CSS)
  * ───────────────────────────────────────────────────────────── */
+/* Marca "Noche con luz" (17/11/2026): _cerebro/nosotros/27-branding-colores.md */
 :root {
   --emerald: #005f51;
   --lime: #31d96d;
-  --ink: #0d0d0d;
-  --ink-soft: #121212;
+  --ink: #07061a;
+  --ink-soft: #0b0830;
   --cream: #f7f6f2;
-  --titulo: #fcfcfc;
+  --titulo: #f3f0ff;
   --rojo: #e5342b;
   --naranja: #f59e0b;
+  --noche: #07061a;
+  --hielo: #c8dcff;
 }
 
 html {
@@ -22,8 +25,8 @@ html {
 }
 
 body {
-  background-color: #f3f6fb; /* hielo: fondo frío que pega con el azul de la marca */
-  color: var(--ink);
+  background-color: var(--noche); /* noche: el fondo violeta oscuro de la marca */
+  color: var(--titulo);
   font-family: var(--font-geist), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -40,25 +43,40 @@ body {
 
 /* ── Degradado de tarjeta de testimonio ──────────────────────── */
 .testimonial-gradient {
-  background: linear-gradient(135deg, #1a6fe0 0%, #0b4bb0 45%, #082e6e 100%);
+  background: linear-gradient(135deg, #5000d0 0%, #3000a0 55%, #200090 100%);
 }
 
-/* ── Degradados de la marca (del caballo del logo: celeste → azul → azul profundo) ── */
+/* ── Degradados de la marca ──
+ *  .degradado-marca  = violeta (tarjetas, números de paso, cajas destacadas)
+ *  .degradado-acento = azul hielo (botones y círculos de acción: lo que se toca)
+ *  .resplandor-esquina = el destello rosa y violeta de la portada */
 .degradado-marca {
-  background: linear-gradient(135deg, #1a6fe0 0%, #0b3b8c 55%, #072866 100%);
+  background: linear-gradient(135deg, #3000a0 0%, #5000d0 55%, #7a3cf0 100%);
 }
 .degradado-acento {
-  background: linear-gradient(135deg, #7ae3ff 0%, #1ec8ff 50%, #0ea2e0 100%);
+  background: linear-gradient(120deg, #eaf2ff 0%, #c8dcff 55%, #9dbbff 100%);
+}
+.fondo-portada {
+  background:
+    radial-gradient(620px 520px at 102% -6%, rgba(196, 98, 176, 0.95) 0%, rgba(150, 60, 180, 0.6) 28%, transparent 62%),
+    radial-gradient(1100px 820px at 96% 4%, rgba(80, 0, 208, 0.85) 0%, rgba(48, 0, 160, 0.55) 38%, transparent 72%),
+    radial-gradient(900px 600px at 40% 118%, rgba(80, 0, 208, 0.65) 0%, rgba(48, 0, 160, 0.35) 40%, transparent 72%),
+    linear-gradient(180deg, #07061a 0%, #0b0830 100%);
+}
+.fondo-cierre {
+  background:
+    radial-gradient(700px 420px at 50% 0%, rgba(80, 0, 208, 0.45), transparent 70%),
+    #07061a;
 }
 
 /* ── Marco de celular para la demo del cupón ─────────────────── */
 .marco-celular {
   border-radius: 2.75rem;
   padding: 0.65rem;
-  background: #0d0d0d;
+  background: #07061a;
   box-shadow:
-    0 0 0 2px #2a2a2a,
-    0 30px 80px -20px rgba(11, 59, 140, 0.6);
+    0 0 0 2px #2d1f78,
+    0 30px 80px -20px rgba(80, 0, 208, 0.6);
 }
 
 /* ── Carrusel infinito de comentarios (marquee) ──────────────── */

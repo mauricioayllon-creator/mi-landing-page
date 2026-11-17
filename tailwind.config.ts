@@ -7,16 +7,32 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // ── Design tokens Grow Business (azul del logo) ──
-        // Todo sale del degradado del caballo: azul profundo → azul medio → celeste.
+        // ── Design tokens Grow Business · "Noche con luz" (decidido el 17/11/2026) ──
+        // Guía completa: _cerebro/nosotros/27-branding-colores.md
+        // Noche = violetas (fondos) · Luz = azul hielo + azul eléctrico · Destello = rosa (solo resplandor).
+        noche: {
+          DEFAULT: '#07061A', // fondo principal
+          2: '#0B0830', // fondo de secciones alternas
+        },
+        tarjeta: '#110D30', // tarjetas sobre el fondo
+        violeta: {
+          DEFAULT: '#5000D0',
+          oscuro: '#200090',
+          prof: '#3000A0',
+          medio: '#4000C0',
+          claro: '#7A3CF0',
+        },
         marca: {
-          DEFAULT: '#0B3B8C', // fondos principales, tarjetas, FAQ
+          DEFAULT: '#5000D0', // violeta eléctrico (solo rellenos, nunca texto sobre fondo oscuro)
         },
-        azul: '#1A6FE0', // degradados y estados intermedios
+        azul: '#2F7BF0', // azul eléctrico: la energía
+        cielo: '#6C8CFF', // azul cielo: fin del degradado, cifras grandes
         acento: {
-          DEFAULT: '#1EC8FF', // botones y palabras destacadas
+          DEFAULT: '#C8DCFF', // azul hielo: la firma (titulares, botones, íconos)
         },
-        hielo: '#F3F6FB', // fondo de secciones claras (frío, para que pegue con el azul)
+        hielo: '#C8DCFF', // azul hielo
+        rosa: '#D7A4C6', // destello: solo en resplandores
+        texto2: '#B4ADDC', // texto secundario sobre fondo oscuro
         // Tokens anteriores (Unreal): los usan componentes que ya no están en la página
         emerald: {
           DEFAULT: '#005F51',
@@ -25,11 +41,11 @@ const config: Config = {
           DEFAULT: '#31D96D',
         },
         ink: {
-          DEFAULT: '#0D0D0D', // navbar, barra flotante
-          soft: '#121212',
+          DEFAULT: '#07061A', // navbar, barra flotante, texto sobre botones hielo
+          soft: '#0B0830',
         },
-        cream: '#F7F6F2',     // fondo body, secciones de respiro
-        titulo: '#FCFCFC',    // titulares
+        cream: '#F7F6F2',     // (antiguo) sin uso en la página
+        titulo: '#F3F0FF',    // titulares y texto principal
         rojo: '#E5342B',      // badge de segmentación
         naranja: '#F59E0B',   // acento puntual barra flotante
       },
@@ -40,8 +56,8 @@ const config: Config = {
         pill: '9999px',
       },
       boxShadow: {
-        float: '0 10px 40px -10px rgba(0,0,0,0.25)',
-        card: '0 20px 60px -20px rgba(11,59,140,0.45)',
+        float: '0 10px 40px -10px rgba(0,0,0,0.45)',
+        card: '0 20px 60px -20px rgba(80,0,208,0.45)',
       },
     },
   },

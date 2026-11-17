@@ -17,3 +17,5 @@
 - Supuestos que se pueden cambiar en motor.js: 50 resultados por semana por conjunto de anuncios (referencia de Meta,
   publicación del 21/10/2026), colchón sano de 40%, 10 ventas para confiar en el número, mes de 30 días.
 - Para probar las cuentas sin navegador: cargar formato.js y motor.js con Node y llamar a CalcPauta.motor.calcular(datos).
+- Desde el 17/11/2026 lleva los colores, las letras y el logo de Grow Business (pedido de Mauricio: «los mismos colores, el
+  mismo branding»), con el mismo estilo de tarjetas. Se abre desde Tu panel › Calculadoras; ahí se ve sin su título y en claro.

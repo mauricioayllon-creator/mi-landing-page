@@ -31,9 +31,12 @@ export default function RootLayout({
   return (
     <html lang="es" className={geist.variable}>
       <head>
-        {/* Meta Pixel Code */}
+        {/* Meta Pixel Code.
+            No cuenta tu panel (/panel) ni lo que miras dentro de él (tu página o tu propuesta abiertas en Links):
+            esas visitas son tuyas, no de prospectos. Para todos los demás funciona igual que siempre. */}
         <Script id="meta-pixel" strategy="afterInteractive">
           {`
+            if (window.self === window.top && !/^\\/(panel|tu-panel)(\\/|$)/.test(location.pathname)) {
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
             n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -44,6 +47,7 @@ export default function RootLayout({
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '1945995836286268');
             fbq('track', 'PageView');
+            }
           `}
         </Script>
         {/* End Meta Pixel Code */}

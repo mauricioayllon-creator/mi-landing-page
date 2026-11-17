@@ -5,41 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Calculadora de diagnóstico: cuánto cobrar, qué prometer y si conviene aceptar a un cliente.">
 <meta name="robots" content="noindex">
-<title>Calculadora de Oferta</title>
+<title>Calculadora de Oferta · Grow Business</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" type="image/png" href="/grow-business-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>/* Dentro de Tu panel: sin el título repetido y siempre en claro, como el panel. */try{if(window.self!==window.top){document.documentElement.classList.add("en-panel");document.documentElement.setAttribute("data-theme","light")}}catch(e){document.documentElement.classList.add("en-panel")}</script>
 <style>
-/* Concepto: dos columnas como una app de Apple. A la izquierda, la llamada (preguntas por pasos, en listas agrupadas). A la derecha, el panel tipo widgets que se arma solo. */
+/* Concepto: dos columnas como una app de Apple. A la izquierda, la llamada (preguntas por pasos, en listas agrupadas). A la derecha, el panel tipo widgets que se arma solo.
+   Colores y letras de Grow Business (los de tu panel, public/panel/estilo.css), pedido del 17/11/2026: el estilo de tarjetas y controles de Apple se queda. */
 :root {
-  --bg: #F2F2F7;
+  --bg: #F2F5FB;
   --card: #FFFFFF;
-  --card-2: #F7F7FA;
-  --fill: rgba(118, 118, 128, 0.12);
-  --fill-2: rgba(118, 118, 128, 0.08);
-  --text: #1D1D1F;
-  --text-2: #6E6E73;
-  --text-3: #8E8E93;
-  --sep: rgba(60, 60, 67, 0.13);
-  --blue: #007AFF; --green: #34C759; --orange: #FF9500; --red: #FF3B30; --indigo: #5856D6; --teal: #30B0C7; --yellow: #FFCC00; --pink: #FF2D55; --purple: #AF52DE; --gray: #8E8E93;
-  --blue-ink: #0066CC; --ok-ink: #248A3D; --warn-ink: #B25000; --bad-ink: #D70015;
-  --tint-blue: rgba(0, 122, 255, 0.10); --tint-green: rgba(52, 199, 89, 0.14); --tint-orange: rgba(255, 149, 0, 0.15); --tint-red: rgba(255, 59, 48, 0.11); --tint-gray: rgba(118, 118, 128, 0.12);
-  --s1: #007AFF; --s2: #FF9500; --s3: #30B0C7;
+  --card-2: #F7F9FD;
+  --fill: rgba(30, 80, 167, 0.08);
+  --fill-2: rgba(30, 80, 167, 0.05);
+  --text: #0B1530;
+  --text-2: #56627D;
+  --text-3: #7C879F;
+  --sep: rgba(11, 21, 48, 0.10);
+  --blue: #1A6FE0; --green: #34C759; --orange: #FF9500; --red: #FF3B30; --indigo: #5856D6; --teal: #30B0C7; --yellow: #FFCC00; --pink: #FF2D55; --purple: #AF52DE; --gray: #8E8E93;
+  --blue-ink: #0B4BB0; --ok-ink: #248A3D; --warn-ink: #B25000; --bad-ink: #D70015;
+  --tint-blue: rgba(26, 111, 224, 0.10); --tint-green: rgba(52, 199, 89, 0.14); --tint-orange: rgba(255, 149, 0, 0.15); --tint-red: rgba(255, 59, 48, 0.11); --tint-gray: rgba(118, 118, 128, 0.12);
+  --s1: #1A6FE0; --s2: #FF9500; --s3: #30B0C7;
   --on-blue: #FFFFFF;
-  --barra: rgba(242, 242, 247, 0.78);
-  --sombra: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 28px rgba(0, 0, 0, 0.05);
+  --barra: rgba(242, 245, 251, 0.82);
+  --sombra: 0 1px 2px rgba(11, 21, 48, 0.04), 0 8px 28px rgba(11, 21, 48, 0.06);
   --sombra-2: 0 1px 1px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.06);
-  --f: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, system-ui, sans-serif;
-  --f-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Segoe UI", Roboto, system-ui, sans-serif;
-  --f-num: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  --f: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-display: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-num: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --top-h: 64px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #000000; --card: #1C1C1E; --card-2: #2C2C2E; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
     --text: #F5F5F7; --text-2: #A1A1A6; --text-3: #8E8E93; --sep: rgba(84, 84, 88, 0.55);
-    --blue: #0A84FF; --green: #30D158; --orange: #FF9F0A; --red: #FF453A; --indigo: #5E5CE6; --teal: #40C8E0; --yellow: #FFD60A; --pink: #FF375F; --purple: #BF5AF2; --gray: #8E8E93;
-    --blue-ink: #4DA3FF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
-    --tint-blue: rgba(10, 132, 255, 0.20); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
-    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --blue: #4D94FF; --green: #30D158; --orange: #FF9F0A; --red: #FF453A; --indigo: #5E5CE6; --teal: #40C8E0; --yellow: #FFD60A; --pink: #FF375F; --purple: #BF5AF2; --gray: #8E8E93;
+    --blue-ink: #7AB0FF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
+    --tint-blue: rgba(77, 148, 255, 0.20); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
+    --s1: #4D94FF; --s2: #d95926; --s3: #199e70;
     --barra: rgba(22, 22, 24, 0.78);
     --sombra: 0 0 0 1px rgba(255, 255, 255, 0.04); --sombra-2: 0 0 0 1px rgba(255, 255, 255, 0.06);
     color-scheme: dark;
@@ -48,10 +54,10 @@
 :root[data-theme="dark"] {
   --bg: #000000; --card: #1C1C1E; --card-2: #2C2C2E; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
   --text: #F5F5F7; --text-2: #A1A1A6; --text-3: #8E8E93; --sep: rgba(84, 84, 88, 0.55);
-  --blue: #0A84FF; --green: #30D158; --orange: #FF9F0A; --red: #FF453A; --indigo: #5E5CE6; --teal: #40C8E0; --yellow: #FFD60A; --pink: #FF375F; --purple: #BF5AF2; --gray: #8E8E93;
-  --blue-ink: #4DA3FF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
-  --tint-blue: rgba(10, 132, 255, 0.20); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --blue: #4D94FF; --green: #30D158; --orange: #FF9F0A; --red: #FF453A; --indigo: #5E5CE6; --teal: #40C8E0; --yellow: #FFD60A; --pink: #FF375F; --purple: #BF5AF2; --gray: #8E8E93;
+  --blue-ink: #7AB0FF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
+  --tint-blue: rgba(77, 148, 255, 0.20); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
+  --s1: #4D94FF; --s2: #d95926; --s3: #199e70;
   --barra: rgba(22, 22, 24, 0.78);
   --sombra: 0 0 0 1px rgba(255, 255, 255, 0.04); --sombra-2: 0 0 0 1px rgba(255, 255, 255, 0.06);
   color-scheme: dark;
@@ -79,8 +85,11 @@ button { -webkit-tap-highlight-color: transparent; }
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px;
 }
 .marca { display: flex; gap: 12px; align-items: center; min-width: 0; }
-.app-ico { width: 38px; height: 38px; border-radius: 10px; flex: none; display: grid; place-items: center; background: linear-gradient(160deg, #34C759, #0A84FF); box-shadow: var(--sombra-2); }
-.app-ico svg { width: 22px; height: 22px; }
+.app-ico { width: 38px; height: 38px; border-radius: 11px; flex: none; display: grid; place-items: center; background: #fff; box-shadow: 0 6px 16px -8px rgba(11, 21, 48, 0.45), var(--sombra-2); }
+.app-ico img { width: 86%; height: 86%; object-fit: contain; display: block; }
+a.app-ico:hover { transform: translateY(-1px); }
+/* Dentro de Tu panel (mauricio-ayllon.com/panel) arriba ya dice qué calculadora es: aquí no se repite. */
+.en-panel .marca { display: none; }
 .marca h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
 .marca p { font-size: 13px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 46ch; }
 .acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -613,8 +622,8 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 .guia-mas-cuerpo ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
 .guia-spin-txt { opacity: .85; font-size: 12px; }
 .ayuda .guia { display: none !important; }
-.guia-paso .guia-burbuja { background: linear-gradient(135deg, #0A84FF, #5856D6); }
-.guia-paso .guia-burbuja::after { border-top-color: #3f6fec; }
+.guia-paso .guia-burbuja { background: linear-gradient(135deg, #1A6FE0, #0B4BB0); }
+.guia-paso .guia-burbuja::after { border-top-color: #125cc8; }
 .guia-panel .guia-burbuja { margin-bottom: 4px; }
 .ruta { margin-bottom: 2px; }
 .ruta-in { background: var(--card); border-radius: 16px; box-shadow: var(--sombra); border: 2px solid var(--blue); padding: 14px 16px; display: grid; gap: 10px; }
@@ -634,7 +643,7 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 .ads-cab { display: flex; gap: 6px; flex-wrap: wrap; }
 .embudo { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .embudo li { display: grid; gap: 1px; justify-items: start; }
-.emb-barra { min-width: fit-content; max-width: 100%; border-radius: 10px; padding: 7px 10px; display: flex; gap: 8px; align-items: baseline; color: #fff; background: linear-gradient(90deg, #0A84FF, #5E5CE6); box-shadow: var(--sombra-2); }
+.emb-barra { min-width: fit-content; max-width: 100%; border-radius: 10px; padding: 7px 10px; display: flex; gap: 8px; align-items: baseline; color: #fff; background: linear-gradient(90deg, #1A6FE0, #0B4BB0); box-shadow: var(--sombra-2); }
 .embudo li:last-child .emb-barra { background: linear-gradient(90deg, #30D158, #248A3D); }
 .emb-barra b { font-family: var(--f-num); font-size: 17px; white-space: nowrap; }
 .emb-barra span { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -753,7 +762,7 @@ button.widget:hover { transform: translateY(-1px); box-shadow: 0 1px 2px rgba(0,
 <header class="top" id="top">
   <div class="top-in">
     <div class="marca">
-      <div class="app-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></div>
+      <a class="app-ico" href="/panel#calculadoras" title="Volver a tu panel" aria-label="Volver a tu panel"><img src="/grow-business-logo.png" alt=""></a>
       <div><h1>Calculadora de Oferta</h1><p id="sub-negocio">Diagnóstico en la llamada</p></div>
     </div>
     <div class="acciones">

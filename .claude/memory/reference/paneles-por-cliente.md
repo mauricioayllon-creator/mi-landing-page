@@ -15,3 +15,5 @@
   Con endpoint: el panel pide clave (?k= o guardada), lee sesiones de la hoja y agenda (crea evento con Meet
   en su calendario e invita al cliente). Sesiones de datos.json con "id" + "agendable"; "ancla": true = al
   agendarla se vuelve plan.dia1. Las agendadas viven en la hoja (pestaña Sesiones), no en datos.json.
+- Desde el 17/11/2026 aparecen solos en Tu panel › Links (mauricio-ayllon.com/panel#links): «Ver» entra con su clave y
+  «Link y clave» copia el mensaje para mandar. Se leen de estas carpetas al publicar: no hay que agregarlos a mano allá.

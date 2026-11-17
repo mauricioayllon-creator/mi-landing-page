@@ -311,6 +311,11 @@ npm run lint         # ESLint
 - **Fix**: Cambios chicos directo en main; trabajo largo en un worktree aparte. Nunca dejar esta carpeta en otra rama
 - **Aplicar en**: Este proyecto (la carpeta la comparten el panel de clientes y otras sesiones)
 
+### 2026-11-17: Todo entra por /panel (Tu panel)
+- **Error**: Cada herramienta nueva quedaba suelta en su propio link (calculadoras, paneles, propuesta) y Mauricio no las usaba porque no las encontraba
+- **Fix**: mauricio-ayllon.com/panel es la única puerta (src/features/tu-panel). Herramienta o página nueva → agregarla en src/features/tu-panel/catalogo.ts: aparece en su pestaña y en el Mapa. Detalle en .claude/memory/reference/tu-panel.md
+- **Aplicar en**: Este proyecto
+
 ---
 
 *V4: Todo es un Skill. Agent-First. El usuario habla, tu construyes.*

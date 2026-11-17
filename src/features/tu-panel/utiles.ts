@@ -79,6 +79,17 @@ export async function copiar(texto: string): Promise<boolean> {
   }
 }
 
+/**
+ * ¿Modo noche? La misma regla que tu panel de trabajo (admin.html): se guarda en «gb-tema»;
+ * sin elegir = noche; «auto» = lo que diga el aparato; «claro» = de día.
+ */
+export const TEMA_LS = 'gb-tema'
+export function esNoche(): boolean {
+  const t = leerLocal(TEMA_LS) || 'noche'
+  if (t === 'auto') return typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches
+  return t === 'noche'
+}
+
 /** El mensaje que se manda con un link y su clave (el mismo que copia tu panel de trabajo). */
 export function mensajeConClave(link: string, clave: string) {
   return 'Tu panel de Grow Business:\n' + link + '\nTu clave: ' + clave

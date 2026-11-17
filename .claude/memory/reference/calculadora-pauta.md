@@ -18,4 +18,5 @@
   publicación del 21/10/2026), colchón sano de 40%, 10 ventas para confiar en el número, mes de 30 días.
 - Para probar las cuentas sin navegador: cargar formato.js y motor.js con Node y llamar a CalcPauta.motor.calcular(datos).
 - Desde el 17/11/2026 lleva los colores, las letras y el logo de Grow Business (pedido de Mauricio: «los mismos colores, el
-  mismo branding»), con el mismo estilo de tarjetas. Se abre desde Tu panel › Calculadoras; ahí se ve sin su título y en claro.
+  mismo branding»), con el mismo estilo de tarjetas. Se abre desde Tu panel › Calculadoras; ahí se ve sin su título y en el mismo modo que el panel
+  (claro o noche, `gb-tema`). Colores «Noche con luz», iguales a los de la Calculadora de Oferta.

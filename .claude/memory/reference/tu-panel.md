@@ -34,10 +34,15 @@ Ordénalo todo dentro del panel, con los mismos colores y la misma marca, y las 
 - El Pixel de Meta (`src/app/layout.tsx`) no corre en `/panel` ni cuando una página se ve dentro de un marco (las vistas
   previas de Links): esas visitas son de Mauricio, no de prospectos.
 - Las calculadoras detectan que están dentro del panel (`window.self !== window.top`): esconden su título (`.en-panel .marca`)
-  y se ven en claro. Fuera del panel conservan su modo oscuro.
+  y siguen el modo del panel. Fuera del panel siguen el modo del aparato.
+- Claro o noche: Tu panel y las calculadoras leen «gb-tema», el mismo ajuste que Mi negocio (sin elegir = noche; «auto» = el
+  aparato; «claro»). Si se cambia en Mi negocio, todo cambia al instante. Colores: marca «Noche con luz» (17/11/2026),
+  los mismos de public/panel/estilo.css (claros en :root, de noche en [data-theme="dark"]).
+- Vercel sirve solo la carpeta public/panel/ cuando alguien abre /panel, ANTES de los rewrites normales. Por eso la regla
+  /panel → /tu-panel va en `beforeFiles` de next.config.ts (si va en la lista normal, en Vercel no funciona aunque en la
+  compu sí). Cualquier carpeta de public/ con index.html hace lo mismo con su dirección.
 
 ## Lo que quedó igual a propósito
-- Los paneles de los clientes (`/clientes/<carpeta>`, `body.corto`) siguen blancos tipo Apple, como se decidió el 09/11:
-  los ven los clientes. Si Mauricio quiere que lleven los azules de la marca, se cambia el bloque `body.corto` de
-  `public/clientes/motor/panel.css`.
+- Los paneles de los clientes (`/clientes/<carpeta>`, `body.corto` en `public/clientes/motor/panel.css`) mantienen su
+  versión simple del 09/11 (letra del aparato), con los colores «Noche con luz» desde el 17/11. Los ven los clientes.
 - La Caja (`caja.html`) y el panel del equipo (`equipo.html`) tienen su propio estilo: los publica el publicador de la compu.

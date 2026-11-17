@@ -16,7 +16,7 @@ import Calculadoras from './Calculadoras'
 import Links from './Links'
 import Mapa from './Mapa'
 import { AREAS, type AreaId, type PanelCliente } from './catalogo'
-import { CLAVE_LS, guardarLocal, leerLocal, leerRuta } from './utiles'
+import { CLAVE_LS, TEMA_LS, esNoche, guardarLocal, leerLocal, leerRuta } from './utiles'
 
 /** La primera vez se abre el Mapa, para que veas cómo quedó ordenado todo. Después, Mi negocio. */
 const VISTO = 'tu-panel-visto'
@@ -31,9 +31,12 @@ export default function TuPanel({ clientes }: { clientes: PanelCliente[] }) {
   const [abiertas, setAbiertas] = useState<AreaId[]>([])
   const [aviso, setAviso] = useState<{ texto: string; error: boolean; n: number } | null>(null)
   const porDefecto = useRef<AreaId | null>(null)
+  // Claro o noche: lo mismo que eligió en Mi negocio (si lo cambia allá, aquí cambia al instante)
+  const [noche, setNoche] = useState(true)
 
   useEffect(() => {
     setClave(leerLocal(CLAVE_LS))
+    setNoche(esNoche())
     if (!porDefecto.current) {
       porDefecto.current = leerLocal(VISTO) ? 'negocio' : 'mapa'
       guardarLocal(VISTO, '1')
@@ -46,12 +49,17 @@ export default function TuPanel({ clientes }: { clientes: PanelCliente[] }) {
     // Si sales desde Mi negocio (o desde otra pestaña del navegador), aquí también se cierra.
     const alCambiar = (e: StorageEvent) => {
       if (e.key === CLAVE_LS || e.key === null) setClave(leerLocal(CLAVE_LS))
+      if (e.key === TEMA_LS || e.key === null) setNoche(esNoche())
     }
+    const aparato = typeof matchMedia === 'function' ? matchMedia('(prefers-color-scheme: dark)') : null
+    const alCambiarAparato = () => setNoche(esNoche())
+    aparato?.addEventListener('change', alCambiarAparato)
     window.addEventListener('hashchange', leer)
     window.addEventListener('storage', alCambiar)
     return () => {
       window.removeEventListener('hashchange', leer)
       window.removeEventListener('storage', alCambiar)
+      aparato?.removeEventListener('change', alCambiarAparato)
     }
   }, [])
 
@@ -73,10 +81,11 @@ export default function TuPanel({ clientes }: { clientes: PanelCliente[] }) {
     setClave(null)
   }, [])
 
-  if (clave === undefined) return <div className={`${s.raiz} ${s.login}`} />
+  const tema = noche ? 'noche' : 'claro'
+  if (clave === undefined) return <div className={`${s.raiz} ${s.login}`} data-tema={tema} />
   if (!clave)
     return (
-      <div className={s.raiz}>
+      <div className={s.raiz} data-tema={tema}>
         <Entrar alEntrar={setClave} />
       </div>
     )
@@ -84,7 +93,7 @@ export default function TuPanel({ clientes }: { clientes: PanelCliente[] }) {
   const abierta = (a: AreaId) => abiertas.includes(a) || ruta.area === a
   const en = (a: AreaId) => ruta.area === a
   return (
-    <div className={s.raiz}>
+    <div className={s.raiz} data-tema={tema}>
       <div className={s.app}>
         <header className={s.barra}>
           <a className={s.marca} href="#negocio/inicio" title="Ir a Hoy">
@@ -122,7 +131,7 @@ export default function TuPanel({ clientes }: { clientes: PanelCliente[] }) {
         </main>
       </div>
 
-      <div className={`${s.toast} ${aviso ? s.toastVer : ''}`} role="status" aria-live="polite" style={aviso?.error ? { background: 'var(--coral-ink)' } : undefined}>
+      <div className={`${s.toast} ${aviso ? s.toastVer : ''} ${aviso?.error ? s.toastError : ''}`} role="status" aria-live="polite">
         {aviso && (
           <>
             <Icono n={aviso.error ? 'x' : 'check'} />

@@ -316,6 +316,16 @@ npm run lint         # ESLint
 - **Fix**: mauricio-ayllon.com/panel es la única puerta (src/features/tu-panel). Herramienta o página nueva → agregarla en src/features/tu-panel/catalogo.ts: aparece en su pestaña y en el Mapa. Detalle en .claude/memory/reference/tu-panel.md
 - **Aplicar en**: Este proyecto
 
+### 2026-11-17: En Vercel, una carpeta de public/ responde sola antes de los rewrites
+- **Error**: El rewrite /panel → /tu-panel funcionaba con `next start` en la compu, pero en Vercel /panel seguía abriendo public/panel/index.html (Vercel sirve el index.html de la carpeta antes de los rewrites normales). Mauricio no vio el cambio
+- **Fix**: Un rewrite que tiene que ganarle a un archivo de public/ va en `beforeFiles` (next.config.ts). Y después de publicar, revisar la dirección EN VIVO (mauricio-ayllon.com), no solo en la compu
+- **Aplicar en**: Este proyecto (y cualquier Next.js en Vercel con carpetas en public/)
+
+### 2026-11-17: Los colores salen de public/panel/estilo.css
+- **Error**: Mientras se armaba Tu panel, otra sesión cambió la marca a «Noche con luz» y el panel de trabajo pasó a modo noche por defecto: Tu panel quedó con los azules viejos
+- **Fix**: Si cambian los colores de la marca, cambiarlos también en src/features/tu-panel/tu-panel.module.css y en las dos calculadoras (Oferta: herramientas/calculadora-oferta/fuente/estilos_v4.css; Pauta: public/calculadora-pauta/estilo.css). Todo sigue el modo claro/noche de «gb-tema»
+- **Aplicar en**: Este proyecto
+
 ---
 
 *V4: Todo es un Skill. Agent-First. El usuario habla, tu construyes.*

@@ -31,7 +31,7 @@ Cómo está hecha: es **un solo archivo** (`index.html`) que funciona solo, sin 
 | **Se promete lo que él controla** | Si el trabajo es traer clientes nuevos, se prometen **personas interesadas**, no ventas. En campañas de tienda con cupón se prometen **llegadas a la tienda** (cupones validados), igual que la garantía real de Mauricio. Si es mejorar anuncios que ya venden, se prometen ventas por anuncios. |
 | **Su servicio** | Contenido + anuncios + **guía para vender** (enseña; el cliente no tiene que contratar a nadie). Si el cliente ya tiene equipo de contenido, se le dan ideas y guiones. |
 | **Lenguaje para un niño de 10 años** | Frases cortas y palabras de todos los días. Sin siglas como CAC, LTV o ICP. «De cada 100 que cobra, le quedan 45» en lugar de «margen de 45%». |
-| **Diseño estilo Apple, con la marca Grow Business** | Tarjetas, controles segmentados, modo claro y oscuro, y que funcione en el celular. Desde el 17/11/2026 (pedido de Mauricio: «los mismos colores, el mismo branding» en todo su panel) los colores y las letras son los de Grow Business (los de `public/panel/estilo.css`: azul `#1A6FE0`, Plus Jakarta Sans y Bricolage Grotesque) y arriba va su logo, que lleva de vuelta a su panel. Dentro de Tu panel (`/panel`) se ve sin su título y siempre en claro. |
+| **Diseño estilo Apple, con la marca Grow Business** | Tarjetas, controles segmentados, modo claro y oscuro, y que funcione en el celular. Desde el 17/11/2026 (pedido de Mauricio: «los mismos colores, el mismo branding» en todo su panel) los colores y las letras son los de Grow Business (los de `public/panel/estilo.css`: azul `#1A6FE0`, Plus Jakarta Sans y Bricolage Grotesque) y arriba va su logo, que lleva de vuelta a su panel. Desde la tarde del 17/11 la marca es «Noche con luz» (fondo violeta noche, azul eléctrico `#2f7bf0`). Dentro de Tu panel (`/panel`) se ve sin su título y en el mismo modo que el panel (claro o noche, según `gb-tema`). |
 | **Pensada para Bolivia** | Bolivianos (Bs), IVA 13% + IT 3%, cargas sociales de más o menos 30%, cobros a 30, 60 o 90 días, límites de las tarjetas para pagar anuncios en dólares. |
 | **Llenable en una llamada** | Si el dueño no sabe un número, hay preguntas más fáciles («¿No sabe?») y se puede escribir un rango («20 a 30»). |
 | **No volver a preguntar lo mismo** | Si un dato ya se anotó, se reutiliza. Nunca se pisa lo que el dueño dijo. |
@@ -307,7 +307,7 @@ Fuentes consultadas para calibrar:
 **Qué se hizo:**
 - La calculadora se abre desde **Tu panel › Calculadoras** (`mauricio-ayllon.com/panel#calculadoras/oferta`), junto a la de Pauta y la de recuperación, cada una con su pregunta y cuándo se usa.
 - Colores y letras de Grow Business, y su logo arriba en vez del ícono verde (el logo lleva de vuelta a su panel).
-- Dentro del panel se esconde su título (arriba ya dice cuál es) y se ve en claro aunque el celular esté en modo oscuro. Fuera del panel conserva su modo oscuro.
+- Dentro del panel se esconde su título (arriba ya dice cuál es) y sigue el modo del panel: claro o noche, el mismo que se elige en Mi negocio (`gb-tema`; sin elegir = noche). Si se cambia allá, cambia aquí al instante. Fuera del panel sigue el modo del aparato.
 - Los cálculos no se tocaron.
 
 ---

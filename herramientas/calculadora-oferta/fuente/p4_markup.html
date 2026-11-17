@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script>/* Dentro de Tu panel: sin el título repetido y siempre en claro, como el panel. */try{if(window.self!==window.top){document.documentElement.classList.add("en-panel");document.documentElement.setAttribute("data-theme","light")}}catch(e){document.documentElement.classList.add("en-panel")}</script>
+<script>/* Dentro de Tu panel: sin el título repetido y en el mismo modo (claro o noche) que el panel; si lo cambias allá, cambia aquí. */(function(){try{if(window.self===window.top)return}catch(e){}var h=document.documentElement;h.classList.add("en-panel");function tema(){var t="noche";try{t=localStorage.getItem("gb-tema")||"noche"}catch(e){}var d=t==="noche"||(t==="auto"&&!!window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);h.setAttribute("data-theme",d?"dark":"light")}tema();addEventListener("storage",function(e){if(!e.key||e.key==="gb-tema")tema()})})();</script>
 <style>
 /*@@CSS4@@*/
 </style>

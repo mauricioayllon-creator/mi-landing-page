@@ -1,0 +1,43 @@
+{
+  "actualizado": "2026-11-16",
+  "cliente": { "nombre": "Fernet boliviano", "inicial": "F" },
+  "contacto": { "nombre": "Belén", "rol": "Su contacto en Grow Business." },
+  "plan": { "duracionDias": 30, "dia1": null, "anclaNombre": "Sesión 1", "etiqueta": "Lanzamiento de 30 días", "titulo": "Lanzamiento de 30 días" },
+  "etapas": [],
+  "hitos": [],
+  "sesiones": [
+    {
+      "id": "inicio",
+      "t": "Empezamos",
+      "fecha": "2026-11-16",
+      "hora": "20:00",
+      "acuerdos": [
+        "Hacemos un lanzamiento de 30 días para que más gente conozca y pruebe el primer fernet boliviano, empezando por el fernet.",
+        "Ustedes ponen 1.500 Bs de publicidad desde su tarjeta y nosotros manejamos su administrador de anuncios de Meta.",
+        "Nosotros hacemos la estrategia y los guiones; su equipo graba y edita."
+      ],
+      "tareas": [
+        { "quien": "ustedes", "que": "Mandarnos la ubicación para la Sesión 1", "cuando": "2026-11-18" },
+        { "quien": "ustedes", "que": "Mandarnos sus redes, sus videos y sus fotos", "cuando": "2026-11-18" },
+        { "quien": "ustedes", "que": "Tener a mano cuántas botellas venden en un mes normal", "cuando": "2026-11-19" },
+        { "quien": "ustedes", "que": "Hablar con su equipo (fotógrafo, edición y quien sale en los videos)", "cuando": "2026-11-19" },
+        { "quien": "nosotros", "que": "Llegar a la Sesión 1 con su público, su oferta de entrada y la cuenta de cuánto tienen que vender", "cuando": "2026-11-19" }
+      ]
+    },
+    { "t": "Próximas sesiones", "d": "Cada sesión se agenda al terminar la anterior." }
+  ],
+  "camino": {
+    "on": {
+      "bienvenida": true, "info": true, "accesos": true, "s1": true, "s2": true, "s3": false,
+      "guiones": true, "confguion": true, "sguion": false, "g1": true, "g2": false, "g3": false,
+      "equipo": true, "edicion": false, "confvideos": false, "sventa": true, "publicar": true,
+      "pauta": true, "srev": true, "sextra": false, "lanz": false, "sres": true, "victoria": true
+    },
+    "aqui": "bienvenida",
+    "fechas": { "s1": { "f": "2026-11-19", "h": "18:00" } },
+    "txt": {
+      "s1": { "msg": "Presencial, en su casa, a las 18:00." },
+      "equipo": { "msg": "Su equipo graba y edita con nuestros guiones." }
+    }
+  }
+}

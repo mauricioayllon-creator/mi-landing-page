@@ -1,14 +1,14 @@
 /* Calculadora de Pauta. Mismo lenguaje visual que la Calculadora de Oferta: tarjetas y controles de Apple, claro y oscuro, y que funcione en el celular.
-   Colores y letras de Grow Business, marca «Noche con luz» (los de tu panel, public/panel/estilo.css, y los de la Calculadora de Oferta), 17/11/2026. */
+   Colores y letras de Grow Business (los de tu panel, public/panel/estilo.css), pedido del 17/11/2026. */
 :root {
-  --bg: #eef1fd; --card: #FFFFFF; --card-2: #f6f7ff;
+  --bg: #F2F5FB; --card: #FFFFFF; --card-2: #F7F9FD;
   --fill: rgba(30, 80, 167, 0.08); --fill-2: rgba(30, 80, 167, 0.05);
-  --text: #0f0a33; --text-2: #5a5d86; --text-3: #9A9DC2; --sep: rgba(15, 10, 51, 0.10);
-  --blue: #2f7bf0; --green: #34C759; --orange: #FF9500; --red: #FF3B30;
-  --blue-ink: #1450a0; --ok-ink: #248A3D; --warn-ink: #B25000; --bad-ink: #D70015;
-  --tint-blue: rgba(47, 123, 240, 0.10); --tint-green: rgba(52, 199, 89, 0.14); --tint-orange: rgba(255, 149, 0, 0.15); --tint-red: rgba(255, 59, 48, 0.11); --tint-gray: rgba(118, 118, 128, 0.12);
+  --text: #0B1530; --text-2: #56627D; --text-3: #7C879F; --sep: rgba(11, 21, 48, 0.10);
+  --blue: #1A6FE0; --green: #34C759; --orange: #FF9500; --red: #FF3B30;
+  --blue-ink: #0B4BB0; --ok-ink: #248A3D; --warn-ink: #B25000; --bad-ink: #D70015;
+  --tint-blue: rgba(26, 111, 224, 0.10); --tint-green: rgba(52, 199, 89, 0.14); --tint-orange: rgba(255, 149, 0, 0.15); --tint-red: rgba(255, 59, 48, 0.11); --tint-gray: rgba(118, 118, 128, 0.12);
   --on-blue: #FFFFFF; --barra: rgba(242, 245, 251, 0.82);
-  --sombra: 0 1px 2px rgba(15, 10, 51, 0.04), 0 8px 28px rgba(15, 10, 51, 0.06);
+  --sombra: 0 1px 2px rgba(11, 21, 48, 0.04), 0 8px 28px rgba(11, 21, 48, 0.06);
   --sombra-2: 0 1px 1px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.06);
   --f: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --f-display: "Bricolage Grotesque", "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -17,25 +17,15 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #07061A; --card: #110D30; --card-2: #1A1545; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
-    --text: #F3F0FF; --text-2: #B4ADDC; --text-3: #8F8AC0; --sep: rgba(80, 70, 160, 0.5);
-    --blue: #3F86F5; --green: #30D158; --orange: #FF9F0A; --red: #FF453A;
-    --blue-ink: #9DBBFF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
-    --tint-blue: rgba(63, 134, 245, 0.22); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
-    --barra: rgba(11, 8, 48, 0.78);
+    --bg: #000000; --card: #1C1C1E; --card-2: #2C2C2E; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
+    --text: #F5F5F7; --text-2: #A1A1A6; --text-3: #8E8E93; --sep: rgba(84, 84, 88, 0.55);
+    --blue: #4D94FF; --green: #30D158; --orange: #FF9F0A; --red: #FF453A;
+    --blue-ink: #7AB0FF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
+    --tint-blue: rgba(77, 148, 255, 0.20); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
+    --barra: rgba(22, 22, 24, 0.78);
     --sombra: 0 0 0 1px rgba(255, 255, 255, 0.04); --sombra-2: 0 0 0 1px rgba(255, 255, 255, 0.06);
     color-scheme: dark;
   }
-}
-:root[data-theme="dark"] {
-  --bg: #07061A; --card: #110D30; --card-2: #1A1545; --fill: rgba(118, 118, 128, 0.24); --fill-2: rgba(118, 118, 128, 0.16);
-  --text: #F3F0FF; --text-2: #B4ADDC; --text-3: #8F8AC0; --sep: rgba(80, 70, 160, 0.5);
-  --blue: #3F86F5; --green: #30D158; --orange: #FF9F0A; --red: #FF453A;
-  --blue-ink: #9DBBFF; --ok-ink: #30D158; --warn-ink: #FFB340; --bad-ink: #FF6961;
-  --tint-blue: rgba(63, 134, 245, 0.22); --tint-green: rgba(48, 209, 88, 0.18); --tint-orange: rgba(255, 159, 10, 0.20); --tint-red: rgba(255, 69, 58, 0.20); --tint-gray: rgba(118, 118, 128, 0.24);
-  --barra: rgba(11, 8, 48, 0.78);
-  --sombra: 0 0 0 1px rgba(255, 255, 255, 0.04); --sombra-2: 0 0 0 1px rgba(255, 255, 255, 0.06);
-  color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }

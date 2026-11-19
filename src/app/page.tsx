@@ -49,8 +49,8 @@ const BOTON_CORTO = 'Escríbeme'
 function LlamadaALaAccion({ claro = false, antes }: { claro?: boolean; antes?: React.ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-3 text-center">
-      {antes && <p className="mb-3 text-xl font-bold text-titulo">{antes}</p>}
-      <p className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-widest text-acento">
+      {antes && <p className={`mb-3 text-xl font-bold ${claro ? 'text-titulo' : 'text-ink'}`}>{antes}</p>}
+      <p className={`flex items-center gap-1.5 text-sm font-semibold uppercase tracking-widest ${claro ? 'text-acento' : 'text-marca'}`}>
         Dale clic aquí
         <svg
           className="h-4 w-4 motion-safe:animate-bounce"
@@ -68,7 +68,7 @@ function LlamadaALaAccion({ claro = false, antes }: { claro?: boolean; antes?: R
       <WhatsAppButton mensaje={MENSAJE} className="px-5 py-3.5 text-[15px] sm:px-6 sm:text-base">
         {BOTON}
       </WhatsAppButton>
-      <p className={`max-w-sm text-sm leading-relaxed ${claro ? 'text-white/70' : 'text-texto2'}`}>
+      <p className={`max-w-sm text-sm leading-relaxed ${claro ? 'text-white/70' : 'text-ink/60'}`}>
         Se abre tu WhatsApp con el mensaje listo. Solo tocas enviar y elegimos juntos el día y la hora.
       </p>
     </div>
@@ -77,7 +77,10 @@ function LlamadaALaAccion({ claro = false, antes }: { claro?: boolean; antes?: R
 
 function Hero() {
   return (
-    <section className="fondo-portada relative overflow-hidden text-titulo">
+    <section
+      className="relative overflow-hidden text-titulo"
+      style={{ background: 'radial-gradient(ellipse 90% 80% at 50% 0%, #1559c9 0%, #0b3b8c 32%, #071a40 75%, #0d0d0d 100%)' }}
+    >
       <div className="grid-pattern pointer-events-none absolute inset-0" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-4xl px-6 pb-16 pt-32 text-center md:pt-36">
@@ -140,7 +143,7 @@ function Hero() {
 
 function Cierre() {
   return (
-    <section className="fondo-cierre px-6 py-20 text-titulo">
+    <section className="bg-ink px-6 py-20 text-titulo">
       <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
         <Image
           src="/mauricio-ayllon.jpg"
@@ -183,26 +186,26 @@ export default function Home() {
         <Hero />
 
         {SECCIONES.comoFunciona && (
-          <section className="bg-noche-2 px-6 py-20">
+          <section className="bg-hielo px-6 py-20">
             <TituloSeccion etiqueta="El sistema">
-              Cómo funciona, y <span className="text-acento">por qué funciona</span>
+              Cómo funciona, y <span className="text-marca">por qué funciona</span>
             </TituloSeccion>
             <ComoFunciona />
           </section>
         )}
 
         {SECCIONES.tuTienda && (
-          <section className="bg-noche px-6 py-20">
+          <section className="bg-white px-6 py-20">
             <TituloSeccion etiqueta="En tu tienda" bajada="Elige qué vendes. Es un ejemplo: la tuya la armamos con lo que vendes de verdad.">
-              ¿Qué vendes? <span className="text-acento">Así se vería tu promo</span>
+              ¿Qué vendes? <span className="text-marca">Así se vería tu promo</span>
             </TituloSeccion>
             <TuTienda />
           </section>
         )}
 
-        <section className="bg-noche-2 px-6 py-20">
+        <section className="bg-hielo px-6 py-20">
           <TituloSeccion>
-            Negocios con los que <span className="text-acento">ya trabajé</span>
+            Negocios con los que <span className="text-marca">ya trabajé</span>
           </TituloSeccion>
           <PruebaSocial />
           <div className="mt-14">
@@ -210,9 +213,9 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-noche-2 px-6 pb-20">
+        <section className="bg-hielo px-6 pb-20">
           <TituloSeccion>
-            Lo que más me <span className="text-acento">preguntan</span>
+            Lo que más me <span className="text-marca">preguntan</span>
           </TituloSeccion>
           <FAQ />
           <div className="mt-14">

@@ -85,7 +85,7 @@ export async function copiar(texto: string): Promise<boolean> {
  */
 export const TEMA_LS = 'gb-tema'
 export function esNoche(): boolean {
-  const t = leerLocal(TEMA_LS) || 'noche'
+  const t = leerLocal(TEMA_LS) || 'claro'
   if (t === 'auto') return typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches
   return t === 'noche'
 }

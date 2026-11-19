@@ -43,7 +43,7 @@ export default function TuPanel({ clientes }: { clientes: PanelCliente[] }) {
   const [mas, setMas] = useState(false)
   const [aviso, setAviso] = useState<{ texto: string; error: boolean; n: number } | null>(null)
   // Claro o noche: lo mismo que eligió en Mi negocio (si lo cambia allá, aquí cambia al instante)
-  const [noche, setNoche] = useState(true)
+  const [noche, setNoche] = useState(false)
 
   useEffect(() => {
     setClave(leerLocal(CLAVE_LS))

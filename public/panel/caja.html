@@ -2,20 +2,20 @@
 <style>
 /* Una sola pregunta por pantalla: un número grande arriba y el porqué abajo, con superficies blancas estilo sistema. */
 :root{
-  --edge:#bdbfe0;--bg:#eef1fd;--card:#ffffff;--field:#eef1fd;--fg:#0f0a33;--mut:#5a5d86;--line:#e2e4f6;
-  --accent:#2864c8;--accent-soft:#e7eeff;
+  --edge:#b9bfcb;--bg:#f2f3f6;--card:#ffffff;--field:#f2f3f6;--fg:#15171c;--mut:#6a7080;--line:#e3e5eb;
+  --accent:#0a66d8;--accent-soft:#e4effd;
   --ok:#14804a;--ok-soft:#e1f4e9;--warn:#a65f00;--warn-soft:#fdf0db;--bad:#c4302b;--bad-soft:#fce7e6;
-  --s1:#2f7bf0;--s2:#7a3cf0;--s3:#e8863a;--s4:#d9a514;--s5:#17a2a2;--s6:#e0559a;--s7:#9aa3b2;--s8:#22a35f;
+  --s1:#3b82f6;--s2:#7c5cd6;--s3:#e8863a;--s4:#d9a514;--s5:#17a2a2;--s6:#e0559a;--s7:#9aa3b2;--s8:#22a35f;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root[data-oscuro]{
-  --edge:#3d3478;--bg:#07061a;--card:#110d30;--field:#1a1545;--fg:#f3f0ff;--mut:#b4addc;--line:#2d1f78;
-  --accent:#6c8cff;--accent-soft:#1f2150;
+  --edge:#4a5261;--bg:#0e1014;--card:#191c22;--field:#23272f;--fg:#f1f3f7;--mut:#99a1b1;--line:#2a2f38;
+  --accent:#5aa2ff;--accent-soft:#1b2c44;
   --ok:#4fce8b;--ok-soft:#14301f;--warn:#f0b35a;--warn-soft:#37280f;--bad:#ff7f79;--bad-soft:#3b1a19;
   --s7:#6d7687;color-scheme:dark}}
 :root[data-theme="dark"]{
-  --edge:#3d3478;--bg:#07061a;--card:#110d30;--field:#1a1545;--fg:#f3f0ff;--mut:#b4addc;--line:#2d1f78;
-  --accent:#6c8cff;--accent-soft:#1f2150;
+  --edge:#4a5261;--bg:#0e1014;--card:#191c22;--field:#23272f;--fg:#f1f3f7;--mut:#99a1b1;--line:#2a2f38;
+  --accent:#5aa2ff;--accent-soft:#1b2c44;
   --ok:#4fce8b;--ok-soft:#14301f;--warn:#f0b35a;--warn-soft:#37280f;--bad:#ff7f79;--bad-soft:#3b1a19;
   --s7:#6d7687;color-scheme:dark}
 *{box-sizing:border-box}
@@ -457,8 +457,6 @@ document.addEventListener('change',function(e){
 </script>
 
 <script>
-/* Modo claro / noche: sigue lo que elegiste en el panel (gb-tema); si no elegiste, el del sistema. */
-(function(){try{var t=localStorage.getItem("gb-tema");if(t==="noche")document.documentElement.setAttribute("data-theme","dark");else if(t==="claro")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();
 /* Clientes: lo que falta del servicio (lo nuestro) separado de lo que falta de su publicidad (de ellos). */
 function cSplit(c,id){
   var x=c.cl.filter(function(i){return i.c.id===id})[0];if(!x||!x.total)return '';
